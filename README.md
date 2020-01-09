@@ -22,7 +22,7 @@
   * [Kickoff Videos]
 
 ## Technical resources
-* 
+* [NI Download](https://www.ni.com/en-us/support/downloads/drivers/download.labview-software-for-frc.html#330601)
 * New Control Systems for 2020
 * CTRE Firmware is located in C:\Users\Public\Documents\FRC
 * [CTRE toolsuite installation instructions]
