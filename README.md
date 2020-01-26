@@ -22,13 +22,17 @@
   * [Kickoff Videos]
 
 ## Technical resources
-* 
+* [NI Download](https://www.ni.com/en-us/support/downloads/drivers/download.labview-software-for-frc.html#330601)
+* [Radio Configuration Instructions](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
 * New Control Systems for 2020
 * CTRE Firmware is located in C:\Users\Public\Documents\FRC
 * [CTRE toolsuite installation instructions]
 * [CTRE software downloads]
 * [Programming the Radio]
-* Current Software Versions - last updated TBD
+* Current Software Versions - last updated 2020-01-09
+  * roboRIO mDNS name: roboRIO-812-FRC
+  * roboRIO Image: FRC_roboRIO_2020_v10
+  * roboRIO Firmware: 6.0.0f1
   * CTRE Phoenix Framework TBD
   * FRC_Radio_Configuration_ TBD
   * FRCUpdateSuite_ TBD
