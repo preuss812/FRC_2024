@@ -7,11 +7,13 @@
 
 ## How to check in the code
 
-1. Open gitshell
-2. cd ~/Documents/FRC_2020
-3. git add -A
-4. git commit -m 'your commit message saying what you changed'
-5. git push
+1. Open Visual Code
+2. Open the current project, FRC_2020
+3. Select the Source Control icon from the left menu
+4. Hover on the files to be Staged and click the '+' sign to stage the file, continue to do this for all files to be staged
+5. Click the '...' menu and select Commit Staged
+6. Enter a description of the change this commit makes to the code base
+7. Click the '...' menu and select Push
 
 ## Game resources
   * [FIRST Robotics Competition Control System](https://docs.wpilib.org/en/latest/#)
@@ -22,13 +24,16 @@
   * [Kickoff Videos]
 
 ## Technical resources
+* [WPILib PDF documentation](https://readthedocs.org/projects/robotpy-wpilib/downloads/pdf/latest/)
+** Excellent resource for Command Based programming which we use
+** [2020 Changes to Command Programming](https://docs.wpilib.org/en/latest/docs/software/commandbased/command-based-changes.html)
 * [NI Download](https://www.ni.com/en-us/support/downloads/drivers/download.labview-software-for-frc.html#330601)
 * [Radio Configuration Instructions](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
-* New Control Systems for 2020
+* 
 * CTRE Firmware is located in C:\Users\Public\Documents\FRC
-* [CTRE toolsuite installation instructions]
-* [CTRE software downloads]
-* [Programming the Radio]
+* [CTRE toolsuite installation instructions](https://phoenix-documentation.readthedocs.io/en/latest/ch05_PrepWorkstation.html#workstation-installation)
+* [CTRE software downloads](http://www.ctr-electronics.com/hro.html#product_tabs_technical_resources)
+* [Programming the Radio](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
 * Current Software Versions - last updated 2020-01-09
   * roboRIO mDNS name: roboRIO-812-FRC
   * roboRIO Image: FRC_roboRIO_2020_v10
