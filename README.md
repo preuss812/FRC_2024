@@ -46,7 +46,7 @@
 * [http://roborio-812-frc.local/](http://roborio-812-frc.local/)
 
 ## Vision Processing / GRIP documents
-* [GRIP - Graphical Image Processing](https://wpilib.screenstepslive.com/s/4485/m/50711?data-resolve-url=true&data-manual-id=50711)
+* [GRIP - Graphical Image Processing](http://docs.wpilib.org/en/latest/docs/software/vision-processing/grip/index.html)
 * [GRIP GitHub Wiki](https://github.com/WPIRoboticsProjects/GRIP/wiki)
 * [GRIP Download page](https://github.com/WPIRoboticsProjects/GRIP/releases)
 * [Integrating GRIP into your Java program](https://github.com/WPIRoboticsProjects/GRIP/wiki/Tutorial:-Run-GRIP-from-a-CPP-or-Java-FRC-program)
