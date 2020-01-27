@@ -17,6 +17,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.RampSubsystem;
+import frc.robot.subsystems.WinchSubsystem;
+import frc.robot.commands.*;
 
 
 /**
@@ -32,6 +35,8 @@ public class RobotContainer {
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final ColorMatcher m_ColorMatcher = new ColorMatcher();
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
+  private final RampSubsystem m_Ramp = new RampSubsystem();
+  private final WinchSubsystem m_Winch = new WinchSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -57,6 +62,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    new JoystickButton(leftJoystick, 1).whileHeld(new WinchCommand(m_Winch, true));
+    new JoystickButton(leftJoystick, 2).whileHeld(new WinchCommand(m_Winch, false));
   }
 
 

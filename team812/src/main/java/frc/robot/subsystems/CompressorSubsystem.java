@@ -32,7 +32,7 @@ public class CompressorSubsystem extends SubsystemBase {
   }
 
   public double get_pressure() {
-    double pressure = m_pressure.get();
+    final double pressure = m_pressure.get();
     SmartDashboard.putNumber("Pressure is ", pressure);
     return pressure;
   }

@@ -25,22 +25,22 @@ public class ColorMatcher extends SubsystemBase {
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
   // Team812 calibrated color definitions, see Constants.java
-  public final  Color kBlueTarget = ColorMatch.makeColor(
+  public final Color kBlueTarget = ColorMatch.makeColor(
     ColorConstants.kBlueTargetRBG[0], 
     ColorConstants.kBlueTargetRBG[1],
     ColorConstants.kBlueTargetRBG[2]
   );
-  public final  Color kGreenTarget = ColorMatch.makeColor(
+  public final Color kGreenTarget = ColorMatch.makeColor(
     ColorConstants.kGreenTargetRGB[0],
     ColorConstants.kGreenTargetRGB[1],
     ColorConstants.kGreenTargetRGB[2]
   );
-  public final  Color kRedTarget = ColorMatch.makeColor(
+  public final Color kRedTarget = ColorMatch.makeColor(
     ColorConstants.kRedTargetRGB[0],
     ColorConstants.kRedTargetRGB[1],
     ColorConstants.kRedTargetRGB[2]
   );
-  public final  Color kYellowTarget = ColorMatch.makeColor(
+  public final Color kYellowTarget = ColorMatch.makeColor(
     ColorConstants.kYellowTargetRGB[0],
     ColorConstants.kYellowTargetRGB[1],
     ColorConstants.kYellowTargetRGB[2]
@@ -56,12 +56,11 @@ public class ColorMatcher extends SubsystemBase {
   }
 
   public Color get_color() {
-    Color detectedColor = m_colorSensor.getColor();
-    double IR = m_colorSensor.getIR();
-    int proximity = m_colorSensor.getProximity();
+    final Color detectedColor = m_colorSensor.getColor();
+    final int proximity = m_colorSensor.getProximity();
 
     String colorString;
-    ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
+    final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (proximity >= 300) 
     if (match.color == kBlueTarget) {

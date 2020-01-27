@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,24 +7,20 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.WinchSubsystem;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
-
+public class WinchCommand extends CommandBase {
   /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * Creates a new WinchInCommand.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  private final WinchSubsystem m_winchSubsystem;
+  private final boolean winchIn;
+
+  public WinchCommand(WinchSubsystem subsystem, boolean in) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_winchSubsystem = subsystem;
+    winchIn = in;
     addRequirements(subsystem);
   }
 
@@ -36,11 +32,16 @@ public class ExampleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(winchIn)
+      m_winchSubsystem.forward();
+   else
+      m_winchSubsystem.reverse();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_winchSubsystem.stop();
   }
 
   // Returns true when the command should end.
