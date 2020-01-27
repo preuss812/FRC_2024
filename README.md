@@ -1,6 +1,6 @@
 # First Robotics Team 812
 
-# The 2020 Destination: Infinite Recharch
+# The 2020 Destination: Infinite Recharge
 
 ## Encryption Key
 * R!$E2geTHeR#2020
@@ -25,8 +25,8 @@
 
 ## Technical resources
 * [WPILib PDF documentation](https://readthedocs.org/projects/robotpy-wpilib/downloads/pdf/latest/)
-** Excellent resource for Command Based programming which we use
-** [2020 Changes to Command Programming](https://docs.wpilib.org/en/latest/docs/software/commandbased/command-based-changes.html)
+ * Excellent resource for Command Based programming which we use
+ * [2020 Changes to Command Programming](https://docs.wpilib.org/en/latest/docs/software/commandbased/command-based-changes.html)
 * [NI Download](https://www.ni.com/en-us/support/downloads/drivers/download.labview-software-for-frc.html#330601)
 * [Radio Configuration Instructions](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
 * 
