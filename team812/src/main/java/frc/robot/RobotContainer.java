@@ -49,7 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     
     m_DriveTrain.setDefaultCommand(
-      new RunCommand(() -> m_DriveTrain.drive(leftJoystick.getX(), leftJoystick.getY()), m_DriveTrain)
+      new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getX(), rightJoystick.getY()), m_DriveTrain)
     );
     // Configure the button bindings
     configureButtonBindings();
@@ -63,8 +63,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(leftJoystick, 1).whileHeld(new WinchCommand(m_Winch, true));
-    new JoystickButton(leftJoystick, 2).whileHeld(new WinchCommand(m_Winch, false));
+    new JoystickButton(rightJoystick, 1).whileHeld(new WinchCommand(m_Winch, true));
+    new JoystickButton(rightJoystick, 2).whileHeld(new WinchCommand(m_Winch, false));
   }
 
 

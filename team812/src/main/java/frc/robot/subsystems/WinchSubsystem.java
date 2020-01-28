@@ -17,7 +17,7 @@ public class WinchSubsystem extends SubsystemBase {
   /**
    * Creates a new HookSubsystem.
    */
-  private final WPI_TalonSRX m_winch = new WPI_TalonSRX(CANConstants.kHookMotor);
+  private final WPI_TalonSRX m_winch = new WPI_TalonSRX(CANConstants.kWinchMotor);
 
   public WinchSubsystem() {
     stop();
