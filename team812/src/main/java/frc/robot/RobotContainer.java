@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -37,6 +39,7 @@ public class RobotContainer {
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
   private final RampSubsystem m_Ramp = new RampSubsystem();
   private final WinchSubsystem m_Winch = new WinchSubsystem();
+  public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -53,6 +56,7 @@ public class RobotContainer {
     );
     // Configure the button bindings
     configureButtonBindings();
+
   }
 
   /**

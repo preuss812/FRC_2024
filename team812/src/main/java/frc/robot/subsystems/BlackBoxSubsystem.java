@@ -12,16 +12,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 
 public class BlackBoxSubsystem extends SubsystemBase {
-
-  private static final int CB1 = 2;
-	private static final int CB2 = 4;
-	private static final int CB3 = 8;
-	private static final int CB4 = 16;
-	private static final int CB5 = 32;
-	private static final int CB6 = 64;
-	private static final int CB7 = 128;
 
 	private static int flagBits = 0;
 
@@ -36,7 +30,11 @@ public class BlackBoxSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+	// This method will be called once per scheduler run
+    double potValue = getPotValue(OIConstants.kControlBoxPotY);
+	SmartDashboard.putNumber("Pot Value is ", potValue);
+	Robot.nttable.getEntry("ypotvalue").setNumber(potValue);
+	
   }
     // This function reads each button on the control box and sets 
     // a corresponding single bit in the integer variable flagBits

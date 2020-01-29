@@ -10,8 +10,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.CANConstants;
+import frc.robot.subsystems.*;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class WinchSubsystem extends SubsystemBase {
   /**
@@ -26,7 +31,10 @@ public class WinchSubsystem extends SubsystemBase {
   }
 
   public void forward() {
-    m_winch.set(1.0);
+ //   double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
+    double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
+    m_winch.set(speed);
+    SmartDashboard.putNumber("forward speed", speed);
   }
 
   public void reverse() {
