@@ -38,7 +38,9 @@ public class WinchSubsystem extends SubsystemBase {
   }
 
   public void reverse() {
-    m_winch.set(-1.0);
+    double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
+    m_winch.set(-speed);
+    SmartDashboard.putNumber("reversed speed", -speed);
   }
 
   public void stop() {

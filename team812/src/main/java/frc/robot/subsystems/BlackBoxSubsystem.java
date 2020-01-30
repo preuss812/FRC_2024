@@ -30,11 +30,7 @@ public class BlackBoxSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-	// This method will be called once per scheduler run
-    double potValue = getPotValue(OIConstants.kControlBoxPotY);
-	SmartDashboard.putNumber("Pot Value is ", potValue);
-	Robot.nttable.getEntry("ypotvalue").setNumber(potValue);
-	
+	// This method will be called once per scheduler run	
   }
     // This function reads each button on the control box and sets 
     // a corresponding single bit in the integer variable flagBits
