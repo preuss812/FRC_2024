@@ -19,6 +19,7 @@ import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.commands.*;
@@ -42,6 +43,7 @@ public class RobotContainer {
   private final WinchSubsystem m_Winch = new WinchSubsystem();
   private final ElevatorSubsystem m_Elevator = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
+  private final BallSubsystem m_Ball = new BallSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -73,6 +75,9 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 2).whileHeld(new WinchCommand(m_Winch, false));
     new JoystickButton(leftJoystick, 1).whileHeld(new ElevatorCommand(m_Elevator, true));
     new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_Elevator, false));
+    new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_Ball, true));
+    new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_Ball, false));
+
   }
 
 

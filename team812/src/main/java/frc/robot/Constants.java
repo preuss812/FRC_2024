@@ -21,7 +21,9 @@ public final class Constants {
         public static final int[] kRightMotors  = {33, 36};
         public static final int kWinchMotor     = 32;
         public static final int kHookMotor      = 37;
-        public static final int[] kIntakeMotors = {38, 39};
+        public static final int kIntakeMotorLeft = 38;
+        public static final int kIntakeMotorRight = 39;
+
         public static final int kPDP = 1;
         public static final int kPCM = 40;
         public static final int kElevatorMotor = 35;
