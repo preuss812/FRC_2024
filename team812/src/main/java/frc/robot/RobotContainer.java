@@ -37,7 +37,7 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
-  private final ColorMatcher m_ColorMatcher = new ColorMatcher();
+  public static ColorMatcher m_ColorMatcher = new ColorMatcher();
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
   private final RampSubsystem m_Ramp = new RampSubsystem();
   private final WinchSubsystem m_Winch = new WinchSubsystem();
