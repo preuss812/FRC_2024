@@ -21,6 +21,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.RampSubsystem;
+import frc.robot.subsystems.SpinTheWheelSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_Elevator = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   private final BallSubsystem m_Ball = new BallSubsystem();
+  private final SpinTheWheelSubsystem m_Start = new SpinTheWheelSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -77,6 +79,8 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_Elevator, false));
     new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_Ball, true));
     new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_Ball, false));
+    new JoystickButton(xboxController, 6).whenPressed(new SpinTheWheelCommand(m_Start));
+
 
   }
 
