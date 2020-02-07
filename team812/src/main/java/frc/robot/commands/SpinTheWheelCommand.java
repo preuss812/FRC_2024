@@ -11,14 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import frc.robot.Constants.CANConstants;
 import frc.robot.RobotContainer;
-
+/*
 public class SpinTheWheelCommand extends CommandBase {
   /*
   public SpinTheWheelCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
-*/
 private final SpinTheWheelSubsystem m_start;
 
 }
@@ -30,3 +29,4 @@ public SpinTheWheelCommand(SpinTheWheelSubsystem subsystem) {
 
 }
 
+*/
