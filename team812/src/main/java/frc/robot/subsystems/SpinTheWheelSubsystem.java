@@ -18,8 +18,14 @@ public class SpinTheWheelSubsystem extends SubsystemBase {
 
      
     public void m_start() {
+
       
        }
+    public void m_stop() {
+        
+      
+    }
+  
      
     
   }

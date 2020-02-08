@@ -17,7 +17,7 @@ public class SpinCommand extends CommandBase {
   /**
    * Creates a new SpinCommand.
    */
-   int rotaionCount = 0;
+   int rotationCount = 0;
    private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
     private final ColorMatcher m_ColorMatcher;
     boolean wasItRed = false;
@@ -34,7 +34,9 @@ public class SpinCommand extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("is initialized*");
-
+    Color detectedColor = m_ColorMatcher.get_color();
+    wasItRed = m_ColorMatcher.isRed(detectedColor);
+    m_SpinTheWheelSubsystem.m_start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,8 +46,8 @@ public class SpinCommand extends CommandBase {
     if(m_ColorMatcher.isRed(detectedColor)) {
      // System.out.println("I see red!");
       if(wasItRed == false) {
-        rotaionCount = rotaionCount + 1;
-        System.out.printf("I rotated********* %d\n", rotaionCount);
+        rotationCount = rotationCount + 1;
+        System.out.printf("I rotated********* %d\n", rotationCount);
         
       }
       wasItRed = true;
@@ -54,7 +56,6 @@ public class SpinCommand extends CommandBase {
       wasItRed = false;
     }
 
-    m_SpinTheWheelSubsystem.m_start();
     //System.out.println("is executed-");
   }
 
@@ -62,12 +63,14 @@ public class SpinCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("is ending/");
+    m_SpinTheWheelSubsystem.m_stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     //System.out.println("is finished+");
+
     return false;
   }
    
