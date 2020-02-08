@@ -89,4 +89,9 @@ public final class Constants {
         public static final int kLeftDriveEncoder = 1; // placeholder
         public static final int kElevatorEncoder = 2; // placeholder
     }
+
+    public static final class SpinConstants {
+	public static final int kSpinMotorSpeed = 0.5;
+	public static final int kColorRotationCountMax = 10;
+    }
 }

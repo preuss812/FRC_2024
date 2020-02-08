@@ -41,11 +41,11 @@ public class RobotContainer {
   public static ColorMatcher m_ColorMatcher = new ColorMatcher();
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
   private final RampSubsystem m_Ramp = new RampSubsystem();
-  private final WinchSubsystem m_Winch = new WinchSubsystem();
-  private final ElevatorSubsystem m_Elevator = new ElevatorSubsystem();
+  private final WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  private final BallSubsystem m_Ball = new BallSubsystem();
-  private final SpinTheWheelSubsystem m_Start = new SpinTheWheelSubsystem();
+  private final BallSubsystem m_BallSubsystem = new BallSubsystem();
+  private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -62,7 +62,6 @@ public class RobotContainer {
     );
     // Configure the button bindings
     configureButtonBindings();
-
   }
 
   /**
@@ -73,18 +72,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(rightJoystick, 1).whileHeld(new WinchCommand(m_Winch, true));
-    new JoystickButton(rightJoystick, 2).whileHeld(new WinchCommand(m_Winch, false));
-    new JoystickButton(leftJoystick, 1).whileHeld(new ElevatorCommand(m_Elevator, true));
-    new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_Elevator, false));
-    new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_Ball, true));
-    new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_Ball, false));
-    //new JoystickButton(xboxController, 6).whenPressed(new SpinTheWheelCommand(m_Start));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_Start, m_ColorMatcher).withTimeout(60));
-
-
+    new JoystickButton(rightJoystick, 1).whileHeld(new WinchCommand(m_WinchSubsystem, true));
+    new JoystickButton(rightJoystick, 2).whileHeld(new WinchCommand(m_WinchSubsystem, false));
+    new JoystickButton(leftJoystick, 1).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_BallSubsystem, true));
+    new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(60));
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
