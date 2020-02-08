@@ -80,7 +80,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_Ball, true));
     new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_Ball, false));
     //new JoystickButton(xboxController, 6).whenPressed(new SpinTheWheelCommand(m_Start));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_Start).withTimeout(20));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_Start, m_ColorMatcher).withTimeout(60));
 
 
   }

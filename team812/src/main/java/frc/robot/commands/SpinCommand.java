@@ -9,19 +9,25 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
+import edu.wpi.first.wpilibj.util.Color;
 
 public class SpinCommand extends CommandBase {
   /**
    * Creates a new SpinCommand.
    */
-  
+   int rotaionCount = 0;
    private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
+    private final ColorMatcher m_ColorMatcher;
+    boolean wasItRed = false;
 
-  public SpinCommand(SpinTheWheelSubsystem subsystem) {
+  public SpinCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-  m_SpinTheWheelSubsystem = subsystem;
-  addRequirements(subsystem);
+  m_SpinTheWheelSubsystem = motorSubsystem;
+  addRequirements(motorSubsystem);
+  m_ColorMatcher = sensorSubsystem;
+  addRequirements(sensorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -34,8 +40,22 @@ public class SpinCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    Color detectedColor = m_ColorMatcher.get_color();
+    if(m_ColorMatcher.isRed(detectedColor)) {
+     // System.out.println("I see red!");
+      if(wasItRed == false) {
+        rotaionCount = rotaionCount + 1;
+        System.out.printf("I rotated********* %d\n", rotaionCount);
+        
+      }
+      wasItRed = true;
+    } else {
+     // System.out.println("Nope!");
+      wasItRed = false;
+    }
+
     m_SpinTheWheelSubsystem.m_start();
-    System.out.println("is executed-");
+    //System.out.println("is executed-");
   }
 
   // Called once the command ends or is interrupted.
@@ -47,7 +67,8 @@ public class SpinCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("is finished+");
+    //System.out.println("is finished+");
     return false;
   }
+   
 }

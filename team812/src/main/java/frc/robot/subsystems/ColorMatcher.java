@@ -91,4 +91,16 @@ public class ColorMatcher extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  public boolean isRed(Color color) {
+    return (color == kRedTarget);
+  }
+  public boolean isBlue(Color color) {
+    return (color == kBlueTarget);
+  }
+  public boolean isYellow(Color color) {
+    return (color == kYellowTarget);
+  }
+  public boolean isGreen(Color color) {
+    return (color == kGreenTarget);
+  }
 }
