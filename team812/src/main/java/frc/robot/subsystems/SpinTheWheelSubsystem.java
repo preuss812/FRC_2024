@@ -15,6 +15,8 @@ import frc.robot.Robot;
 
 public class SpinTheWheelSubsystem extends SubsystemBase {
 
+    public void forward(double speed) {
+    }
 
      
     public void m_start() {
@@ -27,6 +29,11 @@ public class SpinTheWheelSubsystem extends SubsystemBase {
     }
   
      
+    public void reverse(double speed) {
+    }
+
     
+    public void stop() {
+    }	
   }
   

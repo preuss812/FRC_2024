@@ -12,31 +12,31 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Constants.SpinConstants;
 
 public class SpinCommand extends CommandBase {
   /**
    * Creates a new SpinCommand.
    */
-   int rotationCount = 0;
-   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
+    private final int rotationCount;
+    private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
     private final ColorMatcher m_ColorMatcher;
-    boolean wasItRed = false;
+    private final boolean wasItRed;
 
   public SpinCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-  m_SpinTheWheelSubsystem = motorSubsystem;
-  addRequirements(motorSubsystem);
-  m_ColorMatcher = sensorSubsystem;
-  addRequirements(sensorSubsystem);
+      m_SpinTheWheelSubsystem = motorSubsystem;
+      addRequirements(motorSubsystem);
+      m_ColorMatcher = sensorSubsystem;
+      addRequirements(sensorSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+      rotationCount = 0;
+      wasItRed = false;
     System.out.println("is initialized*");
-    Color detectedColor = m_ColorMatcher.get_color();
-    wasItRed = m_ColorMatcher.isRed(detectedColor);
-    m_SpinTheWheelSubsystem.m_start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,22 +56,26 @@ public class SpinCommand extends CommandBase {
       wasItRed = false;
     }
 
+    m_SpinTheWheelSubsystem.forward(kSpinMotorSpeed);
     //System.out.println("is executed-");
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    System.out.println("is ending/");
-    m_SpinTheWheelSubsystem.m_stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     //System.out.println("is finished+");
+      if( rotationCount >= kColorRotationCountMax )
+	  return true;
+      else
+	  return false;
+  }
 
-    return false;
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+
+    System.out.println("is ending/");
+    m_SpinTheWheelSubsystem.stop();
   }
    
 }
