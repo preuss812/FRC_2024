@@ -19,10 +19,11 @@ public final class Constants {
     public static final class CANConstants {
         public static final int[] kLeftMotors   = {30, 31};
         public static final int[] kRightMotors  = {33, 36};
-        public static final int kWinchMotor     = 32;
+        public static final int kWinchMotor     = 41; // dko 20200210 device 41 does not exist
         public static final int kHookMotor      = 37;
         public static final int kIntakeMotorLeft = 38;
         public static final int kIntakeMotorRight = 39;
+        public static final int kSpinMotor = 32;
 
         public static final int kPDP = 1;
         public static final int kPCM = 40;
@@ -91,7 +92,8 @@ public final class Constants {
     }
 
     public static final class SpinConstants {
-	public static final int kSpinMotorSpeed = 0.5;
-	public static final int kColorRotationCountMax = 10;
+	public static final double kSpinMotorSpeed = 0.05;
+    public static final int kColorRotationCountMax = 10;
+    public static final double kSpinTimeout = 60;
     }
 }

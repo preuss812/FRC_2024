@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SpinConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -78,7 +79,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(60));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
   }
 
   /**

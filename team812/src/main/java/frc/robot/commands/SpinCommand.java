@@ -18,10 +18,10 @@ public class SpinCommand extends CommandBase {
   /**
    * Creates a new SpinCommand.
    */
-    private final int rotationCount;
+    private int rotationCount;
     private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
     private final ColorMatcher m_ColorMatcher;
-    private final boolean wasItRed;
+    private boolean wasItRed;
 
   public SpinCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -56,7 +56,7 @@ public class SpinCommand extends CommandBase {
       wasItRed = false;
     }
 
-    m_SpinTheWheelSubsystem.forward(kSpinMotorSpeed);
+    m_SpinTheWheelSubsystem.forward(SpinConstants.kSpinMotorSpeed);
     //System.out.println("is executed-");
   }
 
@@ -64,17 +64,21 @@ public class SpinCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     //System.out.println("is finished+");
-      if( rotationCount >= kColorRotationCountMax )
-	  return true;
+      if( rotationCount >= SpinConstants.kColorRotationCountMax ) {
+        System.out.println("is finished+++++++");
+        return true;
+      }
       else
-	  return false;
+      {
+        return false;
+      }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    System.out.println("is ending/");
+    System.out.println("is ending///////////");
     m_SpinTheWheelSubsystem.stop();
   }
    
