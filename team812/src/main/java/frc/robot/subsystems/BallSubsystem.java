@@ -38,7 +38,7 @@ public class BallSubsystem extends SubsystemBase {
   public void intake() {
     //   double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
        //double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-       double speed = 0.5;
+       double speed = 0.2;//speed was changed from .5 o .2 2/11/2020
        m_left.set(-speed);
        m_right.set(-speed);
        //SmartDashboard.putNumber("forward speed", speed);
@@ -46,7 +46,7 @@ public class BallSubsystem extends SubsystemBase {
    
   public void outtake() {
       // double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-      double speed= 0.5;
+      double speed= 0.2;
        m_left.set(speed);
        m_right.set(speed);
        //SmartDashboard.putNumber("reversed speed", -speed);

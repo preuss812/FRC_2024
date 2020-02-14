@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -42,11 +43,13 @@ public class DriveTrain extends SubsystemBase {
     rightMotors = new SpeedControllerGroup(rightFront, rightBack);
 
     driveBase = new DifferentialDrive(leftMotors, rightMotors);
-    driveBase.setRightSideInverted(false);
+//    driveBase.setRightSideInverted(false);
   }
 
-  public void drive(double speed, double angle) {
-    driveBase.arcadeDrive(speed, angle);
+  public void drive(double throttle, double zRotation) {
+    SmartDashboard.putNumber("drive left(-) / right(+)", zRotation);
+    SmartDashboard.putNumber("drive fwd(-) / rev(+)", throttle);
+    driveBase.arcadeDrive(throttle, zRotation);
   }
 
   @Override
