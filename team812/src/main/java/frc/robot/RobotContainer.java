@@ -20,6 +20,7 @@ import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
@@ -47,6 +48,7 @@ public class RobotContainer {
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   private final BallSubsystem m_BallSubsystem = new BallSubsystem();
   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
+  private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -60,6 +62,9 @@ public class RobotContainer {
     
     m_DriveTrain.setDefaultCommand(
       new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+    );
+    m_GyroSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
     );
     // Configure the button bindings
     configureButtonBindings();
@@ -89,6 +94,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Autonomous(m_DriveTrain);
+    return new Autonomous(m_DriveTrain, m_GyroSubsystem);
   }
 }

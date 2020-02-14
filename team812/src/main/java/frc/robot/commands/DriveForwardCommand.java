@@ -7,8 +7,12 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.Util;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.Utilities;
 
 public class DriveForwardCommand extends CommandBase {
   /**
@@ -16,29 +20,39 @@ public class DriveForwardCommand extends CommandBase {
    */
   private final Double m_speed;
   private final DriveTrain m_subsystem;
+  private final GyroSubsystem m_gyro;
+  public double targetAngle;
 
-  public DriveForwardCommand(DriveTrain subsystem, Double speed) {
+  public DriveForwardCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_speed = speed;
-    addRequirements(m_subsystem);
+    m_gyro = gyro;
+    addRequirements(m_subsystem, m_gyro);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.printf("*** DriveForwardCommand m_speed: %f\n", m_speed);
+    targetAngle = m_gyro.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(-m_speed,0.0);
+    double adjustedAngle;
+    adjustedAngle = targetAngle - m_gyro.getAngle();
+    System.out.printf("Gyro angle: %f\n", m_gyro.getAngle());
+    System.out.printf("Target angle: %f\n", targetAngle);
+    System.out.printf("Driveforward adjustedAngle: %f\n", adjustedAngle);
+    System.out.printf("DriveForward scaleDouble(adjustedAngle): %f\n", Utilities.scaleDouble(adjustedAngle, -10.0, 10.0));
+    m_subsystem.drive(-m_speed, Utilities.scaleDouble(adjustedAngle, -10.0, 10.0));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(final boolean interrupted) {
     m_subsystem.drive(0.0, 0.0);
   }
 
