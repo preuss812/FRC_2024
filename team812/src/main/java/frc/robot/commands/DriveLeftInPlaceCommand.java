@@ -39,8 +39,8 @@ public class DriveLeftInPlaceCommand extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.drive(0.0, -m_speed);
-    System.out.printf("Gyro angle: %f\n", m_gyro.getAngle());
-    System.out.printf("Target angle: %f\n", targetAngle);
+    System.out.printf("DriveLeft Gyro angle: %f\n", m_gyro.getAngle());
+    System.out.printf("DriveLeft Target angle: %f\n", targetAngle);
     }
 
   // Called once the command ends or is interrupted.

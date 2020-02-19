@@ -33,6 +33,7 @@ public class BallSubsystem extends SubsystemBase {
     m_left.setNeutralMode(NeutralMode.Brake);
     m_right.configFactoryDefault();
     m_right.setNeutralMode(NeutralMode.Brake);
+    m_right.setInverted(true);
   }
   
   public void intake() {

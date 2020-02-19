@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,7 +18,7 @@ import frc.robot.Robot;
 
 public class SpinTheWheelSubsystem extends SubsystemBase {
 
-  private final WPI_TalonSRX m_SpinTheWheelSubsystem = new WPI_TalonSRX(CANConstants.kSpinMotor);
+  private final WPI_VictorSPX m_SpinTheWheelSubsystem = new WPI_VictorSPX(CANConstants.kSpinMotor);
   public SpinTheWheelSubsystem() {
     stop();
     m_SpinTheWheelSubsystem.configFactoryDefault();

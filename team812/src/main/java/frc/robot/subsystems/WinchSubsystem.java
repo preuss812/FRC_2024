@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +22,7 @@ public class WinchSubsystem extends SubsystemBase {
   /**
    * Creates a new HookSubsystem.
    */
-  private final WPI_TalonSRX m_winch = new WPI_TalonSRX(CANConstants.kWinchMotor);
+  private final WPI_VictorSPX m_winch = new WPI_VictorSPX(CANConstants.kWinchMotor);
 
   public WinchSubsystem() {
     stop();

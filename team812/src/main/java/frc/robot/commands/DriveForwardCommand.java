@@ -7,12 +7,10 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.Util;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.Utilities;
+import frc.robot.Constants.PidConstants;
 
 public class DriveForwardCommand extends CommandBase {
   /**
@@ -41,13 +39,21 @@ public class DriveForwardCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double adjustedAngle;
-    adjustedAngle = targetAngle - m_gyro.getAngle();
-    System.out.printf("Gyro angle: %f\n", m_gyro.getAngle());
-    System.out.printf("Target angle: %f\n", targetAngle);
-    System.out.printf("Driveforward adjustedAngle: %f\n", adjustedAngle);
-    System.out.printf("DriveForward scaleDouble(adjustedAngle): %f\n", Utilities.scaleDouble(adjustedAngle, -10.0, 10.0));
-    m_subsystem.drive(-m_speed, Utilities.scaleDouble(adjustedAngle, -10.0, 10.0));
+    double deltaAngle,  turningValue;
+    deltaAngle = targetAngle - m_gyro.getAngle();
+    turningValue = deltaAngle * PidConstants.kProportionalDriveStraight;
+    if(turningValue < -1.0) {
+      turningValue = -1.0;
+    }
+    if(turningValue > 1.0) {
+      turningValue = 1.0;
+    }
+
+    System.out.printf("DriveForward Gyro angle: %f\n", m_gyro.getAngle());
+    System.out.printf("DriveForward Target angle: %f\n", targetAngle);
+    System.out.printf("DriveForward deltaAngle: %f\n", deltaAngle);
+    System.out.printf("DriveForward turningValue: %f\n", turningValue);
+    m_subsystem.drive(-m_speed, turningValue);
   }
 
   // Called once the command ends or is interrupted.

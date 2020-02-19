@@ -17,13 +17,13 @@ package frc.robot;
  */
 public final class Constants {
     public static final class CANConstants {
-        public static final int[] kLeftMotors   = {30, 31};
-        public static final int[] kRightMotors  = {33, 36};
-        public static final int kWinchMotor     = 41; // dko 20200210 device 41 does not exist
-        public static final int kHookMotor      = 37;
-        public static final int kIntakeMotorLeft = 38;
-        public static final int kIntakeMotorRight = 39;
-        public static final int kSpinMotor = 32;
+        public static final int[] kLeftMotors   = {38, 39};
+        public static final int[] kRightMotors  = {37, 32};
+        public static final int kWinchMotor     = 7; // dko 20200210 device 41 does not exist
+        public static final int kHookMotor      = 42;
+        public static final int kIntakeMotorLeft = 43;
+        public static final int kIntakeMotorRight = 41;
+        public static final int kSpinMotor = 6;
 
         public static final int kPDP = 1;
         public static final int kPCM = 40;
@@ -92,8 +92,12 @@ public final class Constants {
     }
 
     public static final class SpinConstants {
-	public static final double kSpinMotorSpeed = 0.05;
-    public static final int kColorRotationCountMax = 10;
-    public static final double kSpinTimeout = 60;
+        public static final double kSpinMotorSpeed = 1.0;
+        public static final int kColorRotationCountMax = 10;
+        public static final double kSpinTimeout = 60;
+    }
+
+    public static final class PidConstants {
+        public static final double kProportionalDriveStraight = 0.05;
     }
 }
