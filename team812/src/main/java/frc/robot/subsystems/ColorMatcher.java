@@ -62,7 +62,7 @@ public class ColorMatcher extends SubsystemBase {
     String colorString;
     final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-    if (proximity >= 300) 
+    if (proximity >= 100) 
     if (match.color == kBlueTarget) {
       colorString = "Blue";
     } else if (match.color == kGreenTarget) {

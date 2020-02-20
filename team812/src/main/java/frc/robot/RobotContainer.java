@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinConstants;
+import frc.robot.Constants.PCMConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -26,6 +28,7 @@ import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -55,6 +58,9 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
 
+  // Pneumatics
+  // private final DoubleSolenoid hopperPneumatic = new DoubleSolenoid(CANConstants.kPCM, PCMConstants.kLiftPistons[0], PCMConstants.kLiftPistons[1]);
+  // private final DoubleSolenoid transmission    = new DoubleSolenoid(CANConstants.kPCM, PCMConstants.kGearShift[0],   PCMConstants.kGearShift[1]);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -85,6 +91,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
+    //new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).toggleWhenActive();
   }
 
   /**
