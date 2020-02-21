@@ -101,4 +101,9 @@ public final class Constants {
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
     }
+
+    public static final class BallHandlingConstants {
+        public static final double kBallIntakeSpeed = 0.7;
+        public static final double kBallOutputSpeed = 1.0;
+    }
 }

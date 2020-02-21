@@ -12,28 +12,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.Constants.CANConstants;
 
-public class RampSubsystem extends SubsystemBase {
+public class ShiftSubsystem extends SubsystemBase {
   /**
    * Creates a new RampSubsystem.
    */
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
     CANConstants.kPCM,
-    PCMConstants.kLiftPistons[0],
-    PCMConstants.kLiftPistons[1]
+    PCMConstants.kGearShift[0],
+    PCMConstants.kGearShift[1]
   );
 
-  public RampSubsystem() {
+  public ShiftSubsystem() {
     // define initial position to be taken when this subsystem is initialized
     down();
   }
 
   public void up() {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-    System.out.printf("RampSubsystem UP\n");
+    System.out.printf("ShiftSubsystem UP\n");
   }
   public void down() {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    System.out.printf("RampSubsystem DOWN\n");
+    System.out.printf("ShiftSubsystem UP\n");
   }
 
   @Override

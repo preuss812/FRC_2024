@@ -25,6 +25,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.RampSubsystem;
+import frc.robot.subsystems.ShiftSubsystem;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.commands.*;
@@ -52,15 +53,13 @@ public class RobotContainer {
   private final BallSubsystem m_BallSubsystem = new BallSubsystem();
   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
   private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
+  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
 
-  // Pneumatics
-  // private final DoubleSolenoid hopperPneumatic = new DoubleSolenoid(CANConstants.kPCM, PCMConstants.kLiftPistons[0], PCMConstants.kLiftPistons[1]);
-  // private final DoubleSolenoid transmission    = new DoubleSolenoid(CANConstants.kPCM, PCMConstants.kGearShift[0],   PCMConstants.kGearShift[1]);
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
@@ -72,6 +71,7 @@ public class RobotContainer {
     m_GyroSubsystem.setDefaultCommand(
       new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
     );
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -91,7 +91,9 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
-    //new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).toggleWhenActive();
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).toggleWhenPressed(new ShiftCommand(m_Shifter));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).toggleWhenPressed(new RampCommand(m_Ramp));
+
   }
 
   /**

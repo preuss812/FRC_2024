@@ -12,11 +12,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.CANConstants;
-import frc.robot.subsystems.*;
-import frc.robot.Constants;
-import frc.robot.Robot;
+import frc.robot.Constants.BallHandlingConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
+
 /**
  * Add your docs here.
  */
@@ -38,19 +38,17 @@ public class BallSubsystem extends SubsystemBase {
   
   public void intake() {
     //   double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
-       //double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-       double speed = 0.2;//speed was changed from .5 o .2 2/11/2020
+       double speed = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
        m_left.set(-speed);
        m_right.set(-speed);
-       //SmartDashboard.putNumber("forward speed", speed);
+       SmartDashboard.putNumber("BallSubsystem intake speed", speed);
      }
    
   public void outtake() {
-      // double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-      double speed= 0.2;
+      double speed = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 1.0);
        m_left.set(speed);
        m_right.set(speed);
-       //SmartDashboard.putNumber("reversed speed", -speed);
+       SmartDashboard.putNumber("BallSubsystem output speed", speed);
      }
    
 

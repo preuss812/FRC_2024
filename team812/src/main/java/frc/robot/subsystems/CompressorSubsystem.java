@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.AnalogIOConstants;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class CompressorSubsystem extends SubsystemBase {
   /**
@@ -24,7 +25,6 @@ public class CompressorSubsystem extends SubsystemBase {
     AnalogIOConstants.kPressureRange,
     AnalogIOConstants.kPressureOffset
   );
-
 
   public CompressorSubsystem() {
     m_compressor.start();
@@ -39,6 +39,7 @@ public class CompressorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    get_pressure();
     // This method will be called once per scheduler run
   }
 }

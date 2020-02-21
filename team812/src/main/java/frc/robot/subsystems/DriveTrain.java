@@ -47,9 +47,9 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void drive(double throttle, double zRotation) {
-    SmartDashboard.putNumber("drive left(-) / right(+)", zRotation);
+    SmartDashboard.putNumber("drive left(+) / right(-)", zRotation);
     SmartDashboard.putNumber("drive fwd(-) / rev(+)", throttle);
-    driveBase.arcadeDrive(-throttle, -zRotation);
+    driveBase.arcadeDrive(-throttle, zRotation);
   }
 
   @Override
