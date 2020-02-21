@@ -22,6 +22,9 @@ public class SpinCommand extends CommandBase {
     private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem;
     private final ColorMatcher m_ColorMatcher;
     private boolean wasItRed;
+    private Color initialColor;
+    private int colorCounter;
+    private Color lastColor;
 
   public SpinCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,6 +39,9 @@ public class SpinCommand extends CommandBase {
   public void initialize() {
       rotationCount = 0;
       wasItRed = false;
+      initialColor = m_ColorMatcher.get_color();
+      lastColor = initialColor;
+      colorCounter = 0;
     System.out.println("is initialized*");
   }
 
@@ -43,6 +49,26 @@ public class SpinCommand extends CommandBase {
   @Override
   public void execute() {
     Color detectedColor = m_ColorMatcher.get_color();
+    if (m_ColorMatcher.isGreen(lastColor) && m_ColorMatcher.isYellow(detectedColor)){
+      detectedColor=lastColor;
+      System.out.printf("I hacked the color\n");
+    }
+     if( detectedColor == initialColor) {
+      if(wasItRed == false) {
+        rotationCount++;
+        
+        System.out.printf("I rotated********* %d\n", rotationCount);
+        System.out.printf("Color Counter **** %d\n", colorCounter);
+        colorCounter = 0;
+
+      }
+      wasItRed = true;
+    } else {
+      wasItRed = false;
+      colorCounter++;
+    }
+    print_color(detectedColor);
+    /*
     if(m_ColorMatcher.isRed(detectedColor)) {
      // System.out.println("I see red!");
       if(wasItRed == false) {
@@ -55,6 +81,7 @@ public class SpinCommand extends CommandBase {
      // System.out.println("Nope!");
       wasItRed = false;
     }
+    */
 
     m_SpinTheWheelSubsystem.forward(SpinConstants.kSpinMotorSpeed);
     //System.out.println("is executed-");
@@ -80,6 +107,23 @@ public class SpinCommand extends CommandBase {
 
     System.out.println("is ending///////////");
     m_SpinTheWheelSubsystem.stop();
+  }
+
+  public void print_color(Color color) {
+    String colorString;
+
+    if (m_ColorMatcher.isBlue(color)) {
+      colorString = "Blue";
+    } else if (m_ColorMatcher.isGreen(color)) {
+      colorString = "Green";
+    } else if (m_ColorMatcher.isRed(color)) {
+      colorString = "Red";
+    } else if (m_ColorMatcher.isYellow(color)) {
+      colorString = "Yellow";
+    } else {
+      colorString = "Unknown";
+    } 
+    System.out.printf("Color detected: %s\n", colorString);
   }
    
 }
