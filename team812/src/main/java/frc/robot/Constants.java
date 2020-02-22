@@ -78,6 +78,21 @@ public final class Constants {
         public static final double[] kYellowTargetRGB = {0.3530, 0.5617, 0.0849}; //{0.39, 0.44, 0.16};
         public static final double kColorConfidenceThreshhold = 0.80;
         public static final int kColorProximityThreshhold = 300; // higher is closer, lower is further away
+        public static final int kColorRed = 0;
+        public static final int kColorYellow = 1;
+        public static final int kColorBlue = 2;
+        public static final int kColorGreen = 3;
+        public static final int kColorUnknown = 4;
+
+        public static final String[] kColorNames = {"red","yellow","blue","green","unknown"};
+        public static final int kColorCorrection[][] = {
+            // columns are for color to infer given the color detected
+            {kColorRed,    kColorYellow, kColorUnknown,kColorYellow, kColorRed},     // Last saw red
+            {kColorUnknown,kColorYellow, kColorBlue,   kColorYellow, kColorYellow},  // Last saw yellow
+            {kColorUnknown,kColorGreen,  kColorBlue,   kColorGreen,  kColorBlue},    // last saw blue
+            {kColorRed,    kColorGreen,  kColorUnknown,kColorGreen,  kColorGreen},   // last saw green
+            {kColorRed,    kColorUnknown,kColorBlue,   kColorUnknown,kColorUnknown}  // last saw unknown
+       };
     }
 
     public static final class AnalogIOConstants {
@@ -93,9 +108,9 @@ public final class Constants {
     }
 
     public static final class SpinConstants {
-        public static final double kSpinMotorSpeed = 0.70;
-        public static final int kColorRotationCountMax = 8;
-        public static final double kSpinTimeout = 25;
+        public static final double kSpinMotorSpeed = 1.0;
+        public static final int kColorRotationCountMax = 7;
+        public static final double kSpinTimeout = 12.0;
     }
 
     public static final class PidConstants {

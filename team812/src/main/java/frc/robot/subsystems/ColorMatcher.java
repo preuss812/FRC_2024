@@ -87,6 +87,24 @@ public class ColorMatcher extends SubsystemBase {
     return match.color;
   }
 
+public int getColorIdCorrected(int lastColorIdDetected) {
+  Color detectedColor = get_color();
+  int colorId = ColorConstants.kColorUnknown;
+  int correctedColorId = ColorConstants.kColorUnknown;
+  if (detectedColor == kBlueTarget) {
+      colorId = ColorConstants.kColorBlue;
+  } else if (detectedColor == kGreenTarget) {
+      colorId = ColorConstants.kColorGreen;
+  } else if (detectedColor == kRedTarget) {
+      colorId = ColorConstants.kColorRed;
+  } else if (detectedColor == kYellowTarget) {
+      colorId = ColorConstants.kColorYellow;
+  } else {
+      colorId = ColorConstants.kColorUnknown;
+  }
+  correctedColorId = ColorConstants.kColorCorrection[lastColorIdDetected][colorId];
+  return correctedColorId;
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

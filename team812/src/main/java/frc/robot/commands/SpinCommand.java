@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Constants.ColorConstants;
 import frc.robot.Constants.SpinConstants;
 
 public class SpinCommand extends CommandBase {
@@ -23,8 +24,10 @@ public class SpinCommand extends CommandBase {
     private final ColorMatcher m_ColorMatcher;
     private boolean wasItRed;
     private Color initialColor;
+    private int   initialColorId;
     private int colorCounter;
     private Color lastColor;
+    private int lastColorIdDetected;
 
   public SpinCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,25 +42,50 @@ public class SpinCommand extends CommandBase {
   public void initialize() {
       rotationCount = 0;
       wasItRed = false;
-      initialColor = m_ColorMatcher.get_color();
+      initialColorId = m_ColorMatcher.getColorIdCorrected(ColorConstants.kColorUnknown);
       lastColor = initialColor;
       colorCounter = 0;
+      lastColorIdDetected = initialColorId;
     System.out.println("is initialized*");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Color detectedColor = m_ColorMatcher.get_color();
-    if (m_ColorMatcher.isGreen(lastColor) && m_ColorMatcher.isYellow(detectedColor)){
-      detectedColor=lastColor;
-      System.out.printf("I hacked the color\n");
-    }
-     if( detectedColor == initialColor) {
-      if(wasItRed == false) {
+    //Color detectedColor = m_ColorMatcher.get_color();
+    int detectedColorId = m_ColorMatcher.getColorIdCorrected(lastColorIdDetected);
+    System.out.printf("lastColorId=%d detected=%d\n",lastColorIdDetected,detectedColorId);
+     if (initialColorId == ColorConstants.kColorUnknown) {
+       if (detectedColorId != ColorConstants.kColorUnknown) {
+         System.out.printf("Found initial color\n");
+       
+        initialColorId = detectedColorId;
+        // lastColorIdDetected = detectedColorId;
+       }
+     } else if (detectedColorId != ColorConstants.kColorUnknown) {
+       if (detectedColorId != lastColorIdDetected)
+       {
+         // We moved to the next color.
+         if (detectedColorId == initialColorId) {
+            rotationCount++;
+            colorCounter = 1;
+            //System.out.printf("I rotated********* Rotations=%d Samples=%d\n", rotationCount, colorCounter);
+          }
+        } else {
+            colorCounter++;
+            //System.out.printf("I sampled********* Rotations=%d Samples=%d\n", rotationCount, colorCounter);
+        } 
+     } else {
+        // We went from a known color to unknown.  That happens when we see red -> blue or blue -> red.
+        // this will likely result in a bad rotation count and cause the process to time out.
+        System.out.printf("We lost the color\n");
+     }
+     lastColorIdDetected = detectedColorId;
+    /*
+    if(wasItRed == false) {
         rotationCount++;
         
-        System.out.printf("I rotated********* %d\n", rotationCount);
+        
         System.out.printf("Color Counter **** %d\n", colorCounter);
         colorCounter = 0;
 
@@ -68,6 +96,7 @@ public class SpinCommand extends CommandBase {
       colorCounter++;
     }
     print_color(detectedColor);
+    */
     /*
     if(m_ColorMatcher.isRed(detectedColor)) {
      // System.out.println("I see red!");
