@@ -112,6 +112,12 @@ public final class Constants {
         public static final int kColorRotationCountMax = 7;
         public static final double kSpinTimeout = 12.0;
     }
+    
+    public static final class PositionWheelConstants {
+        public static final double kPositionWheelMotorSpeed = 0.5;
+        public static final int kExpectedSamplesPerSlice = 18;
+        public static final double kPositionWheelTimeout = 8.0;
+    }
 
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
