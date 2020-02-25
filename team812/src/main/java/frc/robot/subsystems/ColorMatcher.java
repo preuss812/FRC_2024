@@ -45,7 +45,7 @@ public class ColorMatcher extends SubsystemBase {
     ColorConstants.kYellowTargetRGB[1],
     ColorConstants.kYellowTargetRGB[2]
   );
-
+    public final Color kBlack = ColorMatch.makeColor(0,0,0);
 
   public ColorMatcher() {
     m_colorMatcher.addColorMatch(kBlueTarget);
@@ -121,4 +121,35 @@ public int getColorIdCorrected(int lastColorIdDetected) {
   public boolean isGreen(Color color) {
     return (color == kGreenTarget);
   }
+}
+
+
+public Color getFMScolor() {
+    String gameData;
+    Color returnColor = kBlack;
+
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    
+
+    if(gameData.length() > 0) {
+	switch (gameData.charAt(0)) {
+	    case 'B' :
+		returnColor = kBlueTarget;
+		break;
+	    case 'G' :
+		returnColor = kGreenTarget;
+		break;
+	    case 'R' :
+		returnColor = kRedTarget;
+		break;
+	    case 'Y' :
+		returnColor = kYellowTarget;
+		break;
+	    default :
+		// data is not one of BGRY, corrupt information
+		break;
+	} 
+    } else {
+	// The FMS data for color is empty
+    }
 }
