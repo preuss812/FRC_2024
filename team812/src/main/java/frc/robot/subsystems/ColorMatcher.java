@@ -15,6 +15,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import frc.robot.Constants.ColorConstants;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class ColorMatcher extends SubsystemBase {
   /**
@@ -87,28 +88,30 @@ public class ColorMatcher extends SubsystemBase {
     return match.color;
   }
 
-public int getColorIdCorrected(int lastColorIdDetected) {
-  Color detectedColor = get_color();
-  int colorId = ColorConstants.kColorUnknown;
-  int correctedColorId = ColorConstants.kColorUnknown;
-  if (detectedColor == kBlueTarget) {
-      colorId = ColorConstants.kColorBlue;
-  } else if (detectedColor == kGreenTarget) {
-      colorId = ColorConstants.kColorGreen;
-  } else if (detectedColor == kRedTarget) {
-      colorId = ColorConstants.kColorRed;
-  } else if (detectedColor == kYellowTarget) {
-      colorId = ColorConstants.kColorYellow;
-  } else {
-      colorId = ColorConstants.kColorUnknown;
+  public int getColorIdCorrected(int lastColorIdDetected) {
+    Color detectedColor = get_color();
+    int colorId = ColorConstants.kColorUnknown;
+    int correctedColorId = ColorConstants.kColorUnknown;
+    if (detectedColor == kBlueTarget) {
+        colorId = ColorConstants.kColorBlue;
+    } else if (detectedColor == kGreenTarget) {
+        colorId = ColorConstants.kColorGreen;
+    } else if (detectedColor == kRedTarget) {
+        colorId = ColorConstants.kColorRed;
+    } else if (detectedColor == kYellowTarget) {
+        colorId = ColorConstants.kColorYellow;
+    } else {
+        colorId = ColorConstants.kColorUnknown;
+    }
+    correctedColorId = ColorConstants.kColorCorrection[lastColorIdDetected][colorId];
+    return correctedColorId;
   }
-  correctedColorId = ColorConstants.kColorCorrection[lastColorIdDetected][colorId];
-  return correctedColorId;
-}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
   public boolean isRed(Color color) {
     return (color == kRedTarget);
   }
@@ -121,10 +124,8 @@ public int getColorIdCorrected(int lastColorIdDetected) {
   public boolean isGreen(Color color) {
     return (color == kGreenTarget);
   }
-}
 
-
-public Color getFMScolor() {
+  public Color getFMScolor() {
     String gameData;
     Color returnColor = kBlack;
 
@@ -132,24 +133,28 @@ public Color getFMScolor() {
     
 
     if(gameData.length() > 0) {
-	switch (gameData.charAt(0)) {
-	    case 'B' :
-		returnColor = kBlueTarget;
-		break;
-	    case 'G' :
-		returnColor = kGreenTarget;
-		break;
-	    case 'R' :
-		returnColor = kRedTarget;
-		break;
-	    case 'Y' :
-		returnColor = kYellowTarget;
-		break;
-	    default :
-		// data is not one of BGRY, corrupt information
-		break;
-	} 
+      switch (gameData.charAt(0)) {
+        case 'B' :
+          returnColor = kBlueTarget;
+          break;
+        case 'G' :
+          returnColor = kGreenTarget;
+          break;
+        case 'R' :
+          returnColor = kRedTarget;
+          break;
+        case 'Y' :
+          returnColor = kYellowTarget;
+          break;
+        default :
+        // data is not one of BGRY, corrupt information
+          break;
+      }
     } else {
-	// The FMS data for color is empty
+      // The FMS data for color is empty
     }
-}
+    return returnColor;
+  }
+
+} // End of the ColorMatch class
+

@@ -17,6 +17,7 @@ import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpinConstants;
 import frc.robot.Constants.PCMConstants;
+import frc.robot.Constants.PositionWheelConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ColorMatcher;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -93,6 +94,7 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).toggleWhenPressed(new ShiftCommand(m_Shifter));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).toggleWhenPressed(new RampCommand(m_Ramp));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
 
   }
 

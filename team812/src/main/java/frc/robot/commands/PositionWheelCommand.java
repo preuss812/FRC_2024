@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.ColorConstants;
 import frc.robot.Constants.PositionWheelConstants;
 
-public class PositionWheel extends CommandBase {
+public class PositionWheelCommand extends CommandBase {
   /**
    * Creates a new PositionWheel.
    */
@@ -29,7 +29,7 @@ public class PositionWheel extends CommandBase {
     private int goalColorIdAdjusted;
     private int samplesInThisSlice;
 
-  public PositionWheel(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
+  public PositionWheelCommand(SpinTheWheelSubsystem motorSubsystem, ColorMatcher sensorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
       m_SpinTheWheelSubsystem = motorSubsystem;
       addRequirements(motorSubsystem);
@@ -40,7 +40,7 @@ public class PositionWheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      goalColorId = kColorIdGreen;  // Need to get from the MCP :-)
+      goalColorId = ColorConstants.kColorGreen;  // Need to get from the MCP :-)
       goalColorIdAdjusted = (goalColorId+2) % 4;  // Advance 2 colors to account for the 90 degree offset of our robot from the mechanism's color sensor 
       System.out.printf("We are looking for color = %s which means our color matcher needs to see %s\n", ColorConstants.kColorNames[goalColorId], ColorConstants.kColorNames[goalColorIdAdjusted]);
       initialColorId = m_ColorMatcher.getColorIdCorrected(ColorConstants.kColorUnknown);
@@ -69,16 +69,17 @@ public class PositionWheel extends CommandBase {
      } else if (detectedColorId != ColorConstants.kColorUnknown) {
        if (detectedColorId != lastColorIdDetected)
        {
+         samplesInThisSlice = 1;
          // We moved to the next color.
          if (detectedColorId == goalColorIdAdjusted) {
-            samplesInThisSlice = 1;
-            //System.out.printf("Entered the goal color slice\n");
+            System.out.printf("Entered the goal color slice\n");
           } else {
             System.out.printf("Entered a non-goal color slice\n");
           }
        } else {
+          samplesInThisSlice++;
           System.out.printf("Continuing in the current slice. Samples=%d\n",samplesInThisSlice);
-       } 
+           } 
      } else {
         // We went from a known color to unknown.  That happens when we see red -> blue or blue -> red.
         // this will likely result in a bad rotation count and cause the process to time out.
@@ -95,7 +96,7 @@ public class PositionWheel extends CommandBase {
   @Override
   public boolean isFinished() {
     //System.out.println("is finished+");
-      if( detectedColor == goalColorIdAdjusted && samplesInThisSlice >= PositionWheelConstants.kExpectedSamplesPerSlice/2) {
+      if( lastColorIdDetected == goalColorIdAdjusted && samplesInThisSlice >= PositionWheelConstants.kExpectedSamplesPerSlice/2) {
         System.out.println("PositionWheel centered in target slice.\n");
     	m_SpinTheWheelSubsystem.forward(0.0);
         return true;

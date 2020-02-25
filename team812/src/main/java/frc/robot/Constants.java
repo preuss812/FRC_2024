@@ -115,7 +115,7 @@ public final class Constants {
     
     public static final class PositionWheelConstants {
         public static final double kPositionWheelMotorSpeed = 0.5;
-        public static final int kExpectedSamplesPerSlice = 18;
+        public static final int kExpectedSamplesPerSlice = 10;
         public static final double kPositionWheelTimeout = 8.0;
     }
 
