@@ -85,16 +85,18 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(rightJoystick, 1).whileHeld(new WinchCommand(m_WinchSubsystem, true));
-    new JoystickButton(rightJoystick, 2).whileHeld(new WinchCommand(m_WinchSubsystem, false));
-    new JoystickButton(leftJoystick, 1).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 2).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
-    new JoystickButton(leftJoystick, 10).whileHeld(new BallCommand(m_BallSubsystem, true));
-    new JoystickButton(leftJoystick, 11).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).toggleWhenPressed(new ShiftCommand(m_Shifter));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).toggleWhenPressed(new RampCommand(m_Ramp));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new WinchCommand(m_WinchSubsystem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_WinchSubsystem, false));/*
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new WinchCommand(m_HookSubsytem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_HookSubsystem, false));*///Needs to be finished
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(leftJoystick, 2).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
+    new JoystickButton(leftJoystick, 3).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
+    new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxStart).toggleWhenPressed(new RampCommand(m_Ramp));
 
   }
 
