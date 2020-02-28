@@ -24,6 +24,7 @@ import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.ShiftSubsystem;
@@ -55,6 +56,7 @@ public class RobotContainer {
   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
   private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
   private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
+  private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -86,9 +88,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new WinchCommand(m_WinchSubsystem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_WinchSubsystem, false));/*
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new WinchCommand(m_HookSubsytem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_HookSubsystem, false));*///Needs to be finished
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_WinchSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new HookCommand(m_HookSubsystem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new HookCommand(m_HookSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, true));
