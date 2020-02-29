@@ -421,6 +421,12 @@
                   "_type": "Text View",
                   "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,2]/Value",
                   "_title": "DoubleSolenoid[40,2]/Value"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [42]",
+                  "_title": "Victor SPX [42]",
+                  "Visuals/Orientation": "HORIZONTAL"
                 }
               ]
             }
@@ -482,9 +488,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1600.0,
-    "height": 860.0
+    "x": 24.66666603088379,
+    "y": 2.6666667461395264,
+    "width": 1161.3333740234375,
+    "height": 696.6666870117188
   }
 }
