@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   
   public void up() {
-    //   double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
+       //double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
        //double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
        double speed = 1.0;
        m_elevator.set(speed);
@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    
   public void down() {
       // double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-      double speed= 1.0;
+       double speed= 1.0;
        m_elevator.set(-speed);
        //SmartDashboard.putNumber("reversed speed", -speed);
      }

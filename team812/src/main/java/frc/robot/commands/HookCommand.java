@@ -15,12 +15,12 @@ public class HookCommand extends CommandBase {
    * Creates a new HookCommmand.
    */
   private final HookSubsystem m_hookSubsystem;
-  private final boolean hookIn;
+  private final boolean hookUp;
 
-  public HookCommand(HookSubsystem subsystem, boolean in) {
+  public HookCommand(HookSubsystem subsystem, boolean up) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_hookSubsystem = subsystem;
-    hookIn = in;
+    hookUp = up;
     addRequirements(subsystem);
   }
 
@@ -29,14 +29,20 @@ public class HookCommand extends CommandBase {
   public void initialize() {
   }
 
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(hookUp)
+      m_hookSubsystem.up();
+   else
+      m_hookSubsystem.down();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hookSubsystem.stop();
   }
 
   // Returns true when the command should end.
