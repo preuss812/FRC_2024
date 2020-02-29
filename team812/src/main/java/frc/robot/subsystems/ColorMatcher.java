@@ -156,5 +156,36 @@ public class ColorMatcher extends SubsystemBase {
     return returnColor;
   }
 
+  public int getFMScolorId() {
+    String gameData;
+    int returnColorId = ColorConstants.kColorUnknown;
+
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    
+
+    if(gameData.length() > 0) {
+      switch (gameData.charAt(0)) {
+        case 'B' :
+          returnColorId = ColorConstants.kColorBlue;
+          break;
+        case 'G' :
+          returnColorId = ColorConstants.kColorGreen;
+          break;
+        case 'R' :
+          returnColorId = ColorConstants.kColorRed;
+          break;
+        case 'Y' :
+          returnColorId = ColorConstants.kColorYellow;
+          break;
+        default :
+        // data is not one of BGRY, corrupt information
+          break;
+      }
+    } else {
+      // The FMS data for color is empty
+    }
+    return returnColorId;
+  }
+
 } // End of the ColorMatch class
 

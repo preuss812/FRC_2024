@@ -40,7 +40,7 @@ public class PositionWheelCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      goalColorId = ColorConstants.kColorGreen;  // Need to get from the MCP :-)
+      goalColorId = m_ColorMatcher.getFMScolorId();  //ColorConstants.kColorGreen;  // Need to get from the MCP :-)
       goalColorIdAdjusted = (goalColorId+2) % 4;  // Advance 2 colors to account for the 90 degree offset of our robot from the mechanism's color sensor 
       System.out.printf("We are looking for color = %s which means our color matcher needs to see %s\n", ColorConstants.kColorNames[goalColorId], ColorConstants.kColorNames[goalColorIdAdjusted]);
       initialColorId = m_ColorMatcher.getColorIdCorrected(ColorConstants.kColorUnknown);
