@@ -26,21 +26,4 @@ public class Utilities {
         }
         return scaled_x;    
     }
-    /*
-    public static double scaleTest(final double input)
-    {
-        final double min = -1.0;
-        final double max = 1.0;
-        double x = 0.0;
-        double scaled_x = 0.0;
-        if(x < min)
-        {
-            scaled_x = x + 1;
-        }
-        if(x > max)
-        {
-
-        }
-    }
-    */
 }

@@ -50,9 +50,9 @@ public class RobotContainer {
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
   private final RampSubsystem m_Ramp = new RampSubsystem();
   private final WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
-  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  private final BallSubsystem m_BallSubsystem = new BallSubsystem();
+  public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
   private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
   private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
