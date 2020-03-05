@@ -21,8 +21,7 @@ public class GyroSubsystem extends SubsystemBase {
   public GyroSubsystem() {
     gyro.reset();
   //  gyro.calibrate();
-    SmartDashboard.putString("Gyro Subsystem initialized", "fred");
-    System.out.println("Gyro Subsystem initialized***");
+    System.out.println("*** Gyro Subsystem initialized.");
 
   }
   public double getAngle() {

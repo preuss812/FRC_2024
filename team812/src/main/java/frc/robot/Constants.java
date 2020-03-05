@@ -72,9 +72,9 @@ public final class Constants {
         public static final int kXboxRTrigger = 10;
     }
     public static final class ColorConstants {
-        public static final double[] kBlueTargetRBG = {0.1213, 0.4416, 0.4372}; // {0.20, 0.46, 0.30};
-        public static final double[] kGreenTargetRGB = {0.1784, 0.6201, 0.2004}; //{0.23, 0.57, 0.19};
-        public static final double[] kRedTargetRGB = {0.575, 0.307, 0.123}; //{0.41, 0.40, 0.19};
+        public static final double[] kBlueTargetRBG   = {0.1213, 0.4416, 0.4372}; // {0.20, 0.46, 0.30};
+        public static final double[] kGreenTargetRGB  = {0.1784, 0.6201, 0.2004}; //{0.23, 0.57, 0.19};
+        public static final double[] kRedTargetRGB    = {0.5750, 0.3070, 0.1230}; //{0.41, 0.40, 0.19};
         public static final double[] kYellowTargetRGB = {0.3530, 0.5617, 0.0849}; //{0.39, 0.44, 0.16};
         public static final double kColorConfidenceThreshhold = 0.80;
         public static final int kColorProximityThreshhold = 300; // higher is closer, lower is further away

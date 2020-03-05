@@ -120,7 +120,7 @@
               "_title": "drive fwd(-) / rev(+)"
             }
           },
-          "6,0": {
+          "6,2": {
             "size": [
               1,
               1
@@ -215,28 +215,6 @@
               "Visuals/Show text": true
             }
           },
-          "8,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Gyro Subsystem initialized",
-              "_title": "Gyro Subsystem initialized"
-            }
-          },
-          "8,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/drive left(+) / right(-)",
-              "_title": "drive left(+) / right(-)"
-            }
-          },
           "9,1": {
             "size": [
               1,
@@ -246,6 +224,28 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/BallSubsystem output speed",
               "_title": "BallSubsystem output speed"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///FMSInfo/GameSpecificMessage",
+              "_title": "FMSInfo/GameSpecificMessage"
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/drive left(+) / right(-)",
+              "_title": "drive left(+) / right(-)"
             }
           }
         }
