@@ -93,11 +93,11 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxSelect).whileHeld(new HookCommand(m_HookSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(leftJoystick, 2).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
     new JoystickButton(leftJoystick, 3).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
-    new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));
+    //new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));
 //    new JoystickButton(xboxController, Constants.OIConstants.kXboxStart).toggleWhenPressed(new RampCommand(m_Ramp));
 
   }
