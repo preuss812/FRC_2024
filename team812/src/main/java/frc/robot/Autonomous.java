@@ -62,10 +62,10 @@ public class Autonomous extends SequentialCommandGroup {
       m_subsystem
     ).withTimeout(1.0));
     */
-    if( x >= -0.4 && x < 0.4) {
+    if( x >= -0.4 && x <= 0.4) {
       // middle position on the field
       addCommands(new ParallelCommandGroup(
-        new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(3.2),
+        new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4.0),
         new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)
       ));
       /*
@@ -75,24 +75,16 @@ public class Autonomous extends SequentialCommandGroup {
       addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
     } else if( x >= 0.5 ) {
       // left position on the field
-      /*
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0));
-      addCommands(new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.60));
-      addCommands(new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(3.0));
-      addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
-      */
+
       addCommands(new ParallelCommandGroup(
       new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
       new SequentialCommandGroup(
           
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0),
+      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
       new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.80),
+      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
       new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(4)
+      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4)
         )
       )
       );
@@ -114,11 +106,11 @@ public class Autonomous extends SequentialCommandGroup {
         addCommands(new ParallelCommandGroup(
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
           new SequentialCommandGroup(
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
             new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.80),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
             new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.7),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(4.0)
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4.0)
           )
         ) 
       );
@@ -127,19 +119,19 @@ public class Autonomous extends SequentialCommandGroup {
         addCommands(new ParallelCommandGroup(
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
           new SequentialCommandGroup(
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
             new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, -45.0).withTimeout(1.0),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.80),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
             new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, 45.0).withTimeout(1.0),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0)
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0)
           )
         )
         );
       }
       addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
+      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.6).withTimeout(2.0));
     } else {
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(1.5));
+      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
     }
       
     /*
