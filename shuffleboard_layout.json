@@ -120,20 +120,6 @@
               "_title": "drive fwd(-) / rev(+)"
             }
           },
-          "6,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Simple Dial",
-              "_source0": "network_table:///SmartDashboard/Pressure is ",
-              "_title": "Pressure is ",
-              "Range/Min": 0.0,
-              "Range/Max": 120.0,
-              "Visuals/Show value": true
-            }
-          },
           "10,2": {
             "size": [
               1,
@@ -234,18 +220,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///FMSInfo/GameSpecificMessage",
-              "_title": "FMSInfo/GameSpecificMessage"
-            }
-          },
-          "8,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/drive left(+) / right(-)",
-              "_title": "drive left(+) / right(-)"
+              "_title": "FMS Color"
             }
           }
         }
@@ -449,9 +424,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 24.66666603088379,
-    "y": 2.6666667461395264,
+    "x": 26.0,
+    "y": 0.0,
     "width": 1260.6666259765625,
-    "height": 696.6666870117188
+    "height": 686.6666870117188
   }
 }

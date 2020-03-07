@@ -43,4 +43,8 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("gyroRate", gyro.getRate());
     SmartDashboard.putNumber("gyroTemp", gyro.getTemperature());
   }
+
+  public void reset() {
+    gyro.reset();
+  }
 }

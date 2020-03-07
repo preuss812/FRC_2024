@@ -47,15 +47,15 @@ public class RobotContainer {
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
   public static ColorMatcher m_ColorMatcher = new ColorMatcher();
-  private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
-  private final RampSubsystem m_Ramp = new RampSubsystem();
+ //private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
+ // private final RampSubsystem m_Ramp = new RampSubsystem();
   private final WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   private final SpinTheWheelSubsystem m_SpinTheWheelSubsystem = new SpinTheWheelSubsystem();
   private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
-  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
+//  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
   // Controller definitions
@@ -97,7 +97,7 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(leftJoystick, 2).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
     new JoystickButton(leftJoystick, 3).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
-    //new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));
+//    new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));
 //    new JoystickButton(xboxController, Constants.OIConstants.kXboxStart).toggleWhenPressed(new RampCommand(m_Ramp));
 
   }
