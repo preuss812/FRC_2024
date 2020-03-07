@@ -67,7 +67,7 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    if( RobotContainer.m_BlackBox.isSet(7) ) {
+    if( RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) ) {
       System.out.printf("*** Drive mode: drive (squared)\n");
       m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)

@@ -8,15 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.*;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.networktables.*;
+import frc.robot.subsystems.BlackBoxSubsystem;
+import frc.robot.Constants.OIConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -32,6 +31,7 @@ public class Autonomous extends SequentialCommandGroup {
     m_subsystem = subsystem;
     m_gyro = gyro;
 
+
     m_gyro.reset();
 
     System.out.printf("*** Entering Autonomous mode\n");
@@ -42,6 +42,11 @@ public class Autonomous extends SequentialCommandGroup {
 
     double x;
     double y;
+
+    BlackBoxSubsystem blackBox;
+    blackBox = RobotContainer.m_BlackBox;
+
+
      /* NetworkTable.setClientMode();
       NetworkTable.setTeam(812);
       NetworkTable.setIPAdress("roborio-812-frc.local");
@@ -57,96 +62,57 @@ public class Autonomous extends SequentialCommandGroup {
     y = yEntry.getDouble(2.0);
     System.out.printf("camera (x,y) = (%f, %f)\n", x,y);
     
-/*    addCommands (new FunctionalCommand(
-      ()-> m_subsystem.drive(0.0, 0.0), 
-      ()-> m_subsystem.drive(0.5, 0.0),
-      ()-> m_subsystem.drive(0.0, 0.0),
-      ,
-      m_subsystem
-    ).withTimeout(1.0));
-    */
-    if( x >= -0.4 && x <= 0.4) {
-      // middle position on the field
-      addCommands(new ParallelCommandGroup(
-        new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(3),
-        new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)
-      ));
-      /*
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(3.2));
-      addCommands(new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5));
-      */
-      addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-    } else if( x >= 0.5 ) {
+    if(blackBox.isSwitchCenter()) {      // middle position on the field
+      addCommands(
+        new ParallelCommandGroup(
+          new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(3),
+          new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)
+        )
+      );
+      if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
+        addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
+        addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
+      }
+    } else if (blackBox.isSwitchLeft()){
+  //  else if( x >= 0.5 ) {
       // left position on the field
 
-      addCommands(new ParallelCommandGroup(
-      new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
-      new SequentialCommandGroup(
-          
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
-      new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
-      new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-      new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4)
-        )
-      )
-      );
-      addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
-    } else if( x <= -0.5 ) {
-      // right position on the field
-      /*
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.0));
-      addCommands(new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(2.60));
-      addCommands(new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(3.0));
-      addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
-      */
-      if( RobotContainer.m_BlackBox.isSet(4) ) {
-        System.out.printf("*** Autonomous right position switch 4 is DOWN\n");
-        addCommands(new ParallelCommandGroup(
+      addCommands(
+        new ParallelCommandGroup(
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
-          new SequentialCommandGroup(
+          new SequentialCommandGroup(   
             new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
+            new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
             new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
-            new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.7),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4.0)
-          )
-        ) 
-      );
-      } else {
-        System.out.printf("*** Autonomous right position switch 4 is UP\n");
-        addCommands(new ParallelCommandGroup(
-          new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
-          new SequentialCommandGroup(
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
-            new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, -45.0).withTimeout(1.0),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
-            new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, 45.0).withTimeout(1.0),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0)
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4)
           )
         )
-        );
+      );
+      if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
+        addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
+        addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
       }
-      addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.6).withTimeout(2.0));
-    } else {
+    } else if( blackBox.isSwitchRight() ) {
+      // right position on the field
+        addCommands(
+          new ParallelCommandGroup(
+            new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
+            new SequentialCommandGroup(
+              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
+              new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, -45.0).withTimeout(1.0),
+              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
+              new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, 45.0).withTimeout(1.0),
+              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0)
+            )
+          )
+        );
+        if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
+          addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
+          addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.6).withTimeout(2.0));
+        }
+      } else {
       addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
     }
-      
-    /*
-    addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(5.5));
-    addCommands(new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(3.0));
-    addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.5).withTimeout(3.0));
-    addCommands(new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(3.0));
-    */
-
-    // addCommands( );
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    // super();
   }
 }
