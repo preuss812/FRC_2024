@@ -49,7 +49,8 @@ public class BlackBoxSubsystem extends SubsystemBase {
     // the flagBits and if the mask set is equal to the value
     // returned, then the bit is set.
     public boolean isSet(int flag) {
-    	int flagMask = 1 << flag;
+		int flagMask = 1 << flag;
+		readBits();
     	if( (flagBits & flagMask) == flagMask ) {
     		return true;
     	} else {

@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.lang.Math;
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -46,10 +47,26 @@ public class DriveTrain extends SubsystemBase {
 //    driveBase.setRightSideInverted(false);
   }
 
+  // Default arcadeDrive constructor squares the inputs. 
+  // arcadeDrive(-y, x) is equivalent to arcadeDrive(-y, x, true)
+  // in this usage, y (throttle), and x (rotation around the z-axis)
+  // are squared within the arcadeDrive() method.
   public void drive(double throttle, double zRotation) {
-    SmartDashboard.putNumber("drive left(+) / right(-)", zRotation);
-    SmartDashboard.putNumber("drive fwd(-) / rev(+)", throttle);
+    SmartDashboard.putString("*** Drive mode: %s", "drive (squared)");
     driveBase.arcadeDrive(-throttle, zRotation);
+  }
+
+  // Cubic arcadeDrive implementation for 2020 wihch flattens
+  // the joystick input response curve by cubing (x^3) the
+  // joystick input which ranges from -1.0 to 1.0.
+  // Sign is maintained due to math, however, for clarity, 
+  // Math.copysign() is used. The third parameter to arcadeDrive() is false 
+  // to prevent the inputs from being squared once again.
+  public void midnightDrive(double throttle, double zRotation) {
+    SmartDashboard.putString("*** Drive mode: %s", "midnightDrive (cubic)");
+    double x = zRotation * zRotation * zRotation;
+    double y = Math.copySign(throttle,throttle * throttle * throttle);
+    driveBase.arcadeDrive(-y, x, false);
   }
 
   @Override

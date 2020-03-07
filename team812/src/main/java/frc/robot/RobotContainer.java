@@ -67,10 +67,17 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    
-    m_DriveTrain.setDefaultCommand(
-      new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
-    );
+    if( RobotContainer.m_BlackBox.isSet(7) ) {
+      System.out.printf("*** Drive mode: drive (squared)\n");
+      m_DriveTrain.setDefaultCommand(
+        new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+      ); 
+    } else {
+      System.out.printf("*** Drive mode: midnightDrive (cubed)\n");
+      m_DriveTrain.setDefaultCommand(
+        new RunCommand(() -> m_DriveTrain.midnightDrive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+      );
+    }
     m_GyroSubsystem.setDefaultCommand(
       new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
     );

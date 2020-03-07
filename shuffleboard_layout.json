@@ -222,6 +222,39 @@
               "_source0": "network_table:///FMSInfo/GameSpecificMessage",
               "_title": "FMS Color"
             }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/drive left(+) / right(-)",
+              "_title": "drive left(+) / right(-)"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/reversed speed",
+              "_title": "reversed speed"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/*** Drive mode: %s",
+              "_title": "Drive Mode"
+            }
           }
         }
       }
@@ -424,9 +457,9 @@
     }
   ],
   "windowGeometry": {
-    "x": 26.0,
-    "y": 0.0,
-    "width": 1260.6666259765625,
-    "height": 686.6666870117188
+    "x": -7.333333492279053,
+    "y": -7.333333492279053,
+    "width": 1294.6666259765625,
+    "height": 694.6666870117188
   }
 }
