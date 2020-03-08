@@ -33,7 +33,7 @@ public class DriveByAngleCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.printf("*** DriveByAngleCommand m_speed: %f, m_angle: %f\n", m_speed, m_angle);
+    //System.out.printf("*** DriveByAngleCommand m_speed: %f, m_angle: %f\n", m_speed, m_angle);
     targetAngle = (m_gyro.getAngle() + m_angle);
   }
 
@@ -41,7 +41,7 @@ public class DriveByAngleCommand extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.drive(0.0, m_speed);
-    System.out.printf("*** DriveByAngleCommand angles (Gyro, Target) : (%f, %f)\n", m_gyro.getAngle(), targetAngle);
+  //  System.out.printf("*** DriveByAngleCommand angles (Gyro, Target) : (%f, %f)\n", m_gyro.getAngle(), targetAngle);
   }
 
   // Called once the command ends or is interrupted.

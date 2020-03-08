@@ -65,7 +65,7 @@ public class Autonomous extends SequentialCommandGroup {
     if(blackBox.isSwitchCenter()) {      // middle position on the field
       addCommands(
         new ParallelCommandGroup(
-          new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(3),
+          new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.3),
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)
         )
       );

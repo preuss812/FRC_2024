@@ -32,7 +32,7 @@ public class DriveForwardCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.printf("*** DriveForwardCommand m_speed: %f\n", m_speed);
+  //  System.out.printf("*** DriveForwardCommand m_speed: %f\n", m_speed);
     targetAngle = m_gyro.getAngle();
   }
 
@@ -49,10 +49,11 @@ public class DriveForwardCommand extends CommandBase {
       turningValue = 1.0;
     }
 
-    System.out.printf("DriveForward Gyro angle: %f\n", m_gyro.getAngle());
+ /*   System.out.printf("DriveForward Gyro angle: %f\n", m_gyro.getAngle());
     System.out.printf("DriveForward Target angle: %f\n", targetAngle);
     System.out.printf("DriveForward deltaAngle: %f\n", deltaAngle);
     System.out.printf("DriveForward turningValue: %f\n", turningValue);
+    */
     m_subsystem.drive(-m_speed, turningValue);
   }
 

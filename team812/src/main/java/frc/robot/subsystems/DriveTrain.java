@@ -9,12 +9,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.lang.Math;
 
 public class DriveTrain extends SubsystemBase {
@@ -44,6 +42,8 @@ public class DriveTrain extends SubsystemBase {
     rightMotors = new SpeedControllerGroup(rightFront, rightBack);
 
     driveBase = new DifferentialDrive(leftMotors, rightMotors);
+    driveBase.setSafetyEnabled(false);
+    
 //    driveBase.setRightSideInverted(false);
   }
 
@@ -52,7 +52,6 @@ public class DriveTrain extends SubsystemBase {
   // in this usage, y (throttle), and x (rotation around the z-axis)
   // are squared within the arcadeDrive() method.
   public void drive(double throttle, double zRotation) {
-    SmartDashboard.putString("*** Drive mode: %s", "drive (squared)");
     driveBase.arcadeDrive(-throttle, zRotation);
   }
 
@@ -63,7 +62,6 @@ public class DriveTrain extends SubsystemBase {
   // Math.copysign() is used. The third parameter to arcadeDrive() is false 
   // to prevent the inputs from being squared once again.
   public void midnightDrive(double throttle, double zRotation) {
-    SmartDashboard.putString("*** Drive mode: %s", "midnightDrive (cubic)");
     double x = zRotation * zRotation * zRotation;
     double y = Math.copySign(throttle,throttle * throttle * throttle);
     driveBase.arcadeDrive(-y, x, false);

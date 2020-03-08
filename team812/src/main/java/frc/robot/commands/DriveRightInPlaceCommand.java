@@ -32,7 +32,7 @@ public class DriveRightInPlaceCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.printf("*** DriveRightInPlaceCommand m_speed: %f\n", m_speed);
+//    System.out.printf("*** DriveRightInPlaceCommand m_speed: %f\n", m_speed);
     targetAngle = (m_gyro.getAngle() + 85.0);
   }
 
@@ -40,8 +40,8 @@ public class DriveRightInPlaceCommand extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.drive(0.0, m_speed);
-    System.out.printf("Gyro angle: %f\n", m_gyro.getAngle());
-    System.out.printf("Target angle: %f\n", targetAngle);
+//    System.out.printf("Gyro angle: %f\n", m_gyro.getAngle());
+//    System.out.printf("Target angle: %f\n", targetAngle);
   }
 
   // Called once the command ends or is interrupted.
