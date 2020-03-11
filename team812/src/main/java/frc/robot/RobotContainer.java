@@ -75,7 +75,7 @@ public class RobotContainer {
     } else {
       System.out.printf("*** Drive mode: midnightDrive (cubed)\n");
       m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.midnightDrive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+        new RunCommand(() -> m_DriveTrain.doge(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
       );
     }
     m_GyroSubsystem.setDefaultCommand(

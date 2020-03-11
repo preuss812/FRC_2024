@@ -31,6 +31,8 @@ public class DriveTrain extends SubsystemBase {
     leftBack.configFactoryDefault();
     leftFront.setNeutralMode(NeutralMode.Coast);
     leftBack.setNeutralMode(NeutralMode.Coast);
+    leftFront.configOpenloopRamp(0.5);
+    leftBack.configOpenloopRamp(0.5);
     leftMotors = new SpeedControllerGroup(leftFront, leftBack);
 
     rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
@@ -39,6 +41,8 @@ public class DriveTrain extends SubsystemBase {
     rightBack.configFactoryDefault();
     rightFront.setNeutralMode(NeutralMode.Coast);
     rightBack.setNeutralMode(NeutralMode.Coast);
+    rightFront.configOpenloopRamp(0.5);
+    rightBack.configOpenloopRamp(0.5);
     rightMotors = new SpeedControllerGroup(rightFront, rightBack);
 
     driveBase = new DifferentialDrive(leftMotors, rightMotors);
@@ -64,6 +68,11 @@ public class DriveTrain extends SubsystemBase {
   public void midnightDrive(double throttle, double zRotation) {
     double x = zRotation * zRotation * zRotation;
     double y = Math.copySign(throttle,throttle * throttle * throttle);
+    driveBase.arcadeDrive(-y, x, false);
+  }
+  public void doge(double throttle, double zRotation) {
+    double x = zRotation;
+    double y = Math.copySign(throttle,Math.pow(throttle,2)*Math.pow(throttle,3)/1.5);
     driveBase.arcadeDrive(-y, x, false);
   }
 

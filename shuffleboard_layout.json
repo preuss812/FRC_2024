@@ -207,15 +207,15 @@
               "_title": "reversed speed"
             }
           },
-          "6,2": {
+          "0,1": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/*** Drive mode: %s",
-              "_title": "Drive Mode"
+              "_source0": "network_table:///SmartDashboard/BallSubsystem intake speed",
+              "_title": "BallSubsystem intake speed"
             }
           }
         }

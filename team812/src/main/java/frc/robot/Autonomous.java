@@ -63,6 +63,8 @@ public class Autonomous extends SequentialCommandGroup {
     System.out.printf("camera (x,y) = (%f, %f)\n", x,y);
     
     if(blackBox.isSwitchCenter()) {      // middle position on the field
+      System.out.printf("*** Autonomous switch is CENTER\n");
+
       addCommands(
         new ParallelCommandGroup(
           new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.3),
@@ -76,16 +78,16 @@ public class Autonomous extends SequentialCommandGroup {
     } else if (blackBox.isSwitchLeft()){
   //  else if( x >= 0.5 ) {
       // left position on the field
-
+      System.out.printf("*** Autonomous switch is LEFT\n");
       addCommands(
         new ParallelCommandGroup(
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
           new SequentialCommandGroup(   
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
+            new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
             new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
-            new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
-            new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
-            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(4)
+            new DriveLeftInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
+            new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5)
           )
         )
       );
@@ -95,6 +97,7 @@ public class Autonomous extends SequentialCommandGroup {
       }
     } else if( blackBox.isSwitchRight() ) {
       // right position on the field
+      System.out.printf("*** Autonomous switch is RIGHT\n");
         addCommands(
           new ParallelCommandGroup(
             new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
