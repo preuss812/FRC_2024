@@ -73,7 +73,7 @@ public class RobotContainer {
         new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
       ); 
     } else {
-      System.out.printf("*** Drive mode: midnightDrive (cubed)\n");
+      System.out.printf("*** Drive mode: doge (cubed)\n");
       m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.doge(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
       );

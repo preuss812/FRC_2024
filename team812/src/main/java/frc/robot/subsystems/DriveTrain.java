@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
+import frc.robot.Constants.DriveTrainConstants;
 import java.lang.Math;
+ 
 
 public class DriveTrain extends SubsystemBase {
   /**
@@ -29,20 +31,20 @@ public class DriveTrain extends SubsystemBase {
     leftBack = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
     leftFront.configFactoryDefault();
     leftBack.configFactoryDefault();
-    leftFront.setNeutralMode(NeutralMode.Coast);
-    leftBack.setNeutralMode(NeutralMode.Coast);
-    leftFront.configOpenloopRamp(0.5);
-    leftBack.configOpenloopRamp(0.5);
+    leftFront.setNeutralMode(NeutralMode.Brake);
+    leftBack.setNeutralMode(NeutralMode.Brake);
+    leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+    leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftMotors = new SpeedControllerGroup(leftFront, leftBack);
 
     rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
     rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
     rightFront.configFactoryDefault();
     rightBack.configFactoryDefault();
-    rightFront.setNeutralMode(NeutralMode.Coast);
-    rightBack.setNeutralMode(NeutralMode.Coast);
-    rightFront.configOpenloopRamp(0.5);
-    rightBack.configOpenloopRamp(0.5);
+    rightFront.setNeutralMode(NeutralMode.Brake);
+    rightBack.setNeutralMode(NeutralMode.Brake);
+    rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+    rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightMotors = new SpeedControllerGroup(rightFront, rightBack);
 
     driveBase = new DifferentialDrive(leftMotors, rightMotors);
