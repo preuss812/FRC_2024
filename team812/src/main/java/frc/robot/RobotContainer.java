@@ -30,6 +30,7 @@ import frc.robot.subsystems.RampSubsystem;
 import frc.robot.subsystems.ShiftSubsystem;
 import frc.robot.subsystems.SpinTheWheelSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
+import frc.robot.subsystems.encoder;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,6 +59,8 @@ public class RobotContainer {
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
+  private final encoder encodersub = new encoder();
+
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
@@ -70,12 +73,12 @@ public class RobotContainer {
     if( RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) ) {
       System.out.printf("*** Drive mode: drive (squared)\n");
       m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.drive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+        new RunCommand(() -> m_DriveTrain.drive(xboxController.getY(), xboxController.getX()), m_DriveTrain)
       ); 
     } else {
       System.out.printf("*** Drive mode: doge (cubed)\n");
       m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.doge(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+        new RunCommand(() -> m_DriveTrain.doge(xboxController.getY(), xboxController.getX()), m_DriveTrain)
       );
     }
     m_GyroSubsystem.setDefaultCommand(
@@ -101,7 +104,8 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new EncoderCommand(encodersub));
+    //new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(leftJoystick, 2).whenPressed(new SpinCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(SpinConstants.kSpinTimeout));
     new JoystickButton(leftJoystick, 3).whenPressed(new PositionWheelCommand(m_SpinTheWheelSubsystem, m_ColorMatcher).withTimeout(PositionWheelConstants.kPositionWheelTimeout));
 //    new JoystickButton(rightJoystick, 3).toggleWhenPressed(new ShiftCommand(m_Shifter));

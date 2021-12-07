@@ -75,6 +75,9 @@ public class DriveTrain extends SubsystemBase {
   public void doge(double throttle, double zRotation) {
     double x = zRotation;
     double y = Math.copySign(throttle,Math.pow(throttle,2)*Math.pow(throttle,3)/1.5);
+    // 2021-12 Alex modified the response for X & Y by half
+    y = y/2;
+    x = x/2;
     driveBase.arcadeDrive(-y, x, false);
   }
 
