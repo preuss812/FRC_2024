@@ -10,11 +10,11 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Encoder;
 
-public class encoder extends SubsystemBase {
+public class EncoderSubysystem extends SubsystemBase {
 
-  private final Encoder somethingelse = new Encoder(8,9,false,Encoder.EncodingType.k2X);
+  private final Encoder p_encoder = new Encoder(8,9,false,Encoder.EncodingType.k2X);
 
-  public encoder() {}
+  public EncoderSubysystem() {}
 
   @Override
   public void periodic() {
@@ -22,10 +22,10 @@ public class encoder extends SubsystemBase {
   }
 
   public double getNumberRate() {
-    return somethingelse.getRate();
+    return p_encoder.getRate();
   }
 
   public double getNumberDist() {
-    return somethingelse.getDistance();
+    return p_encoder.getDistance();
   }
 }
