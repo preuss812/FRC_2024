@@ -10,11 +10,17 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Encoder;
 
-public class EncoderSubysystem extends SubsystemBase {
+// Java Reference Document for the Encoder class
+// https://first.wpi.edu/FRC/roborio/release/docs/java/edu/wpi/first/wpilibj/Encoder.html
 
-  private final Encoder p_encoder = new Encoder(8,9,false,Encoder.EncodingType.k2X);
+public class EncoderSubsystem extends SubsystemBase {
 
-  public EncoderSubysystem() {}
+  private Encoder p_encoder;
+
+  public EncoderSubsystem() {
+    // This is the object constructor
+    p_encoder = new Encoder(8,9,false,Encoder.EncodingType.k2X);
+  }
 
   @Override
   public void periodic() {
@@ -28,4 +34,10 @@ public class EncoderSubysystem extends SubsystemBase {
   public double getNumberDist() {
     return p_encoder.getDistance();
   }
+
+  // Would recommend creating methods for the following
+  // getStopped
+  // setDistancePerPulse
+  // getDistancePerPulse
+  // reset
 }

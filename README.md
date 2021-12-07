@@ -1,14 +1,14 @@
 # First Robotics Team 812
 
-# The 2020 Destination: Infinite Recharge
+# The 2022 Destination: Unknown!
 
 ## Encryption Key
-* R!$E2geTHeR#2020
+* TBD
 
 ## How to check in the code
 
 1. Open Visual Code
-2. Open the current project, FRC_2020
+2. Open the current folder, FRC_2022
 3. Select the Source Control icon from the left menu
 4. Hover on the files to be Staged and click the '+' sign to stage the file, continue to do this for all files to be staged
 5. Click the '...' menu and select Commit Staged
