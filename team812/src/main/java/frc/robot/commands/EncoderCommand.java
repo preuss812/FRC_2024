@@ -8,12 +8,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.EncoderSubysystem;;
+import frc.robot.subsystems.EncoderSubsystem;;
 
 public class EncoderCommand extends CommandBase {
-  private final EncoderSubysystem m_encoder;
+  private final EncoderSubsystem m_encoder;
 
-  public EncoderCommand(EncoderSubysystem subsystem) {
+  public EncoderCommand(EncoderSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_encoder = subsystem;
     addRequirements(m_encoder);
