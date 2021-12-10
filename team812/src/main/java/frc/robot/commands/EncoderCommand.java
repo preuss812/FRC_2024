@@ -25,6 +25,8 @@ public class EncoderCommand extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("EncoderCommand initialized");
+    m_encoder.doReset();
+    m_encoder.setDistancePerPulse(0.02832031);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

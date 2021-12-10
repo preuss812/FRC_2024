@@ -35,6 +35,12 @@ public class EncoderSubsystem extends SubsystemBase {
     return p_encoder.getDistance();
   }
 
+  public void doReset() {
+    p_encoder.reset();
+  }
+  public void setDistancePerPulse(double factor) {
+    p_encoder.setDistancePerPulse(factor);
+  }
   // Would recommend creating methods for the following
   // getStopped
   // setDistancePerPulse
