@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.Constants.CANConstants;
@@ -18,6 +19,7 @@ public class ShiftSubsystem extends SubsystemBase {
    */
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
     CANConstants.kPCM,
+    PneumaticsModuleType.CTREPCM,
     PCMConstants.kGearShift[0],
     PCMConstants.kGearShift[1]
   );

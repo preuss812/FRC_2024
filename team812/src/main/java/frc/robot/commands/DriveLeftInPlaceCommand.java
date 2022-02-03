@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.GyroSubsystem;
+// import frc.robot.subsystems.GyroSubsystem;
 
 public class DriveLeftInPlaceCommand extends CommandBase {
   /**
@@ -17,22 +17,25 @@ public class DriveLeftInPlaceCommand extends CommandBase {
    */
   private final Double m_speed;
   private final DriveTrain m_subsystem;
-  private final GyroSubsystem m_gyro;
+ // private final GyroSubsystem m_gyro;
   private double targetAngle;
 
-  public DriveLeftInPlaceCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed) {
+//  public DriveLeftInPlaceCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed) {
+  public DriveLeftInPlaceCommand(final DriveTrain subsystem, final Double speed) {
+
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    m_gyro = gyro;
+//    m_gyro = gyro;
     m_speed = speed;
-    addRequirements(m_subsystem, m_gyro);
+//    addRequirements(m_subsystem, m_gyro);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
 //    System.out.printf("*** DriveLeftInPlaceCommand m_speed: %f\n", m_speed);
-    targetAngle = (m_gyro.getAngle() - 85.0);
+//    targetAngle = (m_gyro.getAngle() - 85.0);
+    targetAngle = 85.0; // 2022 hack
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,6 +55,7 @@ public class DriveLeftInPlaceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (m_gyro.getAngle() <= targetAngle);
+   // return (m_gyro.getAngle() <= targetAngle);
+   return( targetAngle == targetAngle);
   }
 }

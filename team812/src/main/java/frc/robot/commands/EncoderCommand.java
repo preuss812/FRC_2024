@@ -8,7 +8,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.EncoderSubsystem;;
+import frc.robot.subsystems.EncoderSubsystem;
+
+import frc.robot.Constants.EncoderConstants;
 
 public class EncoderCommand extends CommandBase {
   private final EncoderSubsystem m_encoder;
@@ -26,7 +28,7 @@ public class EncoderCommand extends CommandBase {
   public void initialize() {
     System.out.println("EncoderCommand initialized");
     m_encoder.doReset();
-    m_encoder.setDistancePerPulse(0.02832031);
+    m_encoder.setDistancePerPulse(EncoderConstants.kEncoderDistanceFactor);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

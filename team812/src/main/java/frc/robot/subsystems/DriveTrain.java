@@ -7,7 +7,8 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+// import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -22,7 +23,8 @@ public class DriveTrain extends SubsystemBase {
    * Creates a new DriveTrain.
    */
   private final WPI_TalonSRX leftFront, leftBack, rightFront, rightBack;
-  private final SpeedControllerGroup leftMotors, rightMotors;
+ // private final SpeedControllerGroup leftMotors, rightMotors;
+ private final MotorControllerGroup leftMotors, rightMotors;
 //  private final Encoder rightEncoder, leftEncoder;
   private final DifferentialDrive driveBase;
 
@@ -35,7 +37,8 @@ public class DriveTrain extends SubsystemBase {
     leftBack.setNeutralMode(NeutralMode.Brake);
     leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    leftMotors = new SpeedControllerGroup(leftFront, leftBack);
+   // leftMotors = new SpeedControllerGroup(leftFront, leftBack);
+    leftMotors = new MotorControllerGroup(leftFront,leftBack);
 
     rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
     rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
@@ -45,7 +48,8 @@ public class DriveTrain extends SubsystemBase {
     rightBack.setNeutralMode(NeutralMode.Brake);
     rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    rightMotors = new SpeedControllerGroup(rightFront, rightBack);
+  //  rightMotors = new SpeedControllerGroup(rightFront, rightBack);
+   rightMotors = new MotorControllerGroup(rightFront, rightBack);
 
     driveBase = new DifferentialDrive(leftMotors, rightMotors);
     driveBase.setSafetyEnabled(false);

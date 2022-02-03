@@ -25,17 +25,20 @@ public class Autonomous extends SequentialCommandGroup {
    * Creates a new Autonomous.
    */
   public DriveTrain m_subsystem;
-  public GyroSubsystem m_gyro;
+  // public GyroSubsystem m_gyro;
 
-  public Autonomous(DriveTrain subsystem, GyroSubsystem gyro) {
+  // public Autonomous(DriveTrain subsystem, GyroSubsystem gyro) {
+  public Autonomous(DriveTrain subsystem) {
+
     m_subsystem = subsystem;
+  /* 2022 bug - commenting out gryo for now
+  https://www.chiefdelphi.com/t/adis-16448-not-working-in-2022/400006
     m_gyro = gyro;
 
-
     m_gyro.reset();
+    */
 
     System.out.printf("*** Entering Autonomous mode\n");
-
 
     NetworkTableEntry xEntry;
     NetworkTableEntry yEntry;
@@ -67,13 +70,13 @@ public class Autonomous extends SequentialCommandGroup {
 
       addCommands(
         new ParallelCommandGroup(
-          new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.3),
+          new DriveForwardCommand(m_subsystem, 0.6).withTimeout(2.3),
           new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)
         )
       );
       if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
         addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-        addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
+      //  addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
       }
     } else if (blackBox.isSwitchLeft()){
   //  else if( x >= 0.5 ) {
@@ -81,8 +84,8 @@ public class Autonomous extends SequentialCommandGroup {
       System.out.printf("*** Autonomous switch is LEFT\n");
       addCommands(
         new ParallelCommandGroup(
-          new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
-          new SequentialCommandGroup(   
+          new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)));
+         /* new SequentialCommandGroup(   
             new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5),
             new DriveRightInPlaceCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
             new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
@@ -90,18 +93,18 @@ public class Autonomous extends SequentialCommandGroup {
             new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5)
           )
         )
-      );
+      ); */
       if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
         addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-        addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
+      //  addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.5).withTimeout(2.0));
       }
     } else if( blackBox.isSwitchRight() ) {
       // right position on the field
       System.out.printf("*** Autonomous switch is RIGHT\n");
         addCommands(
           new ParallelCommandGroup(
-            new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5),
-            new SequentialCommandGroup(
+            new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)));
+          /*  new SequentialCommandGroup(
               new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
               new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, -45.0).withTimeout(1.0),
               new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
@@ -109,13 +112,14 @@ public class Autonomous extends SequentialCommandGroup {
               new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0)
             )
           )
-        );
+        ); */
         if(blackBox.isSet(OIConstants.kControlBoxSw3)) {
           addCommands(new BallCommand(RobotContainer.m_BallSubsystem, false).withTimeout(2.0));
-          addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.6).withTimeout(2.0));
+        //  addCommands(new DriveForwardCommand(m_subsystem, m_gyro, -0.6).withTimeout(2.0));
         }
       } else {
-      addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
+        System.out.printf("*** Autonomous driveforward null\n");
+      //addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
     }
   }
 }

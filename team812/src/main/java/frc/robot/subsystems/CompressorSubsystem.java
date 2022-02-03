@@ -9,17 +9,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.AnalogIOConstants;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class CompressorSubsystem extends SubsystemBase {
   /**
    * Creates a new CompressorSubsystem.
    */
-  private final Compressor m_compressor = new Compressor(CANConstants.kPCM);
+  private final Compressor m_compressor = new Compressor(CANConstants.kPCM,PneumaticsModuleType.CTREPCM);
   private final AnalogPotentiometer m_pressure = new AnalogPotentiometer(
     AnalogIOConstants.kPressureTransducer,
     AnalogIOConstants.kPressureRange,
@@ -27,7 +27,8 @@ public class CompressorSubsystem extends SubsystemBase {
   );
 
   public CompressorSubsystem() {
-    m_compressor.start();
+//    m_compressor.start();
+    m_compressor.enabled();
 
   }
 
