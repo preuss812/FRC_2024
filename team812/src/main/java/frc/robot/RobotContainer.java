@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
+import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.commands.*;
 
 
@@ -44,6 +46,7 @@ public class RobotContainer {
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
   private final EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -86,6 +89,7 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     //new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
   }
 
   /**

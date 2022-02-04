@@ -146,4 +146,6 @@ public final class Constants {
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
     }
+
+    public static final int kLightRelay = 0;
 }
