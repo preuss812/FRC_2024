@@ -69,6 +69,10 @@ public class RobotContainer {
       );
     }
 
+   /* m_DriveTrain.setDefaultCommand(
+      new RunCommand(() -> m_DriveTrain.midnightDrive(xboxController.getY(), xboxController.getX()), m_DriveTrain));
+*/
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -88,8 +92,8 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
-    //new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    //new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
   }
 
   /**

@@ -48,6 +48,11 @@ public class DriveTrain extends SubsystemBase {
     rightBack.setNeutralMode(NeutralMode.Brake);
     rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+
+    // New for 2022, motors have to be inverted by this code
+    rightFront.setInverted(true);
+    rightBack.setInverted(true);
+
   //  rightMotors = new SpeedControllerGroup(rightFront, rightBack);
    rightMotors = new MotorControllerGroup(rightFront, rightBack);
 
@@ -62,7 +67,8 @@ public class DriveTrain extends SubsystemBase {
   // in this usage, y (throttle), and x (rotation around the z-axis)
   // are squared within the arcadeDrive() method.
   public void drive(double throttle, double zRotation) {
-    driveBase.arcadeDrive(-throttle, zRotation);
+  //  driveBase.arcadeDrive(throttle, zRotation);
+      driveBase.arcadeDrive(-throttle,zRotation);
   }
 
   // Cubic arcadeDrive implementation for 2020 wihch flattens
@@ -72,17 +78,22 @@ public class DriveTrain extends SubsystemBase {
   // Math.copysign() is used. The third parameter to arcadeDrive() is false 
   // to prevent the inputs from being squared once again.
   public void midnightDrive(double throttle, double zRotation) {
-    double x = zRotation * zRotation * zRotation;
-    double y = Math.copySign(throttle,throttle * throttle * throttle);
-    driveBase.arcadeDrive(-y, x, false);
+    double m_zRotation = Math.pow(zRotation, 3);
+    double m_throttle = Math.copySign(throttle,Math.pow(throttle,3));
+    driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
   }
+
   public void doge(double throttle, double zRotation) {
-    double x = zRotation;
-    double y = Math.copySign(throttle,Math.pow(throttle,2)*Math.pow(throttle,3)/1.5);
+
+    double m_throttle = throttle;
+    double m_zRotation = zRotation;
+
     // 2021-12 Alex modified the response for X & Y by half
-    y = y/2;
-    x = x/2;
-    driveBase.arcadeDrive(-y, x, false);
+    m_throttle = m_throttle/2.0;
+    m_zRotation = m_zRotation/2.0;
+
+    driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
+    
   }
 
   @Override

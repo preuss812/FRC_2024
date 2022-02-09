@@ -21,8 +21,8 @@ public final class Constants {
         public static final int[] kRightMotors  = {30, 31};
         public static final int kWinchMotor     = 7; // dko 20200210 device 41 does not exist
         public static final int kHookMotor      = 42;
-        public static final int kIntakeMotorLeft = 43;
-        public static final int kIntakeMotorRight = 41;
+        public static final int kIntakeMotorLeft = 32;
+        public static final int kIntakeMotorRight = 37;
         public static final int kSpinMotor = 6;
 
         public static final int kPDP = 1;
