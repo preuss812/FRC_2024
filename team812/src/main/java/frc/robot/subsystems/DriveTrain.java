@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 // import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -68,6 +69,8 @@ public class DriveTrain extends SubsystemBase {
   // are squared within the arcadeDrive() method.
   public void drive(double throttle, double zRotation) {
   //  driveBase.arcadeDrive(throttle, zRotation);
+    SmartDashboard.putString("drivetrain", "drive (squared)");
+
       driveBase.arcadeDrive(-throttle,zRotation);
   }
 
@@ -78,6 +81,8 @@ public class DriveTrain extends SubsystemBase {
   // Math.copysign() is used. The third parameter to arcadeDrive() is false 
   // to prevent the inputs from being squared once again.
   public void midnightDrive(double throttle, double zRotation) {
+
+    SmartDashboard.putString("drivetrain", "midnightDrive");
     double m_zRotation = Math.pow(zRotation, 3);
     double m_throttle = Math.copySign(throttle,Math.pow(throttle,3));
     driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
@@ -87,6 +92,7 @@ public class DriveTrain extends SubsystemBase {
 
     double m_throttle = throttle;
     double m_zRotation = zRotation;
+    SmartDashboard.putString("drivetrain", "doge (cubed)");
 
     // 2021-12 Alex modified the response for X & Y by half
     m_throttle = m_throttle/2.0;

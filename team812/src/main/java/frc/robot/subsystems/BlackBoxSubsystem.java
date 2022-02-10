@@ -10,6 +10,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -65,6 +66,7 @@ public class BlackBoxSubsystem extends SubsystemBase {
 //			System.out.print(prespace + i + "=" + (isSet(i) ? "on":"off"));
 			String iString = String.format( prespace + i + "=" + (isSet(i) ? "on":"off") );
 			String eString = String.format("ControlBox bit %d", i);
+			SmartDashboard.putString(eString, iString);
 			//Robot.nttable.getEntry(eString).setString(iString);
     		prespace = " ";
 		}	

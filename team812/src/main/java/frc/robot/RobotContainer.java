@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -57,13 +58,15 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_BlackBox.printBits();
+    System.out.println(m_BlackBox.isSet(OIConstants.kControlBoxSw4));
     if( RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) ) {
-      System.out.printf("*** Drive mode: drive (squared)\n");
+     // System.out.printf("*** Drive mode: drive (squared)\n");
       m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.drive(xboxController.getY(), xboxController.getX()), m_DriveTrain)
       ); 
     } else {
-      System.out.printf("*** Drive mode: doge (cubed)\n");
+    //  System.out.printf("*** Drive mode: doge (cubed)\n");
       m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.doge(xboxController.getY(), xboxController.getX()), m_DriveTrain)
       );
@@ -93,7 +96,7 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
-    //new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
+    new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
   }
 
   /**
