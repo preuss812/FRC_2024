@@ -20,6 +20,7 @@ import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HookSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
@@ -43,6 +44,8 @@ public class RobotContainer {
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
+  public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
@@ -97,6 +100,9 @@ public class RobotContainer {
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
+    //new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, 0.0));
+    //new JoystickButton(rightJoystick, 3).whenPressed(new ArmCommand(m_ArmSubsystem, 1500));
+    //new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
   }
 
   /**

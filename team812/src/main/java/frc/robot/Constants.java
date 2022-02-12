@@ -28,6 +28,7 @@ public final class Constants {
         public static final int kPDP = 1;
         public static final int kPCM = 40;
         public static final int kElevatorMotor = 35;
+        public static final int kArmMotor = 43;
     }
     public static final class PCMConstants {
         public static final int[] kLiftPistons  = {0, 1};
@@ -136,6 +137,11 @@ public final class Constants {
 
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
+        public static final double kArm_kP = 25.0;
+        public static final double kArm_kI = -50.0;
+        public static final double kArm_kD = -10.0;
+        public static final double kArm_kF = 0.3;
+        public static final double kThreshold = 100.0;
     }
 
     public static final class BallHandlingConstants {
