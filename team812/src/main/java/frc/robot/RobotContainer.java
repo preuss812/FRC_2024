@@ -25,6 +25,7 @@ import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
+import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.commands.*;
 
 
@@ -51,6 +52,7 @@ public class RobotContainer {
 
   private final EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
+  private final CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -103,6 +105,8 @@ public class RobotContainer {
     //new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, 0.0));
     //new JoystickButton(rightJoystick, 3).whenPressed(new ArmCommand(m_ArmSubsystem, 1500));
     //new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
+
+    new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem));
   }
 
   /**
