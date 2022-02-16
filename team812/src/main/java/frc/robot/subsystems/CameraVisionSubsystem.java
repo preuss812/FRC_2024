@@ -10,7 +10,7 @@ import org.photonvision.PhotonCamera;
 
 public class CameraVisionSubsystem extends SubsystemBase {
   /** Creates a new CameraVisionSubsystem. */
-  PhotonCamera camera = new PhotonCamera("photonvision");
+  public PhotonCamera camera = new PhotonCamera("pv-812");
   
   public CameraVisionSubsystem() {
     camera.setDriverMode(true); // a guess
