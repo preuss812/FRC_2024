@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import org.photonvision.PhotonUtils;
+import frc.robot.subsystems.DriveTrain;
 
 public class CameraVisionCommand extends CommandBase {
   /** Creates a new CameraVisionCommand. */
   private final CameraVisionSubsystem m_cameraSubsystem;
+  private final DriveTrain m_drivetrainSubsystem;
+
   final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
   final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.0);
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
@@ -30,10 +33,11 @@ public class CameraVisionCommand extends CommandBase {
   double forwardSpeed;
   double rotationSpeed;
 
-  public CameraVisionCommand(CameraVisionSubsystem subsystem) {
+  public CameraVisionCommand(CameraVisionSubsystem subsystem, DriveTrain drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_cameraSubsystem = subsystem;
-    addRequirements(subsystem);
+    m_drivetrainSubsystem = drivetrainSubsystem;
+    addRequirements(subsystem, drivetrainSubsystem);
   }
 
 
@@ -59,14 +63,16 @@ public class CameraVisionCommand extends CommandBase {
                 CAMERA_PITCH_RADIANS,
                 Units.degreesToRadians(results.getBestTarget().getPitch()));
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
-
-        rotationSpeed = -turnController.calculate(results.getBestTarget().getYaw(), 0);
+        forwardSpeed= 0.0;
+        rotationSpeed = 0.1*turnController.calculate(results.getBestTarget().getYaw(), 0);
     } else {
-      forwardSpeed = 0.02;
-      rotationSpeed = 0.02;
+      forwardSpeed = 0.00;
+      rotationSpeed = 0.00;
     }
     SmartDashboard.putNumber("Fwd speed", forwardSpeed);
     SmartDashboard.putNumber("Rot speed", rotationSpeed);
+   m_drivetrainSubsystem.drive(forwardSpeed, rotationSpeed); 
+    
   }
 
   // Called once the command ends or is interrupted.

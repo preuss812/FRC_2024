@@ -106,7 +106,7 @@ public class RobotContainer {
     //new JoystickButton(rightJoystick, 3).whenPressed(new ArmCommand(m_ArmSubsystem, 1500));
     //new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
 
-    new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem));
+    new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
   }
 
   /**
