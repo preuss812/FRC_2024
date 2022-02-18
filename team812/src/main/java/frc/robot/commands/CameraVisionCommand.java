@@ -24,7 +24,8 @@ public class CameraVisionCommand extends CommandBase {
 
   final double LINEAR_P = 0.1;
   final double LINEAR_D = 0.0;
-  final double ANGULAR_P = 0.1;
+  final double ANGULAR_P = 0.03;
+  final double ANGULAR_I = 0.01;
   final double ANGULAR_D = 0.0;
 
   PIDController forwardController;
@@ -45,7 +46,7 @@ public class CameraVisionCommand extends CommandBase {
   @Override
   public void initialize() {
     forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
-    turnController = new PIDController(ANGULAR_P, 0, ANGULAR_D);
+    turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
     forwardSpeed = 0.01;
     rotationSpeed = 0.01;
   }
@@ -64,7 +65,7 @@ public class CameraVisionCommand extends CommandBase {
                 Units.degreesToRadians(results.getBestTarget().getPitch()));
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
         forwardSpeed= 0.0;
-        rotationSpeed = 0.1*turnController.calculate(results.getBestTarget().getYaw(), 0);
+        rotationSpeed = -turnController.calculate(results.getBestTarget().getYaw(), 0);
     } else {
       forwardSpeed = 0.00;
       rotationSpeed = 0.00;
