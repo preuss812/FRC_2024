@@ -25,7 +25,7 @@ public class CameraVisionCommand extends CommandBase {
   final double LINEAR_P = 0.1;
   final double LINEAR_D = 0.0;
   final double ANGULAR_P = 0.03;
-  final double ANGULAR_I = 0.01;
+  final double ANGULAR_I = 0.01; //Unsure if this works, haven't tested yet-Leo
   final double ANGULAR_D = 0.0;
 
   PIDController forwardController;
