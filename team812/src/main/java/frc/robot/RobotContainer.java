@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import javax.print.attribute.standard.Compression;
+
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +29,7 @@ import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CameraVisionSubsystem;
+import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.commands.*;
 
 
@@ -40,7 +44,7 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
-
+  private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
   private final WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
@@ -104,11 +108,11 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
     //new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, 0.0));
     //new JoystickButton(rightJoystick, 3).whenPressed(new ArmCommand(m_ArmSubsystem, 1500));
-    //new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
+    new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 5000));
 
     new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
+    new JoystickButton(leftJoystick, 1).whenPressed(new ArmHomeCommand(m_ArmSubsystem));
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

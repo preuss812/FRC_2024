@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import frc.robot.Constants.DriveTrainConstants;
 
+import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -22,7 +23,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 
 public class ArmSubsystem extends SubsystemBase {
-  private final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
+  public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
 
 
   /** Creates a new ArmSubsystem. */
@@ -37,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     // Invert motor (setInverted) so that the Talon LEDs are green when driving forward (up)
     // Phase sensor should have a positive increment as the Talon drives the arm up
-    m_arm.setInverted(false);
+    m_arm.setInverted(true);
     m_arm.setSensorPhase(false); //Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
@@ -52,8 +53,8 @@ public class ArmSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0,10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(1,10);
-    m_arm.configPeakOutputReverse(1, 10);
+    m_arm.configPeakOutputForward(0.25,10);
+    m_arm.configPeakOutputReverse(-0.25, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -64,17 +65,18 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.config_kF(0, PidConstants.kArm_kF, 10);
 
     // Velocity in sensor units per 100ms
-    m_arm.configMotionCruiseVelocity(1500.0, 10);
+    m_arm.configMotionCruiseVelocity(150.0, 10);
     // Acceleration in sensor units per 100ms per second
-    m_arm.configMotionAcceleration(1500.0, 10);
+    m_arm.configMotionAcceleration(150.0, 10);
 
     // Make sure the forward and reverse limit switches are enabled and configured normally open
     m_arm.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
     m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
+    m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
 
     // Assuming the arm is in the Home position (down) we reset the internal position to zero 
-    m_arm.setSelectedSensorPosition(0.0, 0, 10);
-    setPosition(0.0); // should do nothing except update SmartDashboard
+    //m_arm.setSelectedSensorPosition(0.0, 0, 10);
+  //  setPosition(0.0); // should do nothing except update SmartDashboard
 
     if (isBottomLimitSwitchClosed()) {
       SmartDashboard.putString("Arm status", "Bottom closed, Encoder 0");
@@ -95,6 +97,11 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Arm pos:", position);
     return position;
   }
+
+  public void setSensorPosition(double position) {
+    m_arm.setSelectedSensorPosition(position, 0, 10);
+  }
+
 
   public boolean isTopLimitSwitchClosed () {
     return (m_arm.isFwdLimitSwitchClosed() == 1 ? true : false);

@@ -23,15 +23,15 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new DriveTrain.
    */
-  private final WPI_TalonSRX leftFront, leftBack, rightFront, rightBack;
+  private final WPI_VictorSPX leftFront, leftBack, rightFront, rightBack;
  // private final SpeedControllerGroup leftMotors, rightMotors;
  private final MotorControllerGroup leftMotors, rightMotors;
 //  private final Encoder rightEncoder, leftEncoder;
   private final DifferentialDrive driveBase;
 
   public DriveTrain() {
-    leftFront = new WPI_TalonSRX(CANConstants.kLeftMotors[0]);
-    leftBack = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
+    leftFront = new WPI_VictorSPX(CANConstants.kLeftMotors[0]);
+    leftBack = new WPI_VictorSPX(CANConstants.kLeftMotors[1]);
     leftFront.configFactoryDefault();
     leftBack.configFactoryDefault();
     leftFront.setNeutralMode(NeutralMode.Brake);
@@ -41,8 +41,8 @@ public class DriveTrain extends SubsystemBase {
    // leftMotors = new SpeedControllerGroup(leftFront, leftBack);
     leftMotors = new MotorControllerGroup(leftFront,leftBack);
 
-    rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
-    rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
+    rightFront = new WPI_VictorSPX(CANConstants.kRightMotors[0]);
+    rightBack = new WPI_VictorSPX(CANConstants.kRightMotors[1]);
     rightFront.configFactoryDefault();
     rightBack.configFactoryDefault();
     rightFront.setNeutralMode(NeutralMode.Brake);

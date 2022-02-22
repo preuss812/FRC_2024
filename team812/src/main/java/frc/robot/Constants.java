@@ -17,22 +17,27 @@ package frc.robot;
  */
 public final class Constants {
     public static final class CANConstants {
-        public static final int[] kLeftMotors   = {36, 33};
-        public static final int[] kRightMotors  = {30, 31};
-        public static final int kWinchMotor     = 7; // dko 20200210 device 41 does not exist
-        public static final int kHookMotor      = 42;
-        public static final int kIntakeMotorLeft = 32;
-        public static final int kIntakeMotorRight = 37;
-        public static final int kSpinMotor = 6;
+        public static final int[] kLeftMotors   = {44, 7};
+        public static final int[] kRightMotors  = {30, 06};
+        public static final int kWinchMotor     = 80; // dko remove for 2022
+        public static final int kHookMotor      = 81; // dko remove for 2022
+        public static final int kIntakeMotorLeft = 82; // dko remove for 2022
+        public static final int kIntakeMotorRight = 83; // dko remove for 2022
+        public static final int kIntakeMotor = 39; // dko 20220221 Mr. Rupert went to single motor
+        public static final int kSpinMotor = 84; // dko remove for 2022
 
-        public static final int kPDP = 1;
+        public static final int kPDP = 42;
         public static final int kPCM = 40;
-        public static final int kElevatorMotor = 60;
-        public static final int kArmMotor = 35;
+        public static final int kElevatorMotor = 85; // dko remove 2022
+        public static final int kElevatorMotorLeft = 32;
+        public static final int kElevatorMotorRight = 33;
+        public static final int kArmMotor = 31;
     }
     public static final class PCMConstants {
-        public static final int[] kLiftPistons  = {0, 1};
-        public static final int[] kGearShift = {2, 3};
+        public static final int[] kLiftPistons  = {0, 1}; // dko remove for 2022
+        public static final int[] kGearShift = {2, 3};  // dko remove for 2022
+        public static final int[] kBarHooks = {6,7}; // dko 20220221 need to physically verify
+        public static final int[] kArmExtension = {4,5}; // dko 20220221 need to physicall verify
     }
     public static final class OIConstants {
         public static final int kLeftJoystick = 1;
