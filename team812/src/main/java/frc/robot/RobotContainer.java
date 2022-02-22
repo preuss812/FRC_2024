@@ -25,7 +25,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
-import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CameraVisionSubsystem;
@@ -45,7 +44,6 @@ public class RobotContainer {
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
   private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
-  private final WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
@@ -97,21 +95,22 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxRBumper).whileHeld(new WinchCommand(m_WinchSubsystem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxLBumper).whileHeld(new WinchCommand(m_WinchSubsystem, false));
+    // xbox controller
     new JoystickButton(xboxController, Constants.OIConstants.kXboxStart).whileHeld(new HookCommand(m_HookSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxSelect).whileHeld(new HookCommand(m_HookSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
-    //new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, 0.0));
-    //new JoystickButton(rightJoystick, 3).whenPressed(new ArmCommand(m_ArmSubsystem, 1500));
-    new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 5000));
 
+    // Right Joystick
+    new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
     new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
-    new JoystickButton(leftJoystick, 1).whenPressed(new ArmHomeCommand(m_ArmSubsystem));
+
+    // Left Joystick
+    new JoystickButton(leftJoystick, 4).whenPressed(new ArmHomeCommand(m_ArmSubsystem));
+    new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
+    new JoystickButton(leftJoystick, 6).whenPressed(new ArmCommand(m_ArmSubsystem, 6000));
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

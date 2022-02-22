@@ -77,39 +77,6 @@ public final class Constants {
         public static final int kXboxLTrigger = 9;
         public static final int kXboxRTrigger = 10;
     }
-    public static final class ColorConstants {
-        //Color values at the Preuss School Lab
-        public static final double[] kBlueTargetRBG   = {0.1213, 0.4416, 0.4372}; // {0.20, 0.46, 0.30};
-        public static final double[] kGreenTargetRGB  = {0.1784, 0.6201, 0.2004}; //{0.23, 0.57, 0.19};
-        public static final double[] kRedTargetRGB    = {0.5750, 0.3070, 0.1230}; //{0.41, 0.40, 0.19};
-        public static final double[] kYellowTargetRGB = {0.3530, 0.5617, 0.0849}; //{0.39, 0.44, 0.16};
-        /*
-        // Color Values at Del Mar Fairgrounds 2020-03-06
-        public static final double[] kBlueTargetRBG   = {0.1521, 0.4367, 0.4111};
-        public static final double[] kYellowTargetRGB = {0.3630, 0.5183, 0.1201};
-        public static final double[] kRedTargetRGB    = {0.5593, 0.3203, 0.1201};
-        public static final double[] kGreenTargetRGB  = {0.1967, 0.5539, 0.2492};
-        */
-
-        public static final double kColorConfidenceThreshhold = 0.80;
-        public static final int kColorProximityThreshhold = 300; // higher is closer, lower is further away
-        public static final int kColorRed = 0;
-        public static final int kColorYellow = 1;
-        public static final int kColorBlue = 2;
-        public static final int kColorGreen = 3;
-        public static final int kColorUnknown = 4;
-
-        public static final String[] kColorNames = {"red","yellow","blue","green","unknown"};
-        public static final int kColorCorrection[][] = {
-            // columns are for color to infer given the color detected
-            {kColorRed,    kColorYellow, kColorUnknown,kColorYellow, kColorRed},     // Last saw red
-            {kColorUnknown,kColorYellow, kColorBlue,   kColorYellow, kColorYellow},  // Last saw yellow
-            {kColorUnknown,kColorGreen,  kColorBlue,   kColorGreen,  kColorBlue},    // last saw blue
-            {kColorRed,    kColorGreen,  kColorUnknown,kColorGreen,  kColorGreen},   // last saw green
-            {kColorRed,    kColorUnknown,kColorBlue,   kColorUnknown,kColorUnknown}  // last saw unknown
-       };
-    }
-
     public static final class AnalogIOConstants {
         public static final int kPressureTransducer = 0;
         public static final int kPressureOffset = -20;
@@ -127,19 +94,6 @@ public final class Constants {
         public static final double kEncoderDistanceFactor = (wheelDiameter * Math.PI) / ticksPerRevolution;
         //0.02832031, original factor
     }
-
-    public static final class SpinConstants {
-        public static final double kSpinMotorSpeed = 1.0;
-        public static final int kColorRotationCountMax = 7;
-        public static final double kSpinTimeout = 12.0;
-    }
-    
-    public static final class PositionWheelConstants {
-        public static final double kPositionWheelMotorSpeed = 0.5;
-        public static final int kExpectedSamplesPerSlice = 10;
-        public static final double kPositionWheelTimeout = 8.0;
-    }
-
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
         public static final double kArm_kP = 25.0;

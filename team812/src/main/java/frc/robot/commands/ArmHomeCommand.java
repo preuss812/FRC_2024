@@ -4,18 +4,13 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.Constants.PidConstants;;
 
 public class ArmHomeCommand extends CommandBase {
   /** Creates a new ArmHomeCommand. */
   private final ArmSubsystem m_armSubsystem;
-  private boolean m_reachedHome;
-  private Integer m_backOffCounter;
 
   public ArmHomeCommand(ArmSubsystem subsystem) {
     m_armSubsystem = subsystem;
@@ -25,10 +20,7 @@ public class ArmHomeCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    var initialPosition = m_armSubsystem.getPosition();
     SmartDashboard.putString("homearm", "starting");
-    m_reachedHome = false;
-    m_backOffCounter = 500;
     m_armSubsystem.setSensorPosition(10000.0);
     m_armSubsystem.setPosition(5000.0);
   }

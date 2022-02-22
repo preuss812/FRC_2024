@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 //import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -23,28 +25,33 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private final WPI_TalonSRX m_elevator = new WPI_TalonSRX(CANConstants.kElevatorMotor);
+  private final WPI_TalonSRX m_elevatorLeft = new WPI_TalonSRX(CANConstants.kElevatorMotorLeft);
+  private final WPI_TalonSRX m_elevatorRight = new WPI_TalonSRX(CANConstants.kElevatorMotorRight);
+
+  private WPI_TalonSRX m_elevator = m_elevatorLeft;
+
   public ElevatorSubsystem() {
     stop();
-    m_elevator.configFactoryDefault();
-    m_elevator.setNeutralMode(NeutralMode.Brake);
+    m_elevatorLeft.configFactoryDefault();
+    m_elevatorLeft.setNeutralMode(NeutralMode.Brake);
+    m_elevatorLeft.setInverted(true);
+
+    m_elevatorRight.configFactoryDefault();
+    m_elevatorRight.setNeutralMode(NeutralMode.Brake);
+    m_elevatorRight.setInverted(true);
+
+    m_elevatorRight.follow(m_elevatorLeft);
   }
   
   public void up() {
-       //double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
-       //double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-       double speed = 1.0;
+       double speed = 0.5;
        m_elevator.set(speed);
-       //SmartDashboard.putNumber("forward speed", speed);
      }
    
   public void down() {
-      // double speed = RobotContainer.m_BlackBox.getPotValueScaled(Constants.OIConstants.kControlBoxPotY, 0.0, 1.0);
-       double speed= 1.0;
+       double speed= 0.5;
        m_elevator.set(-speed);
-       //SmartDashboard.putNumber("reversed speed", -speed);
      }
-   
 
 /*
    @Override
