@@ -9,7 +9,91 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]/Left Motor Speed",
+              "_title": "Left Spd",
+              "Range/Min": -1.0,
+              "Range/Max": 1.0,
+              "Visuals/Show value": true
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/Microsoft_LifeCam_HD-3000/targetArea",
+              "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetArea"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/Microsoft_LifeCam_HD-3000/targetPitch",
+              "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetPitch"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/Microsoft_LifeCam_HD-3000/targetPixelsX",
+              "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetPixelsX"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/Microsoft_LifeCam_HD-3000/targetPixelsY",
+              "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetPixelsY"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/Microsoft_LifeCam_HD-3000/targetYaw",
+              "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetYaw"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]/Right Motor Speed",
+              "_title": "Right Spd",
+              "Range/Min": -1.0,
+              "Range/Max": 1.0,
+              "Visuals/Show value": true
+            }
+          },
           "0,0": {
             "size": [
               1,
@@ -17,8 +101,19 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Red",
-              "_title": "Red"
+              "_source0": "network_table:///SmartDashboard/drivetrain",
+              "_title": "drivetrain"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/drivetrain",
+              "_title": "/SmartDashboard/drivetrain"
             }
           },
           "1,0": {
@@ -28,8 +123,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Green",
-              "_title": "Green"
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 1",
+              "_title": "ControlBox bit 1"
             }
           },
           "2,0": {
@@ -39,30 +134,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Blue",
-              "_title": "Blue"
-            }
-          },
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Proximity",
-              "_title": "Proximity"
-            }
-          },
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Confidence",
-              "_title": "Confidence"
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 2",
+              "_title": "ControlBox bit 2"
             }
           },
           "5,0": {
@@ -72,106 +145,8 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Detected Color",
-              "_title": "Detected Color"
-            }
-          },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/gyroAngle",
-              "_title": "gyroAngle"
-            }
-          },
-          "9,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/gyroRate",
-              "_title": "gyroRate"
-            }
-          },
-          "10,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/gyroTemp",
-              "_title": "gyroTemp"
-            }
-          },
-          "10,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/drive fwd(-) / rev(+)",
-              "_title": "drive fwd(-) / rev(+)"
-            }
-          },
-          "10,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/forward speed",
-              "_title": "forward speed"
-            }
-          },
-          "6,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Number Bar",
-              "_source0": "network_table:///OpenSight/x",
-              "_title": "OpenSight/x",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Range/Center": 0.0,
-              "Visuals/Num tick marks": 5,
-              "Visuals/Show text": true
-            }
-          },
-          "7,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Number Bar",
-              "_source0": "network_table:///OpenSight/y",
-              "_title": "OpenSight/y",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Range/Center": 0.0,
-              "Visuals/Num tick marks": 5,
-              "Visuals/Show text": true
-            }
-          },
-          "9,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/BallSubsystem output speed",
-              "_title": "BallSubsystem output speed"
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 3",
+              "_title": "ControlBox bit 3"
             }
           },
           "6,0": {
@@ -181,22 +156,44 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///FMSInfo/GameSpecificMessage",
-              "_title": "FMS Color"
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 4",
+              "_title": "ControlBox bit 4"
             }
           },
-          "8,0": {
+          "7,0": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/drive left(+) / right(-)",
-              "_title": "drive left(+) / right(-)"
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 5",
+              "_title": "ControlBox bit 5"
             }
           },
-          "8,1": {
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 6",
+              "_title": "ControlBox bit 6"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 7",
+              "_title": "ControlBox bit 7"
+            }
+          },
+          "2,1": {
             "size": [
               1,
               1
@@ -207,7 +204,7 @@
               "_title": "reversed speed"
             }
           },
-          "0,1": {
+          "7,1": {
             "size": [
               1,
               1
@@ -216,6 +213,72 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/BallSubsystem intake speed",
               "_title": "BallSubsystem intake speed"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/forward speed",
+              "_title": "forward speed"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm pos:",
+              "_title": "Arm pos:"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm status",
+              "_title": "Arm status"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Visual Target",
+              "_title": "Visual Target"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/pipeline",
+              "_title": "pipeline"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pressure is ",
+              "_title": "Pressure is "
             }
           }
         }
@@ -230,188 +293,367 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
+        "titleType": 0,
         "tiles": {
           "0,0": {
             "size": [
-              2,
-              4
+              1,
+              1
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Ungrouped",
-              "_title": "Ungrouped",
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Enabled",
-                  "_title": "Compressor[40]/Enabled",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Pressure switch",
-                  "_title": "Compressor[40]/Pressure switch",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Voltage View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/AnalogPotentiometer[0]",
-                  "_title": "AnalogPotentiometer[0]",
-                  "Range/Min": 0.0,
-                  "Range/Max": 5.0,
-                  "Range/Center": 0.0,
-                  "Visuals/Orientation": "HORIZONTAL",
-                  "Visuals/Number of tick marks": 5
-                },
-                {
-                  "_type": "Differential Drivebase",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
-                  "_title": "DifferentialDrive[1]",
-                  "Wheels/Number of wheels": 4,
-                  "Wheels/Wheel diameter": 80.0,
-                  "Visuals/Show velocity vectors": true
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [38]",
-                  "_title": "Talon SRX [38]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [32]",
-                  "_title": "Talon SRX [32]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,0]/Value",
-                  "_title": "DoubleSolenoid[40,0]/Value"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [35]",
-                  "_title": "Talon SRX [35]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [39]",
-                  "_title": "Talon SRX [39]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalOutput[19]/Value",
-                  "_title": "DigitalOutput[19]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[10]/Value",
-                  "_title": "DigitalInput[10]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[18]/Value",
-                  "_title": "DigitalInput[18]/Value",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [41]",
-                  "_title": "Talon SRX [41]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [43]",
-                  "_title": "Talon SRX [43]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [7]",
-                  "_title": "Victor SPX [7]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [6]",
-                  "_title": "Victor SPX [6]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,2]/Value",
-                  "_title": "DoubleSolenoid[40,2]/Value"
-                },
-                {
-                  "_type": "Speed Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [42]",
-                  "_title": "Victor SPX [42]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                }
-              ]
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [42]/Value",
+              "_title": "Ungrouped/Victor SPX [42]/Value"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "Relay Widget",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Relay[0]",
+              "_title": "Ungrouped/Relay[0]"
             }
           },
           "2,0": {
             "size": [
-              2,
-              4
+              3,
+              2
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/BallSubsystem",
-              "_title": "BallSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
+              "_type": "Differential Drivebase",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
+              "_title": "Ungrouped/DifferentialDrive[1]",
+              "Wheels/Number of wheels": 4,
+              "Wheels/Wheel diameter": 80.0,
+              "Visuals/Show velocity vectors": true
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Encoder",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[0]",
+              "_title": "Ungrouped/Encoder[0]"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [37]/Value",
+              "_title": "Ungrouped/Talon SRX [37]/Value"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [35]/Value",
+              "_title": "Ungrouped/Talon SRX [35]/Value"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [7]/Value",
+              "_title": "Ungrouped/Victor SPX [7]/Value"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [32]/Value",
+              "_title": "Ungrouped/Talon SRX [32]/Value"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [43]/Value",
+              "_title": "Ungrouped/Talon SRX [43]/Value"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Enabled",
+              "_title": "Ungrouped/Compressor[40]/Enabled",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [31]/Value",
+              "_title": "Ungrouped/Talon SRX [31]/Value"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [81]/Value",
+              "_title": "Ungrouped/Victor SPX [81]/Value"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,4]/Value",
+              "_title": "Ungrouped/DoubleSolenoid[40,4]/Value"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Pressure switch",
+              "_title": "Ungrouped/Compressor[40]/Pressure switch",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Voltage View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/AnalogPotentiometer[0]",
+              "_title": "Ungrouped/AnalogPotentiometer[0]",
+              "Range/Min": 0.0,
+              "Range/Max": 5.0,
+              "Range/Center": 0.0,
+              "Visuals/Orientation": "HORIZONTAL",
+              "Visuals/Number of tick marks": 5
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [33]/Value",
+              "_title": "Ungrouped/Talon SRX [33]/Value"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "pnuematics",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///LiveWindow/Ungrouped/AnalogPotentiometer[0]/Value",
+              "_title": "Pressure",
+              "Range/Min": 0.0,
+              "Range/Max": 150.0,
+              "Visuals/Show value": true
             }
           },
           "4,0": {
             "size": [
               2,
-              4
+              1
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/BlackBoxSubsystem",
-              "_title": "BlackBoxSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Enabled",
+              "_title": "/LiveWindow/Ungrouped/Compressor[40]/Enabled",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "6,0": {
+          "7,0": {
             "size": [
-              2,
-              4
+              1,
+              1
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/WinchSubsystem",
-              "_title": "WinchSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Compressor[40]/Pressure switch",
+              "_title": "/LiveWindow/Ungrouped/Compressor[40]/Pressure switch",
+              "Colors/Color when true": "#FF0000FF",
+              "Colors/Color when false": "#008000FF"
             }
           },
-          "8,0": {
+          "4,1": {
             "size": [
               2,
-              4
+              1
             ],
             "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/CompressorSubsystem",
-              "_title": "CompressorSubsystem",
-              "Layout/Label position": "BOTTOM",
-              "_children": []
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,4]/Value",
+              "_title": "/LiveWindow/Ungrouped/DoubleSolenoid[40,4]/Value"
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Armsolenoid",
+              "_title": "/SmartDashboard/Armsolenoid"
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[40,6]/Value",
+              "_title": "/LiveWindow/Ungrouped/DoubleSolenoid[40,6]/Value"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ElevatorGrip",
+              "_title": "/SmartDashboard/ElevatorGrip"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Arm",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Arm pos:",
+              "_title": "SmartDashboard/Arm pos:",
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 4000.0,
+              "Y-axis/Lower bound": 0.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Arm pos:": true
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm pos:",
+              "_title": "/SmartDashboard/Arm pos:"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "cameravision",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Rot speed",
+              "_title": "SmartDashboard/Rot speed",
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Rot speed": true
             }
           }
         }
@@ -419,9 +661,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.666666507720947,
-    "y": 1.3333333730697632,
-    "width": 1292.0,
-    "height": 685.3333129882812
+    "x": 0.0,
+    "y": 0.0,
+    "width": 1280.0,
+    "height": 680.0
   }
 }
