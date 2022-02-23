@@ -7,6 +7,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 
 public class ArmHomeCommand extends CommandBase {
   /** Creates a new ArmHomeCommand. */
@@ -21,31 +24,14 @@ public class ArmHomeCommand extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putString("homearm", "starting");
-    m_armSubsystem.setSensorPosition(10000.0);
-    m_armSubsystem.setPosition(5000.0);
+    m_armSubsystem.armRetract();
+    m_armSubsystem.setSensorPosition(4000.0);
+    m_armSubsystem.setHomePosition(0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    /*
-    if (m_reachedHome) {
-      m_backOffCounter--;
-    }
-    else
-    {
-     
-      if (m_armSubsystem.isBottomLimitSwitchClosed()) {
-        m_reachedHome = true;
-        m_armSubsystem.m_arm.set(0.10);
-      }
-      else
-      {
-        m_armSubsystem.m_arm.set(-0.10);
-      }
-    }
-    */
   }
 
   // Called once the command ends or is interrupted.
@@ -58,12 +44,10 @@ public class ArmHomeCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     if (m_armSubsystem.isBottomLimitSwitchClosed()) {
-    //if (m_backOffCounter <= 0) {
-      //m_armSubsystem.m_arm.set(0.0);
       m_armSubsystem.setSensorPosition(0.0);
-      m_armSubsystem.setPosition(0.0); // Tell PID to keep arm at 0.
+      m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
+      m_armSubsystem.setHome();
       return true;
-
     }
     else 
     {

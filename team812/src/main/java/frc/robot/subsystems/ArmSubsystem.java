@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.PidConstants;
-import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.ParamEnum;
@@ -17,17 +17,26 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.Constants.PCMConstants;
 
 public class ArmSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
+  private static boolean hasBeenHomed = false;
 
+  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
+    CANConstants.kPCM,
+    PneumaticsModuleType.CTREPCM,
+    PCMConstants.kArmExtension[0],
+    PCMConstants.kArmExtension[1]
+  );
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
     m_arm.configFactoryDefault();
     m_arm.setNeutralMode(NeutralMode.Brake);
-    m_arm.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+    m_arm.configOpenloopRamp(PidConstants.kArm_rampRate);
 
     // Configure the feedback sensor with the type (QuadEncoder), 
     // the PID identifier within the Talon (pid 0) and the timeout (50ms)
@@ -50,8 +59,8 @@ public class ArmSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0,10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(0.25,10);
-    m_arm.configPeakOutputReverse(-0.25, 10);
+    m_arm.configPeakOutputForward(1.0,10);
+    m_arm.configPeakOutputReverse(-1.0, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -71,20 +80,17 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
     m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
 
-    // Assuming the arm is in the Home position (down) we reset the internal position to zero 
-    //m_arm.setSelectedSensorPosition(0.0, 0, 10);
-  //  setPosition(0.0); // should do nothing except update SmartDashboard
-
-    if (isBottomLimitSwitchClosed()) {
-      SmartDashboard.putString("Arm status", "Bottom closed, Encoder 0");
-    } else {
-      SmartDashboard.putString("Arm status", "Limit switch failure, bottom OPEN, Encoder 0");
-    }
-
-
   }
 
   public double setPosition(double position)  {
+    if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
+     m_arm.set(ControlMode.Position, position);
+    }
+    return getPosition();
+  }
+
+  // Only to be used when homing the robot
+  public double setHomePosition(double position) {
     m_arm.set(ControlMode.Position, position);
     return getPosition();
   }
@@ -106,6 +112,27 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean isBottomLimitSwitchClosed() {
     return (m_arm.isRevLimitSwitchClosed() == 1 ? true : false);
+  }
+
+  public void armExtend() {
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    SmartDashboard.putString("Armsolenoid", "extended");
+  }
+  public void armRetract() {
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    SmartDashboard.putString("Armsolenoid", "retracted");
+  }
+
+  public void setHome() {
+    hasBeenHomed = true;
+  }
+
+  public void unsetHome() {
+    hasBeenHomed = false;
+  }
+
+  public boolean isHome() {
+    return hasBeenHomed;
   }
 
   @Override

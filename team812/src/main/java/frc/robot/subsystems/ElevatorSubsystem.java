@@ -7,8 +7,7 @@
 
 package frc.robot.subsystems;
 
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -17,6 +16,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.Constants.PCMConstants;
 
 /**
  * Add your docs here.
@@ -29,6 +31,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_elevatorRight = new WPI_TalonSRX(CANConstants.kElevatorMotorRight);
 
   private WPI_TalonSRX m_elevator = m_elevatorLeft;
+
+  private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
+    CANConstants.kPCM,
+    PneumaticsModuleType.CTREPCM,
+    PCMConstants.kBarHooks[0],
+    PCMConstants.kBarHooks[1]
+  );
 
   public ElevatorSubsystem() {
     stop();
@@ -53,6 +62,14 @@ public class ElevatorSubsystem extends SubsystemBase {
        m_elevator.set(-speed);
      }
 
+     public void openGrip() {
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+      SmartDashboard.putString("ElevatorGrip", "open");
+    }
+    public void closeGrip() {
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+      SmartDashboard.putString("ElevatorGrip", "closed");
+    }
 /*
    @Override
     public void initDefaultCommand() {

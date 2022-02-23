@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUsageId;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,10 +24,10 @@ public class CameraVisionCommand extends CommandBase {
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
   final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
 
-  final double LINEAR_P = 0.1;
+  final double LINEAR_P = 0.0;
   final double LINEAR_D = 0.0;
-  final double ANGULAR_P = 0.03;
-  final double ANGULAR_I = 0.01; //Unsure if this works, haven't tested yet-Leo
+  final double ANGULAR_P = 0.8;
+  final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
 
   PIDController forwardController;
@@ -47,6 +49,7 @@ public class CameraVisionCommand extends CommandBase {
   public void initialize() {
     forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
     turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
+    turnController.setTolerance(4.0); // did not work, dont understand yet
     forwardSpeed = 0.01;
     rotationSpeed = 0.01;
   }
@@ -54,6 +57,7 @@ public class CameraVisionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double error;
     if (m_cameraSubsystem.hasTargets() ) {
       var results = m_cameraSubsystem.camera.getLatestResult();
 
@@ -65,7 +69,9 @@ public class CameraVisionCommand extends CommandBase {
                 Units.degreesToRadians(results.getBestTarget().getPitch()));
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
         forwardSpeed= 0.0;
-        rotationSpeed = -turnController.calculate(results.getBestTarget().getYaw(), 0);
+        rotationSpeed = MathUtil.clamp(-turnController.calculate(results.getBestTarget().getYaw(), 0),-0.50,0.50);
+        error = turnController.getPositionError();
+        SmartDashboard.putNumber("Turn error", error);
     } else {
       forwardSpeed = 0.00;
       rotationSpeed = 0.00;
@@ -83,6 +89,6 @@ public class CameraVisionCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return turnController.atSetpoint();
   }
 }

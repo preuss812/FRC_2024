@@ -13,7 +13,7 @@ public class CameraVisionSubsystem extends SubsystemBase {
   public PhotonCamera camera = new PhotonCamera("pv-812");
   
   public CameraVisionSubsystem() {
-    camera.setDriverMode(true); // a guess
+    //camera.setDriverMode(true); // a guess
     //camera.setPipelineIndex(0);
   }
 
@@ -22,7 +22,7 @@ public class CameraVisionSubsystem extends SubsystemBase {
     var result = camera.getLatestResult();
     var idx = camera.getPipelineIndex();
     SmartDashboard.putNumber("pipeline",idx);
-    camera.setDriverMode(false); // a test if this does what we expect
+  //camera.setDriverMode(false); // a test if this does what we expect
 
     if (result.hasTargets()) {
       SmartDashboard.putString("Visual Target", "Yes");

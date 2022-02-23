@@ -96,11 +96,11 @@ public final class Constants {
     }
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
-        public static final double kArm_kP = 25.0;
-        public static final double kArm_kI = -50.0;
-        public static final double kArm_kD = -10.0;
-        public static final double kArm_kF = 0.3;
-        public static final double kThreshold = 100.0;
+        public static final double kArm_kP = 3.0;
+        public static final double kArm_kI = 0.0;
+        public static final double kArm_kD = 0.0;
+        public static final double kArm_kF = 0.0;
+        public static final double kArm_rampRate = 40;
     }
 
     public static final class BallHandlingConstants {
@@ -110,6 +110,13 @@ public final class Constants {
 
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
+    }
+
+    public static final class ArmConstants {
+        public static final double kArmScorePosition = 1550;
+        public static final double kArmTopPositon = 3550;
+        public static final double kArmBallGathering = 200;
+        public static final double kArmThreshold = 50;
     }
 
     public static final int kLightRelay = 0;

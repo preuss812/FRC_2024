@@ -7,51 +7,41 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.PidConstants;;
 
-public class ArmCommand extends CommandBase {
-  /** Creates a new ArmCommand. */
+public class ArmERCommand extends CommandBase {
+  /** Creates a new ArmERCommand. */
   private final ArmSubsystem m_armSubsystem;
-  private final double setPoint;
+  private final boolean m_extendRetract;
 
-  public ArmCommand(ArmSubsystem subsystem, double position) {
+  public ArmERCommand(ArmSubsystem subsystem, boolean extendRetract) {
     m_armSubsystem = subsystem;
-    setPoint = position;
+    m_extendRetract = extendRetract;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putString("armcmd", "started");
-    m_armSubsystem.setPosition(setPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSubsystem.setPosition(setPoint);
+    if (m_extendRetract)
+      m_armSubsystem.armExtend();
+    else
+      m_armSubsystem.armRetract();
   }
 
-  public boolean onTarget() {
-    double error = m_armSubsystem.getPosition() - setPoint;
-    SmartDashboard.putNumber("armcmderr", error);
-    if( Math.abs(error) < ArmConstants.kArmThreshold) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("armcmd", "end");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return onTarget();
+    return true;
   }
 }

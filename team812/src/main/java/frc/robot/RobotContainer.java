@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import javax.print.attribute.standard.Compression;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -17,8 +15,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -108,9 +109,31 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
 
     // Left Joystick
-    new JoystickButton(leftJoystick, 4).whenPressed(new ArmHomeCommand(m_ArmSubsystem));
-    new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, 3000));
-    new JoystickButton(leftJoystick, 6).whenPressed(new ArmCommand(m_ArmSubsystem, 6000));
+    // This first button takes the arm to the bottom of its travel until
+    // the bottom limit switch is trigged. This "Homes" the encoder to a known
+    // zero position.
+    new JoystickButton(leftJoystick, 11).whenPressed(
+      new SequentialCommandGroup(
+        new ArmERCommand(m_ArmSubsystem, false),
+        new WaitCommand(0.25),
+        new ArmHomeCommand(m_ArmSubsystem)
+      )
+    );
+    new JoystickButton(leftJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
+    new JoystickButton(leftJoystick, 3).whenPressed(
+      new SequentialCommandGroup(
+        new ArmCommand(m_ArmSubsystem, ArmConstants.kArmScorePosition),
+        new WaitCommand(0.25),
+        new ArmERCommand(m_ArmSubsystem, true)
+      )
+    );
+    new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(leftJoystick, 7).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(leftJoystick, 8).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
+    new JoystickButton(leftJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(leftJoystick, 10).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+
+
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
