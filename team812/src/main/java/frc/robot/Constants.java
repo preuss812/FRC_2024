@@ -36,8 +36,8 @@ public final class Constants {
     public static final class PCMConstants {
         public static final int[] kLiftPistons  = {0, 1}; // dko remove for 2022
         public static final int[] kGearShift = {2, 3};  // dko remove for 2022
-        public static final int[] kBarHooks = {6,7}; // dko 20220221 need to physically verify
-        public static final int[] kArmExtension = {4,5}; // dko 20220221 need to physicall verify
+        public static final int[] kBarHooks = {4,5}; // dko 20220221 need to physically verify
+        public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
     }
     public static final class OIConstants {
         public static final int kLeftJoystick = 1;

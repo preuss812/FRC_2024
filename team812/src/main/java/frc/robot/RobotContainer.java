@@ -7,11 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -123,15 +121,15 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 3).whenPressed(
       new SequentialCommandGroup(
         new ArmCommand(m_ArmSubsystem, ArmConstants.kArmScorePosition),
-        new WaitCommand(0.25),
+        new WaitCommand(0.50),
         new ArmERCommand(m_ArmSubsystem, true)
       )
     );
     new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
-    new JoystickButton(leftJoystick, 7).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(leftJoystick, 8).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
-    new JoystickButton(leftJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 10).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(rightJoystick, 4).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(rightJoystick, 5).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
+    new JoystickButton(rightJoystick, 8).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(rightJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
 
 
   }
