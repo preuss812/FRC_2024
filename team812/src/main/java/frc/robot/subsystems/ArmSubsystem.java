@@ -115,11 +115,11 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void armExtend() {
-    m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
     SmartDashboard.putString("Armsolenoid", "extended");
   }
   public void armRetract() {
-    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
     SmartDashboard.putString("Armsolenoid", "retracted");
   }
 

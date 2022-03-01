@@ -63,11 +63,11 @@ public class ElevatorSubsystem extends SubsystemBase {
      }
 
      public void openGrip() {
-      m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
       SmartDashboard.putString("ElevatorGrip", "open");
     }
     public void closeGrip() {
-      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
       SmartDashboard.putString("ElevatorGrip", "closed");
     }
 /*

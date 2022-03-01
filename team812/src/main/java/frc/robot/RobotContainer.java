@@ -21,6 +21,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  public static GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
 
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
@@ -103,6 +105,10 @@ public class RobotContainer {
     // Right Joystick
     new JoystickButton(rightJoystick, 1).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
     new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
+    new JoystickButton(rightJoystick, 4).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(rightJoystick, 5).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
+    new JoystickButton(rightJoystick, 3).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(rightJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
 
     // Left Joystick
     // This first button takes the arm to the bottom of its travel until
@@ -124,10 +130,6 @@ public class RobotContainer {
       )
     );
     new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
-    new JoystickButton(rightJoystick, 4).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(rightJoystick, 5).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
-    new JoystickButton(rightJoystick, 8).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(rightJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
 
 
   }

@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-// import frc.robot.subsystems.GyroSubsystem;
+//import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.Constants.PidConstants;
 
 import frc.robot.subsystems.EncoderSubsystem;
@@ -22,7 +22,7 @@ public class DriveForwardCommand extends CommandBase {
   private final Double m_speed;
   private final DriveTrain m_subsystem;
   private final EncoderSubsystem m_encoder;
-  // private final GyroSubsystem m_gyro;
+  //private final GyroSubsystem m_gyro;
   public double targetAngle;
 
   public DriveForwardCommand(final DriveTrain subsystem, final Double speed) {
@@ -32,8 +32,8 @@ public class DriveForwardCommand extends CommandBase {
     m_subsystem = subsystem;
     m_encoder = null;
     m_speed = speed;
-//    m_gyro = gyro;
-//    addRequirements(m_subsystem, m_gyro);
+    //m_gyro = gyro;
+    //addRequirements(m_subsystem, m_gyro);
   }
 //  public DriveForwardCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed, final EncoderSubsystem encoder) {
   public DriveForwardCommand(final DriveTrain subsystem, final Double speed, final EncoderSubsystem encoder) {
