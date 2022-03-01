@@ -24,7 +24,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
-import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -51,7 +50,6 @@ public class RobotContainer {
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
-  private final EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
   private final CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
 

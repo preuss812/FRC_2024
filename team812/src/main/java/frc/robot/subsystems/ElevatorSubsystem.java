@@ -43,11 +43,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     stop();
     m_elevatorLeft.configFactoryDefault();
     m_elevatorLeft.setNeutralMode(NeutralMode.Brake);
-    m_elevatorLeft.setInverted(true);
+    m_elevatorLeft.setInverted(false);
 
     m_elevatorRight.configFactoryDefault();
     m_elevatorRight.setNeutralMode(NeutralMode.Brake);
-    m_elevatorRight.setInverted(true);
+    m_elevatorRight.setInverted(false);
 
     m_elevatorRight.follow(m_elevatorLeft);
   }
