@@ -40,8 +40,8 @@ public final class Constants {
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
     }
     public static final class OIConstants {
-        public static final int kLeftJoystick = 1;
-        public static final int kRightJoystick = 0;
+        public static final int kLeftJoystick = 0;
+        public static final int kRightJoystick = 1;
         public static final int kXboxController = 2;
         public static final int kControlBox = 3;
 
