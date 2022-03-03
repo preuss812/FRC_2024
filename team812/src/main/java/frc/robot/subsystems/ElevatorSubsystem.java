@@ -53,12 +53,12 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   
   public void up() {
-       double speed = 0.5;
+       double speed = 0.2;
        m_elevator.set(speed);
      }
    
   public void down() {
-       double speed= 0.5;
+       double speed= 0.90;
        m_elevator.set(-speed);
      }
 
