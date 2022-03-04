@@ -276,9 +276,12 @@
               1
             ],
             "content": {
-              "_type": "Text View",
+              "_type": "Simple Dial",
               "_source0": "network_table:///SmartDashboard/Pressure is ",
-              "_title": "Pressure is "
+              "_title": "Pressure is ",
+              "Range/Min": 0.0,
+              "Range/Max": 130.0,
+              "Visuals/Show value": true
             }
           },
           "0,3": {
@@ -347,6 +350,28 @@
               "_title": "gyroConnected",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/BallSubsystem output speed",
+              "_title": "BallSubsystem output speed"
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/armcmd",
+              "_title": "armcmd"
             }
           }
         }
@@ -594,6 +619,30 @@
               "_source0": "network_table:///LiveWindow/Ungrouped/ADXRS450_Gyro[0]/Value",
               "_title": "Ungrouped/ADXRS450_Gyro[0]/Value"
             }
+          },
+          "4,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Motor Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [31]",
+              "_title": "Ungrouped/Talon SRX [31]",
+              "Visuals/Orientation": "HORIZONTAL"
+            }
+          },
+          "6,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Motor Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Victor SPX [81]",
+              "_title": "Ungrouped/Victor SPX [81]",
+              "Visuals/Orientation": "HORIZONTAL"
+            }
           }
         }
       }
@@ -772,8 +821,8 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
+    "x": -2.0,
+    "y": 0.6666666865348816,
     "width": 1280.0,
     "height": 680.0
   }

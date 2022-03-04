@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -78,9 +79,11 @@ public class RobotContainer {
       );
     }
 
-   /* m_DriveTrain.setDefaultCommand(
-      new RunCommand(() -> m_DriveTrain.midnightDrive(xboxController.getY(), xboxController.getX()), m_DriveTrain));
-*/
+    // Default command for the Elevator Subsystem
+    m_ElevatorSubsystem.setDefaultCommand(
+      new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)
+    );
+
 m_CameraLightSubsystem.on();
     // Configure the button bindings
     configureButtonBindings();
@@ -95,39 +98,42 @@ m_CameraLightSubsystem.on();
   private void configureButtonBindings() {
 
     // xbox controller
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxYButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whileHeld(new ElevatorCommand(m_ElevatorSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
 
-    // Right Joystick
+    // Right Joystick for Arm control
     new JoystickButton(rightJoystick, 7).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
-    new JoystickButton(rightJoystick, 2).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
-    new JoystickButton(rightJoystick, 4).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(rightJoystick, 5).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
-    new JoystickButton(rightJoystick, 3).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(rightJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(rightJoystick, 1).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(rightJoystick, 2).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
 
-    // Left Joystick
     // This first button takes the arm to the bottom of its travel until
     // the bottom limit switch is trigged. This "Homes" the encoder to a known
     // zero position.
-    new JoystickButton(leftJoystick, 11).whenPressed(
+    new JoystickButton(rightJoystick, 11).whenPressed(
       new SequentialCommandGroup(
         new ArmERCommand(m_ArmSubsystem, false),
         new WaitCommand(0.25),
         new ArmHomeCommand(m_ArmSubsystem)
       )
     );
-    new JoystickButton(leftJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
-    new JoystickButton(leftJoystick, 3).whenPressed(
+    new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
+    new JoystickButton(rightJoystick, 3).whenPressed(
       new SequentialCommandGroup(
         new ArmCommand(m_ArmSubsystem, ArmConstants.kArmScorePosition),
         new WaitCommand(0.50),
         new ArmERCommand(m_ArmSubsystem, true)
       )
     );
-    new JoystickButton(leftJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
+    new JoystickButton(rightJoystick, 6).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+
+    // Left Joystick for Elevator Control
+    // Elevator up back
+    // Elevator down forward
+    new JoystickButton(leftJoystick, 6).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(leftJoystick, 4).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(leftJoystick, 12).whenPressed(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
 
   }

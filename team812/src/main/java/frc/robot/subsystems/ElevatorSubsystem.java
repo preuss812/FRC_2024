@@ -31,6 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_elevatorRight = new WPI_TalonSRX(CANConstants.kElevatorMotorRight);
 
   private WPI_TalonSRX m_elevator = m_elevatorLeft;
+  private static Boolean end_game = false;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
     CANConstants.kPCM,
@@ -50,16 +51,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorRight.setInverted(false);
 
     m_elevatorRight.follow(m_elevatorLeft);
+
+    end_game = false;
   }
   
   public void up() {
        double speed = 0.2;
-       m_elevator.set(speed);
+       if( end_game )
+         m_elevator.set(speed);
      }
    
   public void down() {
        double speed= 0.90;
-       m_elevator.set(-speed);
+       if( end_game )
+        m_elevator.set(-speed);
      }
 
      public void openGrip() {
@@ -69,6 +74,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void closeGrip() {
       m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
       SmartDashboard.putString("ElevatorGrip", "closed");
+    }
+
+    public void elevate(double throttle) {
+      if( end_game )
+        m_elevator.set(-throttle);
+      }
+    
+    public void enable_elevator() {
+      end_game = true;
+    }
+
+    public boolean is_endgame() {
+      return end_game;
     }
 /*
    @Override

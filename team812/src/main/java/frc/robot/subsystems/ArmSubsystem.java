@@ -84,7 +84,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public double setPosition(double position)  {
     if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
-     m_arm.set(ControlMode.Position, position);
+      m_arm.set(ControlMode.Position, position);
+       
     }
     return getPosition();
   }
@@ -135,6 +136,7 @@ public class ArmSubsystem extends SubsystemBase {
     return hasBeenHomed;
   }
 
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

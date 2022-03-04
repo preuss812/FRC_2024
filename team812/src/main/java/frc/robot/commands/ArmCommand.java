@@ -8,12 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.PidConstants;;
 
 public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   private final ArmSubsystem m_armSubsystem;
-  private final double setPoint;
+  private static double setPoint;
 
   public ArmCommand(ArmSubsystem subsystem, double position) {
     m_armSubsystem = subsystem;
@@ -25,6 +24,8 @@ public class ArmCommand extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putString("armcmd", "started");
+    if(! frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame())
+      setPoint = Math.min(setPoint, ArmConstants.kArmEndGamePosition);
     m_armSubsystem.setPosition(setPoint);
   }
 
