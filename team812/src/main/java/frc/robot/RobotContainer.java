@@ -83,6 +83,9 @@ public class RobotContainer {
     m_ElevatorSubsystem.setDefaultCommand(
       new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)
     );
+     m_ArmSubsystem.setDefaultCommand(
+       new RunCommand( ()->m_ArmSubsystem.rotate(rightJoystick.getY()), m_ArmSubsystem)
+    );
 
 m_CameraLightSubsystem.on();
     // Configure the button bindings

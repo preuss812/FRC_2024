@@ -95,8 +95,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putString("drivetrain", "doge (cubed)");
 
     // 2021-12 Alex modified the response for X & Y by half
-    m_throttle = m_throttle/2.0;
-    m_zRotation = m_zRotation/2.0;
+    m_throttle = Math.pow(m_throttle, 3);
+    m_zRotation = m_zRotation;
 
     driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
     
