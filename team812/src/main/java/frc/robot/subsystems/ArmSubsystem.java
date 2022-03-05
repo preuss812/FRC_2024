@@ -85,7 +85,7 @@ public class ArmSubsystem extends SubsystemBase {
   public double setPosition(double position)  {
     if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
       m_arm.set(ControlMode.Position, position);
-       
+      SmartDashboard.putNumber("ArmSubPos", position);
     }
     return getPosition();
   }

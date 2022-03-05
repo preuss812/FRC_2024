@@ -12,11 +12,14 @@ import frc.robot.Constants.ArmConstants;
 public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   private final ArmSubsystem m_armSubsystem;
-  private static double setPoint;
+  private final double m_position;
+  private  double setPoint;
+  private boolean end_game;
 
   public ArmCommand(ArmSubsystem subsystem, double position) {
     m_armSubsystem = subsystem;
-    setPoint = position;
+    m_position = position;
+    System.out.println("ArmCommand class setPoint is " + m_position);
     addRequirements(subsystem);
   }
 
@@ -24,9 +27,16 @@ public class ArmCommand extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putString("armcmd", "started");
-    if(! frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame())
-      setPoint = Math.min(setPoint, ArmConstants.kArmEndGamePosition);
-    m_armSubsystem.setPosition(setPoint);
+
+    end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
+    System.out.println("ArmCommand Initialize end_game is " + end_game);
+    if( end_game ) {
+      setPoint = m_position;
+      System.out.println("ArmCommand endgame is true, setPoint is " + setPoint);
+    } else {
+      setPoint = Math.min(m_position, ArmConstants.kArmEndGamePosition);
+      System.out.println("ArmCommand endgame is false, setPoint is " + setPoint);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

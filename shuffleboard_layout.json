@@ -11,20 +11,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Simple Dial",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]/Left Motor Speed",
-              "_title": "Left Spd",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Visuals/Show value": true
-            }
-          },
           "3,1": {
             "size": [
               1,
@@ -80,20 +66,6 @@
               "_title": "/photonvision/Microsoft_LifeCam_HD-3000/targetYaw"
             }
           },
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Simple Dial",
-              "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]/Right Motor Speed",
-              "_title": "Right Spd",
-              "Range/Min": -1.0,
-              "Range/Max": 1.0,
-              "Visuals/Show value": true
-            }
-          },
           "0,0": {
             "size": [
               1,
@@ -116,94 +88,6 @@
               "_title": "/SmartDashboard/drivetrain"
             }
           },
-          "1,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 1",
-              "_title": "ControlBox bit 1"
-            }
-          },
-          "2,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 2",
-              "_title": "ControlBox bit 2"
-            }
-          },
-          "5,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 3",
-              "_title": "ControlBox bit 3"
-            }
-          },
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 4",
-              "_title": "ControlBox bit 4"
-            }
-          },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 5",
-              "_title": "ControlBox bit 5"
-            }
-          },
-          "0,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 6",
-              "_title": "ControlBox bit 6"
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 7",
-              "_title": "ControlBox bit 7"
-            }
-          },
-          "2,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/reversed speed",
-              "_title": "reversed speed"
-            }
-          },
           "7,1": {
             "size": [
               1,
@@ -213,17 +97,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/BallSubsystem intake speed",
               "_title": "BallSubsystem intake speed"
-            }
-          },
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/forward speed",
-              "_title": "forward speed"
             }
           },
           "1,2": {
@@ -372,6 +245,129 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/armcmd",
               "_title": "armcmd"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/armcmderr",
+              "_title": "armcmderr"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 4",
+              "_title": "ControlBox bit 4"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 5",
+              "_title": "ControlBox bit 5"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 6",
+              "_title": "ControlBox bit 6"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 7",
+              "_title": "ControlBox bit 7"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmCmdPos",
+              "_title": "/SmartDashboard/ArmCmdPos"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmSubPos",
+              "_title": "ArmSubPos"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 1",
+              "_title": "ControlBox bit 1"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 2",
+              "_title": "ControlBox bit 2"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ControlBox bit 3",
+              "_title": "ControlBox bit 3"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ArmCmdEndGame",
+              "_title": "ArmCmdEndGame",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -798,25 +794,7 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Rot speed",
-              "_title": "SmartDashboard/Rot speed",
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
-            }
-          }
-        }
+        "tiles": {}
       }
     }
   ],

@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_elevatorRight = new WPI_TalonSRX(CANConstants.kElevatorMotorRight);
 
   private WPI_TalonSRX m_elevator = m_elevatorLeft;
-  private static Boolean end_game = false;
+  private Boolean end_game = false;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
     CANConstants.kPCM,
@@ -86,6 +86,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean is_endgame() {
+      System.out.println("is_endgame called" + end_game);
       return end_game;
     }
 /*
