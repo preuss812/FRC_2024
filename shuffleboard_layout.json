@@ -2,7 +2,7 @@
   "tabPane": [
     {
       "title": "SmartDashboard",
-      "autoPopulate": true,
+      "autoPopulate": false,
       "autoPopulatePrefix": "SmartDashboard/",
       "widgetPane": {
         "gridSize": 128.0,
@@ -88,17 +88,6 @@
               "_title": "/SmartDashboard/drivetrain"
             }
           },
-          "7,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/BallSubsystem intake speed",
-              "_title": "BallSubsystem intake speed"
-            }
-          },
           "1,2": {
             "size": [
               1,
@@ -157,96 +146,6 @@
               "Visuals/Show value": true
             }
           },
-          "0,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Armsolenoid",
-              "_title": "Armsolenoid"
-            }
-          },
-          "1,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/homearm",
-              "_title": "homearm"
-            }
-          },
-          "2,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ElevatorGrip",
-              "_title": "ElevatorGrip"
-            }
-          },
-          "3,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/gyroAngle",
-              "_title": "gyroAngle"
-            }
-          },
-          "4,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/gyroRate",
-              "_title": "gyroRate"
-            }
-          },
-          "5,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/gyroConnected",
-              "_title": "gyroConnected",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "6,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/BallSubsystem output speed",
-              "_title": "BallSubsystem output speed"
-            }
-          },
-          "7,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/armcmd",
-              "_title": "armcmd"
-            }
-          },
           "3,0": {
             "size": [
               1,
@@ -256,50 +155,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/armcmderr",
               "_title": "armcmderr"
-            }
-          },
-          "0,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 4",
-              "_title": "ControlBox bit 4"
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 5",
-              "_title": "ControlBox bit 5"
-            }
-          },
-          "2,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 6",
-              "_title": "ControlBox bit 6"
-            }
-          },
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 7",
-              "_title": "ControlBox bit 7"
             }
           },
           "4,0": {
@@ -346,17 +201,6 @@
               "_title": "ControlBox bit 2"
             }
           },
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ControlBox bit 3",
-              "_title": "ControlBox bit 3"
-            }
-          },
           "7,0": {
             "size": [
               1,
@@ -368,6 +212,17 @@
               "_title": "ArmCmdEndGame",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/rotate pos",
+              "_title": "SmartDashboard/rotate pos"
             }
           }
         }
@@ -796,12 +651,45 @@
         "titleType": 0,
         "tiles": {}
       }
+    },
+    {
+      "title": "USB Camera",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://USB Camera 0",
+              "_title": "USB Camera 0",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": 10,
+              "imageWidth": 320,
+              "imageHeight": 240
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
-    "x": -2.0,
-    "y": 0.6666666865348816,
-    "width": 1280.0,
-    "height": 680.0
+    "x": -7.333333492279053,
+    "y": -7.333333492279053,
+    "width": 1294.6666259765625,
+    "height": 734.6666870117188
   }
 }

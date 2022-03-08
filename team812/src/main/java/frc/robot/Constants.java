@@ -18,7 +18,7 @@ package frc.robot;
 public final class Constants {
     public static final class CANConstants {
         public static final int[] kLeftMotors   = {44, 7};
-        public static final int[] kRightMotors  = {30, 06};
+        public static final int[] kRightMotors  = {30, 6};
         public static final int kWinchMotor     = 80; // dko remove for 2022
         public static final int kHookMotor      = 81; // dko remove for 2022
         public static final int kIntakeMotorLeft = 82; // dko remove for 2022

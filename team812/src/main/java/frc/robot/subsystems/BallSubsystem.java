@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -23,30 +24,25 @@ import frc.robot.RobotContainer;
 public class BallSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private final WPI_TalonSRX m_left = new WPI_TalonSRX(CANConstants.kIntakeMotorLeft);
-  private final WPI_TalonSRX m_right = new WPI_TalonSRX(CANConstants.kIntakeMotorRight);
+  private final WPI_TalonSRX m_intake = new WPI_TalonSRX(CANConstants.kIntakeMotor);
 
   public BallSubsystem() {
     stop();
-    m_left.configFactoryDefault();
-    m_left.setNeutralMode(NeutralMode.Brake);
-    m_right.configFactoryDefault();
-    m_right.setNeutralMode(NeutralMode.Brake);
-    m_right.setInverted(true);
+
+    m_intake.configFactoryDefault();
+    m_intake.setNeutralMode(NeutralMode.Brake);
   }
   
   public void intake() {
     //   double speed = Robot.nttable.getEntry("ypotvalue").getDouble(1.0);
        double speed = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
-       m_left.set(-speed);
-       m_right.set(-speed);
+       m_intake.set(-speed);
        SmartDashboard.putNumber("BallSubsystem intake speed", speed);
      }
    
   public void outtake() {
       double speed = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 1.0);
-       m_left.set(speed);
-       m_right.set(speed);
+       m_intake.set(speed);
        SmartDashboard.putNumber("BallSubsystem output speed", speed);
      }
    
@@ -58,8 +54,6 @@ public class BallSubsystem extends SubsystemBase {
     // setDefaultCommand(new MySpecialCommand());
    }*/
   public void stop() {
-    m_left.set(0.0);
-    m_right.set(0.0);
-
+    m_intake.set(0.0);
   }
 }

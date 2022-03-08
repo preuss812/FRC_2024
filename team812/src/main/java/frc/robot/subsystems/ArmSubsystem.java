@@ -81,14 +81,15 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
 
   }
-  private double absolutePosition = 200;
+   private double absolutePosition = getPosition();
 
   public void rotate(double position) {
-    System.out.println(absolutePosition);
+//    System.out.println(absolutePosition);
+    SmartDashboard.putNumber("rotate pos", absolutePosition);
     absolutePosition=absolutePosition+position;
     if (absolutePosition > ArmConstants.kArmBallGathering && absolutePosition < ArmConstants.kArmScorePosition) {
       setPosition(absolutePosition);
-    }
+   }
   };
   public double setPosition(double position)  {
     if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {

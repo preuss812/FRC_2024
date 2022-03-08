@@ -23,13 +23,17 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new DriveTrain.
    */
-  private final WPI_VictorSPX leftFront, leftBack, rightFront, rightBack;
+ // private final WPI_VictorSPX leftFront, leftBack, rightFront, rightBack;
+ // private final WPI_VictorSPX leftBack, rightFront, rightBack;
+  private final WPI_VictorSPX m_leftMotor, m_rightMotor;
+
  // private final SpeedControllerGroup leftMotors, rightMotors;
- private final MotorControllerGroup leftMotors, rightMotors;
+// private final MotorControllerGroup leftMotors, rightMotors;
 //  private final Encoder rightEncoder, leftEncoder;
   private final DifferentialDrive driveBase;
 
   public DriveTrain() {
+/*
     leftFront = new WPI_VictorSPX(CANConstants.kLeftMotors[0]);
     leftBack = new WPI_VictorSPX(CANConstants.kLeftMotors[1]);
     leftFront.configFactoryDefault();
@@ -38,9 +42,13 @@ public class DriveTrain extends SubsystemBase {
     leftBack.setNeutralMode(NeutralMode.Brake);
     leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-   // leftMotors = new SpeedControllerGroup(leftFront, leftBack);
     leftMotors = new MotorControllerGroup(leftFront,leftBack);
-
+    */
+  m_leftMotor = new WPI_VictorSPX(CANConstants.kLeftMotors[1]);
+  m_leftMotor.configFactoryDefault();
+  m_leftMotor.setNeutralMode(NeutralMode.Brake);
+  m_leftMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+/*
     rightFront = new WPI_VictorSPX(CANConstants.kRightMotors[0]);
     rightBack = new WPI_VictorSPX(CANConstants.kRightMotors[1]);
     rightFront.configFactoryDefault();
@@ -56,11 +64,17 @@ public class DriveTrain extends SubsystemBase {
 
   //  rightMotors = new SpeedControllerGroup(rightFront, rightBack);
    rightMotors = new MotorControllerGroup(rightFront, rightBack);
+*/
+  m_rightMotor = new WPI_VictorSPX(CANConstants.kRightMotors[1]);
+  m_rightMotor.configFactoryDefault();
+  m_rightMotor.setNeutralMode(NeutralMode.Brake);
+  m_rightMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+  m_rightMotor.setInverted(true);
 
-    driveBase = new DifferentialDrive(leftMotors, rightMotors);
+
+//    driveBase = new DifferentialDrive(leftMotors, rightMotors);
+    driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
     driveBase.setSafetyEnabled(false);
-    
-//    driveBase.setRightSideInverted(false);
   }
 
   // Default arcadeDrive constructor squares the inputs. 
@@ -96,7 +110,6 @@ public class DriveTrain extends SubsystemBase {
 
     // 2021-12 Alex modified the response for X & Y by half
     m_throttle = Math.pow(m_throttle, 3);
-    m_zRotation = m_zRotation;
 
     driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
     
