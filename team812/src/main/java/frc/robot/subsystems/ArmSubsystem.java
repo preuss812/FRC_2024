@@ -80,14 +80,27 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
     m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
 
+    addChild("ArmTalon",m_arm);
+
   }
-   private double absolutePosition = getPosition();
+  private 
+  final int incrementSize = 50;
 
   public void rotate(double position) {
-//    System.out.println(absolutePosition);
+    double absolutePosition = getPosition();
+    // if the joystick is nearly centered, ignore it
+    if (Math.abs(position) < 0.01) {
+      return;
+    }
+
+    absolutePosition += position * incrementSize;
     SmartDashboard.putNumber("rotate pos", absolutePosition);
-    absolutePosition=absolutePosition+position;
-    if (absolutePosition > ArmConstants.kArmBallGathering && absolutePosition < ArmConstants.kArmScorePosition) {
+    if(! frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame() ) {
+      absolutePosition = Math.min(absolutePosition,ArmConstants.kArmEndGamePosition);
+    }
+
+    if (absolutePosition > ArmConstants.kArmBallGathering 
+    && absolutePosition < ArmConstants.kArmScorePosition) {
       setPosition(absolutePosition);
    }
   };

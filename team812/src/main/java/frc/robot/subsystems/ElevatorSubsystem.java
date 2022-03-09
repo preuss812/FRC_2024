@@ -86,7 +86,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean is_endgame() {
-      System.out.println("is_endgame called" + end_game);
+      //System.out.println("is_endgame called" + end_game);
       return end_game;
     }
 /*

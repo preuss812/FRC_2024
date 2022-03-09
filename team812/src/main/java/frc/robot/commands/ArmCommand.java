@@ -26,6 +26,7 @@ public class ArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
     SmartDashboard.putString("armcmd", "started");
 
     end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
