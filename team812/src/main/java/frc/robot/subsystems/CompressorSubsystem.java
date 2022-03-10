@@ -27,7 +27,6 @@ public class CompressorSubsystem extends SubsystemBase {
   );
 
   public CompressorSubsystem() {
-//    m_compressor.start();
     m_compressor.enabled();
 
   }

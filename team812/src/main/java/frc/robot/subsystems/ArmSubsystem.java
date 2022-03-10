@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.PidConstants;
+import frc.robot.commands.ArmCommand;
 import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -104,6 +105,31 @@ public class ArmSubsystem extends SubsystemBase {
       setPosition(absolutePosition);
    }
   };
+
+  public void rotate2(double speed) {
+    double l_speed = speed;
+    double l_position = getPosition();
+    boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
+
+    if( ! hasBeenHomed ) {
+      l_speed = 0.0;
+    } else if( l_speed > 0.0 ) {
+      if( end_game && l_position >= ArmConstants.kArmTopPositon ) {
+        l_speed = 0.0;
+      } else if( ! end_game && l_position >= ArmConstants.kArmScorePosition) {
+        l_speed = 0.0;
+      }
+    } else if( l_speed < 0.0 ) {
+      if( l_position <= ArmConstants.kArmBallGathering ) {
+        l_speed = 0.0;
+      }
+    }
+    SmartDashboard.putNumber("r2_speed", speed);
+    SmartDashboard.putNumber("r2_l_speed", l_speed);
+    SmartDashboard.putNumber("r2_l_position", l_position);
+
+    m_arm.set(ControlMode.PercentOutput, l_speed);
+  }
   public double setPosition(double position)  {
     if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
       m_arm.set(ControlMode.Position, position);

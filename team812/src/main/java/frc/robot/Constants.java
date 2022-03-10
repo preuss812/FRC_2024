@@ -38,6 +38,7 @@ public final class Constants {
         public static final int[] kGearShift = {2, 3};  // dko remove for 2022
         public static final int[] kBarHooks = {4,5}; // dko 20220221 need to physically verify
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
+        public static final int kMinPresssure = 50; // minimum operating pressure for Arm control
     }
     public static final class OIConstants {
         public static final int kLeftJoystick = 0;
@@ -114,7 +115,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double kArmScorePosition = 1550;
-        public static final double kArmTopPositon = 3550;
+        public static final double kArmTopPositon = 3580; //3550;
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 1700;
         public static final double kArmBallGathering = 200;

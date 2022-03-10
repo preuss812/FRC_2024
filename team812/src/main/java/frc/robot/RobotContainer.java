@@ -43,7 +43,7 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
-  private final CompressorSubsystem m_Compressor = new CompressorSubsystem();
+  public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
@@ -84,7 +84,7 @@ public class RobotContainer {
       new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)
     );
       m_ArmSubsystem.setDefaultCommand(
-        new RunCommand( ()->m_ArmSubsystem.rotate(rightJoystick.getY()), m_ArmSubsystem)
+        new RunCommand( ()->m_ArmSubsystem.rotate2(-rightJoystick.getY()), m_ArmSubsystem)
      );
 
 m_CameraLightSubsystem.on();
