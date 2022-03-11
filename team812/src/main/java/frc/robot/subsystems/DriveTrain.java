@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.RobotContainer;
 import java.lang.Math;
  
 
@@ -76,6 +77,28 @@ public class DriveTrain extends SubsystemBase {
     driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
     driveBase.setSafetyEnabled(false);
   }
+
+    public void preussDrive(double throttle, double zRotation) {
+	double speed = throttle;
+	double turn = zRotation;
+
+	// Left - super low speed
+	// Middle - low speed
+	// Right - Maximum speed
+	
+	if( RobotContainer.m_BlackBox.isSwitchRight() ) {
+	    speed = speed * DriveTrainConstants.kHighSpeed;
+	    turn  = turn  * DriveTrainConstants.kTurnHighSpeed;
+	} else if( RobotContainer.m_BlackBox.isSwitchLeft() ) {
+	    speed = speed * DriveTrainConstants.kLowLowSpeed;
+	    turn  = turn  * DriveTrainConstants.kTurnLowLowSpeed;
+	} else {
+	    speed = speed * DriveTrainConstants.kLowSpeed;
+	    turn  = turn  * DriveTrainConstants.kTurnLowSpeed;
+	}
+	driveBase.arcadeDrive(-throttle,zRotation);
+    }
+
 
   // Default arcadeDrive constructor squares the inputs. 
   // arcadeDrive(-y, x) is equivalent to arcadeDrive(-y, x, true)

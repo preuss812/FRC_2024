@@ -16,43 +16,39 @@
 7. Click the '...' menu and select Push
 
 ## Game resources
-  * [FIRST Robotics Competition Control System](https://docs.wpilib.org/en/latest/#)
-  * [Game & Season Materials](https://www.firstinspires.org/resource-library/frc/competition-manual-qa-system)
-  * [FRC Game Season Manual]
-  * [Kit of Parts (KoP)]
-  * [Playing Field Details]
-  * [Kickoff Videos]
+* [FIRST Robotics Competition Control System](https://docs.wpilib.org/en/latest/#)
+* [Game & Season Materials](https://www.firstinspires.org/resource-library/frc/competition-manual-qa-system)
+* [FRC Game Season Manual]
+* [Kit of Parts (KoP)]
+* [Playing Field Details]
+* [Kickoff Videos]
 
 ## Technical resources
-* [2020 Java Command Based Programming reference](https://docs.wpilib.org/en/latest/docs/software/commandbased/index.html)
-* [NI Download](https://www.ni.com/en-us/support/downloads/drivers/download.labview-software-for-frc.html#330601)
-* [Radio Configuration Instructions](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
+* [Java Command Based Programming reference](https://docs.wpilib.org/en/stable/docs/software/commandbased/index.html)
+* [New for 2022](https://docs.wpilib.org/en/stable/docs/yearly-overview/yearly-changelog.html)
+* [NI Game Tools Download](https://www.ni.com/en-us/support/downloads/drivers/download.frc-game-tools.html#440024)
+* [Radio Configuration Instructions](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/radio-programming.html)
 * CTRE Firmware is located in C:\Users\Public\Documents\FRC
-* [CTRE toolsuite installation instructions](https://phoenix-documentation.readthedocs.io/en/latest/ch05_PrepWorkstation.html#workstation-installation)
-* [CTRE software downloads](http://www.ctr-electronics.com/hro.html#product_tabs_technical_resources)
-* [Programming the Radio](https://docs.wpilib.org/en/latest/docs/getting-started/getting-started-frc-control-system/radio-programming.html)
-* Current Software Versions - last updated 2020-01-09
+* [CTRE Phoenix Tuner](https://github.com/CrossTheRoadElec/Phoenix-Releases)
+* Current Software Versions - last updated 2022??
   * roboRIO mDNS name: roboRIO-812-FRC
-  * roboRIO Image: FRC_roboRIO_2020_v10
-  * roboRIO Firmware: 6.0.0f1
+  * roboRIO Image: FRC_roboRIO_??
+  * roboRIO Firmware: ??
   * CTRE Phoenix Framework TBD
   * FRC_Radio_Configuration_ TBD
   * FRCUpdateSuite_ TBD
-  * Eclipse wpilib for java TBD
 
-# RoboRio local URL
-* [http://roborio-812-frc.local/](http://roborio-812-frc.local/)
+# Robot Network Devices
+* WiFi AP [http://10.8.12.1](http://10.8.12.1)
+* RoboRio [http://roborio-812-frc.local](http://roborio-812-frc.local/) -or- [http://10.8.12.2](http://10.8.12.2)
+* PhotonVision Pi [http://photonvision.local/](http://photonvision.local/) -or- [http://10.8.12.100](http://10.8.12.100)
 
-## Vision Processing / GRIP documents
-* [GRIP - Graphical Image Processing](http://docs.wpilib.org/en/latest/docs/software/vision-processing/grip/index.html)
-* [GRIP GitHub Wiki](https://github.com/WPIRoboticsProjects/GRIP/wiki)
-* [GRIP Download page](https://github.com/WPIRoboticsProjects/GRIP/releases)
-* [Integrating GRIP into your Java program](https://github.com/WPIRoboticsProjects/GRIP/wiki/Tutorial:-Run-GRIP-from-a-CPP-or-Java-FRC-program)
-* [How to read Contour Values from NetworkTables in Java](https://wpilib.screenstepslive.com/s/4485/m/50711/l/479908-reading-array-values-published-by-networktables)
-* [Using GRIP for 2016 Game tutorial](https://wpilib.screenstepslive.com/s/4485/m/50711/l/481750-using-grip-for-the-2016-game)
-* [Identifying targets - The Math](https://wpilib.screenstepslive.com/s/4485/m/24194/l/288985-identifying-and-processing-the-targets)
-* [Team2168 CPP Example](https://github.com/Team2168/2168_Vision_Example)
+
+## Vision Processing 
+* For 2022 we use PhotonVision [https://photonvision.org/](https://photonvision.org/)
 
 ## Accelerometer / Gyro documents
-* [Accelerometer WPILib screensteps](http://wpilib.screenstepslive.com/s/4485/m/13809/l/241870-accelerometers-measuring-acceleration-and-tilt)
-* [Gyro WPILib screensteps](https://wpilib.screenstepslive.com/s/4485/m/13810/l/241871-gyros-measuring-rotation-and-controlling-robot-driving-direction)
+* [ADIS16448 IMU Guide](https://wiki.analog.com/first/adis16448_imu_frc/java)
+* [ADIS16448 Visual Code Driver Installation](https://github.com/juchong/ADIS16448-RoboRIO-Driver)
+* [WPILib Using Gyroscopes](https://docs.wpilib.org/en/stable/docs/software/hardware-apis/sensors/gyros-software.html)
+

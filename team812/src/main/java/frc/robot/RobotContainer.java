@@ -65,6 +65,10 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+      new RunCommand(() -> m_DriveTrain.preussDrive(xboxController.getY(), xboxController.getX()), m_DriveTrain)
+
+	  /*	    
     m_BlackBox.printBits();
     System.out.println(m_BlackBox.isSet(OIConstants.kControlBoxSw4));
     if( RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) ) {
@@ -78,7 +82,8 @@ public class RobotContainer {
         new RunCommand(() -> m_DriveTrain.doge(xboxController.getY(), xboxController.getX()), m_DriveTrain)
       );
     }
-
+	  */
+	  
     // Default command for the Elevator Subsystem
     m_ElevatorSubsystem.setDefaultCommand(
       new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)

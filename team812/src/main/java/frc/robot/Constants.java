@@ -111,6 +111,15 @@ public final class Constants {
 
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
+	
+	public static final double kHighSpeed = 1.0;
+	public static final double kTurnHighSpeed = 1.0;
+
+	public static final double kLowSpeed = 0.4;
+	public static final double kTurnLowSpeed = 0.2;
+
+	public static final double kLowLowSpeed = 0.2;
+	public static final double kTurnLowLowSpeed = 0.1;
     }
 
     public static final class ArmConstants {
