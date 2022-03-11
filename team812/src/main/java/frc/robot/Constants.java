@@ -101,7 +101,7 @@ public final class Constants {
         public static final double kArm_kI = 0.0;
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
-        public static final double kArm_rampRate = 40;
+        public static final double kArm_rampRate = 0.5;
     }
 
     public static final class BallHandlingConstants {

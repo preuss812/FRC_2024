@@ -87,7 +87,7 @@ public class RobotContainer {
         new RunCommand( ()->m_ArmSubsystem.rotate2(-rightJoystick.getY()), m_ArmSubsystem)
      );
 
-m_CameraLightSubsystem.on();
+    m_CameraLightSubsystem.off();
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -103,7 +103,13 @@ m_CameraLightSubsystem.on();
     // xbox controller
     new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(
+      new SequentialCommandGroup(
+        new InstantCommand(m_CameraLightSubsystem::on,m_CameraLightSubsystem),
+        new WaitCommand(0.25),
+        new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain)
+      )
+    );
 
     // Right Joystick for Arm control
     new JoystickButton(rightJoystick, 7).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
