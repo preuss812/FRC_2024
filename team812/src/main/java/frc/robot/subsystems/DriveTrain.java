@@ -97,6 +97,11 @@ public class DriveTrain extends SubsystemBase {
 	    turn  = turn  * DriveTrainConstants.kTurnLowSpeed;
 	}
 	driveBase.arcadeDrive(-throttle,zRotation);
+
+	// speed = (a*speed^3 + b*speed) * c
+	// a = 0.2, b = 1.8, c = 0.05
+	// 
+
     }
 
 
