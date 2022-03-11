@@ -13,8 +13,12 @@ import frc.robot.commands.ArmCommand;
 import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+
+import javax.lang.model.util.ElementScanner6;
+
 import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -37,7 +41,10 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     m_arm.configFactoryDefault();
     m_arm.setNeutralMode(NeutralMode.Brake);
-    m_arm.configOpenloopRamp(PidConstants.kArm_rampRate);
+
+    // This is a CLOSED loop system. Do not uncomment or enable
+    // OpenloopRamp for the PID controlled arm.
+//    m_arm.configOpenloopRamp(PidConstants.xxx_kArm_rampRate_xxx);
 
     // Configure the feedback sensor with the type (QuadEncoder), 
     // the PID identifier within the Talon (pid 0) and the timeout (50ms)
@@ -81,8 +88,6 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
     m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
 
-    addChild("ArmTalon",m_arm);
-
   }
   private 
   final int incrementSize = 50;
@@ -110,26 +115,43 @@ public class ArmSubsystem extends SubsystemBase {
     double l_speed = speed;
     double l_position = getPosition();
     boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
-
+String path;
     if( ! hasBeenHomed ) {
       l_speed = 0.0;
+      path = "not homed";
     } else if( l_speed > 0.0 ) {
       if( end_game && l_position >= ArmConstants.kArmTopPositon ) {
         l_speed = 0.0;
+        path = "endgame";
       } else if( ! end_game && l_position >= ArmConstants.kArmScorePosition) {
         l_speed = 0.0;
+        path = "not end game";
+      }
+      else {
+        path = "speed > 0 no change";
       }
     } else if( l_speed < 0.0 ) {
       if( l_position <= ArmConstants.kArmBallGathering ) {
         l_speed = 0.0;
+        path= "speed < 0 limited";
       }
+      else {
+        path = "speed < 0 no change";
+      }
+    } else {
+      path = "lspeed = 0";
+    //  l_speed = 0.0;
     }
     SmartDashboard.putNumber("r2_speed", speed);
     SmartDashboard.putNumber("r2_l_speed", l_speed);
     SmartDashboard.putNumber("r2_l_position", l_position);
+    SmartDashboard.putString("rotate2_path", path);
 
     m_arm.set(ControlMode.PercentOutput, l_speed);
+    //m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
+
+
   public double setPosition(double position)  {
     if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
       m_arm.set(ControlMode.Position, position);
