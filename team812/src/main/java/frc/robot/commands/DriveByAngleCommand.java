@@ -43,14 +43,14 @@ public class DriveByAngleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(0.0, m_speed);
+    m_subsystem.preussDrive(0.0, m_speed);
   //  System.out.printf("*** DriveByAngleCommand angles (Gyro, Target) : (%f, %f)\n", m_gyro.getAngle(), targetAngle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.drive(0.0, 0.0);
+    m_subsystem.preussDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.

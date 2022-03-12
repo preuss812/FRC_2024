@@ -9,16 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.PidConstants;
-import frc.robot.commands.ArmCommand;
 import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-
-import javax.lang.model.util.ElementScanner6;
-
 import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
@@ -28,7 +23,7 @@ import frc.robot.Constants.PCMConstants;
 
 public class ArmSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
-  private static boolean hasBeenHomed = false;
+  private static boolean hasBeenHomed = true;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
     CANConstants.kPCM,
@@ -115,8 +110,9 @@ public class ArmSubsystem extends SubsystemBase {
     double l_speed = speed;
     double l_position = getPosition();
     boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
-String path;
-    if( ! hasBeenHomed ) {
+    String path;
+
+    if( ! isHome() ) {
       l_speed = 0.0;
       path = "not homed";
     } else if( l_speed > 0.0 ) {
@@ -153,7 +149,7 @@ String path;
 
 
   public double setPosition(double position)  {
-    if( hasBeenHomed && position >= ArmConstants.kArmBallGathering ) {
+    if( isHome() && position >= ArmConstants.kArmBallGathering ) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
@@ -168,7 +164,6 @@ String path;
 
   public double getPosition() {
     double position = m_arm.getSelectedSensorPosition(0);
-    SmartDashboard.putNumber("Arm pos:", position);
     return position;
   }
 
@@ -186,8 +181,12 @@ String path;
   }
 
   public void armExtend() {
-    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    SmartDashboard.putString("Armsolenoid", "extended");
+    // check the height to be sure that we don't extend the arms
+    // into the wheels.
+    if( getPosition() >= (ArmConstants.kArmBallGathering - ArmConstants.kArmThreshold) && isHome() ) {
+      m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+      SmartDashboard.putString("Armsolenoid", "extended");
+    }
   }
   public void armRetract() {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -196,10 +195,17 @@ String path;
 
   public void setHome() {
     hasBeenHomed = true;
+    System.out.println("setHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome() {
     hasBeenHomed = false;
+    System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
+  }
+
+  public void unsetHome(String msg) {
+    hasBeenHomed = false;
+    System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " + hasBeenHomed);
   }
 
   public boolean isHome() {
@@ -210,6 +216,7 @@ String path;
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    getPosition();
+    SmartDashboard.putNumber("Arm pos:", getPosition());
+    SmartDashboard.putBoolean("Arm Homed?", isHome());
   }
 }

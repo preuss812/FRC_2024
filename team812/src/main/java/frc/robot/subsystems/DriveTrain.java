@@ -78,43 +78,43 @@ public class DriveTrain extends SubsystemBase {
     driveBase.setSafetyEnabled(false);
   }
 
-    public void preussDrive(double throttle, double zRotation) {
-	double speed = throttle;
-	double turn = zRotation;
+  public void preussDrive(double throttle, double zRotation) {
+  	double speed = throttle;
+	  double turn = zRotation;
+    String mode;
 
 	// Left - super low speed
 	// Middle - low speed
 	// Right - Maximum speed
 	
-	if( RobotContainer.m_BlackBox.isSwitchRight() ) {
-	    speed = speed * DriveTrainConstants.kHighSpeed;
-	    turn  = turn  * DriveTrainConstants.kTurnHighSpeed;
-	} else if( RobotContainer.m_BlackBox.isSwitchLeft() ) {
+	  if( RobotContainer.m_BlackBox.isSwitchLeft() ) {
 	    speed = speed * DriveTrainConstants.kLowLowSpeed;
 	    turn  = turn  * DriveTrainConstants.kTurnLowLowSpeed;
-	} else {
-	    speed = speed * DriveTrainConstants.kLowSpeed;
-	    turn  = turn  * DriveTrainConstants.kTurnLowSpeed;
-	}
-	driveBase.arcadeDrive(-throttle,zRotation);
+      mode = "low";
+	  } else if( RobotContainer.m_BlackBox.isSwitchCenter() ) {
+      speed = speed * DriveTrainConstants.kLowSpeed;
+      turn = turn * DriveTrainConstants.kTurnLowSpeed;
+      mode = "med";
+    } else {
+      speed = speed * DriveTrainConstants.kHighSpeed;
+      turn  = turn  * DriveTrainConstants.kTurnHighSpeed;
+      mode = "high";
+	  }
+
+    SmartDashboard.putString("Pdrive mode", mode);
+    SmartDashboard.putNumber("Pdrive throttle", throttle);
+    SmartDashboard.putNumber("Pdrive turn", turn);
+
+	  driveBase.arcadeDrive(-throttle, turn, false);
+  }
 
 	// speed = (a*speed^3 + b*speed) * c
 	// a = 0.2, b = 1.8, c = 0.05
-	// 
-
-    }
-
 
   // Default arcadeDrive constructor squares the inputs. 
   // arcadeDrive(-y, x) is equivalent to arcadeDrive(-y, x, true)
   // in this usage, y (throttle), and x (rotation around the z-axis)
   // are squared within the arcadeDrive() method.
-  public void drive(double throttle, double zRotation) {
-  //  driveBase.arcadeDrive(throttle, zRotation);
-    SmartDashboard.putString("drivetrain", "drive (squared)");
-
-      driveBase.arcadeDrive(-throttle,zRotation);
-  }
 
   // Cubic arcadeDrive implementation for 2020 wihch flattens
   // the joystick input response curve by cubing (x^3) the
@@ -122,26 +122,8 @@ public class DriveTrain extends SubsystemBase {
   // Sign is maintained due to math, however, for clarity, 
   // Math.copysign() is used. The third parameter to arcadeDrive() is false 
   // to prevent the inputs from being squared once again.
-  public void midnightDrive(double throttle, double zRotation) {
+ 
 
-    SmartDashboard.putString("drivetrain", "midnightDrive");
-    double m_zRotation = Math.pow(zRotation, 3);
-    double m_throttle = Math.copySign(throttle,Math.pow(throttle,3));
-    driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
-  }
-
-  public void doge(double throttle, double zRotation) {
-
-    double m_throttle = throttle;
-    double m_zRotation = zRotation;
-    SmartDashboard.putString("drivetrain", "doge (cubed)");
-
-    // 2021-12 Alex modified the response for X & Y by half
-    m_throttle = Math.pow(m_throttle, 3);
-
-    driveBase.arcadeDrive(-m_throttle, m_zRotation, false);
-    
-  }
 
   @Override
   public void periodic() {

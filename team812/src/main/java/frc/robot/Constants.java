@@ -112,23 +112,23 @@ public final class Constants {
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
 	
-	public static final double kHighSpeed = 1.0;
-	public static final double kTurnHighSpeed = 1.0;
+	    public static final double kHighSpeed = 1.0;
+	    public static final double kTurnHighSpeed = 1.0;
 
-	public static final double kLowSpeed = 0.4;
-	public static final double kTurnLowSpeed = 0.2;
+	    public static final double kLowSpeed = 0.2;
+	    public static final double kTurnLowSpeed = 0.8;
 
-	public static final double kLowLowSpeed = 0.2;
-	public static final double kTurnLowLowSpeed = 0.1;
+	    public static final double kLowLowSpeed = 0.08;
+	    public static final double kTurnLowLowSpeed = 0.7;
     }
 
     public static final class ArmConstants {
         public static final double kArmScorePosition = 1550;
-        public static final double kArmTopPositon = 3580; //3550;
+        public static final double kArmTopPositon = 3600; //3550;
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 1700;
         public static final double kArmBallGathering = 200;
-        public static final double kArmThreshold = 50;
+        public static final double kArmThreshold = 20;
     }
 
     public static final int kLightRelay = 0;

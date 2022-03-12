@@ -68,7 +68,7 @@ public class DriveForwardCommand extends CommandBase {
     if(turningValue > 1.0) {
       turningValue = 1.0;
     }
-    m_subsystem.drive(-m_speed, turningValue);
+    m_subsystem.preussDrive(-m_speed, turningValue);
 
     /* 
     System.out.printf("DriveForward Gyro angle: %f\n", m_gyro.getAngle());
@@ -81,7 +81,7 @@ public class DriveForwardCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_subsystem.drive(0.0, 0.0);
+    m_subsystem.preussDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.

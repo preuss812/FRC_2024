@@ -607,7 +607,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "5,1": {
+          "4,1": {
             "size": [
               1,
               1
@@ -633,7 +633,53 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm pos:",
-              "_title": "/SmartDashboard/Arm pos:"
+              "_title": "ArmPosition"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm Homed?",
+              "_title": "SmartDashboard/Arm Homed?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/r2_speed",
+              "_title": "SmartDashboard/r2_speed"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/r2_l_speed",
+              "_title": "SmartDashboard/r2_l_speed"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/rotate2_path",
+              "_title": "SmartDashboard/rotate2_path"
             }
           }
         }
@@ -680,6 +726,63 @@
               "fps": 10,
               "imageWidth": 320,
               "imageHeight": 240
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Drivetrain",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pdrive mode",
+              "_title": "SmartDashboard/Pdrive mode"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Number Bar",
+              "_source0": "network_table:///SmartDashboard/Pdrive throttle",
+              "_title": "throttle",
+              "Range/Min": -1.0,
+              "Range/Max": 1.0,
+              "Range/Center": 0.0,
+              "Visuals/Num tick marks": 5,
+              "Visuals/Show text": true
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Number Bar",
+              "_source0": "network_table:///SmartDashboard/Pdrive turn",
+              "_title": "turn",
+              "Range/Min": -1.0,
+              "Range/Max": 1.0,
+              "Range/Center": 0.0,
+              "Visuals/Num tick marks": 5,
+              "Visuals/Show text": true
             }
           }
         }

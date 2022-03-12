@@ -66,30 +66,18 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-      new RunCommand(() -> m_DriveTrain.preussDrive(xboxController.getY(), xboxController.getX()), m_DriveTrain)
+    m_ArmSubsystem.unsetHome("RobotContainer");
 
-	  /*	    
-    m_BlackBox.printBits();
-    System.out.println(m_BlackBox.isSet(OIConstants.kControlBoxSw4));
-    if( RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) ) {
-     // System.out.printf("*** Drive mode: drive (squared)\n");
-      m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.drive(xboxController.getY(), xboxController.getX()), m_DriveTrain)
-      ); 
-    } else {
-    //  System.out.printf("*** Drive mode: doge (cubed)\n");
-      m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.doge(xboxController.getY(), xboxController.getX()), m_DriveTrain)
-      );
-    }
-	  */
-	  
+     m_DriveTrain.setDefaultCommand(
+       new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+     );
+
     // Default command for the Elevator Subsystem
     m_ElevatorSubsystem.setDefaultCommand(
       new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)
     );
       m_ArmSubsystem.setDefaultCommand(
-        new RunCommand( ()->m_ArmSubsystem.rotate2(-rightJoystick.getY()), m_ArmSubsystem)
+        new RunCommand( ()->m_ArmSubsystem.rotate2(-xboxController.getY()), m_ArmSubsystem)
      );
 
     m_CameraLightSubsystem.off();
@@ -149,6 +137,8 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
     new JoystickButton(leftJoystick, 12).whenPressed(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
+    // Toggle Home boolean for the arm - this should not be used in competition
+    new JoystickButton(leftJoystick, 7).toggleWhenPressed(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome,m_ArmSubsystem));
 
   }
   /**
