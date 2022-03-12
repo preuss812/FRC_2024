@@ -74,7 +74,7 @@ public class RobotContainer {
 
     // Default command for the Elevator Subsystem
     m_ElevatorSubsystem.setDefaultCommand(
-      new RunCommand( () -> m_ElevatorSubsystem.elevate(leftJoystick.getY()), m_ElevatorSubsystem)
+      new RunCommand( () -> m_ElevatorSubsystem.elevate(-leftJoystick.getY()), m_ElevatorSubsystem)
     );
       m_ArmSubsystem.setDefaultCommand(
         new RunCommand( ()->m_ArmSubsystem.rotate2(-xboxController.getY()), m_ArmSubsystem)
@@ -138,7 +138,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 12).whenPressed(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
     // Toggle Home boolean for the arm - this should not be used in competition
-    new JoystickButton(leftJoystick, 7).toggleWhenPressed(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome,m_ArmSubsystem));
+    //new JoystickButton(leftJoystick, 7).toggleWhenPressed(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome2,m_ArmSubsystem));
 
   }
   /**

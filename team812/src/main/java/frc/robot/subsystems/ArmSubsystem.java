@@ -200,12 +200,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void unsetHome() {
     hasBeenHomed = false;
-    System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
+    //System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome(String msg) {
     hasBeenHomed = false;
-    System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " + hasBeenHomed);
+    //System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " + hasBeenHomed);
   }
 
   public boolean isHome() {

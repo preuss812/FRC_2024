@@ -123,10 +123,10 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double kArmScorePosition = 1550;
-        public static final double kArmTopPositon = 3600; //3550;
+        public static final double kArmScorePosition = 2100;
+        public static final double kArmTopPositon = 4020; //3550;
         public static final double kArmHangPosition = 2550;
-        public static final double kArmEndGamePosition = 1700;
+        public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 20;
     }
