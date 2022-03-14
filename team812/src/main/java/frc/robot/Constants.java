@@ -133,4 +133,5 @@ public final class Constants {
     }
 
     public static final int kLightRelay = 0;
+    public static final int kTopLightRelay = 1;
 }

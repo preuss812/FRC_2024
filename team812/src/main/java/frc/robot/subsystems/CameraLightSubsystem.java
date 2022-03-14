@@ -12,15 +12,18 @@ import edu.wpi.first.wpilibj.Relay.Value;
 public class CameraLightSubsystem extends SubsystemBase {
   /** Creates a new CameraLightSubsystem. */
   private final Relay m_lightring = new Relay(Constants.kLightRelay, Relay.Direction.kForward);
+  private final Relay m_toplightring = new Relay(Constants.kTopLightRelay, Relay.Direction.kForward);
 
   public CameraLightSubsystem() {}
 
   public void on() {
     m_lightring.set(Value.kOn);
+    m_toplightring.set(Value.kOn);
   }
 
   public void off(){
     m_lightring.set(Value.kOff);
+    m_toplightring.set(Value.kOff);
   }
   
   @Override
