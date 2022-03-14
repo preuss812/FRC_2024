@@ -126,6 +126,7 @@ public final class Constants {
     public static final class ArmConstants {
         public static final double kArmScorePosition = 2100;
         public static final double kArmTopPositon = 4020; //3550;
+        public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
