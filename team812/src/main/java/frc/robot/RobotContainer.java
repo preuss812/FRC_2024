@@ -135,6 +135,9 @@ public class RobotContainer {
     // Elevator down forward
     new JoystickButton(leftJoystick, 6).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
     new JoystickButton(leftJoystick, 4).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(leftJoystick, 7).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
+    new JoystickButton(leftJoystick, 8).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(leftJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
     new JoystickButton(leftJoystick, 12).whenPressed(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
     // Toggle Home boolean for the arm - this should not be used in competition
