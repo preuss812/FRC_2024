@@ -22,7 +22,6 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
@@ -48,7 +47,6 @@ public class RobotContainer {
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
-  public static GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
 
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
   private final HookSubsystem m_HookSubsystem = new HookSubsystem();
@@ -122,13 +120,14 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
     new JoystickButton(rightJoystick, 3).whenPressed(
       new SequentialCommandGroup(
-        new ArmCommand(m_ArmSubsystem, ArmConstants.kArmScorePosition),
+        new ArmCommand(m_ArmSubsystem, ArmConstants.kArmPreGrabPosition),
         new WaitCommand(0.50),
         new ArmERCommand(m_ArmSubsystem, true)
       )
     );
     new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(rightJoystick, 6).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 10).whenPressed(new ArmEmergencyStop(m_ArmSubsystem));
 
     // Left Joystick for Elevator Control
     // Elevator up back

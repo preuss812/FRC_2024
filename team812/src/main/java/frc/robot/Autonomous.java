@@ -9,16 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.*;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.OIConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -42,49 +37,11 @@ public class Autonomous extends SequentialCommandGroup {
     BallSubsystem m_ballSubsystem = RobotContainer.m_BallSubsystem;
     blackBox.readBits();
 
-    if(blackBox.isSwitchCenter()) {      // middle position on the field
-      System.out.printf("*** Autonomous switch is CENTER\n");
-
-      addCommands(
-        new SequentialCommandGroup(
-          new ArmHomeCommand(m_armSubsystem),
-          new ArmCommand(m_armSubsystem,ArmConstants.kArmScorePosition).withTimeout(0.5),
-          new ArmERCommand(m_armSubsystem, true).withTimeout(0.5),
-          new BallCommand(m_ballSubsystem, true).withTimeout(0.5),
-          new DriveForwardCommand(m_driveTrain, -0.5).withTimeout(0.10)
-        )
-      );
-    } else if (blackBox.isSwitchLeft()){
-  //  else if( x >= 0.5 ) {
-      // left position on the field
-      System.out.printf("*** Autonomous switch is LEFT\n");
-      SmartDashboard.putString("AutoSwitch", "LEFT");
-      addCommands(
-        new SequentialCommandGroup(
-          new ElevatorGripCommand(RobotContainer.m_ElevatorSubsystem, true),
-          new DriveForwardCommand(m_driveTrain, 0.4).withTimeout(0.5),
-          new ElevatorGripCommand(RobotContainer.m_ElevatorSubsystem, false)
-          )
-      );
-
-    } else if( blackBox.isSwitchRight() ) {
-      // right position on the field
-      System.out.printf("*** Autonomous switch is RIGHT\n");
-/*        addCommands(
-          new ParallelCommandGroup(
-            new ElevatorCommand(RobotContainer.m_ElevatorSubsystem, true).withTimeout(4.5)));
-            new SequentialCommandGroup(
-              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0),
-              new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, -45.0).withTimeout(1.0),
-              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.80),
-              new DriveByAngleCommand(m_subsystem, m_gyro, 0.6, 45.0).withTimeout(1.0),
-              new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(2.0)
-            )
-          )
-        ); */
-      } else {
-        System.out.printf("*** Autonomous driveforward null\n");
-      //addCommands(new DriveForwardCommand(m_subsystem, m_gyro, 0.6).withTimeout(1.5));
-    }
+    addCommands(
+      new SequentialCommandGroup(
+        new ArmHomeCommand(m_armSubsystem),
+        new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
+      )
+    );
   }
 }
