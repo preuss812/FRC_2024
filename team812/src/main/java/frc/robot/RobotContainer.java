@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -58,12 +59,26 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
-
+  double POV_to_double(int pov) {
+    double result;
+    if (pov == -1) {
+      result = 0.0;
+    } else if (pov == 0) {
+      result = 0.5;
+    } else if (pov == 180) {
+      result = -0.5;
+    } else { 
+      result = 0.0;
+    }
+    SmartDashboard.putNumber("POV", pov);
+    SmartDashboard.putNumber("POV_Out", result);
+    return result;
+  }
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
+   
     m_ArmSubsystem.unsetHome("RobotContainer");
 
      m_DriveTrain.setDefaultCommand(
@@ -74,8 +89,12 @@ public class RobotContainer {
     m_ElevatorSubsystem.setDefaultCommand(
       new RunCommand( () -> m_ElevatorSubsystem.elevate(-leftJoystick.getY()), m_ElevatorSubsystem)
     );
-      m_ArmSubsystem.setDefaultCommand(
-        new RunCommand( ()->m_ArmSubsystem.rotate2(-xboxController.getY()), m_ArmSubsystem)
+    //   m_ArmSubsystem.setDefaultCommand(
+    //     new RunCommand( ()->m_ArmSubsystem.rotate2(-xboxController.getY()), m_ArmSubsystem)
+    //  );
+
+    m_ArmSubsystem.setDefaultCommand(
+        new RunCommand( ()->m_ArmSubsystem.rotate2(POV_to_double(rightJoystick.getPOV())), m_ArmSubsystem)
      );
 
     m_CameraLightSubsystem.off();
@@ -121,7 +140,7 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 3).whenPressed(
       new SequentialCommandGroup(
         new ArmCommand(m_ArmSubsystem, ArmConstants.kArmPreGrabPosition),
-        new WaitCommand(0.50),
+        //new WaitCommand(0.50),
         new ArmERCommand(m_ArmSubsystem, true)
       )
     );
