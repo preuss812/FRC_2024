@@ -58,7 +58,7 @@ public class RobotContainer {
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
-  private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
+//  private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
   double POV_to_double(int pov) {
     double result;
     if (pov == -1) {
@@ -111,7 +111,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     // xbox controller
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
+/*    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(
       new SequentialCommandGroup(
@@ -120,6 +120,7 @@ public class RobotContainer {
         new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain)
       )
     );
+    */
 
     // Right Joystick for Arm control
     new JoystickButton(rightJoystick, 7).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
