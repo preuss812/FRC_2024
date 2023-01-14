@@ -113,7 +113,7 @@ public class RobotContainer {
     // xbox controller
 /*    new JoystickButton(xboxController, Constants.OIConstants.kXboxBButton).whileHeld(new BallCommand(m_BallSubsystem, true));
     new JoystickButton(xboxController, Constants.OIConstants.kXboxAButton).whileHeld(new BallCommand(m_BallSubsystem, false));
-    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).whenPressed(
+    new JoystickButton(xboxController, Constants.OIConstants.kXboxXButton).onTrue(
       new SequentialCommandGroup(
         new InstantCommand(m_CameraLightSubsystem::on,m_CameraLightSubsystem),
         new WaitCommand(0.25),
@@ -123,44 +123,44 @@ public class RobotContainer {
     */
 
     // Right Joystick for Arm control
-    new JoystickButton(rightJoystick, 7).toggleWhenPressed(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
-    new JoystickButton(rightJoystick, 1).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(rightJoystick, 2).whenPressed(new ArmERCommand(m_ArmSubsystem, false));
+    new JoystickButton(rightJoystick, 7).toggleOnTrue(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
+    new JoystickButton(rightJoystick, 1).onTrue(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(rightJoystick, 2).onTrue(new ArmERCommand(m_ArmSubsystem, false));
 
     // This first button takes the arm to the bottom of its travel until
     // the bottom limit switch is trigged. This "Homes" the encoder to a known
     // zero position.
-    new JoystickButton(rightJoystick, 11).whenPressed(
+    new JoystickButton(rightJoystick, 11).onTrue(
       new SequentialCommandGroup(
         new ArmERCommand(m_ArmSubsystem, false),
         new WaitCommand(0.25),
         new ArmHomeCommand(m_ArmSubsystem)
       )
     );
-    new JoystickButton(rightJoystick, 5).whenPressed(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
-    new JoystickButton(rightJoystick, 3).whenPressed(
+    new JoystickButton(rightJoystick, 5).onTrue(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
+    new JoystickButton(rightJoystick, 3).onTrue(
       new SequentialCommandGroup(
         new ArmCommand(m_ArmSubsystem, ArmConstants.kArmPreGrabPosition),
         //new WaitCommand(0.50),
         new ArmERCommand(m_ArmSubsystem, true)
       )
     );
-    new JoystickButton(rightJoystick, 4).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
-    new JoystickButton(rightJoystick, 6).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
-    new JoystickButton(rightJoystick, 10).whenPressed(new ArmEmergencyStop(m_ArmSubsystem));
+    new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
+    new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmSubsystem));
 
     // Left Joystick for Elevator Control
     // Elevator up back
     // Elevator down forward
-    new JoystickButton(leftJoystick, 6).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 4).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, false));
-    new JoystickButton(leftJoystick, 7).whenPressed(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
-    new JoystickButton(leftJoystick, 8).whenPressed(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(leftJoystick, 9).whenPressed(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 12).whenPressed(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
+    new JoystickButton(leftJoystick, 6).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(leftJoystick, 4).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
+    new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmSubsystem, true));
+    new JoystickButton(leftJoystick, 9).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
     // Toggle Home boolean for the arm - this should not be used in competition
-    //new JoystickButton(leftJoystick, 7).toggleWhenPressed(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome2,m_ArmSubsystem));
+    //new JoystickButton(leftJoystick, 7).toggleonTrue(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome2,m_ArmSubsystem));
 
   }
   /**
