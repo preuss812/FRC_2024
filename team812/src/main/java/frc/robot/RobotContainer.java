@@ -23,11 +23,9 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
-import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.commands.*;
 
@@ -50,10 +48,8 @@ public class RobotContainer {
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
-  private final HookSubsystem m_HookSubsystem = new HookSubsystem();
 
   private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
-  private final CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -82,7 +78,7 @@ public class RobotContainer {
     m_ArmSubsystem.unsetHome("RobotContainer");
 
      m_DriveTrain.setDefaultCommand(
-       new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), rightJoystick.getX()), m_DriveTrain)
+       new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain)
      );
 
     // Default command for the Elevator Subsystem

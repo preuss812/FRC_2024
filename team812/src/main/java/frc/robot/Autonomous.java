@@ -10,10 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.Constants.ArmConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -34,7 +32,6 @@ public class Autonomous extends SequentialCommandGroup {
 
     BlackBoxSubsystem blackBox = RobotContainer.m_BlackBox;
     ArmSubsystem m_armSubsystem = RobotContainer.m_ArmSubsystem;
-    BallSubsystem m_ballSubsystem = RobotContainer.m_BallSubsystem;
     blackBox.readBits();
 
     addCommands(
