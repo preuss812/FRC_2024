@@ -57,6 +57,7 @@ public class CameraVisionCommand extends CommandBase {
   @Override
   public void execute() {
     double error;
+    SmartDashboard.putNumber("Range", -54);
     if (m_cameraSubsystem.hasTargets() ) {
       var results = m_cameraSubsystem.camera.getLatestResult();
 
@@ -66,6 +67,7 @@ public class CameraVisionCommand extends CommandBase {
                 TARGET_HEIGHT_METERS,
                 CAMERA_PITCH_RADIANS,
                 Units.degreesToRadians(results.getBestTarget().getPitch()));
+        SmartDashboard.putNumber("Range", range);
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
         forwardSpeed= 0.0;
         rotationSpeed = MathUtil.clamp(-turnController.calculate(results.getBestTarget().getYaw(), 0),-0.50,0.50);
@@ -88,6 +90,7 @@ public class CameraVisionCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return turnController.atSetpoint();
+//    return turnController.atSetpoint();
+    return true;
   }
 }
