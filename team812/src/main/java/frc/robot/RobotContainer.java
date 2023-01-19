@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.ButtonMonitor;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -25,6 +27,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BallSubsystem;
+import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.commands.*;
@@ -46,6 +49,7 @@ public class RobotContainer {
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
 
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
 
@@ -143,6 +147,7 @@ public class RobotContainer {
     );
     new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 9).onTrue(new CameraVisionCommand(m_CameraVisionSubsystem, m_DriveTrain));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmSubsystem));
 
     // Left Joystick for Elevator Control
