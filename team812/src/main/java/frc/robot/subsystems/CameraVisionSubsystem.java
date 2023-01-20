@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class CameraVisionSubsystem extends SubsystemBase {
   /** Creates a new CameraVisionSubsystem. */
@@ -33,6 +36,34 @@ public class CameraVisionSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler run (50 /s)
+   var result = camera.getLatestResult();
+  //  System.out.println("result " + result);
+
+   boolean hasTargets = result.hasTargets(); // true or false
+
+   // if camera sees something, then
+      if (hasTargets){
+        PhotonTrackedTarget target = result.getBestTarget(); // use best target
+        // calculate distance to to april tag
+        final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
+        final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.0);
+        final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
+        final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
+        double distance =
+          PhotonUtils.calculateDistanceToTargetMeters(
+                  CAMERA_HEIGHT_METERS,
+                  TARGET_HEIGHT_METERS,
+                  CAMERA_PITCH_RADIANS,
+                  Units.degreesToRadians(target.getPitch()));
+                  
+        // print out some data 
+        System.out.println(CAMERA_HEIGHT_METERS + " " +
+        TARGET_HEIGHT_METERS + " " +
+        CAMERA_PITCH_RADIANS);
+        System.out.println("result (m): " + distance);
+  }  
   }
+
+
 }
