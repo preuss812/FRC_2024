@@ -46,9 +46,9 @@ public class CameraVisionSubsystem extends SubsystemBase {
       if (hasTargets){
         PhotonTrackedTarget target = result.getBestTarget(); // use best target
         // calculate distance to to april tag
-        final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
-        final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.0);
-        final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
+        final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(19);
+        final double TARGET_HEIGHT_METERS = Units.inchesToMeters(27); // target taped to table (center @ 2'3")
+        final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(4);
         final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
         double distance =
           PhotonUtils.calculateDistanceToTargetMeters(
@@ -58,11 +58,14 @@ public class CameraVisionSubsystem extends SubsystemBase {
                   Units.degreesToRadians(target.getPitch()));
                   
         // print out some data 
-        System.out.println(CAMERA_HEIGHT_METERS + " " +
-        TARGET_HEIGHT_METERS + " " +
-        CAMERA_PITCH_RADIANS);
-        System.out.println("result (m): " + distance);
-  }  
+        // System.out.println(CAMERA_HEIGHT_METERS + " " +
+        // TARGET_HEIGHT_METERS + " " +
+        // CAMERA_PITCH_RADIANS);
+        // System.out.println("result (m): " + distance); // PRINT THIS OUT SLOWER
+        SmartDashboard.putNumber("April Tag Target Distance (Predicted) (in)", Units.metersToInches(distance));
+        SmartDashboard.putNumber("detected April tag pitch (degree)", target.getPitch());
+      }
+
   }
 
 

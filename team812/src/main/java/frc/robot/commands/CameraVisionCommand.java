@@ -70,7 +70,7 @@ public class CameraVisionCommand extends CommandBase {
         SmartDashboard.putNumber("Range", range);
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
         forwardSpeed= 0.0;
-        rotationSpeed = MathUtil.clamp(-turnController.calculate(results.getBestTarget().getYaw(), 0),-0.50,0.50);
+        rotationSpeed = MathUtil.clamp(-turnController.calculate(results.getBestTarget().getYaw(), 0),-1.0,1.0);
         error = turnController.getPositionError();
         SmartDashboard.putNumber("Turn error", error);
     } else {
