@@ -65,7 +65,6 @@ public class CameraVisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("April Tag Target Distance (Predicted) (in)", Units.metersToInches(distance));
         SmartDashboard.putNumber("detected April tag pitch (degree)", target.getPitch());
       }
-
   }
 
 
