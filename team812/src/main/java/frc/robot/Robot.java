@@ -13,6 +13,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.RobotContainer;
 
 /**
@@ -26,6 +30,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   public static NetworkTable nttable;
+  AHRS ahrs;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,7 +44,12 @@ public class Robot extends TimedRobot {
     nttable = ntinst.getTable("0team812");
     CameraServer.startAutomaticCapture(0);
     CameraServer.startAutomaticCapture(1);
-
+    try {
+      ahrs = new AHRS(SerialPort.Port.kUSB1);
+      ahrs.enableLogging(true);
+  } catch (RuntimeException ex) {
+    DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+  }
     m_robotContainer = new RobotContainer();
   }
 
@@ -99,6 +109,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    ahrs.zeroYaw();
   }
 
   /**
@@ -106,6 +117,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putBoolean("IMU_Connected", ahrs.isConnected());
+    SmartDashboard.putBoolean("IMU_IsCalibrating", ahrs.isCalibrating());
+    SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
+    SmartDashboard.putNumber("IMU_Pitch", ahrs.getPitch());
+    SmartDashboard.putNumber("IMU_Roll", ahrs.getRoll());
   }
 
   @Override

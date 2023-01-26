@@ -11,42 +11,84 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "2,0": {
+          "3,1": {
             "size": [
-              3,
-              3
+              1,
+              1
             ],
             "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://USB Camera 0",
-              "_title": "USB Camera 0",
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": 10,
-              "imageWidth": 320,
-              "imageHeight": 240
+              "_type": "Boolean Box",
+              "_source0": "network_table:///photonvision/pv-812/hasTarget",
+              "_title": "/photonvision/pv-812/hasTarget",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "5,0": {
+          "4,1": {
             "size": [
-              3,
-              3
+              2,
+              1
             ],
             "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://USB Camera 1",
-              "_title": "USB Camera 1",
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": 10,
-              "imageWidth": 320,
-              "imageHeight": 240
+              "_type": "Text View",
+              "_source0": "network_table:///photonvision/pv-812/targetYaw",
+              "_title": "/photonvision/pv-812/targetYaw",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,2": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/April Tag Target Distance (Predicted) (in)",
+              "_title": "/SmartDashboard/April Tag Target Distance (Predicted) (in)",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Range",
+              "_title": "SmartDashboard/Range",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Fwd speed",
+              "_title": "SmartDashboard/Fwd speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Rot speed",
+              "_title": "SmartDashboard/Rot speed",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -71,7 +113,9 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive mode",
-              "_title": "SmartDashboard/Pdrive mode"
+              "_title": "SmartDashboard/Pdrive mode",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           },
           "4,1": {
@@ -83,11 +127,14 @@
               "_type": "Number Bar",
               "_source0": "network_table:///SmartDashboard/Pdrive throttle",
               "_title": "throttle",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Range/Min": -1.0,
               "Range/Max": 1.0,
               "Range/Center": 0.0,
               "Visuals/Num tick marks": 5,
-              "Visuals/Show text": true
+              "Visuals/Show text": true,
+              "Visuals/Orientation": "HORIZONTAL"
             }
           },
           "5,1": {
@@ -99,11 +146,14 @@
               "_type": "Number Bar",
               "_source0": "network_table:///SmartDashboard/Pdrive turn",
               "_title": "turn",
+              "_glyph": 148,
+              "_showGlyph": false,
               "Range/Min": -1.0,
               "Range/Max": 1.0,
               "Range/Center": 0.0,
               "Visuals/Num tick marks": 5,
-              "Visuals/Show text": true
+              "Visuals/Show text": true,
+              "Visuals/Orientation": "HORIZONTAL"
             }
           }
         }
@@ -111,8 +161,8 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.333333492279053,
-    "y": -7.333333492279053,
+    "x": 118.0,
+    "y": 62.0,
     "width": 1294.6666259765625,
     "height": 734.6666870117188
   }

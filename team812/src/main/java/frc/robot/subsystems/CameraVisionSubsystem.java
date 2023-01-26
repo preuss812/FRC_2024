@@ -34,5 +34,7 @@ public class CameraVisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    var result = camera.getLatestResult();
+    System.out.println("result " + result);
   }
 }
