@@ -106,6 +106,10 @@ public class DriveTrain extends SubsystemBase {
 	  driveBase.arcadeDrive(-throttle, turn, false);
   }
 
+  
+  public void tankDrive(double l, double r) {
+	  driveBase.tankDrive(l,r);
+  }
 	// speed = (a*speed^3 + b*speed) * c
 	// a = 0.2, b = 1.8, c = 0.05
 
