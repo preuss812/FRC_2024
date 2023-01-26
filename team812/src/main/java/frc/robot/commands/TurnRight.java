@@ -16,7 +16,9 @@ public class TurnRight extends CommandBase {
   @Override
   public void execute() {
     double jantLeft = 0.75; 
-    double jantRight = -0.75;
+    double jantRight = -0.7;
+    boolean doneTurning = false;
+    
     while (!doneTurning) { // ! is the same as "not" in English
         // boolean doneRu\\Turing
         //SmartDashboard
