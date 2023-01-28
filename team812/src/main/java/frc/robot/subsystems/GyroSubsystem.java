@@ -32,6 +32,7 @@ public class GyroSubsystem extends SubsystemBase {
       }
       System.out.println("*** Gyro Subsystem initialized.");
   }
+  
   public double getAngle() {
     return gyro.getAngle();
   }
@@ -39,11 +40,11 @@ public class GyroSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("IMU_Connected", ahrs.isConnected());
-    SmartDashboard.putBoolean("IMU_IsCalibrating", ahrs.isCalibrating());
-    SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
-    SmartDashboard.putNumber("IMU_Pitch", ahrs.getPitch());
-    SmartDashboard.putNumber("IMU_Roll", ahrs.getRoll());
+    SmartDashboard.putBoolean("IMU_Connected", gyro.isConnected());
+    SmartDashboard.putBoolean("IMU_IsCalibrating", gyro.isCalibrating());
+    SmartDashboard.putNumber("IMU_Yaw", gyro.getYaw());
+    SmartDashboard.putNumber("IMU_Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("IMU_Roll", gyro.getRoll());
   }
 
   public void reset() {

@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GyroSubsystem;
@@ -23,30 +25,35 @@ public class DriveForwardCommand extends CommandBase {
   private final DriveTrain m_subsystem;
   private final EncoderSubsystem m_encoder;
   private final GyroSubsystem m_gyro;
-  public double targetAngle;
+  public double targetAngle = 0; // target is starting direction
+  private boolean magic = false;
 
-  public DriveForwardCommand(final DriveTrain subsystem, final Double speed) {
+  public DriveForwardCommand(final DriveTrain subsystem, final Double speed, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
 
 //    public DriveForwardCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_speed = speed;
+    m_gyro = gyro;
+    m_encoder = encoder;
     addRequirements(m_subsystem, m_gyro);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_gyro.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double deltaAngle,  turningValue;
+    // targetAngle += 7.2 / 2; // drive in a circle every 2 seconds: 360 degree/ 50 update per sec / 2 sec
     deltaAngle = targetAngle - m_gyro.getAngle();
-    turningValue = MathUtil.clamp(deltaAngle * PidConstants.kProportionalDriveStraight, -1.0, 1.0)
-    m_subsystem.preussDrive(-m_speed, turningValue);
+    turningValue = MathUtil.clamp(deltaAngle * PidConstants.kProportionalDriveStraight, -1.0, 1.0);
+    SmartDashboard.putNumber("turn", turningValue);
+    SmartDashboard.putNumber("delta", deltaAngle);
+    m_subsystem.preussDrive(-m_speed, -turningValue);
   }
 
   // Called once the command ends or is interrupted.
@@ -56,8 +63,8 @@ public class DriveForwardCommand extends CommandBase {
   }
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+  // @Override
+  // public boolean isFinished() {
+  //   return false;
+  // }
 }

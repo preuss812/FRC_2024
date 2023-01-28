@@ -27,6 +27,7 @@ public class DriveByAngleCommand extends CommandBase {
     m_subsystem = subsystem;
     m_speed = speed;
     m_angle = angle;
+    m_gyro = null;
     addRequirements(m_subsystem, m_gyro);
   }
 
