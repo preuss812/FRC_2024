@@ -4,84 +4,92 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.CameraVisionSubsystem;
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import frc.robot.subsystems.DriveTrain;
 
 public class CameraVisionPoseCommand extends CommandBase {
   /** Creates a new CameraVisionCommand. */
   private final CameraVisionSubsystem m_cameraSubsystem;
+  private final PhotonPoseEstimator m_photonPoseEstimator;
   private final DriveTrain m_drivetrainSubsystem;
 
-  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
-  final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.0);
-  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
-  final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
-
-  final double LINEAR_P = 0.0;
-  final double LINEAR_D = 0.0;
-  final double ANGULAR_P = 0.8;
-  final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0;
-
-  PIDController forwardController;
-  PIDController turnController;
-
-  double forwardSpeed;
-  double rotationSpeed;
+  private EstimatedRobotPose ref_pose;
 
   public CameraVisionPoseCommand(CameraVisionSubsystem subsystem, DriveTrain drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
+    AprilTagFieldLayout atfl = null;
+    final AprilTag tag01 =
+      new AprilTag(
+              0,
+              new Pose3d(new Pose2d(0.0, FieldConstants.width / 2.0, Rotation2d.fromDegrees(0.0))));
+    ArrayList<AprilTag> atList = new ArrayList<AprilTag>();
+    atList.add(tag01);
+
+    atfl = new AprilTagFieldLayout(
+      atList,
+      FieldConstants.length,
+      FieldConstants.width
+    );
+
     m_cameraSubsystem = subsystem;
     m_drivetrainSubsystem = drivetrainSubsystem;
+    m_photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, m_cameraSubsystem.camera, VisionConstants.robotToCam);
     addRequirements(subsystem, drivetrainSubsystem);
   }
 
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose3d estimatedPose) {
+    m_photonPoseEstimator.setReferencePose(estimatedPose);
+    return m_photonPoseEstimator.update();
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
-    turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    turnController.setTolerance(4.0); // did not work, dont understand yet
-    forwardSpeed = 0.01;
-    rotationSpeed = 0.01;
+    Pose3d initial_ref_pose = new Pose3d();
+    ref_pose = getEstimatedGlobalPose(initial_ref_pose).get();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error;
-    SmartDashboard.putNumber("Range", -54);
-    if (m_cameraSubsystem.hasTargets() ) {
-      var results = m_cameraSubsystem.camera.getLatestResult();
-      PhotonTrackedTarget target = results.getBestTarget();
-      int targetID = target.getFiducialId();
-      
-      Transform3d bestCameraToTarget = target.getBestCameraToTarget();
-      SmartDashboard.putNumber("RotX", bestCameraToTarget.getRotation().getX());
-      SmartDashboard.putNumber("RotY", bestCameraToTarget.getRotation().getY());
-      SmartDashboard.putNumber("RotZ", bestCameraToTarget.getRotation().getZ());
-      SmartDashboard.putNumber("FiducialID", targetID);
+    Optional<EstimatedRobotPose> estrp = getEstimatedGlobalPose(ref_pose.estimatedPose);
+    if (estrp.isEmpty()) {
+      return;
     }
+    Pose3d estimated_pose = estrp.get().estimatedPose;
+    ref_pose = estrp.get();
+    SmartDashboard.putNumber("X", estimated_pose.getX());
+    SmartDashboard.putNumber("Y", estimated_pose.getY());
+    SmartDashboard.putNumber("Z", estimated_pose.getZ());
   }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-//    return turnController.atSetpoint();
     return true;
   }
 }
