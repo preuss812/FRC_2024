@@ -90,6 +90,32 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/turn",
+              "_title": "/SmartDashboard/turn",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/delta",
+              "_title": "/SmartDashboard/delta",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -163,7 +189,7 @@
   "windowGeometry": {
     "x": 118.0,
     "y": 62.0,
-    "width": 1294.6666259765625,
-    "height": 734.6666870117188
+    "width": 1295.0,
+    "height": 735.0
   }
 }
