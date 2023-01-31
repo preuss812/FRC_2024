@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
-//import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 
 public class DriveByAngleCommand extends CommandBase {
   /**
@@ -17,34 +17,31 @@ public class DriveByAngleCommand extends CommandBase {
    */
   private final Double m_speed;
   private final DriveTrain m_subsystem;
-//  private final GyroSubsystem m_gyro;
+  private final GyroSubsystem m_gyro;
   private final double m_angle;
   private double targetAngle;
 
-//  public DriveByAngleCommand(final DriveTrain subsystem, final GyroSubsystem gyro, final Double speed, final Double angle) {
   public DriveByAngleCommand(final DriveTrain subsystem, final Double speed, final Double angle) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-//    m_gyro = gyro;
     m_speed = speed;
     m_angle = angle;
-//    addRequirements(m_subsystem, m_gyro);
+    m_gyro = null;
+    addRequirements(m_subsystem, m_gyro);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //System.out.printf("*** DriveByAngleCommand m_speed: %f, m_angle: %f\n", m_speed, m_angle);
-//    targetAngle = (m_gyro.getAngle() + m_angle);
-    targetAngle = m_angle;  
+      // drive to a relative angle
+    targetAngle = (m_gyro.getAngle() + m_angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_subsystem.preussDrive(0.0, m_speed);
-  //  System.out.printf("*** DriveByAngleCommand angles (Gyro, Target) : (%f, %f)\n", m_gyro.getAngle(), targetAngle);
   }
 
   // Called once the command ends or is interrupted.
@@ -56,7 +53,6 @@ public class DriveByAngleCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-//    return (m_gyro.getAngle() >= targetAngle);
-      return (targetAngle == targetAngle); // 2022 hack until gryo support in wpilibj is fixed
+      return (m_gyro.getAngle() >= targetAngle);
   }
 }

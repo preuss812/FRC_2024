@@ -30,6 +30,7 @@ import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
+import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.commands.*;
 
 
@@ -58,6 +59,9 @@ public class RobotContainer {
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
+
+    // Gyro
+    private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
   
 //  private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
   double POV_to_double(int pov) {
@@ -97,6 +101,12 @@ public class RobotContainer {
     m_ArmSubsystem.setDefaultCommand(
         new RunCommand( ()->m_ArmSubsystem.rotate2(POV_to_double(rightJoystick.getPOV())), m_ArmSubsystem)
      );
+
+    // Gyro subsystem
+    m_GyroSubsystem.setDefaultCommand(
+	new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
+    );
+
 
     m_CameraLightSubsystem.off();
     // Configure the button bindings
@@ -159,8 +169,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmSubsystem, true));
     new JoystickButton(leftJoystick, 9).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 11).onTrue(new TurnRight(m_DriveTrain));
-
+    new JoystickButton(leftJoystick, 11).whileTrue(new DriveForwardCommand(m_DriveTrain, 0.25, m_GyroSubsystem, null));
     new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
 
     // Toggle Home boolean for the arm - this should not be used in competition
