@@ -25,7 +25,7 @@ public class DriveForwardCommand extends CommandBase {
   private final DriveTrain m_subsystem;
   private final EncoderSubsystem m_encoder;
   private final GyroSubsystem m_gyro;
-  public double targetAngle = 0; // target is starting direction
+  public double targetAngle; // target is starting direction
   private boolean magic = false;
 
   public DriveForwardCommand(final DriveTrain subsystem, final Double speed, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
@@ -42,6 +42,7 @@ public class DriveForwardCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    targetAngle = m_gyro.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

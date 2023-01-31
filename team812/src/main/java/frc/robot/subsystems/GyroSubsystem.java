@@ -20,7 +20,8 @@ public class GyroSubsystem extends SubsystemBase {
     // AHRS is the class for the NavX IMU / Gyro, but we use the variable
     // name "gyro" because it makes more sense.
     private AHRS gyro;
-  private boolean announce = false;
+    private double initialPitch;
+    private boolean isPitchSet = false;
    
   public GyroSubsystem() {
       try {
@@ -36,6 +37,15 @@ public class GyroSubsystem extends SubsystemBase {
   public double getAngle() {
     return gyro.getAngle();
   }
+  public double getPitch() {
+    double delta =  gyro.getPitch() - initialPitch;
+    SmartDashboard.putNumber("Current Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("Start Pitch", initialPitch);
+    SmartDashboard.putNumber("delta Pitch", delta);
+
+
+    return gyro.getPitch() - initialPitch;
+  }
 
   @Override
   public void periodic() {
@@ -45,9 +55,14 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_Yaw", gyro.getYaw());
     SmartDashboard.putNumber("IMU_Pitch", gyro.getPitch());
     SmartDashboard.putNumber("IMU_Roll", gyro.getRoll());
+    if(! gyro.isCalibrating() && ! isPitchSet) {
+      initialPitch = gyro.getPitch();
+      isPitchSet = true;
+    }
   }
 
   public void reset() {
     gyro.zeroYaw();
+    //gyro.
   }
 }
