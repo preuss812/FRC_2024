@@ -38,13 +38,18 @@ public class GyroSubsystem extends SubsystemBase {
     return gyro.getAngle();
   }
   public double getPitch() {
+      // The NavX does not provide a method zeroPitch() so in the
+      // periodic function we save the the pitch at robot startup
+      // into initialPitch and use that as a reference for the
+      // remainder of the autonomous or teleoperated session.
+
     double delta =  gyro.getPitch() - initialPitch;
+
     SmartDashboard.putNumber("Current Pitch", gyro.getPitch());
     SmartDashboard.putNumber("Start Pitch", initialPitch);
     SmartDashboard.putNumber("delta Pitch", delta);
 
-
-    return gyro.getPitch() - initialPitch;
+    return delta;
   }
 
   @Override
@@ -55,6 +60,14 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_Yaw", gyro.getYaw());
     SmartDashboard.putNumber("IMU_Pitch", gyro.getPitch());
     SmartDashboard.putNumber("IMU_Roll", gyro.getRoll());
+
+    // According to the documentation for the NavX gyro it takes some
+    // time to perform a self calibration. The robot runs this
+    // periodic() function 50 times / second and so we put the
+    // settings for initialPitch here and check to see that the
+    // NavX is finished calibrating before asking for the current
+    // pitch and storing it.
+
     if(! gyro.isCalibrating() && ! isPitchSet) {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
@@ -63,6 +76,5 @@ public class GyroSubsystem extends SubsystemBase {
 
   public void reset() {
     gyro.zeroYaw();
-    //gyro.
   }
 }
