@@ -30,9 +30,12 @@ public class BalanceCommand extends CommandBase {
   @Override
   public void execute() {
     double delta = m_gyro.getPitch();
-    double balanceSpeed = MathUtil.clamp(delta * PidConstants.kPorportionalBalance, -1.0, 1.0);
-    SmartDashboard.putNumber("turn", balanceSpeed);
-    SmartDashboard.putNumber("delta", delta);
+    double ratio = delta < 0.0 ? PidConstants.kProportionalBalanceBackward : PidConstants.kPorportionalBalanceForward;
+    double balanceSpeed = MathUtil.clamp(delta * ratio, -0.5, 0.5);
+    if (Math.abs(delta) < 0.1) balanceSpeed = 0.0;
+    SmartDashboard.putNumber("bal-speed", balanceSpeed);
+    SmartDashboard.putNumber("bal-delta", delta);
+    SmartDashboard.putNumber("bal-proportion", ratio);
     m_subsystem.preussDrive(-balanceSpeed, 0);
   }
 

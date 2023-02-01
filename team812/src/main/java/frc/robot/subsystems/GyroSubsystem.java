@@ -45,10 +45,6 @@ public class GyroSubsystem extends SubsystemBase {
 
     double delta =  gyro.getPitch() - initialPitch;
 
-    SmartDashboard.putNumber("Current Pitch", gyro.getPitch());
-    SmartDashboard.putNumber("Start Pitch", initialPitch);
-    SmartDashboard.putNumber("delta Pitch", delta);
-
     return delta;
   }
 
@@ -71,6 +67,7 @@ public class GyroSubsystem extends SubsystemBase {
     if(! gyro.isCalibrating() && ! isPitchSet) {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
+      SmartDashboard.putNumber("IMU_Zero_Pitch", initialPitch);
     }
   }
 

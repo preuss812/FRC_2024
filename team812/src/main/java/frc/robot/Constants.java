@@ -108,7 +108,8 @@ public final class Constants {
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
         public static final double kArm_rampRate = 0.5;
-        public static final double kPorportionalBalance = 1.00;
+        public static final double kPorportionalBalanceForward = 0.90;
+        public static final double kProportionalBalanceBackward = 0.10;
     }
 
     public static final class BallHandlingConstants {
