@@ -56,6 +56,9 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_Yaw", gyro.getYaw());
     SmartDashboard.putNumber("IMU_Pitch", gyro.getPitch());
     SmartDashboard.putNumber("IMU_Roll", gyro.getRoll());
+    SmartDashboard.putNumber("IMU_X", gyro.getDisplacementX());
+    SmartDashboard.putNumber("IMU_Y", gyro.getDisplacementY());
+    SmartDashboard.putNumber("IMU_Z", gyro.getDisplacementZ());
 
     // According to the documentation for the NavX gyro it takes some
     // time to perform a self calibration. The robot runs this
@@ -68,10 +71,14 @@ public class GyroSubsystem extends SubsystemBase {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
       SmartDashboard.putNumber("IMU_Zero_Pitch", initialPitch);
+      gyro.resetDisplacement();
     }
   }
 
   public void reset() {
     gyro.zeroYaw();
+  }
+  public void resetDisplacement() {
+    gyro.resetDisplacement();
   }
 }

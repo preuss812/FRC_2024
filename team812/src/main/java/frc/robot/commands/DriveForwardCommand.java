@@ -26,7 +26,6 @@ public class DriveForwardCommand extends CommandBase {
   private final EncoderSubsystem m_encoder;
   private final GyroSubsystem m_gyro;
   public double targetAngle; // target is starting direction
-  private boolean magic = false;
 
   public DriveForwardCommand(final DriveTrain subsystem, final Double speed, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
 
@@ -52,8 +51,9 @@ public class DriveForwardCommand extends CommandBase {
     // targetAngle += 7.2 / 2; // drive in a circle every 2 seconds: 360 degree/ 50 update per sec / 2 sec
     deltaAngle = targetAngle - m_gyro.getAngle();
     turningValue = MathUtil.clamp(deltaAngle * PidConstants.kProportionalDriveStraight, -1.0, 1.0);
-    SmartDashboard.putNumber("turn", turningValue);
-    SmartDashboard.putNumber("delta", deltaAngle);
+    SmartDashboard.putNumber("FWD_turning_value", -turningValue);
+    SmartDashboard.putNumber("FWD_delta_angle", deltaAngle);
+    SmartDashboard.putNumber("FWD_m_speed", -m_speed);
     m_subsystem.preussDrive(-m_speed, -turningValue);
   }
 

@@ -158,6 +158,7 @@ public class RobotContainer {
     );
     new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 8).onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     new JoystickButton(rightJoystick, 9).onTrue(new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmSubsystem));
 
