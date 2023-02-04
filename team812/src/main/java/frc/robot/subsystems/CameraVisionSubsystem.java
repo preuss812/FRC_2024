@@ -34,6 +34,20 @@ public class CameraVisionSubsystem extends SubsystemBase {
     }
     return result.hasTargets();
   }
+
+  public PhotonTrackedTarget getBestTarget() {
+    var result = camera.getLatestResult();
+    //  System.out.println("result " + result);
+     boolean hasTargets = result.hasTargets(); // true or false
+  
+    // if camera sees something, then
+    if (hasTargets){
+      PhotonTrackedTarget target = result.getBestTarget();
+      return target;
+    }
+    return null;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run (50 /s)
