@@ -29,6 +29,7 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.commands.*;
 
 
@@ -49,7 +50,8 @@ public class RobotContainer {
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
-
+  //public static PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
+  
 //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
 
   private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
@@ -157,7 +159,7 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
     new JoystickButton(rightJoystick, 8).onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
-    new JoystickButton(rightJoystick, 9).onTrue(new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
+    //new JoystickButton(rightJoystick, 9).onTrue(new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmSubsystem));
 
     // Left Joystick for Elevator Control

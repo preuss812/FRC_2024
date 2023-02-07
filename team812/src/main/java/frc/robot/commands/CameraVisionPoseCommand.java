@@ -68,7 +68,7 @@ public class CameraVisionPoseCommand extends CommandBase {
     m_cameraSubsystem = subsystem;
     m_drivetrainSubsystem = drivetrainSubsystem;
     // set pose estimator and PoseStrategy.CLOSEST_TO_REFERENCE_POSE
-    m_photonPoseEstimator = new PhotonPoseEstimator(m_fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, m_cameraSubsystem.camera, VisionConstants.robotToCam);
+    m_photonPoseEstimator = new PhotonPoseEstimator(m_fieldLayout, PoseStrategy.LOWEST_AMBIGUITY, m_cameraSubsystem.camera, VisionConstants.robotToCam);
     addRequirements(subsystem, drivetrainSubsystem);
     
   }
@@ -108,7 +108,7 @@ public class CameraVisionPoseCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
   private String getFomattedPose(Pose2d pose) {
