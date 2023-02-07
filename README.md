@@ -2,6 +2,14 @@
 
 # The 2023 CHARGED UP
 
+## Robot Start Up Checklist
+1. Power up the robot by attaching a well charged battery and closing the breaker
+2. Power up both laptops
+3. Start up Visual Code on both laptops
+4. Connect to the 812 WiFi network on both laptops
+5. Start the Drivers Station on the laptop that is connected to the joysticks and confirm that it has a) Robot Communications; b) Robot Code; c) Joystick's connected.
+6. Open Chrome on the laptop that is connected to the joysticks and enter http://10.8.12.100 and confirm that the PhotonVision console is available and that you can see a camera image.
+
 ## How to check in the code
 
 1. Open Visual Code
