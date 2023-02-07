@@ -2,6 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
+// https://github.com/PhotonVision/photonvision/blob/master/photonlib-java-examples/apriltagExample/src/main/java/frc/robot/Drivetrain.java
+
 package frc.robot.commands;
 
 import edu.wpi.first.apriltag.AprilTag;
@@ -46,7 +49,7 @@ public class CameraVisionPoseCommand extends CommandBase {
   private EstimatedRobotPose ref_pose;
 
   public CameraVisionPoseCommand(CameraVisionSubsystem subsystem, DriveTrain drivetrainSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Load april tag field
     AprilTagFieldLayout layout;
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
@@ -58,12 +61,14 @@ public class CameraVisionPoseCommand extends CommandBase {
       layout = null;
     }
 
-    AprilTagFieldLayout atfl = layout;
     m_fieldLayout = layout;
+    SmartDashboard.putData("Field", field2d);
+
 
     m_cameraSubsystem = subsystem;
     m_drivetrainSubsystem = drivetrainSubsystem;
-    m_photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, m_cameraSubsystem.camera, VisionConstants.robotToCam);
+    // set pose estimator and PoseStrategy.CLOSEST_TO_REFERENCE_POSE
+    m_photonPoseEstimator = new PhotonPoseEstimator(m_fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, m_cameraSubsystem.camera, VisionConstants.robotToCam);
     addRequirements(subsystem, drivetrainSubsystem);
     
   }
@@ -76,54 +81,25 @@ public class CameraVisionPoseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose3d initial_ref_pose = new Pose3d();
-    ref_pose = getEstimatedGlobalPose(initial_ref_pose).get();
+    // Pose3d initial_ref_pose = new Pose3d();
+    // ref_pose = getEstimatedGlobalPose(initial_ref_pose).get();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Optional<EstimatedRobotPose> estrp = getEstimatedGlobalPose(ref_pose.estimatedPose);
-    if (estrp.isEmpty()) {
-      return;
+    // getEstimatedGlobalPose(m_photonPoseEstimator.getEstimatedPosition());
+    try {
+      Pose2d estimatedPose2d = (m_photonPoseEstimator.update().get().estimatedPose.toPose2d());
+      SmartDashboard.putString("Position estimated", getFomattedPose(estimatedPose2d));
+      if (m_photonPoseEstimator.update().isPresent()) {
+        field2d.setRobotPose(estimatedPose2d);
+      }
     }
-    Pose3d estimated_pose = estrp.get().estimatedPose;
-
-
-
-    ref_pose = estrp.get();
-    SmartDashboard.putNumber("X", estimated_pose.getX());
-    SmartDashboard.putNumber("Y", estimated_pose.getY());
-    SmartDashboard.putNumber("Z", estimated_pose.getZ());
-
-
-
-
-    // Update pose estimator with the best visible target
-    var target = m_cameraSubsystem.getBestTarget();
-
-    if (target != null) {
-
-      var fiducialId = target.getFiducialId();
-      // Get the tag pose from field layout - consider that the layout will be null if it failed to load
-      Optional<Pose3d> tagPose = m_fieldLayout == null ? Optional.empty() : m_fieldLayout.getTagPose(fiducialId);
-      if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && tagPose.isPresent()) {
-        var targetPose = tagPose.get();
-        Transform3d camToTarget = target.getBestCameraToTarget();
-        Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
-
-        // var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
-        var resultTimestamp = System.currentTimeMillis() / 1000;
-        m_photonPoseEstimator.addVisionMeasurement(camPose.toPose2d(), resultTimestamp);
+    catch (Exception e) {
+      // System.out.println("pose is null");
     }
 
-
-    // Update pose estimator with drivetrain sensors
-    // m_photonPoseEstimator.update(
-    //   drivetrainSubsystem.getGyroscopeRotation(),
-    //   drivetrainSubsystem.getModulePositions());
-
-    field2d.setRobotPose(m_photonPoseEstimator.update());
   }
 
   // Called once the command ends or is interrupted.
@@ -135,8 +111,6 @@ public class CameraVisionPoseCommand extends CommandBase {
     return true;
   }
 
- 
-
   private String getFomattedPose(Pose2d pose) {
     return String.format("(%.2f, %.2f) %.2f degrees", 
         pose.getX(), 
@@ -144,21 +118,14 @@ public class CameraVisionPoseCommand extends CommandBase {
         pose.getRotation().getDegrees());
   }
 
-
-    /**
-     * @param estimatedRobotPose The current best guess at robot pose
-     * @return A pair of the fused camera observations to a single Pose2d on the field, and the time
-     *     of the observation. Assumes a planar field and the robot is always firmly on the ground
-     */
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-      m_photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-        return m_photonPoseEstimator.update();
-    }
-
+  /**
+   * @param estimatedRobotPose The current best guess at robot pose
+   * @return A pair of the fused camera observations to a single Pose2d on the field, and the time
+   *     of the observation. Assumes a planar field and the robot is always firmly on the ground
+   */
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    m_photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+      return m_photonPoseEstimator.update();
+  }
 }
-
-
-
-
-
 

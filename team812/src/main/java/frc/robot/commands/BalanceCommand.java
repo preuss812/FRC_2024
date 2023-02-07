@@ -31,6 +31,7 @@ public class BalanceCommand extends CommandBase {
   public void execute() {
     double delta = m_gyro.getPitch();
     double ratio = delta < 0.0 ? PidConstants.kProportionalBalanceBackward : PidConstants.kPorportionalBalanceForward;
+    // TODO: add I and D constants
     double balanceSpeed = MathUtil.clamp(delta * ratio, -0.5, 0.5);
     if (Math.abs(delta) < 0.1) balanceSpeed = 0.0;
     SmartDashboard.putNumber("bal-speed", balanceSpeed);
