@@ -29,7 +29,8 @@ public class ArmCommand extends CommandBase {
     
     SmartDashboard.putString("armcmd", "started");
 
-    end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
+    // end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
+    end_game = true; // There is no end game in 2023. this enables full range of motion.
     System.out.println("ArmCommand Initialize end_game is " + end_game);
     if( end_game ) {
       setPoint = m_position;

@@ -23,10 +23,10 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.ElevatorSubsystem;
+// import frc.robot.subsystems.ElevatorSubsystem; // No Elevator for 2023.
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmExtensionSubsystem;
-import frc.robot.subsystems.BallSubsystem;
+// import frc.robot.subsystems.BallSubsystem; // No Ball Subsystem for 2023.
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
@@ -47,9 +47,9 @@ public class RobotContainer {
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
   public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
-  public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  // public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem(); // No Elevator for 2023.
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  public static BallSubsystem m_BallSubsystem = new BallSubsystem();
+  // public static BallSubsystem m_BallSubsystem = new BallSubsystem(); // No Ball Subsystem for 2023.
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); // This is arm rotation - dph
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
@@ -94,9 +94,10 @@ public class RobotContainer {
      );
 
     // Default command for the Elevator Subsystem
-    m_ElevatorSubsystem.setDefaultCommand(
-      new RunCommand( () -> m_ElevatorSubsystem.elevate(-leftJoystick.getY()), m_ElevatorSubsystem)
-    );
+    // m_ElevatorSubsystem.setDefaultCommand(
+      // new RunCommand( () -> m_ElevatorSubsystem.elevate(-leftJoystick.getY()), m_ElevatorSubsystem)
+    //};
+
     //   m_ArmSubsystem.setDefaultCommand(
     //     new RunCommand( ()->m_ArmSubsystem.rotate2(-xboxController.getY()), m_ArmSubsystem)
     //  );
@@ -107,7 +108,7 @@ public class RobotContainer {
 
     // Gyro subsystem
     m_GyroSubsystem.setDefaultCommand(
-	new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
+	    new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem)
     );
 
 
@@ -168,14 +169,14 @@ public class RobotContainer {
     // Left Joystick for Elevator Control
     // Elevator up back
     // Elevator down forward
-    new JoystickButton(leftJoystick, 6).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true));
-    new JoystickButton(leftJoystick, 4).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, false));
+    // new JoystickButton(leftJoystick, 6).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
+    // new JoystickButton(leftJoystick, 4).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, false)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmSubsystem, true));
-    new JoystickButton(leftJoystick, 9).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true));
+    // new JoystickButton(leftJoystick, 9).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 10).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));
     new JoystickButton(leftJoystick, 11).whileTrue(new DriveForwardCommand(m_DriveTrain, 0.25, m_GyroSubsystem, null));
-    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem));
+    //new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem)); // No Elevator for 2023.
 
     // Toggle Home boolean for the arm - this should not be used in competition
     //new JoystickButton(leftJoystick, 7).toggleonTrue(new StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome2,m_ArmSubsystem));

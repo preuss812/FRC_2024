@@ -96,9 +96,11 @@ public class ArmSubsystem extends SubsystemBase {
 
     absolutePosition += position * incrementSize;
     SmartDashboard.putNumber("rotate pos", absolutePosition);
+    /* No Elevator in 2023
     if(! frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame() ) {
       absolutePosition = Math.min(absolutePosition,ArmConstants.kArmEndGamePosition);
     }
+    */
 
     if (absolutePosition > ArmConstants.kArmBallGathering 
     && absolutePosition < ArmConstants.kArmScorePosition) {
@@ -109,17 +111,17 @@ public class ArmSubsystem extends SubsystemBase {
   public void rotate2(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
-    boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
+    //boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame(); /// No Elevator in 2023.
     String path;
 
     if( ! isHome() ) {
       l_speed = 0.0;
       path = "not homed";
     } else if( l_speed > 0.0 ) {
-      if( end_game && l_position >= ArmConstants.kArmTopPosition ) {
+      if(l_position >= ArmConstants.kArmTopPosition ) {
         l_speed = 0.0;
         path = "endgame";
-      } else if( ! end_game && l_position >= ArmConstants.kArmScorePosition) {
+      } else if( l_position >= ArmConstants.kArmScorePosition ) {
         l_speed = 0.0;
         path = "not end game";
       }
