@@ -67,8 +67,8 @@ public class CameraVisionPoseCommand extends CommandBase {
 
     m_cameraSubsystem = subsystem;
     m_drivetrainSubsystem = drivetrainSubsystem;
-    // set pose estimator and PoseStrategy.LOWEST_AMBIGUITY
-    m_photonPoseEstimator = new PhotonPoseEstimator(m_fieldLayout, PoseStrategy.LOWEST_AMBIGUITY, m_cameraSubsystem.camera, VisionConstants.robotToCam);
+    // set pose estimator and PoseStrategy.AVERAGE_BEST_TARGETS
+    m_photonPoseEstimator = new PhotonPoseEstimator(m_fieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, m_cameraSubsystem.camera, VisionConstants.robotToCam);
     addRequirements(subsystem, drivetrainSubsystem);
     
   }

@@ -41,7 +41,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       //Forward Camera
       Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
       // Construct PhotonPoseEstimator
-      photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY, cam, robotToCam);
+      photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS, cam, robotToCam);
     }
     catch(Exception e) {
       // Need to add code here to report that we could not load the field layout - dph - 2023-02-05
