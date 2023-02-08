@@ -32,13 +32,14 @@ public class Autonomous extends SequentialCommandGroup {
 
     BlackBoxSubsystem blackBox = RobotContainer.m_BlackBox;
     ArmSubsystem m_armSubsystem = RobotContainer.m_ArmSubsystem;
+    ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
     CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
     
     blackBox.readBits();
 
     addCommands(
       new SequentialCommandGroup(
-        new ArmHomeCommand(m_armSubsystem),
+        new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),
         new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
         new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
       )

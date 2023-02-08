@@ -20,10 +20,12 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmExtensionSubsystem;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CameraLightSubsystem;
@@ -48,13 +50,14 @@ public class RobotContainer {
   public static ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static BallSubsystem m_BallSubsystem = new BallSubsystem();
-  public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); // This is arm rotation - dph
+  public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   //public static PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
   
-//  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
+  //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();
 
-  private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem();
+  //private final CameraLightSubsystem m_CameraLightSubsystem = new CameraLightSubsystem(); // No Camera light for 2023 - dph
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -108,7 +111,7 @@ public class RobotContainer {
     );
 
 
-    m_CameraLightSubsystem.off();
+    //m_CameraLightSubsystem.off(); // No camera light in 2023 - dph
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -134,7 +137,7 @@ public class RobotContainer {
     */
 
     // Right Joystick for Arm control
-    new JoystickButton(rightJoystick, 7).toggleOnTrue(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
+    // new JoystickButton(rightJoystick, 7).toggleOnTrue(new StartEndCommand(m_CameraLightSubsystem::on, m_CameraLightSubsystem::off, m_CameraLightSubsystem));
     new JoystickButton(rightJoystick, 1).onTrue(new ArmERCommand(m_ArmSubsystem, true));
     new JoystickButton(rightJoystick, 2).onTrue(new ArmERCommand(m_ArmSubsystem, false));
 
@@ -145,7 +148,7 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new ArmERCommand(m_ArmSubsystem, false),
         new WaitCommand(0.25),
-        new ArmHomeCommand(m_ArmSubsystem)
+        new ArmHomeCommand(m_ArmSubsystem, m_ArmExtensionSubsystem)
       )
     );
     new JoystickButton(rightJoystick, 5).onTrue(new ArmCommand(m_ArmSubsystem, ArmConstants.kArmBallGathering));
@@ -157,7 +160,7 @@ public class RobotContainer {
       )
     );
     new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
-    new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPositon));
+    new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmTopPosition));
     new JoystickButton(rightJoystick, 8).onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     //new JoystickButton(rightJoystick, 9).onTrue(new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmSubsystem));

@@ -116,7 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
       l_speed = 0.0;
       path = "not homed";
     } else if( l_speed > 0.0 ) {
-      if( end_game && l_position >= ArmConstants.kArmTopPositon ) {
+      if( end_game && l_position >= ArmConstants.kArmTopPosition ) {
         l_speed = 0.0;
         path = "endgame";
       } else if( ! end_game && l_position >= ArmConstants.kArmScorePosition) {

@@ -6,17 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.Constants.PCMConstants;
+import frc.robot.subsystems.ArmExtensionSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmHomeCommand extends CommandBase {
   /** Creates a new ArmHomeCommand. */
   private final ArmSubsystem m_armSubsystem;
+  private final ArmExtensionSubsystem m_armExtensionSubsystem;
   double l_pressure;
 
-  public ArmHomeCommand(ArmSubsystem subsystem) {
+  public ArmHomeCommand(ArmSubsystem subsystem, ArmExtensionSubsystem armExtensionSubsystem) {
     m_armSubsystem = subsystem;
+    m_armExtensionSubsystem = armExtensionSubsystem;
     addRequirements(subsystem);
+    addRequirements(armExtensionSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,9 +34,10 @@ public class ArmHomeCommand extends CommandBase {
 
     SmartDashboard.putString("homearm", "starting");
     if( l_pressure >= PCMConstants.kMinPresssure) {
-      m_armSubsystem.armRetract();
+      m_armExtensionSubsystem.setSensorPosition(ArmExtensionConstants.kArmExtensionFullyExtendedPosition);
+      m_armExtensionSubsystem.setHomePosition(0);
       m_armSubsystem.setSensorPosition(4000.0);
-      m_armSubsystem.setHomePosition(0.0);
+      m_armSubsystem.setHomePosition(0.0); // Cant really do this safely until the arms are retracted. - dph
     }
   }
 
@@ -50,16 +57,21 @@ public class ArmHomeCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     if( l_pressure < PCMConstants.kMinPresssure) {
-      return true;
-    } else if (m_armSubsystem.isBottomLimitSwitchClosed()) {
-      m_armSubsystem.setSensorPosition(0.0);
-      m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
-      m_armSubsystem.setHome();
-      return true;
+      return true; // End the command because we cannot operation without pressure to close the hands - dph
+    } else {
+      if (! m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isBottomLimitSwitchClosed()) { // Should isHome be checked? - dph
+        m_armExtensionSubsystem.setSensorPosition(0.0);
+        m_armExtensionSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
+        m_armExtensionSubsystem.setHome();
+      }
+      if (! m_armSubsystem.isHome() && m_armSubsystem.isBottomLimitSwitchClosed()) {
+        m_armSubsystem.setSensorPosition(0.0);
+        m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
+        m_armSubsystem.setHome();
+      } else {
+        return false; // Arm extension is homed but the arm rotation is still homing.
+      }
     }
-    else 
-    {
-      return false;
-    }
+    return m_armExtensionSubsystem.isHome() && m_armSubsystem.isHome();
   }
 }

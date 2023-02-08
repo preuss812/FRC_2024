@@ -36,7 +36,8 @@ public final class Constants {
         public static final int kElevatorMotor = 85; // dko remove 2022
         public static final int kElevatorMotorLeft = 32;
         public static final int kElevatorMotorRight = 33;
-        public static final int kArmMotor = 31;
+        public static final int kArmMotor = 31; // dph this is the arm rotation motor.  Inclined to rename after verifying with the team.
+        public static final int kArmExtensionMotor = 99; // dph Needs a real number
     }
     public static final class PCMConstants {
         public static final int[] kLiftPistons  = {0, 1}; // dko remove for 2022
@@ -103,11 +104,17 @@ public final class Constants {
     }
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
+     
         public static final double kArm_kP = 3.0;
         public static final double kArm_kI = 0.0;
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
         public static final double kArm_rampRate = 0.5;
+        public static final double kArmExtension_kP = 3.0;
+        public static final double kArmExtension_kI = 0.0;
+        public static final double kArmExtension_kD = 0.0;
+        public static final double kArmExtension_kF = 0.0;
+        public static final double kArmExtension_rampRate = 0.5;
         public static final double kPorportionalBalanceForward = 0.90;
         public static final double kProportionalBalanceBackward = 0.10;
     }
@@ -132,12 +139,29 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double kArmScorePosition = 2100;
-        public static final double kArmTopPositon = 4020; //3550;
+        public static final double kArmTopPosition = 4020; //3550;
         public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 20;
+    }
+    
+    public static final class ArmExtensionConstants {
+        // Distances are in meters
+        // Positions are in encoder counts/ticks
+        public static final double kArmExtensionGearToothSpacing = 0.005; // (meters)  = 5 millimeters
+        public static final double kArmExtensionTeethPerRotation = 36;
+        public static final double kArmExtensionEncoderCountPerRevolution = 8192; // Need to verify this number - dph
+        public static final double kArmExtensionOneMeterPosition = 1.0/(kArmExtensionGearToothSpacing*kArmExtensionTeethPerRotation)*kArmExtensionEncoderCountPerRevolution;
+        public static final double kArmExtensionFullyRetractedPosition = 0.0;
+        public static final double kArmExtensionFullyExtendedPosition = kArmExtensionOneMeterPosition; // This needs to be calibrated - dph
+        public static final double kArmExtensionHomePosition = kArmExtensionOneMeterPosition * 0.0;
+        public static final double kArmExtensionBottomRowPosition = kArmExtensionOneMeterPosition * 0.0;
+        public static final double kArmExtensionMiddleRowPosition = kArmExtensionOneMeterPosition * 0.043;
+        public static final double kArmExtensionTopRowPosition = kArmExtensionOneMeterPosition * 0.86;
+        public static final double kArmExtensionGatheringPosition = kArmExtensionOneMeterPosition * 0.0;
+        public static final double kArmExtensionThreshold = 20;
     }
 
     public static final int kLightRelay = 0;
