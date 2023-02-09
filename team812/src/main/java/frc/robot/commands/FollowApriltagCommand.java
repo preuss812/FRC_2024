@@ -29,9 +29,9 @@ public class FollowApriltagCommand extends CommandBase {
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
   final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
 
-  final double LINEAR_P = 0.5;
+  final double LINEAR_P = 0.0;
   final double LINEAR_D = 0.0;
-  final double ANGULAR_P = 0.8;
+  final double ANGULAR_P = 0.04;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
 
@@ -54,7 +54,7 @@ public class FollowApriltagCommand extends CommandBase {
   public void initialize() {
     forwardController = new PIDController(LINEAR_P, 0, LINEAR_D);
     turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    turnController.setTolerance(4.0); // did not work, dont understand yet
+    turnController.setTolerance(1.0); // did not work, dont understand yet
     forwardSpeed = 0.01;
     rotationSpeed = 0.01;
   }
@@ -88,12 +88,16 @@ public class FollowApriltagCommand extends CommandBase {
 
         forwardSpeed = -forwardController.calculate(range, GOAL_RANGE_METERS);
         // forwardSpeed= 0.0; // for safety in debug do not move forward, just turn.
-        rotationSpeed = MathUtil.clamp(-turnController.calculate(yaw, 0),-1.0,1.0);
+        rotationSpeed = -MathUtil.clamp(-turnController.calculate(yaw, 0),-0.8,0.8);
+        if( Math.abs(rotationSpeed) <= 0.5) {
+          rotationSpeed = 0.0; // so that we don't use battery power for no motion
+        }
         error = turnController.getPositionError();
         SmartDashboard.putNumber("Turn error", error);
     }
     SmartDashboard.putNumber("Target Fwd speed", forwardSpeed);
     SmartDashboard.putNumber("Target Rot speed", rotationSpeed);
+    forwardSpeed = 0.0;
     m_drivetrainSubsystem.preussDrive(forwardSpeed, rotationSpeed); 
 
   }
