@@ -377,6 +377,221 @@
               "_source0": "network_table:///SmartDashboard/bal-proportion",
               "_title": "bal-proportion"
             }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Arm pos:",
+              "_title": "Arm pos:"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Arm Homed?",
+              "_title": "Arm Homed?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmExtension pos:",
+              "_title": "ArmExtension pos:"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ArmExtension Homed?",
+              "_title": "ArmExtension Homed?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/IMU_IsCalibrating",
+              "_title": "IMU_IsCalibrating",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetFound",
+              "_title": "TargetFound"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetX",
+              "_title": "TargetX"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetY",
+              "_title": "TargetY"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetYaw",
+              "_title": "TargetYaw"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetRange",
+              "_title": "TargetRange"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TargetRangeGoal",
+              "_title": "TargetRangeGoal"
+            }
+          },
+          "1,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Fwd speed",
+              "_title": "Target Fwd speed"
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Rot speed",
+              "_title": "Target Rot speed"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/POV",
+              "_title": "POV"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/POV_Out",
+              "_title": "POV_Out"
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/r2_speed",
+              "_title": "r2_speed"
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/r2_l_speed",
+              "_title": "r2_l_speed"
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/r2_l_position",
+              "_title": "r2_l_position"
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/rotate2_path",
+              "_title": "rotate2_path"
+            }
           }
         }
       }
@@ -583,10 +798,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Field/Robot[0]": true,
-              "Visible data/SmartDashboard/Field/Robot[1]": true,
-              "Visible data/SmartDashboard/Field/Robot[2]": true
+              "Y-axis/Unit": "ul"
             }
           }
         }

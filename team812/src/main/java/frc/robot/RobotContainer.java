@@ -170,12 +170,12 @@ public class RobotContainer {
     // Elevator up back
     // Elevator down forward
     // new JoystickButton(leftJoystick, 6).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
-    new JoystickButton(leftJoystick, 6).onTrue(new FollowApriltagCommandBB(m_CameraVisionSubsystem, m_DriveTrain)); // Optimize Pid controller using Black Box
+    new JoystickButton(leftJoystick, 6).onTrue(new TurnRightBB2 (m_DriveTrain)); // No Elevator for 2023.
     // new JoystickButton(leftJoystick, 4).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, false)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmSubsystem, true));
     // new JoystickButton(leftJoystick, 9).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
-    new JoystickButton(leftJoystick, 9).onTrue(new TurnRightBB(m_DriveTrain)); // For PID Loop Characterization - dph
+    new JoystickButton(leftJoystick, 9).onTrue(new FollowApriltagCommandBB(m_CameraVisionSubsystem, m_DriveTrain)); // Optimize Pid controller using Black Box
     new JoystickButton(leftJoystick, 10).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));
     new JoystickButton(leftJoystick, 11).whileTrue(new DriveForwardCommand(m_DriveTrain, 0.25, m_GyroSubsystem, null));
     //new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem)); // No Elevator for 2023.
