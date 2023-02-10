@@ -21,8 +21,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
+import frc.robot.Constants.GripperConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.GripperSubsystem;
 // import frc.robot.subsystems.ElevatorSubsystem; // No Elevator for 2023.
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -53,6 +55,8 @@ public class RobotContainer {
   public static ArmSubsystem m_ArmSubsystem = new ArmSubsystem(); // This is arm rotation - dph
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
+  
   //public static PhotonVisionSubsystem m_PhotonVisionSubsystem = new PhotonVisionSubsystem();
   
   //  private final ShiftSubsystem m_Shifter = new ShiftSubsystem();

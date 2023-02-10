@@ -42,8 +42,9 @@ public final class Constants {
     public static final class PCMConstants {
         public static final int[] kLiftPistons  = {0, 1}; // dko remove for 2022
         public static final int[] kGearShift = {2, 3};  // dko remove for 2022
-        public static final int[] kBarHooks = {4,5}; // dko 20220221 need to physically verify
+        public static final int[] kGripper = {4,5}; // dko 20220221 need to physically verify
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
+        public static final int[] kBarHooks = {8,9}; // dko 20220221 need to physically verify
         public static final int kMinPresssure = 50; // minimum operating pressure for Arm control
     }
     public static final class OIConstants {
@@ -162,6 +163,12 @@ public final class Constants {
         public static final double kArmExtensionTopRowPosition = kArmExtensionOneMeterPosition * 0.86;
         public static final double kArmExtensionGatheringPosition = kArmExtensionOneMeterPosition * 0.0;
         public static final double kArmExtensionThreshold = 20;
+    }
+
+    public static final class GripperConstants {
+        public static final String kOpen    = "Open";
+        public static final String kUnknown =  "Unknown";
+        public static final String kClosed  =  "Closed";
     }
 
     public static final int kLightRelay = 0;

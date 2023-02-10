@@ -34,6 +34,7 @@ public class Autonomous extends SequentialCommandGroup {
     ArmSubsystem m_armSubsystem = RobotContainer.m_ArmSubsystem;
     ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
     CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
+    GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
     
     blackBox.readBits();
 
