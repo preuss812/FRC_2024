@@ -169,7 +169,7 @@ public class RobotContainer {
     // Left Joystick for Elevator Control
     // Elevator up back
     // Elevator down forward
-    // new JoystickButton(leftJoystick, 6).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
+    new JoystickButton(leftJoystick, 6).onTrue(new TurnRightBB2 (m_DriveTrain)); // No Elevator for 2023.
     // new JoystickButton(leftJoystick, 4).onTrue(new ElevatorGripCommand(m_ElevatorSubsystem, false)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmSubsystem,ArmConstants.kArmHangPosition));
     new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmSubsystem, true));
