@@ -32,10 +32,10 @@ public class TestProfiledPIDCommand extends ProfiledPIDCommand {
         new ProfiledPIDController(
             // The PID gains
             0.02, // Determined emperically with TurnRightBB
-            0.001,
-            0,
+            0.0002,
+            0.002,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(90, 30)),  // These are degrees/second and degrees/second/second
+            new TrapezoidProfile.Constraints(90,30)),  // These are degrees/second and degrees/second/second
         // This should return the measurement
         () -> 0,
         // This should return the goal (can also be a constant)
@@ -64,11 +64,10 @@ public class TestProfiledPIDCommand extends ProfiledPIDCommand {
       m_controller.setGoal(-30.0); // -30 degree angle relative to the target
     }
     */
-    m_controller.setGoal(20); // debug for dph
-
+    m_controller.setGoal(0); // debug for dph
     PhotonTrackedTarget target;
     double rotation = 0.0;
-    double throttle = 0.0;
+    double throttle = 0.00314;
     double yaw = 0.0;
     double yawError = 0.0;
     // Should look into supplying function getMeasurement - dph
@@ -82,10 +81,12 @@ public class TestProfiledPIDCommand extends ProfiledPIDCommand {
       yaw = target.getYaw();
       SmartDashboard.putNumber("TargetRotationYaw", yaw);
 
-      rotation = MathUtil.clamp(m_controller.calculate(yaw),-1,1);
+      rotation = m_controller.calculate(yaw);
+      rotation = MathUtil.clamp(rotation,-0.5,0.5);
+      rotation = rotation + Math.signum(rotation) * 0.2;
       yawError = m_controller.getPositionError();
       // if the sign of the error switches, we have passed the target. reset the pid controller.
-      boolean disableReset = false;
+      boolean disableReset = true;
       if (!disableReset && Math.signum(yawError) != Math.signum(lastYawError))  // Disabled at the moment.
       {
         m_controller.reset(20);
@@ -94,6 +95,7 @@ public class TestProfiledPIDCommand extends ProfiledPIDCommand {
       lastYawError = yawError;
     }
     SmartDashboard.putNumber("TargetRotationSpeed", rotation);
+    SmartDashboard.putNumber("TargetThrottle", throttle);
 
     // Run controller and update motor output
     m_driveTrain.arcadeDrive(throttle, rotation); // preussDrive was scaling the results.  Wanted to avoid that for how.
