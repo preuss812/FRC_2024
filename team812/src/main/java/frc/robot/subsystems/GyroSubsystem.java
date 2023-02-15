@@ -27,7 +27,6 @@ public class GyroSubsystem extends SubsystemBase {
       try {
 	  gyro = new AHRS(SerialPort.Port.kUSB1);
 	  gyro.enableLogging(true);
-	  this.reset();
       } catch (RuntimeException ex) {
 	  DriverStation.reportError("Error instantiating Gyro:  " + ex.getMessage(), true);
       }
@@ -71,6 +70,7 @@ public class GyroSubsystem extends SubsystemBase {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
       SmartDashboard.putNumber("IMU_Zero_Pitch", initialPitch);
+      this.reset();
       gyro.resetDisplacement();
     }
   }

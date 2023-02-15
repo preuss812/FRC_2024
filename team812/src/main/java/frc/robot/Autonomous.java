@@ -43,9 +43,11 @@ public class Autonomous extends SequentialCommandGroup {
       new SequentialCommandGroup(
        // new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),
       //  new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
-      new DriveForwardCommand(m_driveTrain, 0.25, m_GyroSubsystem, null).withTimeout(0.7),
-      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.6, 90.0), 
-      new DriveForwardCommand(m_driveTrain, 0.25, m_GyroSubsystem, null).withTimeout(0.7)
+      new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(0.5),
+      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, -90.0), 
+      new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(1.5),
+      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, 90.0) 
+
 
        // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
 //        new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),

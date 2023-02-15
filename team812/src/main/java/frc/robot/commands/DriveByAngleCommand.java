@@ -42,13 +42,13 @@ public class DriveByAngleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.preussDrive(0.0, -m_speed);
+    m_subsystem.arcadeDrive(0.0, -m_speed*Math.signum(m_angle));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.preussDrive(0.0, 0.0);
+    m_subsystem.arcadeDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
@@ -56,6 +56,10 @@ public class DriveByAngleCommand extends CommandBase {
   public boolean isFinished() {
     SmartDashboard.putNumber("DBA: targetAngle", targetAngle);
     SmartDashboard.putNumber("DBA: getAngle", m_gyro.getAngle());
+    if (m_angle >= 0) {
       return (m_gyro.getAngle() >= targetAngle);
+    } else {
+      return (m_gyro.getAngle() <= targetAngle);
+    }
   }
 }
