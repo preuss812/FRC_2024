@@ -35,13 +35,18 @@ public class Autonomous extends SequentialCommandGroup {
     ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
     CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
     GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
-
+    GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem; 
+    
     blackBox.readBits();
 
     addCommands(
       new SequentialCommandGroup(
        // new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),
-       new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
+      //  new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
+      new DriveForwardCommand(m_driveTrain, 0.25, m_GyroSubsystem, null).withTimeout(0.7),
+      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.6, 90.0), 
+      new DriveForwardCommand(m_driveTrain, 0.25, m_GyroSubsystem, null).withTimeout(0.7)
+
        // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
 //        new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
   //      new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)

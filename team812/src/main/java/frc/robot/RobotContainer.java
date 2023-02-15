@@ -68,7 +68,7 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
 
     // Gyro
-    private final GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
+    public static GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
   
 //  private final Joystick xboxController = new Joystick(OIConstants.kXboxController);
   double POV_to_double(int pov) {
