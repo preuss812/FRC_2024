@@ -10,15 +10,15 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.subsystems.ArmExtensionSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmRotationSubsystem;
 
 public class ArmHomeCommand extends CommandBase {
   /** Creates a new ArmHomeCommand. */
-  private final ArmSubsystem m_armSubsystem;
+  private final ArmRotationSubsystem m_armSubsystem;
   private final ArmExtensionSubsystem m_armExtensionSubsystem;
   double l_pressure;
 
-  public ArmHomeCommand(ArmSubsystem subsystem, ArmExtensionSubsystem armExtensionSubsystem) {
+  public ArmHomeCommand(ArmRotationSubsystem subsystem, ArmExtensionSubsystem armExtensionSubsystem) {
     m_armSubsystem = subsystem;
     m_armExtensionSubsystem = armExtensionSubsystem;
     addRequirements(subsystem);
@@ -33,7 +33,7 @@ public class ArmHomeCommand extends CommandBase {
     System.out.println("Home pressure: " + l_pressure);
 
     SmartDashboard.putString("homearm", "starting");
-    if( l_pressure >= PCMConstants.kMinPresssure) {
+    if (l_pressure >= PCMConstants.kMinPresssure) {
       m_armExtensionSubsystem.setSensorPosition(ArmExtensionConstants.kArmExtensionFullyExtendedPosition);
       m_armExtensionSubsystem.setHomePosition(0);
       m_armSubsystem.setSensorPosition(4000.0);
@@ -56,15 +56,18 @@ public class ArmHomeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if( l_pressure < PCMConstants.kMinPresssure) {
-      return true; // End the command because we cannot operation without pressure to close the hands - dph
+    if (l_pressure < PCMConstants.kMinPresssure) {
+      return true; // End the command because we cannot operation without pressure to close the
+                   // hands - dph
     } else {
-      if (! m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isBottomLimitSwitchClosed()) { // Should isHome be checked? - dph
+      if (!m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isBottomLimitSwitchClosed()) { // Should isHome
+                                                                                                      // be checked? -
+                                                                                                      // dph
         m_armExtensionSubsystem.setSensorPosition(0.0);
         m_armExtensionSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
         m_armExtensionSubsystem.setHome();
       }
-      if (! m_armSubsystem.isHome() && m_armSubsystem.isBottomLimitSwitchClosed()) {
+      if (!m_armSubsystem.isHome() && m_armSubsystem.isBottomLimitSwitchClosed()) {
         m_armSubsystem.setSensorPosition(0.0);
         m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
         m_armSubsystem.setHome();

@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmRotationSubsystem;
 
 public class ArmERCommand extends CommandBase {
   /** Creates a new ArmERCommand. */
-  private final ArmSubsystem m_armSubsystem;
+  private final ArmRotationSubsystem m_armSubsystem;
   private final boolean m_extendRetract;
 
-  public ArmERCommand(ArmSubsystem subsystem, boolean extendRetract) {
+  public ArmERCommand(ArmRotationSubsystem subsystem, boolean extendRetract) {
     m_armSubsystem = subsystem;
     m_extendRetract = extendRetract;
     addRequirements(subsystem);
@@ -31,7 +31,6 @@ public class ArmERCommand extends CommandBase {
     else
       m_armSubsystem.armRetract();
   }
-
 
   // Called once the command ends or is interrupted.
   @Override

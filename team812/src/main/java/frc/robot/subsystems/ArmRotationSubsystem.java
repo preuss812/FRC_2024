@@ -21,34 +21,34 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants.PCMConstants;
 
-public class ArmSubsystem extends SubsystemBase {
+public class ArmRotationSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
   private static boolean hasBeenHomed = true;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
-    CANConstants.kPCM,
-    PneumaticsModuleType.CTREPCM,
-    PCMConstants.kArmExtension[0],
-    PCMConstants.kArmExtension[1]
-  );
+      CANConstants.kPCM,
+      PneumaticsModuleType.CTREPCM,
+      PCMConstants.kArmExtension[0],
+      PCMConstants.kArmExtension[1]);
 
   /** Creates a new ArmSubsystem. */
-  public ArmSubsystem() {
+  public ArmRotationSubsystem() {
     m_arm.configFactoryDefault();
     m_arm.setNeutralMode(NeutralMode.Brake);
 
     // This is a CLOSED loop system. Do not uncomment or enable
     // OpenloopRamp for the PID controlled arm.
-//    m_arm.configOpenloopRamp(PidConstants.xxx_kArm_rampRate_xxx);
+    // m_arm.configOpenloopRamp(PidConstants.xxx_kArm_rampRate_xxx);
 
-    // Configure the feedback sensor with the type (QuadEncoder), 
+    // Configure the feedback sensor with the type (QuadEncoder),
     // the PID identifier within the Talon (pid 0) and the timeout (50ms)
     m_arm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 50);
 
-    // Invert motor (setInverted) so that the Talon LEDs are green when driving forward (up)
+    // Invert motor (setInverted) so that the Talon LEDs are green when driving
+    // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the arm up
     m_arm.setInverted(true);
-    m_arm.setSensorPhase(false); //Attempts to make it positive
+    m_arm.setSensorPhase(false); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
     // 10 sets timeouts for Motion Magic
@@ -60,9 +60,9 @@ public class ArmSubsystem extends SubsystemBase {
     // stalling that might occur where stalling means that power is being
     // applied, but the motor isn't moving due to friction or inertia. This
     // can help the motor not burn itself out.
-    m_arm.configNominalOutputForward(0,10);
+    m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(1.0,10);
+    m_arm.configPeakOutputForward(1.0, 10);
     m_arm.configPeakOutputReverse(-1.0, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
@@ -78,14 +78,15 @@ public class ArmSubsystem extends SubsystemBase {
     // Acceleration in sensor units per 100ms per second
     m_arm.configMotionAcceleration(150.0, 10);
 
-    // Make sure the forward and reverse limit switches are enabled and configured normally open
-    m_arm.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
-    m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
-    m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
+    // Make sure the forward and reverse limit switches are enabled and configured
+    // normally open
+    m_arm.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    m_arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+    m_arm.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0, 0, 0, 0);
 
   }
-  private 
-  final int incrementSize = 50;
+
+  private final int incrementSize = 50;
 
   public void rotate(double position) {
     double absolutePosition = getPosition();
@@ -96,49 +97,41 @@ public class ArmSubsystem extends SubsystemBase {
 
     absolutePosition += position * incrementSize;
     SmartDashboard.putNumber("rotate pos", absolutePosition);
-    /* No Elevator in 2023
-    if(! frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame() ) {
-      absolutePosition = Math.min(absolutePosition,ArmConstants.kArmEndGamePosition);
-    }
-    */
 
-    if (absolutePosition > ArmConstants.kArmBallGathering 
-    && absolutePosition < ArmConstants.kArmScorePosition) {
+    if (absolutePosition > ArmConstants.kArmBallGathering
+        && absolutePosition < ArmConstants.kArmScorePosition) {
       setPosition(absolutePosition);
-   }
+    }
   };
 
   public void rotate2(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
-    //boolean end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame(); /// No Elevator in 2023.
     String path;
 
-    if( ! isHome() ) {
+    if (!isHome()) {
       l_speed = 0.0;
       path = "not homed";
-    } else if( l_speed > 0.0 ) {
-      if(l_position >= ArmConstants.kArmTopPosition ) {
+    } else if (l_speed > 0.0) {
+      if (l_position >= ArmConstants.kArmTopPosition) {
         l_speed = 0.0;
         path = "endgame";
-      } else if( l_position >= ArmConstants.kArmScorePosition ) {
+      } else if (l_position >= ArmConstants.kArmScorePosition) {
         l_speed = 0.0;
         path = "not end game";
-      }
-      else {
+      } else {
         path = "speed > 0 no change";
       }
-    } else if( l_speed < 0.0 ) {
-      if( l_position <= ArmConstants.kArmBallGathering ) {
+    } else if (l_speed < 0.0) {
+      if (l_position <= ArmConstants.kArmBallGathering) {
         l_speed = 0.0;
-        path= "speed < 0 limited";
-      }
-      else {
+        path = "speed < 0 limited";
+      } else {
         path = "speed < 0 no change";
       }
     } else {
       path = "lspeed = 0";
-    //  l_speed = 0.0;
+      // l_speed = 0.0;
     }
     SmartDashboard.putNumber("r2_speed", speed);
     SmartDashboard.putNumber("r2_l_speed", l_speed);
@@ -146,12 +139,11 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putString("rotate2_path", path);
 
     m_arm.set(ControlMode.PercentOutput, l_speed);
-    //m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
+    // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
 
-
-  public double setPosition(double position)  {
-    if( isHome() && position >= ArmConstants.kArmBallGathering ) {
+  public double setPosition(double position) {
+    if (isHome() && position >= ArmConstants.kArmBallGathering) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
@@ -173,8 +165,7 @@ public class ArmSubsystem extends SubsystemBase {
     m_arm.setSelectedSensorPosition(position, 0, 10);
   }
 
-
-  public boolean isTopLimitSwitchClosed () {
+  public boolean isTopLimitSwitchClosed() {
     return (m_arm.isFwdLimitSwitchClosed() == 1 ? true : false);
   }
 
@@ -185,11 +176,12 @@ public class ArmSubsystem extends SubsystemBase {
   public void armExtend() {
     // check the height to be sure that we don't extend the arms
     // into the wheels.
-    if( getPosition() >= (ArmConstants.kArmBallGathering - ArmConstants.kArmThreshold) && isHome() ) {
+    if (getPosition() >= (ArmConstants.kArmBallGathering - ArmConstants.kArmThreshold) && isHome()) {
       m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
       SmartDashboard.putString("Armsolenoid", "extended");
     }
   }
+
   public void armRetract() {
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
     SmartDashboard.putString("Armsolenoid", "retracted");
@@ -202,19 +194,19 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void unsetHome() {
     hasBeenHomed = false;
-    //System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
+    // System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome(String msg) {
     hasBeenHomed = false;
-    //System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " + hasBeenHomed);
+    // System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " +
+    // hasBeenHomed);
   }
 
   public boolean isHome() {
     return hasBeenHomed;
   }
 
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.BlackBoxSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmRotationSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -31,28 +31,26 @@ public class Autonomous extends SequentialCommandGroup {
     System.out.printf("*** Entering Autonomous mode\n");
 
     BlackBoxSubsystem blackBox = RobotContainer.m_BlackBox;
-    ArmSubsystem m_armSubsystem = RobotContainer.m_ArmSubsystem;
+    ArmRotationSubsystem m_armSubsystem = RobotContainer.m_ArmRotationSubsystem;
     ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
     CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
     GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
-    GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem; 
-    
+    GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem;
+
     blackBox.readBits();
 
     addCommands(
-      new SequentialCommandGroup(
-       // new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),
-      //  new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
-      new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(0.5),
-      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, -90.0), 
-      new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(1.5),
-      new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, 90.0) 
+        new SequentialCommandGroup(
+            // new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),
+            // new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
+            new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(0.5),
+            new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, -90.0),
+            new DriveForwardCommand(m_driveTrain, 0.4, m_GyroSubsystem, null).withTimeout(1.5),
+            new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.5, 90.0)
 
-
-       // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
-//        new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
-  //      new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
-      )
-    );
+        // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
+        // new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
+        // new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
+        ));
   }
 }

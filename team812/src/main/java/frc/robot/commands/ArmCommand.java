@@ -6,17 +6,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
-  private final ArmSubsystem m_armSubsystem;
+  private final ArmRotationSubsystem m_armSubsystem;
   private final double m_position;
-  private  double setPoint;
+  private double setPoint;
   private boolean end_game;
 
-  public ArmCommand(ArmSubsystem subsystem, double position) {
+  public ArmCommand(ArmRotationSubsystem subsystem, double position) {
     m_armSubsystem = subsystem;
     m_position = position;
     System.out.println("ArmCommand class setPoint is " + m_position);
@@ -26,13 +26,13 @@ public class ArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
     SmartDashboard.putString("armcmd", "started");
 
     // end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
     end_game = true; // There is no end game in 2023. this enables full range of motion.
     System.out.println("ArmCommand Initialize end_game is " + end_game);
-    if( end_game ) {
+    if (end_game) {
       setPoint = m_position;
       System.out.println("ArmCommand endgame is true, setPoint is " + setPoint);
     } else {
@@ -50,12 +50,13 @@ public class ArmCommand extends CommandBase {
   public boolean onTarget() {
     double error = m_armSubsystem.getPosition() - setPoint;
     SmartDashboard.putNumber("armcmderr", error);
-    if( Math.abs(error) < ArmConstants.kArmThreshold) {
+    if (Math.abs(error) < ArmConstants.kArmThreshold) {
       return true;
     } else {
       return false;
     }
   }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmRotationSubsystem;
 
 public class ArmEmergencyStop extends CommandBase {
   /** Creates a new ArmCommand. */
-  private final ArmSubsystem m_armSubsystem;
+  private final ArmRotationSubsystem m_armSubsystem;
 
-  public ArmEmergencyStop(ArmSubsystem subsystem) {
+  public ArmEmergencyStop(ArmRotationSubsystem subsystem) {
     m_armSubsystem = subsystem;
     addRequirements(subsystem);
   }

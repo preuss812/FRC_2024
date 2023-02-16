@@ -11,16 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.Constants.GripperConstants;
-
 
 /**
  * Add your docs here.
@@ -29,17 +25,18 @@ public class GripperSubsystem extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private String gripperState = GripperConstants.kUnknown; 
+  private String gripperState = GripperConstants.kUnknown;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
-    CANConstants.kPCM,
-    PneumaticsModuleType.CTREPCM,
-    PCMConstants.kGripper[0],
-    PCMConstants.kGripper[1]
-  );
+      CANConstants.kPCM,
+      PneumaticsModuleType.CTREPCM,
+      PCMConstants.kGripper[0],
+      PCMConstants.kGripper[1]);
 
-  public GripperSubsystem() {}
-  
+  public GripperSubsystem() {
+    // This is where you might set an initial state of open or closed
+  }
+
   public void openGrip() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -50,7 +47,7 @@ public class GripperSubsystem extends SubsystemBase {
     }
     SmartDashboard.putString("Gripper", gripperState);
   }
-  
+
   public void closeGrip() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
@@ -62,19 +59,19 @@ public class GripperSubsystem extends SubsystemBase {
     SmartDashboard.putString("Gripper", gripperState);
   }
 
-
   public boolean isOpen() {
-    return ( gripperState == GripperConstants.kOpen );
+    return (gripperState == GripperConstants.kOpen);
   }
 
   public boolean isClosed() {
-    return ( gripperState == GripperConstants.kClosed );
+    return (gripperState == GripperConstants.kClosed);
   }
-/*
-   @Override
-    public void initDefaultCommand() {
-     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-   }*/
- 
+  /*
+   * @Override
+   * public void initDefaultCommand() {
+   * // Set the default command for a subsystem here.
+   * // setDefaultCommand(new MySpecialCommand());
+   * }
+   */
+
 }
