@@ -94,7 +94,7 @@ public class RobotContainer {
     m_ArmSubsystem.unsetHome("RobotContainer");
 
      m_DriveTrain.setDefaultCommand(
-       new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain)
+       new RunCommand(() -> m_DriveTrain.arcadeDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain)
      );
 
     // Default command for the Elevator Subsystem

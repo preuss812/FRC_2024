@@ -37,7 +37,7 @@ public class BalanceCommand extends CommandBase {
     SmartDashboard.putNumber("bal-speed", balanceSpeed);
     SmartDashboard.putNumber("bal-delta", delta);
     SmartDashboard.putNumber("bal-proportion", ratio);
-    m_subsystem.preussDrive(-balanceSpeed, 0);
+    m_subsystem.arcadeDrive(-balanceSpeed, 0);
   }
 
   // Called once the command ends or is interrupted.

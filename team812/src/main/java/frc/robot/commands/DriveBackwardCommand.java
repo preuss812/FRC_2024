@@ -36,13 +36,13 @@ public class DriveBackwardCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.preussDrive(m_speed, m_turn);
+    m_subsystem.arcadeDrive(m_speed, m_turn);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_subsystem.preussDrive(0.0, 0.0);
+    m_subsystem.arcadeDrive(0.0, 0.0);
     System.out.println("*** DriveBackward: end");
   }
 
