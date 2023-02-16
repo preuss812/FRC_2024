@@ -106,6 +106,8 @@ public class DriveTrain extends SubsystemBase {
 	  driveBase.arcadeDrive(-throttle, turn, false);
   } 
   public void arcadeDrive(double throttle, double turn) {
+    SmartDashboard.putNumber("ArcadeThrottle", -throttle);
+    SmartDashboard.putNumber("ArcadeTurn", turn);
     driveBase.arcadeDrive(-throttle, turn, false); // CHECK THE SIGNS of throttle and turn!!!
   }
   

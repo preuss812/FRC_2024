@@ -27,7 +27,6 @@ public class GyroSubsystem extends SubsystemBase {
       try {
 	  gyro = new AHRS(SerialPort.Port.kUSB1);
 	  gyro.enableLogging(true);
-	  this.reset();
       } catch (RuntimeException ex) {
 	  DriverStation.reportError("Error instantiating Gyro:  " + ex.getMessage(), true);
       }
@@ -59,6 +58,9 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_X", gyro.getDisplacementX());
     SmartDashboard.putNumber("IMU_Y", gyro.getDisplacementY());
     SmartDashboard.putNumber("IMU_Z", gyro.getDisplacementZ());
+    SmartDashboard.putNumber("IMU_VX", gyro.getVelocityX());
+    SmartDashboard.putNumber("IMU_VY", gyro.getVelocityY());
+    SmartDashboard.putNumber("IMU_VZ", gyro.getVelocityZ());
 
     // According to the documentation for the NavX gyro it takes some
     // time to perform a self calibration. The robot runs this
@@ -71,6 +73,7 @@ public class GyroSubsystem extends SubsystemBase {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
       SmartDashboard.putNumber("IMU_Zero_Pitch", initialPitch);
+      this.reset();
       gyro.resetDisplacement();
     }
   }

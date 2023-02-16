@@ -54,13 +54,13 @@ public class DriveForwardCommand extends CommandBase {
     SmartDashboard.putNumber("FWD_turning_value", -turningValue);
     SmartDashboard.putNumber("FWD_delta_angle", deltaAngle);
     SmartDashboard.putNumber("FWD_m_speed", -m_speed);
-    m_subsystem.preussDrive(-m_speed, -turningValue);
+    m_subsystem.arcadeDrive(-m_speed, -turningValue);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_subsystem.preussDrive(0.0, 0.0);
+    m_subsystem.arcadeDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.

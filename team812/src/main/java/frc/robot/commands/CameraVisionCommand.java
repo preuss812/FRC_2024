@@ -79,7 +79,7 @@ public class CameraVisionCommand extends CommandBase {
     }
     SmartDashboard.putNumber("Fwd speed", forwardSpeed);
     SmartDashboard.putNumber("Rot speed", rotationSpeed);
-   m_drivetrainSubsystem.preussDrive(forwardSpeed, rotationSpeed); 
+   m_drivetrainSubsystem.arcadeDrive(forwardSpeed, rotationSpeed); 
     
   }
 

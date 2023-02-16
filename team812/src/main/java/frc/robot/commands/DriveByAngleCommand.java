@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GyroSubsystem;
@@ -21,13 +22,13 @@ public class DriveByAngleCommand extends CommandBase {
   private final double m_angle;
   private double targetAngle;
 
-  public DriveByAngleCommand(final DriveTrain subsystem, final Double speed, final Double angle) {
+  public DriveByAngleCommand(final DriveTrain subsystem, final GyroSubsystem gyro, Double speed, final Double angle) {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_speed = speed;
     m_angle = angle;
-    m_gyro = null;
+    m_gyro = gyro;
     addRequirements(m_subsystem, m_gyro);
   }
 
@@ -41,18 +42,24 @@ public class DriveByAngleCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.preussDrive(0.0, m_speed);
+    m_subsystem.arcadeDrive(0.0, -m_speed*Math.signum(m_angle));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.preussDrive(0.0, 0.0);
+    m_subsystem.arcadeDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    SmartDashboard.putNumber("DBA: targetAngle", targetAngle);
+    SmartDashboard.putNumber("DBA: getAngle", m_gyro.getAngle());
+    if (m_angle >= 0) {
       return (m_gyro.getAngle() >= targetAngle);
+    } else {
+      return (m_gyro.getAngle() <= targetAngle);
+    }
   }
 }
