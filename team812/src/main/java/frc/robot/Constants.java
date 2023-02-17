@@ -24,24 +24,13 @@ public final class Constants {
     public static final class CANConstants {
         public static final int[] kLeftMotors   = {44, 7};
         public static final int[] kRightMotors  = {30, 6};
-        public static final int kWinchMotor     = 80; // dko remove for 2022
-        public static final int kHookMotor      = 81; // dko remove for 2022
-        public static final int kIntakeMotorLeft = 82; // dko remove for 2022
-        public static final int kIntakeMotorRight = 83; // dko remove for 2022
-        public static final int kIntakeMotor = 39; // dko 20220221 Mr. Rupert went to single motor
-        public static final int kSpinMotor = 84; // dko remove for 2022
 
         public static final int kPDP = 42;
         public static final int kPCM = 40;
-        public static final int kElevatorMotor = 85; // dko remove 2022
-        public static final int kElevatorMotorLeft = 32;
-        public static final int kElevatorMotorRight = 33;
         public static final int kArmMotor = 31; // dph this is the arm rotation motor.  Inclined to rename after verifying with the team.
         public static final int kArmExtensionMotor = 99; // dph Needs a real number
     }
     public static final class PCMConstants {
-        public static final int[] kLiftPistons  = {0, 1}; // dko remove for 2022
-        public static final int[] kGearShift = {2, 3};  // dko remove for 2022
         public static final int[] kGripper = {4,5}; // dko 20220221 need to physically verify
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
         public static final int[] kBarHooks = {8,9}; // dko 20220221 need to physically verify
@@ -120,11 +109,6 @@ public final class Constants {
         public static final double kProportionalBalanceBackward = 0.10;
     }
 
-    public static final class BallHandlingConstants {
-        public static final double kBallIntakeSpeed = 0.7;
-        public static final double kBallOutputSpeed = 1.0;
-    }
-
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
 	
@@ -170,9 +154,6 @@ public final class Constants {
         public static final String kUnknown =  "Unknown";
         public static final String kClosed  =  "Closed";
     }
-
-    public static final int kLightRelay = 0;
-    public static final int kTopLightRelay = 1;
 
     public static final class VisionConstants {
         public static final Transform3d robotToCam =

@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     nttable = ntinst.getTable("0team812");
-   CameraServer.startAutomaticCapture(0);
+//   CameraServer.startAutomaticCapture(0);
 //    CameraServer.startAutomaticCapture(1);
     m_robotContainer = new RobotContainer();
   }

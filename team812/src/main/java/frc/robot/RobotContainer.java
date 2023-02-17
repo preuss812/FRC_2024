@@ -130,9 +130,9 @@ public class RobotContainer {
      * 5 set ARM ROTATION to GATHER and set ARM EXTENSION as appropriate (armpos1)
      * 6 set ARM ROTATION to HIGH and set ARM EXTENSION as appropriate (armpos4)
      */
-    new JoystickButton(rightJoystick, 1).onTrue(new ArmERCommand(m_ArmRotationSubsystem, true));
-    new JoystickButton(rightJoystick, 2).onTrue(new ArmERCommand(m_ArmRotationSubsystem, false));
-
+    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain));
     // This first button takes the arm to the bottom of its travel until
     // the bottom limit switch is trigged. This "Homes" the encoder to a known
     // zero position.

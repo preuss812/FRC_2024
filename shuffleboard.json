@@ -19,9 +19,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pressure is ",
-              "_title": "Pressure is ",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Pressure is "
             }
           },
           "1,0": {
@@ -32,9 +30,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 1",
-              "_title": "ControlBox bit 1",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 1"
             }
           },
           "2,0": {
@@ -45,9 +41,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 2",
-              "_title": "ControlBox bit 2",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 2"
             }
           },
           "3,0": {
@@ -58,9 +52,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 3",
-              "_title": "ControlBox bit 3",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 3"
             }
           },
           "4,0": {
@@ -71,9 +63,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 4",
-              "_title": "ControlBox bit 4",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 4"
             }
           },
           "5,0": {
@@ -84,9 +74,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 5",
-              "_title": "ControlBox bit 5",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 5"
             }
           },
           "6,0": {
@@ -97,9 +85,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 6",
-              "_title": "ControlBox bit 6",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 6"
             }
           },
           "7,0": {
@@ -110,9 +96,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ControlBox bit 7",
-              "_title": "ControlBox bit 7",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ControlBox bit 7"
             }
           },
           "0,2": {
@@ -123,9 +107,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive mode",
-              "_title": "Pdrive mode",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Pdrive mode"
             }
           },
           "1,2": {
@@ -136,9 +118,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive throttle",
-              "_title": "Pdrive throttle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Pdrive throttle"
             }
           },
           "2,2": {
@@ -149,9 +129,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive turn",
-              "_title": "Pdrive turn",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Pdrive turn"
             }
           },
           "3,1": {
@@ -163,8 +141,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///photonvision/pv-812/hasTarget",
               "_title": "/photonvision/pv-812/hasTarget",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -177,9 +153,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/April Tag Target Distance (Predicted) (in)",
-              "_title": "April Tag Target Distance (Predicted) (in)",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "April Tag Target Distance (Predicted) (in)"
             }
           },
           "4,1": {
@@ -190,9 +164,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/detected April tag pitch (degree)",
-              "_title": "detected April tag pitch (degree)",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "detected April tag pitch (degree)"
             }
           },
           "7,3": {
@@ -203,9 +175,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Range",
-              "_title": "Range",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Range"
             }
           },
           "6,3": {
@@ -216,9 +186,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Turn error",
-              "_title": "Turn error",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Turn error"
             }
           },
           "4,3": {
@@ -229,9 +197,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Fwd speed",
-              "_title": "Fwd speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Fwd speed"
             }
           },
           "5,3": {
@@ -242,9 +208,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Rot speed",
-              "_title": "Rot speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Rot speed"
             }
           },
           "0,1": {
@@ -256,8 +220,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/IMU_Connected",
               "_title": "IMU_Connected",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -270,9 +232,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Yaw",
-              "_title": "IMU_Yaw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Yaw"
             }
           },
           "9,0": {
@@ -283,9 +243,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Port Resets",
-              "_title": "navX Port Resets",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "navX Port Resets"
             }
           },
           "10,0": {
@@ -296,9 +254,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Updates Per Sec",
-              "_title": "navX Updates Per Sec",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "navX Updates Per Sec"
             }
           },
           "9,1": {
@@ -309,9 +265,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Stream Responses",
-              "_title": "navX Stream Responses",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "navX Stream Responses"
             }
           },
           "10,1": {
@@ -322,9 +276,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Pitch",
-              "_title": "IMU_Pitch",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Pitch"
             }
           },
           "9,2": {
@@ -335,9 +287,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Roll",
-              "_title": "IMU_Roll",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Roll"
             }
           },
           "10,2": {
@@ -348,9 +298,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_X",
-              "_title": "IMU_X",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_X"
             }
           },
           "9,3": {
@@ -361,9 +309,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Y",
-              "_title": "IMU_Y",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Y"
             }
           },
           "10,3": {
@@ -374,9 +320,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Z",
-              "_title": "IMU_Z",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Z"
             }
           },
           "2,1": {
@@ -387,9 +331,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Zero_Pitch",
-              "_title": "IMU_Zero_Pitch",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "IMU_Zero_Pitch"
             }
           },
           "1,4": {
@@ -400,9 +342,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Integration Control Response Count",
-              "_title": "navX Integration Control Response Count",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "navX Integration Control Response Count"
             }
           },
           "2,4": {
@@ -413,9 +353,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-speed",
-              "_title": "bal-speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "bal-speed"
             }
           },
           "3,4": {
@@ -426,9 +364,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-delta",
-              "_title": "bal-delta",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "bal-delta"
             }
           },
           "4,4": {
@@ -439,9 +375,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-proportion",
-              "_title": "bal-proportion",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "bal-proportion"
             }
           },
           "8,0": {
@@ -452,9 +386,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Arm pos:",
-              "_title": "Arm pos:",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Arm pos:"
             }
           },
           "6,1": {
@@ -466,8 +398,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Arm Homed?",
               "_title": "Arm Homed?",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -480,9 +410,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArmExtension pos:",
-              "_title": "ArmExtension pos:",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ArmExtension pos:"
             }
           },
           "8,1": {
@@ -494,8 +422,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/ArmExtension Homed?",
               "_title": "ArmExtension Homed?",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -509,8 +435,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/IMU_IsCalibrating",
               "_title": "IMU_IsCalibrating",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -523,9 +447,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetFound",
-              "_title": "TargetFound",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetFound"
             }
           },
           "5,2": {
@@ -536,9 +458,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetX",
-              "_title": "TargetX",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetX"
             }
           },
           "6,2": {
@@ -549,9 +469,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetY",
-              "_title": "TargetY",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetY"
             }
           },
           "7,2": {
@@ -562,9 +480,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetYaw",
-              "_title": "TargetYaw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetYaw"
             }
           },
           "8,2": {
@@ -575,9 +491,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetRange",
-              "_title": "TargetRange",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetRange"
             }
           },
           "0,3": {
@@ -588,9 +502,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetRangeGoal",
-              "_title": "TargetRangeGoal",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetRangeGoal"
             }
           },
           "1,3": {
@@ -601,9 +513,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Target Fwd speed",
-              "_title": "Target Fwd speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Target Fwd speed"
             }
           },
           "2,3": {
@@ -614,9 +524,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Target Rot speed",
-              "_title": "Target Rot speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Target Rot speed"
             }
           },
           "3,3": {
@@ -627,9 +535,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/POV",
-              "_title": "POV",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "POV"
             }
           },
           "8,3": {
@@ -640,9 +546,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/POV_Out",
-              "_title": "POV_Out",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "POV_Out"
             }
           },
           "0,4": {
@@ -653,9 +557,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/r2_speed",
-              "_title": "r2_speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "r2_speed"
             }
           },
           "5,4": {
@@ -666,9 +568,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/r2_l_speed",
-              "_title": "r2_l_speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "r2_l_speed"
             }
           },
           "6,4": {
@@ -679,9 +579,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/r2_l_position",
-              "_title": "r2_l_position",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "r2_l_position"
             }
           },
           "7,4": {
@@ -692,9 +590,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/rotate2_path",
-              "_title": "rotate2_path",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "rotate2_path"
             }
           },
           "11,0": {
@@ -705,9 +601,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetRotationYaw",
-              "_title": "TargetRotationYaw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetRotationYaw"
             }
           },
           "12,0": {
@@ -718,9 +612,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetRotationSpeed",
-              "_title": "TargetRotationSpeed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetRotationSpeed"
             }
           },
           "11,1": {
@@ -731,9 +623,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetThrottle",
-              "_title": "TargetThrottle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "TargetThrottle"
             }
           },
           "12,1": {
@@ -744,9 +634,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArcadeThrottle",
-              "_title": "ArcadeThrottle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ArcadeThrottle"
             }
           },
           "11,2": {
@@ -757,9 +645,62 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArcadeTurn",
-              "_title": "ArcadeTurn",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "ArcadeTurn"
+            }
+          },
+          "11,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/IMU_VX",
+              "_title": "IMU_VX"
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/IMU_VY",
+              "_title": "IMU_VY"
+            }
+          },
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/IMU_VZ",
+              "_title": "IMU_VZ"
+            }
+          },
+          "10,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/armcmd",
+              "_title": "armcmd"
+            }
+          },
+          "11,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/armcmderr",
+              "_title": "armcmderr"
             }
           }
         }
@@ -797,9 +738,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Port Resets",
-              "_title": "SmartDashboard/navX Port Resets",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/navX Port Resets"
             }
           },
           "4,1": {
@@ -810,9 +749,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Stream Responses",
-              "_title": "SmartDashboard/navX Stream Responses",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/navX Stream Responses"
             }
           },
           "5,1": {
@@ -823,9 +760,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/navX Updates Per Sec",
-              "_title": "SmartDashboard/navX Updates Per Sec",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/navX Updates Per Sec"
             }
           },
           "3,2": {
@@ -837,8 +772,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/IMU_Connected",
               "_title": "Connected?",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -852,8 +785,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/IMU_IsCalibrating",
               "_title": "Calibrating?",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -866,9 +797,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Roll",
-              "_title": "Roll",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Roll"
             }
           },
           "7,2": {
@@ -879,9 +808,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Yaw",
-              "_title": "Yaw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "Yaw"
             }
           },
           "6,0": {
@@ -892,9 +819,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Pitch",
-              "_title": "SmartDashboard/IMU_Pitch",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/IMU_Pitch"
             }
           },
           "6,1": {
@@ -905,9 +830,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/IMU_Zero_Pitch",
-              "_title": "/SmartDashboard/IMU_Zero_Pitch",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/IMU_Zero_Pitch"
             }
           },
           "6,2": {
@@ -918,9 +841,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-delta",
-              "_title": "/SmartDashboard/bal-delta",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/bal-delta"
             }
           },
           "6,3": {
@@ -931,9 +852,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-speed",
-              "_title": "/SmartDashboard/bal-speed",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/bal-speed"
             }
           },
           "7,3": {
@@ -944,9 +863,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/bal-proportion",
-              "_title": "/SmartDashboard/bal-proportion",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/bal-proportion"
             }
           }
         }
@@ -973,16 +890,12 @@
               "_source0": "network_table:///SmartDashboard/TargetRotationSpeed",
               "_source1": "network_table:///SmartDashboard/TargetThrottle",
               "_title": "/SmartDashboard/TargetRotationSpeed",
-              "_glyph": 148,
-              "_showGlyph": false,
               "Graph/Visible time": 45.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/TargetRotationSpeed": true,
-              "Visible data/SmartDashboard/TargetThrottle": true
+              "Y-axis/Unit": "ul"
             }
           },
           "5,0": {
@@ -993,9 +906,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetFound",
-              "_title": "/SmartDashboard/TargetFound",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/TargetFound"
             }
           },
           "7,0": {
@@ -1006,9 +917,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetRotationYaw",
-              "_title": "/SmartDashboard/TargetRotationYaw",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/TargetRotationYaw"
             }
           },
           "4,0": {
@@ -1019,9 +928,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/TargetThrottle",
-              "_title": "SmartDashboard/TargetThrottle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/TargetThrottle"
             }
           },
           "4,4": {
@@ -1032,9 +939,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArcadeThrottle",
-              "_title": "SmartDashboard/ArcadeThrottle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/ArcadeThrottle"
             }
           },
           "5,4": {
@@ -1045,9 +950,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArcadeTurn",
-              "_title": "SmartDashboard/ArcadeTurn",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "SmartDashboard/ArcadeTurn"
             }
           },
           "6,4": {
@@ -1058,9 +961,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive throttle",
-              "_title": "/SmartDashboard/Pdrive throttle",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/Pdrive throttle"
             }
           },
           "7,4": {
@@ -1071,9 +972,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pdrive turn",
-              "_title": "/SmartDashboard/Pdrive turn",
-              "_glyph": 148,
-              "_showGlyph": false
+              "_title": "/SmartDashboard/Pdrive turn"
             }
           }
         }

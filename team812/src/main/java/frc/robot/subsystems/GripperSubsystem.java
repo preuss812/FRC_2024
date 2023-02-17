@@ -40,7 +40,7 @@ public class GripperSubsystem extends SubsystemBase {
   public void openGrip() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-    if (pressure > 50.0) {
+    if (pressure > PCMConstants.kMinPresssure) {
       gripperState = GripperConstants.kOpen;
     } else {
       gripperState = GripperConstants.kUnknown;
@@ -51,7 +51,7 @@ public class GripperSubsystem extends SubsystemBase {
   public void closeGrip() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
-    if (pressure > 50.0) {
+    if (pressure > PCMConstants.kMinPresssure) {
       gripperState = GripperConstants.kClosed;
     } else {
       gripperState = GripperConstants.kUnknown;

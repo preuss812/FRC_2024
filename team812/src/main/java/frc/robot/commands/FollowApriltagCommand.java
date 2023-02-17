@@ -98,7 +98,7 @@ public class FollowApriltagCommand extends CommandBase {
     SmartDashboard.putNumber("Target Fwd speed", forwardSpeed);
     SmartDashboard.putNumber("Target Rot speed", rotationSpeed);
    // forwardSpeed = 0.0;
-    m_drivetrainSubsystem.preussDrive(forwardSpeed, rotationSpeed); 
+    m_drivetrainSubsystem.arcadeDrive(forwardSpeed, rotationSpeed); 
 
   }
 
@@ -110,7 +110,6 @@ public class FollowApriltagCommand extends CommandBase {
   @Override
   public boolean isFinished() {
 //    return turnController.atSetpoint();
-    return false; // Run forever to make debug easier.
-    // return true;
+    return false;
   }
 }
