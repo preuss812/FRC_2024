@@ -49,8 +49,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // Invert motor (setInverted) so that the Talon LEDs are green when driving
     // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the arm up
-    m_arm.setInverted(true);
-    m_arm.setSensorPhase(false); // Attempts to make it positive
+    m_arm.setInverted(false);
+    m_arm.setSensorPhase(true); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
     // 10 sets timeouts for Motion Magic
@@ -64,8 +64,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(1.0, 10);
-    m_arm.configPeakOutputReverse(-1.0, 10);
+    m_arm.configPeakOutputForward(0.2, 10);
+    m_arm.configPeakOutputReverse(-0.2, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -163,7 +163,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   public double setPosition(double position) {
     if (isHome() && position >= ArmConstants.kArmBallGathering) {
-      //m_arm.set(ControlMode.Position, position);
+      m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
     return getPosition();
