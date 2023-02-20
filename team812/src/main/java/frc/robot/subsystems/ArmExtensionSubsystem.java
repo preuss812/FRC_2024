@@ -22,7 +22,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 public class ArmExtensionSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_armExtension = new WPI_TalonSRX(CANConstants.kArmExtensionMotor);
-  private static boolean hasBeenHomed = true;
+  private static boolean hasBeenHomed = false;
 
   /** Creates a new ArmExtensionSubsystem. */
   public ArmExtensionSubsystem() {
@@ -54,8 +54,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_armExtension.configNominalOutputForward(0,10);
     m_armExtension.configNominalOutputReverse(0, 10);
-    m_armExtension.configPeakOutputForward(1.0,10);
-    m_armExtension.configPeakOutputReverse(-1.0, 10);
+    m_armExtension.configPeakOutputForward(0.3,10);
+    m_armExtension.configPeakOutputReverse(-0.3, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -145,7 +145,12 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     m_armExtension.setSelectedSensorPosition(position, 0, 10);
   }
 
-
+  public void setSensorReference() {
+    double l_position = ArmExtensionConstants.kArmExtensionReferencePosition;
+    m_armExtension.setSelectedSensorPosition(l_position, 0, 10);
+    setHomePosition(l_position);
+    setHome();
+  }
   public boolean isInLimitSwitchClosed () {
     return (m_armExtension.isFwdLimitSwitchClosed() == 1 ? true : false);
   }

@@ -141,17 +141,18 @@ public final class Constants {
     public static final class ArmExtensionConstants {
         // Distances are in meters
         // Positions are in encoder counts/ticks
+        public static final double kArmExtensionReferencePosition =0;
         public static final double kArmExtensionGearToothSpacing = 0.005; // (meters)  = 5 millimeters
         public static final double kArmExtensionTeethPerRotation = 36;
         public static final double kArmExtensionEncoderCountPerRevolution = 8192; // Need to verify this number - dph
         public static final double kArmExtensionOneMeterPosition = 1.0/(kArmExtensionGearToothSpacing*kArmExtensionTeethPerRotation)*kArmExtensionEncoderCountPerRevolution;
         public static final double kArmExtensionFullyRetractedPosition = 0.0;
         public static final double kArmExtensionFullyExtendedPosition = kArmExtensionOneMeterPosition; // This needs to be calibrated - dph
-        public static final double kArmExtensionHomePosition = kArmExtensionOneMeterPosition * 0.0;
-        public static final double kArmExtensionBottomRowPosition = kArmExtensionOneMeterPosition * 0.0;
-        public static final double kArmExtensionMiddleRowPosition = kArmExtensionOneMeterPosition * 0.043;
-        public static final double kArmExtensionTopRowPosition = kArmExtensionOneMeterPosition * 0.86;
-        public static final double kArmExtensionGatheringPosition = kArmExtensionOneMeterPosition * 0.0;
+        public static final double kArmExtensionHomePosition = 0;
+        public static final double kArmExtensionLowPosition = 8000;
+        public static final double kArmExtensionMidPosition = 16000;
+        public static final double kArmExtensionHiPosition = 24000;
+        public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
         public static final double kArmExtensionThreshold = 20;
     }
 
