@@ -88,8 +88,12 @@ public class RobotContainer {
         new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
 
     m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate2(POV_to_double(rightJoystick.getPOV())),
+        new RunCommand(() -> m_ArmRotationSubsystem.test_rotate(POV_to_double(rightJoystick.getPOV())),
             m_ArmRotationSubsystem));
+            
+    m_ArmExtensionSubsystem.setDefaultCommand(
+        new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
+            m_ArmExtensionSubsystem));
 
     // Gyro subsystem
     m_GyroSubsystem.setDefaultCommand(

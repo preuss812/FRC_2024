@@ -22,9 +22,8 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new DriveTrain.
    */
- // private final WPI_VictorSPX leftFront, leftBack, rightFront, rightBack;
- // private final WPI_VictorSPX leftBack, rightFront, rightBack;
-  private final WPI_VictorSPX m_leftMotor, m_rightMotor;
+  private final WPI_TalonSRX leftFront, leftBack, rightFront, rightBack;
+ // private final WPI_TalonSRX m_leftMotor, m_rightMotor;
 
  // private final SpeedControllerGroup leftMotors, rightMotors;
 // private final MotorControllerGroup leftMotors, rightMotors;
@@ -32,47 +31,49 @@ public class DriveTrain extends SubsystemBase {
   private final DifferentialDrive driveBase;
 
   public DriveTrain() {
-/*
-    leftFront = new WPI_VictorSPX(CANConstants.kLeftMotors[0]);
-    leftBack = new WPI_VictorSPX(CANConstants.kLeftMotors[1]);
+
+    leftFront = new WPI_TalonSRX(CANConstants.kLeftMotors[0]);
+    leftBack = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
     leftFront.configFactoryDefault();
     leftBack.configFactoryDefault();
     leftFront.setNeutralMode(NeutralMode.Brake);
     leftBack.setNeutralMode(NeutralMode.Brake);
     leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    leftMotors = new MotorControllerGroup(leftFront,leftBack);
-    */
-  m_leftMotor = new WPI_VictorSPX(CANConstants.kLeftMotors[1]);
+    leftBack.follow(leftFront);
+  //  leftMotors = new GroupMotorControllers(leftFront,leftBack);
+/* 
+  m_leftMotor = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
   m_leftMotor.configFactoryDefault();
   m_leftMotor.setNeutralMode(NeutralMode.Brake);
   m_leftMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-/*
-    rightFront = new WPI_VictorSPX(CANConstants.kRightMotors[0]);
-    rightBack = new WPI_VictorSPX(CANConstants.kRightMotors[1]);
+*/
+    rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
+    rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
     rightFront.configFactoryDefault();
     rightBack.configFactoryDefault();
     rightFront.setNeutralMode(NeutralMode.Brake);
     rightBack.setNeutralMode(NeutralMode.Brake);
     rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+    rightBack.follow(rightFront);
 
     // New for 2022, motors have to be inverted by this code
     rightFront.setInverted(true);
     rightBack.setInverted(true);
 
   //  rightMotors = new SpeedControllerGroup(rightFront, rightBack);
-   rightMotors = new MotorControllerGroup(rightFront, rightBack);
-*/
-  m_rightMotor = new WPI_VictorSPX(CANConstants.kRightMotors[1]);
+   //rightMotors = new MotorControllerGroup(rightFront, rightBack);
+/*
+  m_rightMotor = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
   m_rightMotor.configFactoryDefault();
   m_rightMotor.setNeutralMode(NeutralMode.Brake);
   m_rightMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
   m_rightMotor.setInverted(true);
+*/
 
-
-//    driveBase = new DifferentialDrive(leftMotors, rightMotors);
-    driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
+    driveBase = new DifferentialDrive(leftFront, rightFront);
+//    driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
     driveBase.setSafetyEnabled(false);
   }
 

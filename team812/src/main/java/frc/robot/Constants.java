@@ -28,10 +28,10 @@ public final class Constants {
         public static final int kPDP = 42;
         public static final int kPCM = 40;
         public static final int kArmMotor = 31; // dph this is the arm rotation motor.  Inclined to rename after verifying with the team.
-        public static final int kArmExtensionMotor = 99; // dph Needs a real number
+        public static final int kArmExtensionMotor = 43; // dph Needs a real number
     }
     public static final class PCMConstants {
-        public static final int[] kGripper = {4,5}; // dko 20220221 need to physically verify
+        public static final int[] kGripper = {1,0}; // dko 20220221 need to physically verify
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
         public static final int[] kBarHooks = {8,9}; // dko 20220221 need to physically verify
         public static final int kMinPresssure = 50; // minimum operating pressure for Arm control

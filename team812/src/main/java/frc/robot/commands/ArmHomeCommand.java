@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -60,7 +59,7 @@ public class ArmHomeCommand extends CommandBase {
       return true; // End the command because we cannot operation without pressure to close the
                    // hands - dph
     } else {
-      if (!m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isBottomLimitSwitchClosed()) { // Should isHome
+      if (!m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isOutLimitSwitchClosed()) { // Should isHome
                                                                                                       // be checked? -
                                                                                                       // dph
         m_armExtensionSubsystem.setSensorPosition(0.0);

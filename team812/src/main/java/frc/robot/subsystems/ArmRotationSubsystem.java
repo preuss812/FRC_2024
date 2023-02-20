@@ -17,6 +17,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants.PCMConstants;
@@ -104,6 +106,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     }
   };
 
+
   public void rotate2(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
@@ -133,10 +136,26 @@ public class ArmRotationSubsystem extends SubsystemBase {
       path = "lspeed = 0";
       // l_speed = 0.0;
     }
+
     SmartDashboard.putNumber("r2_speed", speed);
     SmartDashboard.putNumber("r2_l_speed", l_speed);
     SmartDashboard.putNumber("r2_l_position", l_position);
     SmartDashboard.putString("rotate2_path", path);
+
+
+    m_arm.set(ControlMode.PercentOutput, l_speed);
+    // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
+  }
+
+
+  public void test_rotate(double speed) {
+    double l_speed = speed;
+    double l_position = getPosition();
+
+    l_speed = MathUtil.clamp(l_speed, -0.30, 0.10);
+
+    SmartDashboard.putNumber("test_rotate_l_speed", l_speed);
+    SmartDashboard.putNumber("test_rotate_l_position", l_position);
 
     m_arm.set(ControlMode.PercentOutput, l_speed);
     // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
@@ -212,5 +231,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm pos:", getPosition());
     SmartDashboard.putBoolean("Arm Homed?", isHome());
+    SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
+    SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
   }
 }

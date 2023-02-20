@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -114,6 +115,12 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     //m_armExtension.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
 
+  public void test_move_in_out(double speed) {
+    double l_speed = speed;
+    l_speed = MathUtil.clamp(l_speed,-0.20,0.20);
+    SmartDashboard.putNumber("ArmExtension test speed", l_speed);
+    m_armExtension.set(l_speed);
+  }
 
   public double setPosition(double position)  {
     if( isHome() && position >= ArmExtensionConstants.kArmExtensionFullyRetractedPosition ) {
@@ -139,11 +146,11 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   }
 
 
-  public boolean isTopLimitSwitchClosed () {
+  public boolean isInLimitSwitchClosed () {
     return (m_armExtension.isFwdLimitSwitchClosed() == 1 ? true : false);
   }
 
-  public boolean isBottomLimitSwitchClosed() {
+  public boolean isOutLimitSwitchClosed() {
     return (m_armExtension.isRevLimitSwitchClosed() == 1 ? true : false);
   }
 
@@ -172,5 +179,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ArmExtension pos:", getPosition());
     SmartDashboard.putBoolean("ArmExtension Homed?", isHome());
+    SmartDashboard.putBoolean("ArmExtension outsw", isOutLimitSwitchClosed());
+    SmartDashboard.putBoolean("ArmExtension insw", isInLimitSwitchClosed());
   }
 }
