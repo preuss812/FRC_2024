@@ -123,6 +123,7 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        public static final double kArmReferencePosition = 824; // 2023 broomstick ref position
         public static final double kArmScorePosition = 2100;
         public static final double kArmTopPosition = 4020; //3550;
         public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
@@ -130,6 +131,11 @@ public final class Constants {
         public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 20;
+        // new for 2023
+        public static final double kArmLowPosition = 700;
+        public static final double kArmMidPosition = 1000;
+        public static final double kArmHiPosition = 1200;
+        
     }
     
     public static final class ArmExtensionConstants {

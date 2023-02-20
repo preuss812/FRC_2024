@@ -163,7 +163,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   public double setPosition(double position) {
     if (isHome() && position >= ArmConstants.kArmBallGathering) {
-      m_arm.set(ControlMode.Position, position);
+      //m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
     return getPosition();
@@ -182,6 +182,13 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   public void setSensorPosition(double position) {
     m_arm.setSelectedSensorPosition(position, 0, 10);
+  }
+
+  public void setSensorReference() {
+    double l_position = ArmConstants.kArmReferencePosition;
+    m_arm.setSelectedSensorPosition(l_position, 0, 10);
+    setHomePosition(l_position);
+    setHome();
   }
 
   public boolean isTopLimitSwitchClosed() {

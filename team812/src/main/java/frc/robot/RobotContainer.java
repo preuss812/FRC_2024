@@ -151,20 +151,18 @@ public class RobotContainer {
             new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmPreGrabPosition),
             // new WaitCommand(0.50),
             new ArmERCommand(m_ArmRotationSubsystem, true)));
-    new JoystickButton(rightJoystick, 4).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHangPosition));
-    new JoystickButton(rightJoystick, 6).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmTopPosition));
+    
+  
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     // new JoystickButton(rightJoystick, 9).onTrue(new
     // CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem));
 
-    // Left Joystick for Elevator Control
-    // Elevator up back
-    // Elevator down forward
-    // new JoystickButton(leftJoystick, 6).onTrue(new
-    // ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
-    new JoystickButton(leftJoystick, 6).onTrue(new TurnRightBB2(m_DriveTrain)); // No Elevator for 2023.
+    // Left Joystick for Arm Rotation and Extension Control
+    new JoystickButton(leftJoystick, 3).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition));
+    new JoystickButton(leftJoystick, 4).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition));
+    new JoystickButton(leftJoystick, 6).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition));new JoystickButton(leftJoystick, 6).onTrue(new TurnRightBB2(m_DriveTrain)); // No Elevator for 2023.
     // new JoystickButton(leftJoystick, 4).onTrue(new
     // ElevatorGripCommand(m_ElevatorSubsystem, false)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHangPosition));
@@ -172,8 +170,8 @@ public class RobotContainer {
     // new JoystickButton(leftJoystick, 9).onTrue(new
     // ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
     new JoystickButton(leftJoystick, 9).onTrue(new FollowApriltagCommandBB(m_CameraVisionSubsystem, m_DriveTrain)); // Optimize
-                                                                                                                    // Pid
-                                                                                                                    // controller
+    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
+                                                                                                                        // controller
                                                                                                                     // using
                                                                                                                     // Black
                                                                                                                     // Box
