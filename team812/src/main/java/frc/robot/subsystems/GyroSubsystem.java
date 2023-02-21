@@ -22,7 +22,14 @@ public class GyroSubsystem extends SubsystemBase {
     private AHRS gyro;
     private double initialPitch;
     private boolean isPitchSet = false;
-   
+    private static double m_xDisplacement = 0.0;
+    private static double m_yDisplacement = 0.0;
+    private static double m_xVelocity = 0.0;
+    private static double m_yVelocity = 0.0;
+    private static double m_xAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
+    private static double m_yAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
+    private static final double deltaTime = 0.020; // 20 milliseconds.  Assuming that the ideal time is achieved.
+
   public GyroSubsystem() {
       try {
 	  gyro = new AHRS(SerialPort.Port.kUSB1);
@@ -61,6 +68,27 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_VX", gyro.getVelocityX());
     SmartDashboard.putNumber("IMU_VY", gyro.getVelocityY());
     SmartDashboard.putNumber("IMU_VZ", gyro.getVelocityZ());
+
+    if (isPitchSet) {
+      // Attempt to track position.
+      // This probably will not produce good results.  I was just curious.
+      // The getDisplacement{X,Y,Z} functions are returning garbage - 2023-02-20.
+      // The getVelocity{X,Y,Z} functions appear to be returning acceleration values.
+      // Treat the getVelocity* function as acceleration and compute displacements using the formulas:
+      // v'(x,y) = v(x,y) + dv(x,y) * dt
+      // (x,y)'  = (x,y) + v(x,y) * dt + 1/2*a(x,y)*dt*dt;
+      double aX = gyro.getVelocityX();
+      double aY = gyro.getVelocityY();
+
+      m_xDisplacement += m_xVelocity*deltaTime + 0.5*aX*deltaTime*deltaTime;
+      m_yDisplacement += m_yVelocity*deltaTime + 0.5*aY*deltaTime*deltaTime;
+      m_xVelocity += aX*deltaTime;
+      m_yVelocity += aY*deltaTime;
+      SmartDashboard.putNumber("IMU_X(hack)", m_xDisplacement);
+      SmartDashboard.putNumber("IMU_Y(hack)", m_yDisplacement);
+      SmartDashboard.putNumber("IMU_VX(hack)", m_xVelocity);
+      SmartDashboard.putNumber("IMU_VY(hack)", m_yVelocity);
+    }
 
     // According to the documentation for the NavX gyro it takes some
     // time to perform a self calibration. The robot runs this
