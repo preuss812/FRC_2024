@@ -120,6 +120,8 @@ public final class Constants {
 
 	    public static final double kLowLowSpeed = 0.08;
 	    public static final double kTurnLowLowSpeed = 0.7;
+
+        public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
     }
 
     public static final class ArmConstants {
