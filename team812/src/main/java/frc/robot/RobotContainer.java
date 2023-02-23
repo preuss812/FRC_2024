@@ -89,12 +89,11 @@ public class RobotContainer {
     m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
 
-   /*
-     m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.test_rotate(POV_to_double(rightJoystick.getPOV())),
-            m_ArmRotationSubsystem));
-    */
-
+   // May need to comment this out
+   if (false) {
+    m_ArmRotationSubsystem.setDefaultCommand(
+        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getX()), m_ArmRotationSubsystem));
+   }
     m_ArmExtensionSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
             m_ArmExtensionSubsystem));
@@ -140,7 +139,9 @@ public class RobotContainer {
      */
     new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-    new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain));
+    new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
+    new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
+
     // This first button takes the arm to the bottom of its travel until
     // the bottom limit switch is trigged. This "Homes" the encoder to a known
     // zero position.

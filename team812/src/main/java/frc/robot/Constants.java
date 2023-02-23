@@ -126,17 +126,21 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double kArmReferencePosition = 824; // 2023 broomstick ref position
+        public static final double kArmAutonomousReferencePosition = 0.0; // 2023 position when the arm is folded in the robot to start the game
         public static final double kArmScorePosition = 2100;
         public static final double kArmTopPosition = 4020; //3550;
         public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
-        public static final double kArmThreshold = 40;
+        public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
-        public static final double kArmLowPosition = 700;
-        public static final double kArmMidPosition = 1000;
-        public static final double kArmHiPosition = 1200;
+        public static final double kArmMinPosition = 500;  // Lowest you can ask for 
+        public static final double kArmLowPosition = 700;  // Height for scoring on the bottom row
+        public static final double kArmMidPosition = 1000; // Height for scoring on the middle row
+        public static final double kArmHiPosition = 1200;  // Height for scoring on the top row
+        public static final double kArmMaxPosition = 1500; // Highest you can ask for
+       
         
     }
     

@@ -89,21 +89,22 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   }
 
-  private final int incrementSize = 50;
+  private final int incrementSize = 5; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out.
 
   public void rotate(double position) {
-    double absolutePosition = getPosition();
+    //double absolutePosition = getPosition(); // Should get the goal, not the position. // Dont need it.
+    double currentPosition = m_arm.getClosedLoopTarget(0);
     // if the joystick is nearly centered, ignore it
-    if (Math.abs(position) < 0.01) {
+    if (Math.abs(position) < 0.01) {  // Also move to constants.java
       return;
     }
 
-    absolutePosition += position * incrementSize;
-    SmartDashboard.putNumber("rotate pos", absolutePosition);
-
-    if (absolutePosition > ArmConstants.kArmBallGathering
-        && absolutePosition < ArmConstants.kArmScorePosition) {
-      setPosition(absolutePosition);
+    double newPosition = currentPosition + position * incrementSize;
+    
+    if (newPosition >= ArmConstants.kArmMinPosition
+        && newPosition < ArmConstants.kArmMaxPosition) {
+      setPosition(newPosition);
+      SmartDashboard.putNumber("rotate pos", newPosition);
     }
   };
 
@@ -163,7 +164,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   }
 
   public double setPosition(double position) {
-    if (isHome() && position >= ArmConstants.kArmBallGathering) {
+    if (isHome() && position >= ArmConstants.kArmMaxPosition) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }

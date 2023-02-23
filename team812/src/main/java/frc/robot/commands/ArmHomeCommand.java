@@ -4,8 +4,11 @@
 
 package frc.robot.commands;
 
+import javax.swing.text.Position;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -33,10 +36,12 @@ public class ArmHomeCommand extends CommandBase {
 
     SmartDashboard.putString("homearm", "starting");
     if (l_pressure >= PCMConstants.kMinPresssure) {
-      m_armExtensionSubsystem.setSensorPosition(ArmExtensionConstants.kArmExtensionFullyExtendedPosition);
-      m_armExtensionSubsystem.setHomePosition(0);
-      m_armSubsystem.setSensorPosition(4000.0);
-      m_armSubsystem.setHomePosition(0.0); // Cant really do this safely until the arms are retracted. - dph
+      m_armExtensionSubsystem.setSensorPosition(ArmExtensionConstants.kArmExtensionReferencePosition);  // Tell the arm extension subsystem it is currently at the reference/home Position.class
+      m_armExtensionSubsystem.setHomePosition(ArmExtensionConstants.kArmExtensionReferencePosition);    // Tell the arm extention subsystem to stay where it is/
+      m_armExtensionSubsystem.setHome();                                                      
+      m_armSubsystem.setSensorPosition(ArmConstants.kArmAutonomousReferencePosition);
+      m_armSubsystem.setHomePosition(ArmConstants.kArmAutonomousReferencePosition); // Cant really do this safely until the arms are retracted. - dph
+      m_armSubsystem.setHome();
     }
   }
 
