@@ -180,12 +180,6 @@ public class ArmRotationSubsystem extends SubsystemBase {
     double position = m_arm.getSelectedSensorPosition(0);
     return position;
   }
-  
-  public double getPosition(String junk) {
-    double position = m_arm.getSelectedSensorPosition(0);
-    SmartDashboard.putNumber("getPostion", getPosition_timesCalled++ );
-    return position;
-  } 
 
   public void setSensorPosition(double position) {
     m_arm.setSelectedSensorPosition(position, 0, 10);

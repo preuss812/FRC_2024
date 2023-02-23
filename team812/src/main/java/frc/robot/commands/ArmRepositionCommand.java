@@ -21,8 +21,8 @@ public class ArmRepositionCommand extends SequentialCommandGroup {
     m_armRotationSubsystem = armRotationSubsystem;
     m_armExtensionSubsystem = armExtensionSubsystem;
     SmartDashboard.putNumber("ArmReposition: Rotation",rotation);
-    SmartDashboard.putNumber("ArmReposition: getPosition", m_armRotationSubsystem.getPosition("ABC"));
-    if (rotation > m_armRotationSubsystem.getPosition("A")) {
+    SmartDashboard.putNumber("ArmReposition: getPosition", m_armRotationSubsystem.getPosition());
+    if (rotation > m_armRotationSubsystem.getPosition()) {
       addCommands( new ArmCommand(m_armRotationSubsystem, rotation).withTimeout(5), new ArmExtensionCommand(m_armExtensionSubsystem, extension).withTimeout(5));
       SmartDashboard.putString("ArmRepositionBranch", "A going up");
     } else {
