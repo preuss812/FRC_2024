@@ -66,7 +66,7 @@ public class ArmHomeCommand extends CommandBase {
         m_armExtensionSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
         m_armExtensionSubsystem.setHome();
       }
-      if (!m_armSubsystem.isHome() && m_armSubsystem.isBottomLimitSwitchClosed()) {
+      if (!m_armSubsystem.isHome() ) {
         m_armSubsystem.setSensorPosition(0.0);
         m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
         m_armSubsystem.setHome();
@@ -74,6 +74,7 @@ public class ArmHomeCommand extends CommandBase {
         return false; // Arm extension is homed but the arm rotation is still homing.
       }
     }
+    // m_armExtensionSubsystem.setHome();
     return m_armExtensionSubsystem.isHome() && m_armSubsystem.isHome();
   }
 }

@@ -104,7 +104,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Pdrive throttle", throttle);
     SmartDashboard.putNumber("Pdrive turn", turn);
 
-	  driveBase.arcadeDrive(-throttle, turn, false);
+	  driveBase.arcadeDrive(-throttle*3/4, turn*3/4, false);
   } 
   public void arcadeDrive(double throttle, double turn) {
     SmartDashboard.putNumber("ArcadeThrottle", -throttle);
