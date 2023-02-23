@@ -20,6 +20,7 @@ public class ArmExtensionCommand extends CommandBase {
     m_armExtensionSubsystem = subsystem;
     m_position = position;
     System.out.println("ArmExtensionCommand class setPoint is " + m_position);
+    SmartDashboard.putNumber("ArmExtension: Goal position",position);
     addRequirements(subsystem);
   }
 

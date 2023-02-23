@@ -26,6 +26,7 @@ import frc.robot.Constants.PCMConstants;
 public class ArmRotationSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
   private static boolean hasBeenHomed = true;
+  static Integer getPosition_timesCalled = 0;
 
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
@@ -179,6 +180,12 @@ public class ArmRotationSubsystem extends SubsystemBase {
     double position = m_arm.getSelectedSensorPosition(0);
     return position;
   }
+  
+  public double getPosition(String junk) {
+    double position = m_arm.getSelectedSensorPosition(0);
+    SmartDashboard.putNumber("getPostion", getPosition_timesCalled++ );
+    return position;
+  } 
 
   public void setSensorPosition(double position) {
     m_arm.setSelectedSensorPosition(position, 0, 10);

@@ -166,6 +166,7 @@ public class RobotContainer {
     //new JoystickButton(leftJoystick, 3).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition));
    // new JoystickButton(leftJoystick, 4).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition));
    // new JoystickButton(leftJoystick, 6).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition));
+    /*
     new JoystickButton(leftJoystick, 3
     ).onTrue( new SequentialCommandGroup(
       new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition),
@@ -181,6 +182,16 @@ public class RobotContainer {
       new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition),
       new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
     ));
+    */
+    new JoystickButton(leftJoystick, 3
+    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem, ArmConstants.kArmLowPosition, ArmExtensionConstants.kArmExtensionLowPosition)
+    );
+    new JoystickButton(leftJoystick, 4
+    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem, ArmConstants.kArmMidPosition, ArmExtensionConstants.kArmExtensionMidPosition)
+    );
+    new JoystickButton(leftJoystick, 6
+    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem,ArmConstants.kArmHiPosition, ArmExtensionConstants.kArmExtensionHiPosition)
+    );
     // Left Joystick for Arm Extension Control Debug
     new JoystickButton(leftJoystick, 7).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition));
     new JoystickButton(leftJoystick, 9).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition));

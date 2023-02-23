@@ -130,7 +130,7 @@ public final class Constants {
         public static final double kArmHangPosition = 2550;
         public static final double kArmEndGamePosition = 2100;
         public static final double kArmBallGathering = 200;
-        public static final double kArmThreshold = 20;
+        public static final double kArmThreshold = 40;
         // new for 2023
         public static final double kArmLowPosition = 700;
         public static final double kArmMidPosition = 1000;
