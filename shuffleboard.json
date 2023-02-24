@@ -1361,15 +1361,15 @@
               "_showGlyph": false
             }
           },
-          "3,2": {
+          "6,2": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ArmExtension pos:",
-              "_title": "SmartDashboard/ArmExtension pos:",
+              "_source0": "network_table:///SmartDashboard/ArmExtension: Goal position",
+              "_title": "SmartDashboard/ArmExtension: Goal position",
               "_glyph": 148,
               "_showGlyph": false
             }
