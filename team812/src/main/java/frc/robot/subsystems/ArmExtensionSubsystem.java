@@ -182,8 +182,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("ArmExtension pos:", getPosition());
-    SmartDashboard.putNumber("ArmExtension pos:", m_armExtension.getSelectedSensorPosition());    
+    SmartDashboard.putNumber("ArmExtension pos", getPosition());
+    SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget());    
     SmartDashboard.putBoolean("ArmExtension Homed?", isHome());
     SmartDashboard.putBoolean("ArmExtension outsw", isOutLimitSwitchClosed());
     SmartDashboard.putBoolean("ArmExtension insw", isInLimitSwitchClosed());

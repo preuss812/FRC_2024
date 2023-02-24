@@ -240,6 +240,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm pos:", getPosition());
+    SmartDashboard.putNumber("Arm target", m_arm.getClosedLoopTarget());
     SmartDashboard.putBoolean("Arm Homed?", isHome());
     SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
     SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
