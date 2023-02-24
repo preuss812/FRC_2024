@@ -164,7 +164,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
   }
 
   public double setPosition(double position) {
-    if (isHome() && position >= ArmConstants.kArmBallGathering) {
+    // position will be zero in tucked position
+    if (isHome() && position >= 0) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
@@ -204,7 +205,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public void armExtend() {
     // check the height to be sure that we don't extend the arms
     // into the wheels.
-    if (getPosition() >= (ArmConstants.kArmBallGathering - ArmConstants.kArmThreshold) && isHome()) {
+    if (getPosition() >= (ArmConstants.kArmMinPosition - ArmConstants.kArmThreshold) && isHome()) {
       m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
       SmartDashboard.putString("Armsolenoid", "extended");
     }

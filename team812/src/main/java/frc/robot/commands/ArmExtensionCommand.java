@@ -19,8 +19,7 @@ public class ArmExtensionCommand extends CommandBase {
   public ArmExtensionCommand(ArmExtensionSubsystem subsystem, double position) {
     m_armExtensionSubsystem = subsystem;
     m_position = position;
-    System.out.println("ArmExtensionCommand class setPoint is " + m_position);
-    SmartDashboard.putNumber("ArmExtension: Goal position",position);
+
     addRequirements(subsystem);
   }
 
@@ -35,6 +34,8 @@ public class ArmExtensionCommand extends CommandBase {
     System.out.println("ArmExtensionCommand Initialize end_game is " + end_game);
       setPoint = m_position;
       // System.out.println("ArmExtension, setPoint is " + setPoint);
+      // System.out.println("ArmExtensionCommand class setPoint is " + m_position);
+      SmartDashboard.putNumber("ArmExtension: Goal position",m_position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
