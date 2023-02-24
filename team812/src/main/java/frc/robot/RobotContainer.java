@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmExtensionConstants;
+import frc.robot.Constants.ArmExtensionConstants;;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
@@ -90,10 +90,10 @@ public class RobotContainer {
         new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
 
    // May need to comment this out
-   if (false) {
+  //  if (false) {
     m_ArmRotationSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getX()), m_ArmRotationSubsystem));
-   }
+  //  }
     m_ArmExtensionSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
             m_ArmExtensionSubsystem));
@@ -179,19 +179,36 @@ public class RobotContainer {
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition)
       ),
-      () -> m_ArmRotationSubsystem.getPosition() < ArmExtensionConstants.kArmExtensionLowPosition
+      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmLowPosition
       //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
     new JoystickButton(leftJoystick, 4
-    ).onTrue( new SequentialCommandGroup(
-      new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition),
-      new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
+    ).onTrue( new ConditionalCommand( 
+      new SequentialCommandGroup(
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition),
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
+      ),
+      new SequentialCommandGroup(
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
+,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition)
+      ),
+      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
+      //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
     new JoystickButton(leftJoystick, 6
-    ).onTrue( new SequentialCommandGroup(
-      new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition),
-      new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
+    ).onTrue( new ConditionalCommand( 
+      new SequentialCommandGroup(
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition),
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
+      ),
+      new SequentialCommandGroup(
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
+,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition)
+      ),
+      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
+      //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
+    
     /*
   
     new JoystickButton(leftJoystick, 3

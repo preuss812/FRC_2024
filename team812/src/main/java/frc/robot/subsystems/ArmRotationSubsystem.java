@@ -164,7 +164,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   }
 
   public double setPosition(double position) {
-    if (isHome() && position >= ArmConstants.kArmMaxPosition) {
+    if (isHome() && position >= ArmConstants.kArmBallGathering) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
     }
