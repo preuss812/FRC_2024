@@ -107,6 +107,13 @@ public class ArmRotationSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("rotate pos", newPosition);
     }
   };
+  
+  public void rotateUp50() {
+    setPosition(m_arm.getClosedLoopTarget(0)+50);
+  }
+  public void rotateDown50() {
+    setPosition(m_arm.getClosedLoopTarget(0)-50);
+  }
 
 
   public void rotate2(double speed) {

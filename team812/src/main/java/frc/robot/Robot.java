@@ -9,10 +9,12 @@ package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
+
 // import frc.robot.RobotContainer;
 
 /**
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
 //   CameraServer.startAutomaticCapture(0);
 //    CameraServer.startAutomaticCapture(1);
     m_robotContainer = new RobotContainer();
+    SmartDashboard.putData(CommandScheduler.getInstance()); // This puts running commands on the shuffleboard.
   }
 
   /**

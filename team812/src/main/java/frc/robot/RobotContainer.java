@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmExtensionConstants;;
+import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GripperSubsystem;
@@ -104,6 +104,15 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    // for debug: put subsystem info on the shuffleboard. - remove before competition.
+    SmartDashboard.putData(m_ArmExtensionSubsystem);
+    SmartDashboard.putData(m_ArmRotationSubsystem);
+    SmartDashboard.putData("ArmRotate", new ArmCommand(m_ArmRotationSubsystem, 1000));
+    SmartDashboard.putData("HomeArmExtension", new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
+    SmartDashboard.putData("HomeArmRotation", new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
+    SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
+    SmartDashboard.putData("Rotate Down", new InstantCommand(m_ArmRotationSubsystem::rotateDown50, m_ArmRotationSubsystem));
   }
 
   /**
