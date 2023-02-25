@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.PidConstants;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -259,5 +260,9 @@ private static double rotateTimesCalled=0;
     SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
     SmartDashboard.putNumber("rotate calls", rotateTimesCalled);
 
+    if (isTopLimitSwitchClosed()) {
+      setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
+      setPosition(Constants.ArmConstants.kArmMaxPosition);
+    }
   }
 }
