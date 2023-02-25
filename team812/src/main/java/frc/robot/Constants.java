@@ -136,9 +136,9 @@ public final class Constants {
         public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
         public static final double kArmMinPosition =587;  // Lowest you can ask for 
-        public static final double kArmLowPosition = 970;  // Height for scoring on the bottom row
+        public static final double kArmLowPosition = 950;  // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
-        public static final double kArmHiPosition = 2302;  // Height for scoring on the top row
+        public static final double kArmHiPosition = 2202;  // Height for scoring on the top row
         public static final double kArmMaxPosition =2443; // Highest you can ask for
        
         
@@ -155,9 +155,9 @@ public final class Constants {
         public static final double kArmExtensionFullyRetractedPosition = 0.0;
         public static final double kArmExtensionFullyExtendedPosition = kArmExtensionOneMeterPosition; // This needs to be calibrated - dph
         public static final double kArmExtensionHomePosition = 0;
-        public static final double kArmExtensionLowPosition = 8000;
-        public static final double kArmExtensionMidPosition = 16000;
-        public static final double kArmExtensionHiPosition = 24000;
+        public static final double kArmExtensionLowPosition = 0;
+        public static final double kArmExtensionMidPosition = 6000;
+        public static final double kArmExtensionHiPosition = 35000;
         public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
         public static final double kArmExtensionThreshold = 20;
     }

@@ -69,7 +69,7 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_VY", gyro.getVelocityY());
     SmartDashboard.putNumber("IMU_VZ", gyro.getVelocityZ());
 
-    if (isPitchSet) {
+    if (true || isPitchSet) {
       // Attempt to track position.
       // This probably will not produce good results.  I was just curious.
       // The getDisplacement{X,Y,Z} functions are returning garbage - 2023-02-20.

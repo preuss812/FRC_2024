@@ -27,7 +27,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
   private static boolean hasBeenHomed = true;
   static Integer getPosition_timesCalled = 0;
-
+  private static double targetPosition = 0;
+private static double rotateTimesCalled=0;
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
       PneumaticsModuleType.CTREPCM,
@@ -89,30 +90,32 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   }
 
-  private final int incrementSize = 5; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out.
+  private final int incrementSize = 50; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out.
 
   public void rotate(double position) {
     //double absolutePosition = getPosition(); // Should get the goal, not the position. // Dont need it.
-    double currentPosition = m_arm.getClosedLoopTarget(0);
+    double currentPosition = targetPosition;
+    rotateTimesCalled++;
     // if the joystick is nearly centered, ignore it
+    SmartDashboard.putNumber("rotate js", position);
     if (Math.abs(position) < 0.01) {  // Also move to constants.java
       return;
     }
 
     double newPosition = currentPosition + position * incrementSize;
-    
+    SmartDashboard.putNumber("rotate pos", newPosition);
     if (newPosition >= ArmConstants.kArmMinPosition
         && newPosition < ArmConstants.kArmMaxPosition) {
       setPosition(newPosition);
-      SmartDashboard.putNumber("rotate pos", newPosition);
+      
     }
   };
   
   public void rotateUp50() {
-    setPosition(m_arm.getClosedLoopTarget(0)+50);
+    setPosition(targetPosition+50.0);
   }
   public void rotateDown50() {
-    setPosition(m_arm.getClosedLoopTarget(0)-50);
+    setPosition(targetPosition-50.0);
   }
 
 
@@ -175,6 +178,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     if (isHome() && position >= 0) {
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
+      targetPosition = position;
     }
     return getPosition();
   }
@@ -247,9 +251,11 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm pos:", getPosition());
-    SmartDashboard.putNumber("Arm target", m_arm.getClosedLoopTarget());
+    SmartDashboard.putNumber("Arm target", targetPosition);
     SmartDashboard.putBoolean("Arm Homed?", isHome());
     SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
     SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
+    SmartDashboard.putNumber("rotate calls", rotateTimesCalled);
+
   }
 }
