@@ -19,7 +19,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
-
 public class ArmExtensionSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_armExtension = new WPI_TalonSRX(CANConstants.kArmExtensionMotor);
   private static boolean hasBeenHomed = false;
@@ -31,16 +30,17 @@ public class ArmExtensionSubsystem extends SubsystemBase {
 
     // This is a CLOSED loop system. Do not uncomment or enable
     // OpenloopRamp for the PID controlled arm.
-//    m_armExtension.configOpenloopRamp(PidConstants.xxx_kArmExtension_rampRate_xxx);
+    // m_armExtension.configOpenloopRamp(PidConstants.xxx_kArmExtension_rampRate_xxx);
 
-    // Configure the feedback sensor with the type (QuadEncoder), 
+    // Configure the feedback sensor with the type (QuadEncoder),
     // the PID identifier within the Talon (pid 0) and the timeout (50ms)
     m_armExtension.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 50);
 
-    // Invert motor (setInverted) so that the Talon LEDs are green when driving forward (up)
+    // Invert motor (setInverted) so that the Talon LEDs are green when driving
+    // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the arm up
     m_armExtension.setInverted(true);
-    m_armExtension.setSensorPhase(false); //Attempts to make it positive
+    m_armExtension.setSensorPhase(false); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
     // 10 sets timeouts for Motion Magic
@@ -52,9 +52,9 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // stalling that might occur where stalling means that power is being
     // applied, but the motor isn't moving due to friction or inertia. This
     // can help the motor not burn itself out.
-    m_armExtension.configNominalOutputForward(0,10);
+    m_armExtension.configNominalOutputForward(0, 10);
     m_armExtension.configNominalOutputReverse(0, 10);
-    m_armExtension.configPeakOutputForward(0.3,10);
+    m_armExtension.configPeakOutputForward(0.3, 10);
     m_armExtension.configPeakOutputReverse(-0.3, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
@@ -70,41 +70,41 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // Acceleration in sensor units per 100ms per second
     m_armExtension.configMotionAcceleration(150.0, 10);
 
-    // Make sure the forward and reverse limit switches are enabled and configured normally open
-    m_armExtension.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
-    m_armExtension.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,0);
-    m_armExtension.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0,0,0,0); 
+    // Make sure the forward and reverse limit switches are enabled and configured
+    // normally open
+    m_armExtension.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,
+        0);
+    m_armExtension.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen,
+        0);
+    m_armExtension.configSetParameter(ParamEnum.eClearPositionOnLimitR, 0, 0, 0, 0);
 
   }
-  
 
   public void reposition(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
     String path;
 
-    if( ! isHome() ) {
+    if (!isHome()) {
       l_speed = 0.0;
       path = "not homed";
-    } else if( l_speed > 0.0 ) {
-      if( l_position >= ArmExtensionConstants.kArmExtensionFullyExtendedPosition ) {
+    } else if (l_speed > 0.0) {
+      if (l_position >= ArmExtensionConstants.kArmExtensionFullyExtendedPosition) {
         l_speed = 0.0;
         path = "already fully extended";
-      }
-      else {
+      } else {
         path = "speed > 0 no change";
       }
-    } else if( l_speed < 0.0 ) {
-      if( l_position <= ArmExtensionConstants.kArmExtensionFullyRetractedPosition ) {
+    } else if (l_speed < 0.0) {
+      if (l_position <= ArmExtensionConstants.kArmExtensionFullyRetractedPosition) {
         l_speed = 0.0;
-        path= "already fully retracted";
-      }
-      else {
+        path = "already fully retracted";
+      } else {
         path = "speed < 0 no change";
       }
     } else {
       path = "lspeed = 0";
-    //  l_speed = 0.0;
+      // l_speed = 0.0;
     }
     SmartDashboard.putNumber("ArmExtension:r2_speed", speed);
     SmartDashboard.putNumber("ArmExtension:r2_l_speed", l_speed);
@@ -112,18 +112,19 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     SmartDashboard.putString("ArmExtension:rotate2_path", path);
 
     m_armExtension.set(ControlMode.PercentOutput, l_speed);
-    //m_armExtension.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
+    // m_armExtension.set(ControlMode.Velocity, l_speed, DemandType.Neutral,
+    // demand1);
   }
 
   public void test_move_in_out(double speed) {
     double l_speed = speed;
-    l_speed = MathUtil.clamp(l_speed,-0.20,0.20);
+    l_speed = MathUtil.clamp(l_speed, -0.20, 0.20);
     SmartDashboard.putNumber("ArmExtension test speed", l_speed);
     m_armExtension.set(l_speed);
   }
 
-  public double setPosition(double position)  {
-    if( isHome() && position >= ArmExtensionConstants.kArmExtensionFullyRetractedPosition ) {
+  public double setPosition(double position) {
+    if (isHome() && position >= ArmExtensionConstants.kArmExtensionFullyRetractedPosition) {
       m_armExtension.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmExtensionSubPos", position);
     }
@@ -151,7 +152,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     setHomePosition(l_position);
     setHome();
   }
-  public boolean isInLimitSwitchClosed () {
+
+  public boolean isInLimitSwitchClosed() {
     return (m_armExtension.isFwdLimitSwitchClosed() == 1 ? true : false);
   }
 
@@ -166,26 +168,32 @@ public class ArmExtensionSubsystem extends SubsystemBase {
 
   public void unsetHome() {
     hasBeenHomed = false;
-    //System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
+    // System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome(String msg) {
     hasBeenHomed = false;
-    //System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " + hasBeenHomed);
+    // System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " +
+    // hasBeenHomed);
   }
 
   public boolean isHome() {
     return hasBeenHomed;
   }
 
-  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ArmExtension pos", getPosition());
-    //SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget());    
+    SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget());
     SmartDashboard.putBoolean("ArmExtension Homed?", isHome());
     SmartDashboard.putBoolean("ArmExtension outsw", isOutLimitSwitchClosed());
     SmartDashboard.putBoolean("ArmExtension insw", isInLimitSwitchClosed());
+
+    // Resets the set position to 0 when the limit switch is switched
+    if (isInLimitSwitchClosed()) {
+      setSensorReference();
+    }
+
   }
 }

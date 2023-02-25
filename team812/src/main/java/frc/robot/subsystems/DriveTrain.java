@@ -16,18 +16,17 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.RobotContainer;
- 
 
 public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new DriveTrain.
    */
   private final WPI_TalonSRX leftFront, leftBack, rightFront, rightBack;
- // private final WPI_TalonSRX m_leftMotor, m_rightMotor;
+  // private final WPI_TalonSRX m_leftMotor, m_rightMotor;
 
- // private final SpeedControllerGroup leftMotors, rightMotors;
-// private final MotorControllerGroup leftMotors, rightMotors;
-//  private final Encoder rightEncoder, leftEncoder;
+  // private final SpeedControllerGroup leftMotors, rightMotors;
+  // private final MotorControllerGroup leftMotors, rightMotors;
+  // private final Encoder rightEncoder, leftEncoder;
   private final DifferentialDrive driveBase;
 
   public DriveTrain() {
@@ -41,13 +40,13 @@ public class DriveTrain extends SubsystemBase {
     leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     leftBack.follow(leftFront);
-  //  leftMotors = new GroupMotorControllers(leftFront,leftBack);
-/* 
-  m_leftMotor = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
-  m_leftMotor.configFactoryDefault();
-  m_leftMotor.setNeutralMode(NeutralMode.Brake);
-  m_leftMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-*/
+    // leftMotors = new GroupMotorControllers(leftFront,leftBack);
+    /*
+     * m_leftMotor = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
+     * m_leftMotor.configFactoryDefault();
+     * m_leftMotor.setNeutralMode(NeutralMode.Brake);
+     * m_leftMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+     */
     rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
     rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
     rightFront.configFactoryDefault();
@@ -62,63 +61,64 @@ public class DriveTrain extends SubsystemBase {
     rightFront.setInverted(true);
     rightBack.setInverted(true);
 
-  //  rightMotors = new SpeedControllerGroup(rightFront, rightBack);
-   //rightMotors = new MotorControllerGroup(rightFront, rightBack);
-/*
-  m_rightMotor = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
-  m_rightMotor.configFactoryDefault();
-  m_rightMotor.setNeutralMode(NeutralMode.Brake);
-  m_rightMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-  m_rightMotor.setInverted(true);
-*/
+    // rightMotors = new SpeedControllerGroup(rightFront, rightBack);
+    // rightMotors = new MotorControllerGroup(rightFront, rightBack);
+    /*
+     * m_rightMotor = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
+     * m_rightMotor.configFactoryDefault();
+     * m_rightMotor.setNeutralMode(NeutralMode.Brake);
+     * m_rightMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+     * m_rightMotor.setInverted(true);
+     */
 
     driveBase = new DifferentialDrive(leftFront, rightFront);
-//    driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
+    // driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
     driveBase.setSafetyEnabled(false);
   }
 
   public void preussDrive(double throttle, double zRotation) {
-  	double speed = throttle;
-	  double turn = zRotation;
+    double speed = throttle;
+    double turn = zRotation;
     String mode;
 
-	// Left - super low speed
-	// Middle - low speed
-	// Right - Maximum speed
-	
-	  if( RobotContainer.m_BlackBox.isSwitchLeft() ) {
-	    speed = speed * DriveTrainConstants.kLowLowSpeed;
-	    turn  = turn  * DriveTrainConstants.kTurnLowLowSpeed;
+    // Left - super low speed
+    // Middle - low speed
+    // Right - Maximum speed
+
+    if (RobotContainer.m_BlackBox.isSwitchLeft()) {
+      speed = speed * DriveTrainConstants.kLowLowSpeed;
+      turn = turn * DriveTrainConstants.kTurnLowLowSpeed;
       mode = "low";
-	  } else if( RobotContainer.m_BlackBox.isSwitchCenter() ) {
+    } else if (RobotContainer.m_BlackBox.isSwitchCenter()) {
       speed = speed * DriveTrainConstants.kLowSpeed;
       turn = turn * DriveTrainConstants.kTurnLowSpeed;
       mode = "med";
     } else {
       speed = speed * DriveTrainConstants.kHighSpeed;
-      turn  = turn  * DriveTrainConstants.kTurnHighSpeed;
+      turn = turn * DriveTrainConstants.kTurnHighSpeed;
       mode = "high";
-	  }
+    }
 
     SmartDashboard.putString("Pdrive mode", mode);
-    SmartDashboard.putNumber("Pdrive throttle", throttle);
+    SmartDashboard.putNumber("Pdrive throttle", speed);
     SmartDashboard.putNumber("Pdrive turn", turn);
 
-	  driveBase.arcadeDrive(-throttle*3/4, turn*3/4, false);
-  } 
+    driveBase.arcadeDrive(-speed, turn, false);
+  }
+
   public void arcadeDrive(double throttle, double turn) {
     SmartDashboard.putNumber("ArcadeThrottle", -throttle);
     SmartDashboard.putNumber("ArcadeTurn", turn);
     driveBase.arcadeDrive(-throttle, turn, false); // CHECK THE SIGNS of throttle and turn!!!
   }
-  
-  public void tankDrive(double l, double r) {
-	  driveBase.tankDrive(l,r);
-  }
-	// speed = (a*speed^3 + b*speed) * c
-	// a = 0.2, b = 1.8, c = 0.05
 
-  // Default arcadeDrive constructor squares the inputs. 
+  public void tankDrive(double l, double r) {
+    driveBase.tankDrive(l, r);
+  }
+  // speed = (a*speed^3 + b*speed) * c
+  // a = 0.2, b = 1.8, c = 0.05
+
+  // Default arcadeDrive constructor squares the inputs.
   // arcadeDrive(-y, x) is equivalent to arcadeDrive(-y, x, true)
   // in this usage, y (throttle), and x (rotation around the z-axis)
   // are squared within the arcadeDrive() method.
@@ -126,11 +126,9 @@ public class DriveTrain extends SubsystemBase {
   // Cubic arcadeDrive implementation for 2020 wihch flattens
   // the joystick input response curve by cubing (x^3) the
   // joystick input which ranges from -1.0 to 1.0.
-  // Sign is maintained due to math, however, for clarity, 
-  // Math.copysign() is used. The third parameter to arcadeDrive() is false 
+  // Sign is maintained due to math, however, for clarity,
+  // Math.copysign() is used. The third parameter to arcadeDrive() is false
   // to prevent the inputs from being squared once again.
- 
-
 
   @Override
   public void periodic() {

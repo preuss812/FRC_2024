@@ -50,7 +50,13 @@ public class ArmCommand extends CommandBase {
   public boolean onTarget() {
     double error = m_armSubsystem.getPosition() - setPoint;
     SmartDashboard.putNumber("armcmderr", error);
-    if (Math.abs(error) < ArmConstants.kArmThreshold) {
+
+    // add more threshold as the arm goes up
+    // we think increasing acceptable error is better than adding a PID.I term
+    // after 1000 ticks it will increase slightly as a multiplier of kArmThreshold
+    double extraThreshold = Math.max(m_armSubsystem.getPosition() * 0.001 - 1, 1);
+
+    if (Math.abs(error) < ArmConstants.kArmThreshold * extraThreshold) {
       return true;
     } else {
       return false;

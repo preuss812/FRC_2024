@@ -110,14 +110,14 @@ private static double rotateTimesCalled=0;
       
     }
   };
-  
+
   public void rotateUp50() {
     setPosition(targetPosition+50.0);
   }
+
   public void rotateDown50() {
     setPosition(targetPosition-50.0);
   }
-
 
   public void rotate2(double speed) {
     double l_speed = speed;
@@ -154,11 +154,13 @@ private static double rotateTimesCalled=0;
     SmartDashboard.putNumber("r2_l_position", l_position);
     SmartDashboard.putString("rotate2_path", path);
 
-
     m_arm.set(ControlMode.PercentOutput, l_speed);
     // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
 
+  public void disableMotor() {
+    m_arm.set(ControlMode.Disabled, 0);
+  }
 
   public void test_rotate(double speed) {
     double l_speed = speed;
