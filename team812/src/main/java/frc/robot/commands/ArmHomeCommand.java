@@ -35,6 +35,12 @@ public class ArmHomeCommand extends CommandBase {
     System.out.println("Home pressure: " + l_pressure);
 
     SmartDashboard.putString("homearm", "starting");
+   
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
     if (l_pressure >= PCMConstants.kMinPresssure) {
       m_armExtensionSubsystem.setSensorPosition(ArmExtensionConstants.kArmExtensionReferencePosition);  // Tell the arm extension subsystem it is currently at the reference/home Position.class
       m_armExtensionSubsystem.setHomePosition(ArmExtensionConstants.kArmExtensionReferencePosition);    // Tell the arm extention subsystem to stay where it is/
@@ -43,11 +49,6 @@ public class ArmHomeCommand extends CommandBase {
       m_armSubsystem.setHomePosition(ArmConstants.kArmAutonomousReferencePosition); // Cant really do this safely until the arms are retracted. - dph
       m_armSubsystem.setHome();
     }
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
   }
 
   // Called once the command ends or is interrupted.
@@ -60,26 +61,11 @@ public class ArmHomeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (l_pressure < PCMConstants.kMinPresssure) {
-      return true; // End the command because we cannot operation without pressure to close the
-                   // hands - dph
-    } else {
-      if (!m_armExtensionSubsystem.isHome() && m_armExtensionSubsystem.isOutLimitSwitchClosed()) { // Should isHome
-                                                                                                      // be checked? -
-                                                                                                      // dph
-        m_armExtensionSubsystem.setSensorPosition(0.0);
-        m_armExtensionSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
-        m_armExtensionSubsystem.setHome();
-      }
-      if (!m_armSubsystem.isHome() ) {
-        m_armSubsystem.setSensorPosition(0.0);
-        m_armSubsystem.setHomePosition(0.0); // Tell PID to keep arm at 0.
-        m_armSubsystem.setHome();
-      } else {
-        return false; // Arm extension is homed but the arm rotation is still homing.
-      }
+    if (l_pressure >= PCMConstants.kMinPresssure &&
+        m_armExtensionSubsystem.isHome() &&
+        m_armSubsystem.isHome()) {
+      return true; // Enthe command because we cannot operation without pressure to close the
     }
-    // m_armExtensionSubsystem.setHome();
-    return m_armExtensionSubsystem.isHome() && m_armSubsystem.isHome();
+    return false;
   }
 }

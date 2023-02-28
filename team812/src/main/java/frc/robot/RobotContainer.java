@@ -92,7 +92,7 @@ public class RobotContainer {
    // May need to comment this out
   //  if (false) {
     m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getX()), m_ArmRotationSubsystem));
+        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getY()), m_ArmRotationSubsystem));
   //  }
     m_ArmExtensionSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
@@ -109,6 +109,7 @@ public class RobotContainer {
     SmartDashboard.putData(m_ArmExtensionSubsystem);
     SmartDashboard.putData(m_ArmRotationSubsystem);
     SmartDashboard.putData("ArmRotate", new ArmCommand(m_ArmRotationSubsystem, 1000));
+    SmartDashboard.putData("ArmHomeCommand", new ArmHomeCommand(m_ArmRotationSubsystem,m_ArmExtensionSubsystem));
     SmartDashboard.putData("HomeArmExtension", new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
     SmartDashboard.putData("HomeArmRotation", new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
@@ -146,8 +147,8 @@ public class RobotContainer {
      * 5 set ARM ROTATION to GATHER and set ARM EXTENSION as appropriate (armpos1)
      * 6 set ARM ROTATION to HIGH and set ARM EXTENSION as appropriate (armpos4)
      */
-    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
 

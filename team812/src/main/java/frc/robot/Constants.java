@@ -118,8 +118,8 @@ public final class Constants {
 	    public static final double kLowSpeed = 0.2;
 	    public static final double kTurnLowSpeed = 0.8;
 
-	    public static final double kLowLowSpeed = 0.08;
-	    public static final double kTurnLowLowSpeed = 0.7;
+	    public static final double kLowLowSpeed = 0.2;
+	    public static final double kTurnLowLowSpeed = 0.8;
 
         public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
     }
@@ -135,11 +135,11 @@ public final class Constants {
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
-        public static final double kArmMinPosition =587;  // Lowest you can ask for 
+        public static final double kArmMinPosition = 925;  // Lowest you can ask for 
         public static final double kArmLowPosition = 950;  // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
         public static final double kArmHiPosition = 2202;  // Height for scoring on the top row
-        public static final double kArmMaxPosition =2443; // Highest you can ask for
+        public static final double kArmMaxPosition = 2443; // Highest you can ask for
        
         
     }

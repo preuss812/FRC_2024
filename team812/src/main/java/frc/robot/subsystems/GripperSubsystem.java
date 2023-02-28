@@ -30,8 +30,8 @@ public class GripperSubsystem extends SubsystemBase {
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
       PneumaticsModuleType.CTREPCM,
-      PCMConstants.kGripper[0],
-      PCMConstants.kGripper[1]);
+      PCMConstants.kGripper[1],
+      PCMConstants.kGripper[0]);
 
   public GripperSubsystem() {
     // This is where you might set an initial state of open or closed

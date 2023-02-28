@@ -1510,40 +1510,38 @@
               "Y-axis/Unit": "ul",
               "Visible data/SmartDashboard/rotate js": true
             }
-          }
-        }
-      }
-    },
-    {
-      "title": "Tab 6",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "1,0": {
+          },
+          "3,4": {
             "size": [
-              8,
-              5
+              5,
+              1
             ],
             "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://USB Camera 0",
-              "_title": "USB Camera 0",
+              "_type": "Network Table Tree",
+              "_source0": "network_table:///SmartDashboard/Scheduler",
+              "_title": "SmartDashboard/Scheduler",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,1": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/ARM Output%",
+              "_title": "SmartDashboard/ARM Output%",
               "_glyph": 148,
               "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/ARM Output%": true
             }
           }
         }
@@ -1559,7 +1557,41 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "3,0": {
+            "size": [
+              6,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/rotate js",
+              "_title": "SmartDashboard/rotate js",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/rotate js": true
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/rotate js",
+              "_title": "SmartDashboard/rotate js",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
       }
     }
   ],

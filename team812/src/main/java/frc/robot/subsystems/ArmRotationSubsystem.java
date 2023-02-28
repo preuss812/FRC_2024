@@ -95,20 +95,21 @@ private static double rotateTimesCalled=0;
 
   public void rotate(double position) {
     //double absolutePosition = getPosition(); // Should get the goal, not the position. // Dont need it.
-    double currentPosition = targetPosition;
-    rotateTimesCalled++;
+    double currentTarget = targetPosition;
     // if the joystick is nearly centered, ignore it
     SmartDashboard.putNumber("rotate js", position);
     if (Math.abs(position) < 0.01) {  // Also move to constants.java
+      setPosition(getPosition());
       return;
     }
 
-    double newPosition = currentPosition + position * incrementSize;
+    double newPosition = currentTarget + position * incrementSize;
     SmartDashboard.putNumber("rotate pos", newPosition);
     if (newPosition >= ArmConstants.kArmMinPosition
         && newPosition < ArmConstants.kArmMaxPosition) {
       setPosition(newPosition);
-      
+      rotateTimesCalled++;
+
     }
   };
 
@@ -258,11 +259,13 @@ private static double rotateTimesCalled=0;
     SmartDashboard.putBoolean("Arm Homed?", isHome());
     SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
     SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
-    SmartDashboard.putNumber("rotate calls", rotateTimesCalled);
+    SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
+    SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
+    SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
 
     if (isTopLimitSwitchClosed()) {
       setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
-      setPosition(Constants.ArmConstants.kArmMaxPosition);
+      //setPosition(Constants.ArmConstants.kArmMaxPosition);
     }
   }
 }
