@@ -74,8 +74,8 @@ public class RobotContainer {
     } else {
       result = 0.0;
     }
-    SmartDashboard.putNumber("POV", pov);
-    SmartDashboard.putNumber("POV_Out", result);
+    // SmartDashboard.putNumber("POV", pov);
+    // SmartDashboard.putNumber("POV_Out", result);
     return result;
   }
 
@@ -89,11 +89,9 @@ public class RobotContainer {
     m_DriveTrain.setDefaultCommand(
         new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
 
-   // May need to comment this out
-  //  if (false) {
     m_ArmRotationSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getY()), m_ArmRotationSubsystem));
-  //  }
+
     m_ArmExtensionSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
             m_ArmExtensionSubsystem));
@@ -152,33 +150,11 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
 
-    // This first button takes the arm to the bottom of its travel until
-    // the bottom limit switch is trigged. This "Homes" the encoder to a known
-    // zero position.
-    new JoystickButton(rightJoystick, 11).onTrue(
-        new SequentialCommandGroup(
-            new ArmERCommand(m_ArmRotationSubsystem, false),
-            new WaitCommand(0.25),
-            new ArmHomeCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem)));
-    new JoystickButton(rightJoystick, 5).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmBallGathering));
-    new JoystickButton(rightJoystick, 3).onTrue(
-        new SequentialCommandGroup(
-            new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmPreGrabPosition),
-            // new WaitCommand(0.50),
-            new ArmERCommand(m_ArmRotationSubsystem, true)));
-    
-  
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
-    // new JoystickButton(rightJoystick, 9).onTrue(new
-    // CameraVisionPoseCommand(m_CameraVisionSubsystem, m_DriveTrain));
-    new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem));
+    new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
-    //new JoystickButton(leftJoystick, 3).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition));
-   // new JoystickButton(leftJoystick, 4).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition));
-   // new JoystickButton(leftJoystick, 6).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition));
-    
     new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
@@ -190,7 +166,6 @@ public class RobotContainer {
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmLowPosition
-      //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
     new JoystickButton(leftJoystick, 4
     ).onTrue( new ConditionalCommand( 
@@ -203,7 +178,6 @@ public class RobotContainer {
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
-      //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
     new JoystickButton(leftJoystick, 6
     ).onTrue( new ConditionalCommand( 
@@ -216,51 +190,14 @@ public class RobotContainer {
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
-      //m_ArmRotationSubsystem.aboveCurrentPosition(ArmConstants.kArmLowPosition)
     ));
-    
-    /*
-  
-    new JoystickButton(leftJoystick, 3
-    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem, ArmConstants.kArmLowPosition, ArmExtensionConstants.kArmExtensionLowPosition)
-    );
-    new JoystickButton(leftJoystick, 4
-    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem, ArmConstants.kArmMidPosition, ArmExtensionConstants.kArmExtensionMidPosition)
-    );
-    new JoystickButton(leftJoystick, 6
-    ).onTrue( new ArmRepositionCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem,ArmConstants.kArmHiPosition, ArmExtensionConstants.kArmExtensionHiPosition)
-    );
-    */
   
   // Left Joystick for Arm Extension Control Debug
     new JoystickButton(leftJoystick, 7).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition));
     new JoystickButton(leftJoystick, 9).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition));
     new JoystickButton(leftJoystick, 11).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
-    //new JoystickButton(leftJoystick, 6).onTrue(new TurnRightBB2(m_DriveTrain)); // No Elevator for 2023.
-    // new JoystickButton(leftJoystick, 4).onTrue(new
-    // new JoystickButton(leftJoystick, 4).onTrue(new
-    // ElevatorGripCommand(m_ElevatorSubsystem, false)); // No Elevator for 2023.
-    // new JoystickButton(leftJoystick, 7).onTrue(new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHangPosition));
-    // new JoystickButton(leftJoystick, 8).onTrue(new ArmERCommand(m_ArmRotationSubsystem, true));
-    // new JoystickButton(leftJoystick, 9).onTrue(new
-    // ElevatorGripCommand(m_ElevatorSubsystem, true)); // No Elevator for 2023.
-    // new JoystickButton(leftJoystick, 9).onTrue(new FollowApriltagCommandBB(m_CameraVisionSubsystem, m_DriveTrain)); // Optimize
     new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
     new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
-                                                                                                                        // controller
-                                                                                                                    // using
-                                                                                                                    // Black
-                                                                                                                    // Box
-    // new JoystickButton(leftJoystick, 10).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));
-    // new JoystickButton(leftJoystick, 11).whileTrue(new DriveForwardCommand(m_DriveTrain, 0.25, m_GyroSubsystem, null));
-    // new JoystickButton(leftJoystick, 12).onTrue(new
-    // InstantCommand(m_ElevatorSubsystem::enable_elevator,m_ElevatorSubsystem)); //
-    // No Elevator for 2023.
-
-    // Toggle Home boolean for the arm - this should not be used in competition
-    // new JoystickButton(leftJoystick, 7).toggleonTrue(new
-    // StartEndCommand(m_ArmSubsystem::setHome,m_ArmSubsystem::unsetHome2,m_ArmSubsystem));
-
   }
 
   /**

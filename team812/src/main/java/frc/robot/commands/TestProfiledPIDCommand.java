@@ -31,7 +31,7 @@ public class TestProfiledPIDCommand extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            0.02, // Determined emperically with TurnRightBB
+            0.02, // Determined emperically.
             0.0002,
             0.002,
             // The motion profile constraints

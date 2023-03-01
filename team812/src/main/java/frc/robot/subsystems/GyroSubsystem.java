@@ -62,34 +62,15 @@ public class GyroSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU_Yaw", gyro.getYaw());
     SmartDashboard.putNumber("IMU_Pitch", gyro.getPitch());
     SmartDashboard.putNumber("IMU_Roll", gyro.getRoll());
+    /*
     SmartDashboard.putNumber("IMU_X", gyro.getDisplacementX());
     SmartDashboard.putNumber("IMU_Y", gyro.getDisplacementY());
     SmartDashboard.putNumber("IMU_Z", gyro.getDisplacementZ());
     SmartDashboard.putNumber("IMU_VX", gyro.getVelocityX());
     SmartDashboard.putNumber("IMU_VY", gyro.getVelocityY());
     SmartDashboard.putNumber("IMU_VZ", gyro.getVelocityZ());
-
-    if (true || isPitchSet) {
-      // Attempt to track position.
-      // This probably will not produce good results.  I was just curious.
-      // The getDisplacement{X,Y,Z} functions are returning garbage - 2023-02-20.
-      // The getVelocity{X,Y,Z} functions appear to be returning acceleration values.
-      // Treat the getVelocity* function as acceleration and compute displacements using the formulas:
-      // v'(x,y) = v(x,y) + dv(x,y) * dt
-      // (x,y)'  = (x,y) + v(x,y) * dt + 1/2*a(x,y)*dt*dt;
-      double aX = gyro.getVelocityX();
-      double aY = gyro.getVelocityY();
-
-      m_xDisplacement += m_xVelocity*deltaTime + 0.5*aX*deltaTime*deltaTime;
-      m_yDisplacement += m_yVelocity*deltaTime + 0.5*aY*deltaTime*deltaTime;
-      m_xVelocity += aX*deltaTime;
-      m_yVelocity += aY*deltaTime;
-      SmartDashboard.putNumber("IMU_X(hack)", m_xDisplacement);
-      SmartDashboard.putNumber("IMU_Y(hack)", m_yDisplacement);
-      SmartDashboard.putNumber("IMU_VX(hack)", m_xVelocity);
-      SmartDashboard.putNumber("IMU_VY(hack)", m_yVelocity);
-    }
-
+    */
+    
     // According to the documentation for the NavX gyro it takes some
     // time to perform a self calibration. The robot runs this
     // periodic() function 50 times / second and so we put the

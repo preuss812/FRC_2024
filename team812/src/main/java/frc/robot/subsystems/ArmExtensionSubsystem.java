@@ -22,7 +22,8 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 public class ArmExtensionSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_armExtension = new WPI_TalonSRX(CANConstants.kArmExtensionMotor);
   private static boolean hasBeenHomed = false;
-
+  private static double targetPosition = 0.0;
+  
   /** Creates a new ArmExtensionSubsystem. */
   public ArmExtensionSubsystem() {
     m_armExtension.configFactoryDefault();
@@ -80,6 +81,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
 
   }
 
+  /*
   public void reposition(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
@@ -115,10 +117,11 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // m_armExtension.set(ControlMode.Velocity, l_speed, DemandType.Neutral,
     // demand1);
   }
-
+  */
+// TODO Understand why this works with PID Controller - dph 2023-03-01
   public void test_move_in_out(double speed) {
     double l_speed = speed;
-    l_speed = MathUtil.clamp(l_speed, -0.20, 0.20);
+    l_speed = MathUtil.clamp(l_speed, -0.20, 0.20); // TODO increase speed - dph 2023-03-01
     SmartDashboard.putNumber("ArmExtension test speed", l_speed);
     m_armExtension.set(l_speed);
   }
@@ -126,6 +129,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   public double setPosition(double position) {
     if (isHome() && position >= ArmExtensionConstants.kArmExtensionFullyRetractedPosition) {
       m_armExtension.set(ControlMode.Position, position);
+      targetPosition = position;
       SmartDashboard.putNumber("ArmExtensionSubPos", position);
     }
     return getPosition();
@@ -142,6 +146,10 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     return position;
   }
 
+  public double getTargetPosition() {
+    return targetPosition;
+  }
+  
   public void setSensorPosition(double position) {
     m_armExtension.setSelectedSensorPosition(position, 0, 10);
   }
@@ -154,27 +162,23 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   }
 
   public boolean isInLimitSwitchClosed() {
-    return (m_armExtension.isFwdLimitSwitchClosed() == 1 ? true : false);
+    return (m_armExtension.isRevLimitSwitchClosed() == 1 ? true : false); // TODO verify swap of in/out - dph 2023-03-01
   }
 
   public boolean isOutLimitSwitchClosed() {
-    return (m_armExtension.isRevLimitSwitchClosed() == 1 ? true : false);
+    return (m_armExtension.isFwdLimitSwitchClosed() == 1 ? true : false);  // TODO verify swap of in/out - dph 2023-03-01
   }
 
   public void setHome() {
     hasBeenHomed = true;
-    System.out.println("setHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome() {
     hasBeenHomed = false;
-    // System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome(String msg) {
     hasBeenHomed = false;
-    // System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " +
-    // hasBeenHomed);
   }
 
   public boolean isHome() {
@@ -185,7 +189,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ArmExtension pos", getPosition());
-    SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget());
+    // SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget()); // This was generating a warning
+    SmartDashboard.putNumber("ArmExtension target", getTargetPosition());
     SmartDashboard.putBoolean("ArmExtension Homed?", isHome());
     SmartDashboard.putBoolean("ArmExtension outsw", isOutLimitSwitchClosed());
     SmartDashboard.putBoolean("ArmExtension insw", isInLimitSwitchClosed());

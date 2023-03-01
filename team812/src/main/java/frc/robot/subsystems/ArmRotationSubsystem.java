@@ -121,6 +121,7 @@ private static double rotateTimesCalled=0;
     setPosition(targetPosition-50.0);
   }
 
+  /*
   public void rotate2(double speed) {
     double l_speed = speed;
     double l_position = getPosition();
@@ -159,6 +160,7 @@ private static double rotateTimesCalled=0;
     m_arm.set(ControlMode.PercentOutput, l_speed);
     // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
+*/
 
   public void disableMotor() {
     m_arm.set(ControlMode.Disabled, 0);
@@ -246,13 +248,10 @@ private static double rotateTimesCalled=0;
 
   public void unsetHome() {
     hasBeenHomed = false;
-    // System.out.println("unsetHome hasBeenHomed: " + hasBeenHomed);
   }
 
   public void unsetHome(String msg) {
     hasBeenHomed = false;
-    // System.out.println("unsetHome called from >" + msg + "< and hasBeenHomed: " +
-    // hasBeenHomed);
   }
 
   public boolean isHome() {

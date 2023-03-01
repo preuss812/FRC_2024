@@ -13,8 +13,7 @@ public class ArmExtensionCommand extends CommandBase {
   /** Creates a new ArmExtensionCommand. */
   private final ArmExtensionSubsystem m_armExtensionSubsystem;
   private final double m_position;
-  private double setPoint;
-  private boolean end_game;
+  private double setPoint;  // TODO get rid of setPoint and use m_armExtensionSubsystem.getTargetPosition or getPositionError
 
   public ArmExtensionCommand(ArmExtensionSubsystem subsystem, double position) {
     m_armExtensionSubsystem = subsystem;
@@ -29,13 +28,10 @@ public class ArmExtensionCommand extends CommandBase {
 
     SmartDashboard.putString("armExtensionCmd", "started");
 
-    // end_game = frc.robot.RobotContainer.m_ElevatorSubsystem.is_endgame();
-    end_game = true; // There is no end game in 2023. this enables full range of motion.
-    System.out.println("ArmExtensionCommand Initialize end_game is " + end_game);
-      setPoint = m_position;
-      // System.out.println("ArmExtension, setPoint is " + setPoint);
-      // System.out.println("ArmExtensionCommand class setPoint is " + m_position);
-      SmartDashboard.putNumber("ArmExtension: Goal position",m_position);
+    setPoint = m_position;
+    // System.out.println("ArmExtension, setPoint is " + setPoint);
+    // System.out.println("ArmExtensionCommand class setPoint is " + m_position);
+    SmartDashboard.putNumber("ArmExtension: Goal position",m_position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

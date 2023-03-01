@@ -37,7 +37,6 @@ public class CameraVisionSubsystem extends SubsystemBase {
 
   public PhotonTrackedTarget getBestTarget() {
     var result = camera.getLatestResult();
-    //  System.out.println("result " + result);
      boolean hasTargets = result.hasTargets(); // true or false
   
     // if camera sees something, then
@@ -52,7 +51,6 @@ public class CameraVisionSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run (50 /s)
    var result = camera.getLatestResult();
-  //  System.out.println("result " + result);
 
    boolean hasTargets = result.hasTargets(); // true or false
 
@@ -71,11 +69,6 @@ public class CameraVisionSubsystem extends SubsystemBase {
                   CAMERA_PITCH_RADIANS,
                   Units.degreesToRadians(target.getPitch()));
                   
-        // print out some data 
-        // System.out.println(CAMERA_HEIGHT_METERS + " " +
-        // TARGET_HEIGHT_METERS + " " +
-        // CAMERA_PITCH_RADIANS);
-        // System.out.println("result (m): " + distance); // PRINT THIS OUT SLOWER
         SmartDashboard.putNumber("April Tag Target Distance (Predicted) (in)", Units.metersToInches(distance));
         SmartDashboard.putNumber("detected April tag pitch (degree)", target.getPitch());
       }

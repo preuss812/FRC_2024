@@ -5,15 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmExtensionSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 
+// This command simply cancels any active arm comand and tells the arm rotation and extension to stay where they currently are.
 public class ArmEmergencyStop extends CommandBase {
   /** Creates a new ArmCommand. */
-  private final ArmRotationSubsystem m_armSubsystem;
+  
+  private final ArmRotationSubsystem m_armRotationSubsystem;
+  private final ArmExtensionSubsystem m_armExtensionSubsystem;
 
-  public ArmEmergencyStop(ArmRotationSubsystem subsystem) {
-    m_armSubsystem = subsystem;
-    addRequirements(subsystem);
+  public ArmEmergencyStop(ArmRotationSubsystem armRotationSubsystem, ArmExtensionSubsystem armExtensionSubsystem) {
+    m_armRotationSubsystem = armRotationSubsystem;
+    m_armExtensionSubsystem = armExtensionSubsystem;
+    addRequirements(armRotationSubsystem);
+    addRequirements(armExtensionSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +31,8 @@ public class ArmEmergencyStop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSubsystem.setPosition(m_armSubsystem.getPosition());
+    m_armRotationSubsystem.setPosition(m_armRotationSubsystem.getPosition()); // TODO Shouldnt this be in initialize()? - dph 2023-03-01
+    m_armExtensionSubsystem.setPosition(m_armExtensionSubsystem.getPosition()); // TODO Shouldnt this be in initialize()? - dph 2023-03-01
   }
 
   // Called once the command ends or is interrupted.

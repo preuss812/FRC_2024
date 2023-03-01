@@ -34,7 +34,7 @@ public class EncoderCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Dist:" + m_encoder.getNumberDist()+"\n" + "Rate:"+m_encoder.getNumberRate());
+    // System.out.println("Dist:" + m_encoder.getNumberDist()+"\n" + "Rate:"+m_encoder.getNumberRate());
   }
 
   // Called once the command ends or is interrupted.

@@ -44,7 +44,7 @@ public class ArmCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSubsystem.setPosition(setPoint);
+    m_armSubsystem.setPosition(setPoint);   // TODO: Does this need to be here? - dph 2023-03-01
   }
 
   public boolean onTarget() {
