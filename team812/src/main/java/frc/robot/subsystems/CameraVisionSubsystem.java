@@ -54,14 +54,14 @@ public class CameraVisionSubsystem extends SubsystemBase {
 
    boolean hasTargets = result.hasTargets(); // true or false
 
-   // if camera sees something, then
+   // if camera sees something, then // TODO is this part even needed?
       if (hasTargets){
         PhotonTrackedTarget target = result.getBestTarget(); // use best target
         // calculate distance to to april tag
         final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(19);
         final double TARGET_HEIGHT_METERS = Units.inchesToMeters(27); // target taped to table (center @ 2'3")
         final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(4);
-        final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
+        // final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
         double distance =
           PhotonUtils.calculateDistanceToTargetMeters(
                   CAMERA_HEIGHT_METERS,

@@ -36,6 +36,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import frc.robot.subsystems.DriveTrain;
+// TODO is this command needed? - dph 2023-03-01
 
 public class CameraVisionPoseCommand extends CommandBase {
   /** Creates a new CameraVisionCommand. */
@@ -46,7 +47,7 @@ public class CameraVisionPoseCommand extends CommandBase {
   private final Field2d field2d = new Field2d();
 
 
-  private EstimatedRobotPose ref_pose;
+  // private EstimatedRobotPose ref_pose;
 
   public CameraVisionPoseCommand(CameraVisionSubsystem subsystem, DriveTrain drivetrainSubsystem) {
     // Load april tag field

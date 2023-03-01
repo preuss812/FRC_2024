@@ -15,7 +15,7 @@ import frc.robot.subsystems.GyroSubsystem;
 import frc.robot.Constants.PidConstants;
 
 import frc.robot.subsystems.EncoderSubsystem;
-import frc.robot.Constants.EncoderConstants;
+// import frc.robot.Constants.EncoderConstants;
 
 public class DriveForwardCommand extends CommandBase {
   /**
@@ -23,7 +23,7 @@ public class DriveForwardCommand extends CommandBase {
    */
   private final Double m_speed;
   private final DriveTrain m_subsystem;
-  private final EncoderSubsystem m_encoder;
+  // private final EncoderSubsystem m_encoder;
   private final GyroSubsystem m_gyro;
   public double targetAngle; // target is starting direction
 
@@ -34,7 +34,7 @@ public class DriveForwardCommand extends CommandBase {
     m_subsystem = subsystem;
     m_speed = speed;
     m_gyro = gyro;
-    m_encoder = encoder;
+    // m_encoder = encoder;
     addRequirements(m_subsystem, m_gyro);
   }
 

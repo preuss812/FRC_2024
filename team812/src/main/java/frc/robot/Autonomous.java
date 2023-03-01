@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import org.opencv.aruco.GridBoard;
+// import org.opencv.aruco.GridBoard;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,7 +38,7 @@ public class Autonomous extends SequentialCommandGroup {
     BlackBoxSubsystem blackBox = RobotContainer.m_BlackBox;
     ArmRotationSubsystem m_armSubsystem = RobotContainer.m_ArmRotationSubsystem;
     ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
-    CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
+    // CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
     GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
     GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem;
 

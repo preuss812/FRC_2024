@@ -22,13 +22,13 @@ public class GyroSubsystem extends SubsystemBase {
     private AHRS gyro;
     private double initialPitch;
     private boolean isPitchSet = false;
-    private static double m_xDisplacement = 0.0;
-    private static double m_yDisplacement = 0.0;
-    private static double m_xVelocity = 0.0;
-    private static double m_yVelocity = 0.0;
-    private static double m_xAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
-    private static double m_yAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
-    private static final double deltaTime = 0.020; // 20 milliseconds.  Assuming that the ideal time is achieved.
+    // private static double m_xDisplacement = 0.0;
+    // private static double m_yDisplacement = 0.0;
+    // private static double m_xVelocity = 0.0;
+    // private static double m_yVelocity = 0.0;
+    // private static double m_xAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
+    // private static double m_yAcceleration = 0.0; // In case we decide to do trapezoidal acceleration.
+    // private static final double deltaTime = 0.020; // 20 milliseconds.  Assuming that the ideal time is achieved.
 
   public GyroSubsystem() {
       try {
