@@ -115,11 +115,11 @@ public final class Constants {
 	    public static final double kHighSpeed = 1.0;
 	    public static final double kTurnHighSpeed = 1.0;
 
-	    public static final double kLowSpeed = 0.2;
-	    public static final double kTurnLowSpeed = 0.8;
+	    public static final double kMedSpeed = 0.6;
+	    public static final double kTurnMedSpeed = 0.5;
 
-	    public static final double kLowLowSpeed = 0.2;
-	    public static final double kTurnLowLowSpeed = 0.8;
+	    public static final double kLowSpeed = 0.2;
+	    public static final double kTurnLowSpeed = 0.4;
 
         public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
     }

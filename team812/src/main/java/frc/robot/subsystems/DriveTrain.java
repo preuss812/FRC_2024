@@ -76,7 +76,7 @@ public class DriveTrain extends SubsystemBase {
     driveBase.setSafetyEnabled(false);
   }
 
-  public void preussDrive(double throttle, double zRotation) {
+  public void preussDrive2022(double throttle, double zRotation) {
     double speed = throttle;
     double turn = zRotation;
     String mode;
@@ -86,12 +86,12 @@ public class DriveTrain extends SubsystemBase {
     // Right - Maximum speed
 
     if (RobotContainer.m_BlackBox.isSwitchLeft()) {
-      speed = speed * DriveTrainConstants.kLowLowSpeed;
-      turn = turn * DriveTrainConstants.kTurnLowLowSpeed;
-      mode = "low";
-    } else if (RobotContainer.m_BlackBox.isSwitchCenter()) {
       speed = speed * DriveTrainConstants.kLowSpeed;
       turn = turn * DriveTrainConstants.kTurnLowSpeed;
+      mode = "low";
+    } else if (RobotContainer.m_BlackBox.isSwitchCenter()) {
+      speed = speed * DriveTrainConstants.kMedSpeed;
+      turn = turn * DriveTrainConstants.kTurnMedSpeed;
       mode = "med";
     } else {
       speed = speed * DriveTrainConstants.kHighSpeed;
@@ -106,6 +106,19 @@ public class DriveTrain extends SubsystemBase {
     driveBase.arcadeDrive(-speed, turn, false);
   }
 
+  public void preussDrive(double throttle, double zRotation) {
+    double speed = throttle;
+    double turn = zRotation;
+
+    speed = speed * DriveTrainConstants.kMedSpeed;
+    turn = turn * DriveTrainConstants.kTurnMedSpeed;
+
+    SmartDashboard.putNumber("Pdrive throttle", speed);
+    SmartDashboard.putNumber("Pdrive turn", turn);
+
+    driveBase.arcadeDrive(-speed, turn, false);
+  }
+  
   public void arcadeDrive(double throttle, double turn) {
     SmartDashboard.putNumber("ArcadeThrottle", -throttle);
     SmartDashboard.putNumber("ArcadeTurn", turn);

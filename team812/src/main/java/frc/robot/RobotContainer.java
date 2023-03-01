@@ -209,7 +209,7 @@ public class RobotContainer {
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(5)
       ),
       new SequentialCommandGroup(
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)

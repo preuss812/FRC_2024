@@ -68,7 +68,7 @@ private static double rotateTimesCalled=0;
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
     m_arm.configPeakOutputForward(0.4, 10);
-    m_arm.configPeakOutputReverse(-0.2, 10);
+    m_arm.configPeakOutputReverse(-0.4, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -196,6 +196,14 @@ private static double rotateTimesCalled=0;
   public double getPosition() {
     double position = m_arm.getSelectedSensorPosition(0);
     return position;
+  }
+
+  public double getTargetPosition() {
+      return targetPosition;
+  }
+
+  public double getPositionError() {
+    return getPosition() - getTargetPosition();
   }
 
   public void setSensorPosition(double position) {
