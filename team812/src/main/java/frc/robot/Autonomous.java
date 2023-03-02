@@ -51,14 +51,19 @@ public class Autonomous extends SequentialCommandGroup {
             new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition),                                     // Rotate the arm out to allow motion
             new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition), // Extend the arm to the low, gathering position.
             // new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
-            new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(0.5),
+            new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(2.0),
             //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, -90.0),
             //new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(1.5),
             //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, 90.0),
             new ArmCommand(m_armSubsystem, ArmConstants.kArmHiPosition),                                     // Rotate the arm up to score the maximum points.
             new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition), // Extend the arm to the proper scoring height.
-            new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem)                              // Release the code/cube to score.                         
-
+            new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),                             // Release the code/cube to score.
+            new DriveForwardCommand(m_driveTrain, -0.2, m_GyroSubsystem, null).withTimeout(1.0),                         
+            new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition), // Return retract arm again.
+            new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),    
+            new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition), 
+            new DriveForwardCommand(m_driveTrain, -0.2, m_GyroSubsystem, null).withTimeout(4.5),
+            new BalanceCommand(m_driveTrain, m_GyroSubsystem)
         // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
         // new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
         // new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)

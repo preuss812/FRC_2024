@@ -7,6 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmExtensionSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 
 // This command simply cancels any active arm comand and tells the arm rotation and extension to stay where they currently are.
 public class ArmEmergencyStop extends CommandBase {
@@ -31,8 +33,12 @@ public class ArmEmergencyStop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_armRotationSubsystem.disableMotor();
+    m_armRotationSubsystem.m_arm.setNeutralMode(NeutralMode.Coast);
     m_armRotationSubsystem.setPosition(m_armRotationSubsystem.getPosition()); // TODO Shouldnt this be in initialize()? - dph 2023-03-01
     m_armExtensionSubsystem.setPosition(m_armExtensionSubsystem.getPosition()); // TODO Shouldnt this be in initialize()? - dph 2023-03-01
+
+
   }
 
   // Called once the command ends or is interrupted.
@@ -43,6 +49,9 @@ public class ArmEmergencyStop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    // null pointer exception
+    // ArmRotationSubsystem die = null;
+    // die.disableMotor();
+    return false;
   }
 }

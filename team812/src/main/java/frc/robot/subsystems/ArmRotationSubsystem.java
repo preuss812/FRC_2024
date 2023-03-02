@@ -98,7 +98,7 @@ private static double rotateTimesCalled=0;
     double currentTarget = targetPosition;
     // if the joystick is nearly centered, ignore it
     SmartDashboard.putNumber("rotate js", position);
-    if (Math.abs(position) < 0.01) {  // Also move to constants.java
+    if (Math.abs(position) < 0.1) {  // Also move to constants.java
       setPosition(getPosition());
       return;
     }

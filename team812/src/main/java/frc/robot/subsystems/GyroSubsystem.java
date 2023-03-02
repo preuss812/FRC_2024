@@ -82,8 +82,7 @@ public class GyroSubsystem extends SubsystemBase {
       initialPitch = gyro.getPitch();
       isPitchSet = true;
       SmartDashboard.putNumber("IMU_Zero_Pitch", initialPitch);
-      this.reset();
-      gyro.resetDisplacement();
+      this.reset();  // resets yaw aka angle
     }
   }
 

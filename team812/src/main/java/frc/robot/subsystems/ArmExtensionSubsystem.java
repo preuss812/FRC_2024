@@ -121,7 +121,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
 // TODO Understand why this works with PID Controller - dph 2023-03-01
   public void test_move_in_out(double speed) {
     double l_speed = speed;
-    l_speed = MathUtil.clamp(l_speed, -0.20, 0.20); // TODO increase speed - dph 2023-03-01
+    l_speed = MathUtil.clamp(l_speed, -0.50, 0.50); // TODO increase speed - dph 2023-03-01
     SmartDashboard.putNumber("ArmExtension test speed", l_speed);
     m_armExtension.set(l_speed);
   }
