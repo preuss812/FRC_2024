@@ -149,7 +149,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
-
+    new JoystickButton(rightJoystick, 5).whileTrue(new BalanceCommandDebug(m_DriveTrain, m_GyroSubsystem)); 
+    
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
