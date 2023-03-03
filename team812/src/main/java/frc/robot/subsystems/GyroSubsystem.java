@@ -51,7 +51,7 @@ public class GyroSubsystem extends SubsystemBase {
 
     double delta =  gyro.getPitch() - initialPitch;
 
-    return delta;
+    return gyro.getPitch();
   }
 
   @Override

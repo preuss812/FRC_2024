@@ -50,6 +50,7 @@ public class ArmEmergencyStop extends CommandBase {
   @Override
   public boolean isFinished() {
     // null pointer exception
+    // should wait a bit here
     // ArmRotationSubsystem die = null;
     // die.disableMotor();
     return false;

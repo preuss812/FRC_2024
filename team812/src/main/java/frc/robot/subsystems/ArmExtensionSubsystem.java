@@ -199,6 +199,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     if (isInLimitSwitchClosed()) {
       setSensorReference();
     }
-
+    if (isOutLimitSwitchClosed()) {
+      setSensorPosition(ArmExtensionConstants.kArmExtensionMaxPosition);
+   }
   }
 }
