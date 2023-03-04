@@ -56,10 +56,10 @@ public class BalanceCommandDebug extends CommandBase {
         } else if (deltaPitch > 0.1) {
             // We are reducing pitch so we are approaching or possibly past the balance point
             // Reverse a little.
-            balancePath = 4;
+            balancePath = 5;
             balanceSpeed = -0.05;
         } else {
-            balancePath=5;
+            balancePath=6;
         }
     } else {
         // Current Pitch is between -2 and +2 degrees, that's basically balanced.
@@ -74,6 +74,7 @@ public class BalanceCommandDebug extends CommandBase {
     SmartDashboard.putNumber("bal-proportion", ratio);
     SmartDashboard.putNumber("bal-path", balancePath);
     m_subsystem.arcadeDrive(-balanceSpeed, 0);
+    m_lastPitch = currentPitch;
   }
 
   // Called once the command ends or is interrupted.

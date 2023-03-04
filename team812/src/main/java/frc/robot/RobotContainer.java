@@ -90,7 +90,7 @@ public class RobotContainer {
         new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
 
     m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getY()), m_ArmRotationSubsystem));
+        new RunCommand(() -> m_ArmRotationSubsystem.rotate(leftJoystick.getY()), m_ArmRotationSubsystem));
 
     m_ArmExtensionSubsystem.setDefaultCommand(
         new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
@@ -145,8 +145,8 @@ public class RobotContainer {
      * 5 set ARM ROTATION to GATHER and set ARM EXTENSION as appropriate (armpos1)
      * 6 set ARM ROTATION to HIGH and set ARM EXTENSION as appropriate (armpos4)
      */
-    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
     new JoystickButton(rightJoystick, 5).whileTrue(new BalanceCommandDebug(m_DriveTrain, m_GyroSubsystem)); 
@@ -156,7 +156,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
-    new JoystickButton(leftJoystick, 3
+    new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem)); new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition),

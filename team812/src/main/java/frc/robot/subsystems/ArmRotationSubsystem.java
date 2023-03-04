@@ -29,7 +29,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
   private static boolean hasBeenHomed = true;
   static Integer getPosition_timesCalled = 0;
   private static double targetPosition = 0;
-private static double rotateTimesCalled=0;
+  private static double rotateTimesCalled=0;
+  private static boolean m_rotateStopped = true;
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
       PneumaticsModuleType.CTREPCM,
@@ -99,10 +100,13 @@ private static double rotateTimesCalled=0;
     // if the joystick is nearly centered, ignore it
     SmartDashboard.putNumber("rotate js", position);
     if (Math.abs(position) < 0.1) {  // Also move to constants.java
-      setPosition(getPosition());
+      if (!m_rotateStopped) {
+        setPosition(getPosition());
+        m_rotateStopped = true;
+      }
       return;
     }
-
+    m_rotateStopped = false;
     double newPosition = currentTarget + position * incrementSize;
     SmartDashboard.putNumber("rotate pos", newPosition);
     if (newPosition >= ArmConstants.kArmMinPosition
