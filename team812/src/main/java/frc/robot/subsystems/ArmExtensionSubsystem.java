@@ -5,11 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.PidConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmExtensionConstants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -185,9 +188,41 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     return hasBeenHomed;
   }
 
+  // Takes rotation in ticks and returns extension in ticks
+  private double maxExtensionForRotation(double rotationInTicks)
+  {
+    // Transform rotation in ticks into degrees relative to horizontal arm.
+    double theta = (rotationInTicks - ArmConstants.kArmHorizontalRotationPosition)*ArmConstants.kArmDegreesPerTick;
+    // Find the total allowed length of the arm from the pivot point
+    double maxLengthInMeters = ArmExtensionConstants.kArmExtensionHorizontalExtensionPosition/Math.cos(Units.degreesToRadians(theta));
+    // Subtract the fixed length of the arm from the total length to get the extension in meters and convert that to ticks.
+    double maxExtensionPosition = (maxLengthInMeters - ArmExtensionConstants.kArmExtensionRetractedLength)*ArmExtensionConstants.kArmExtensionTicksPerMeter;
+    maxExtensionPosition = MathUtil.clamp(maxExtensionPosition, ArmExtensionConstants.kArmExtensionMinPosition, ArmExtensionConstants.kArmExtensionMaxPosition);
+    // If we are below horizontal perform an additional check for the arm extending below the plane of the ground.
+    if (theta < 0) {
+      double lowerLimit = ArmExtensionConstants.kArmExtensionPivotToWheelsOnFloorLine; // Debug only, remove.
+      double minArmLength = ArmExtensionConstants.kArmExtensionRetractedLength;
+      double maxArmLengthAtThisAngle = -ArmExtensionConstants.kArmExtensionPivotToWheelsOnFloorLine/Math.sin(Units.degreesToRadians(-theta));
+      double maxArmExtensionLength = maxArmLengthAtThisAngle - minArmLength;
+      if (maxArmExtensionLength < 0.0) maxArmExtensionLength = 0.0;
+      double maxExtensionPositionForFloor = maxArmExtensionLength*ArmExtensionConstants.kArmExtensionTicksPerMeter;
+      if ( maxExtensionPositionForFloor< maxExtensionPosition)
+        maxExtensionPosition = maxExtensionPositionForFloor;
+    }
+      return maxExtensionPosition;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double currentRotation = RobotContainer.m_ArmRotationSubsystem.getTargetPosition();
+    double targetExtension = getTargetPosition();
+    double currentExtension = getPosition();
+    // Prevent the rotation of the arm from taking the arm out of the legal perimiter of the robot.
+    double adjustedExtension = MathUtil.clamp(maxExtensionForRotation(currentRotation), ArmExtensionConstants.kArmExtensionMinPosition, targetExtension);
+    if (adjustedExtension !=  targetExtension)
+      setPosition(adjustedExtension); // Note this corrupts the target position in some cases. TODO remember the true goal
+
     SmartDashboard.putNumber("ArmExtension pos", getPosition());
     // SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget()); // This was generating a warning
     SmartDashboard.putNumber("ArmExtension target", getTargetPosition());

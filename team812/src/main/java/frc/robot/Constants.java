@@ -125,6 +125,7 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        public static final double kArmEncoderCountPerRevolution = 8192; // Need to verify this number - dph
         public static final double kArmReferencePosition = 0; // 2023 broomstick ref position
         public static final double kArmAutonomousReferencePosition = 0.0; // 2023 position when the arm is folded in the robot to start the game
         public static final double kArmScorePosition = 2100;
@@ -140,8 +141,11 @@ public final class Constants {
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
         public static final double kArmHiPosition = 2720;  // Height for scoring on the top row
         public static final double kArmMaxPosition = 2740; // Highest you can ask for
-       
-        
+        public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
+        public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
+        public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;
+        public static final double kArmHorizontalRotationPosition = ArmConstants.kArmMaxPosition - kArmMaxElevationAngleToGround*kArmTicksPerDegree;
+        public static final double kArmMinRotationAngle = -(kArmHorizontalRotationPosition - kArmMinPosition)*kArmDegreesPerTick;  // Degrees below horizontal
     }
     
     public static final class ArmExtensionConstants {
@@ -151,9 +155,10 @@ public final class Constants {
         public static final double kArmExtensionGearToothSpacing = 0.005; // (meters)  = 5 millimeters
         public static final double kArmExtensionTeethPerRotation = 36;
         public static final double kArmExtensionEncoderCountPerRevolution = 8192; // Need to verify this number - dph
-        public static final double kArmExtensionOneMeterPosition = 1.0/(kArmExtensionGearToothSpacing*kArmExtensionTeethPerRotation)*kArmExtensionEncoderCountPerRevolution;
+        public static final double kArmExtensionTicksPerMeter = 1.0/(kArmExtensionGearToothSpacing*kArmExtensionTeethPerRotation)*kArmExtensionEncoderCountPerRevolution;
         public static final double kArmExtensionFullyRetractedPosition = 0.0;
-        public static final double kArmExtensionFullyExtendedPosition = kArmExtensionOneMeterPosition; // This needs to be calibrated - dph
+        public static final double kArmExtensionMinPosition = 0.0;
+        public static final double kArmExtensionFullyExtendedPosition = kArmExtensionTicksPerMeter; // This needs to be calibrated - dph
         public static final double kArmExtensionHomePosition = 0;
         public static final double kArmExtensionLowPosition = 0;
         public static final double kArmExtensionMidPosition = 6000;
@@ -161,6 +166,13 @@ public final class Constants {
         public static final double kArmExtensionMaxPosition = 36992;
         public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
         public static final double kArmExtensionThreshold = 20;
+        public static final double kArmExtensionMaxExtendedArmLength = Units.inchesToMeters(67.0);
+        public static final double kArmExtensionRetractedLength =  kArmExtensionMaxExtendedArmLength - kArmExtensionMaxPosition/kArmExtensionTicksPerMeter;
+        public static final double kArmExtensionMaxExtensionBeyondPerimeter = Units.inchesToMeters(42.0);
+        
+        public static final double kArmExtensionHorizontalExtensionPosition = ArmExtensionConstants.kArmExtensionMaxExtendedArmLength
+                                                                           * Math.cos(Units.degreesToRadians(ArmConstants.kArmMaxElevationAngleToGround));
+        public static final double kArmExtensionPivotToWheelsOnFloorLine = Math.sin(Units.degreesToRadians(ArmConstants.kArmMinRotationAngle))*kArmExtensionRetractedLength;
     }
 
     public static final class GripperConstants {

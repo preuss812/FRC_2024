@@ -29,6 +29,7 @@ public class ArmExtensionCommand extends CommandBase {
     SmartDashboard.putString("armExtensionCmd", "started");
 
     setPoint = m_position;
+    m_armExtensionSubsystem.setPosition(setPoint);
     // System.out.println("ArmExtension, setPoint is " + setPoint);
     // System.out.println("ArmExtensionCommand class setPoint is " + m_position);
     SmartDashboard.putNumber("ArmExtension: Goal position",m_position);
@@ -37,7 +38,7 @@ public class ArmExtensionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armExtensionSubsystem.setPosition(setPoint);
+   // m_armExtensionSubsystem.setPosition(setPoint); // TODO Verify this is not needed
   }
 
   public boolean onTarget() {

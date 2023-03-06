@@ -112,6 +112,8 @@ public class RobotContainer {
     SmartDashboard.putData("HomeArmRotation", new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate Down", new InstantCommand(m_ArmRotationSubsystem::rotateDown50, m_ArmRotationSubsystem));
+    SmartDashboard.putData("ArmMovementCmd", new ArmMovementCommand(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
+    SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
   }
 
   /**
