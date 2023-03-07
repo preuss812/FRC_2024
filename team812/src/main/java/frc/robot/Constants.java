@@ -82,15 +82,13 @@ public final class Constants {
     }
 
     public static final class EncoderConstants {
-        public static final int kRightDriveEncoder = 0; // placeholder
-        public static final int kLeftDriveEncoder = 1; // placeholder
-        public static final int kElevatorEncoder = 2; // placeholder
+        public static final int[] kRightDriveEncoder = {2,3};
+        public static final int[] kLeftDriveEncoder = {0,1};
 
-        public static final double wheelDiameter = 7.25;
+        public static final double wheelDiameter = 6.0;
         public static final double ticksPerRevolution = 256;
 
         public static final double kEncoderDistanceFactor = (wheelDiameter * Math.PI) / ticksPerRevolution;
-        //0.02832031, original factor
     }
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;

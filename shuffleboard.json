@@ -1603,19 +1603,6 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "6,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ArmExtension pos:",
-              "_title": "SmartDashboard/ArmExtension pos:",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "4,2": {
             "size": [
               1,
@@ -1796,6 +1783,19 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pressure is ",
               "_title": "SmartDashboard/Pressure is ",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmExtension pos",
+              "_title": "SmartDashboard/ArmExtension pos",
               "_glyph": 148,
               "_showGlyph": false
             }
