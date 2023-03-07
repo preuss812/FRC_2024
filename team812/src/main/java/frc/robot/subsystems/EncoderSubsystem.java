@@ -30,13 +30,14 @@ public class EncoderSubsystem extends SubsystemBase {
                                          EncoderConstants.kLeftDriveEncoder[1],
                       false,
                                         Encoder.EncodingType.k2X);
+    AllReset();
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Encoder Left", getLeftNumberDist());
+    SmartDashboard.putNumber("Encoder Left", getLeftNumberRate());
     SmartDashboard.putNumber("Encoder Right", getRightNumberDist());
   }
 
