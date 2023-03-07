@@ -83,7 +83,7 @@ public final class Constants {
 
     public static final class EncoderConstants {
         public static final int[] kRightDriveEncoder = {2,3};
-        public static final int[] kLeftDriveEncoder = {0,1};
+        public static final int[] kLeftDriveEncoder = {1,0};
 
         public static final double wheelDiameter = 6.0;
         public static final double ticksPerRevolution = 256;
