@@ -23,6 +23,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -53,6 +54,7 @@ public class RobotContainer {
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
+  public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
