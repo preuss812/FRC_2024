@@ -56,8 +56,8 @@ public class RobotContainer {
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
-  //public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
-  public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
+  public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
@@ -98,7 +98,7 @@ public class RobotContainer {
         new RunCommand(() -> m_ArmRotationSubsystem.rotate(leftJoystick.getY()), m_ArmRotationSubsystem));
 
     m_ArmExtensionSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmExtensionSubsystem.test_move_in_out(POV_to_double(leftJoystick.getPOV())),
+        new RunCommand(() -> m_ArmExtensionSubsystem.testMoveInOut(POV_to_double(leftJoystick.getPOV())),
             m_ArmExtensionSubsystem));
 
     // Gyro subsystem

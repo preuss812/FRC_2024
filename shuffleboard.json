@@ -1616,19 +1616,6 @@
               "_showGlyph": false
             }
           },
-          "6,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ArmExtension: Goal position",
-              "_title": "SmartDashboard/ArmExtension: Goal position",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "7,1": {
             "size": [
               1,
@@ -1651,19 +1638,6 @@
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/Rotate UP",
               "_title": "SmartDashboard/Rotate UP",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/ArmExtension target",
-              "_title": "/SmartDashboard/ArmExtension target",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1796,6 +1770,58 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ArmExtension pos",
               "_title": "SmartDashboard/ArmExtension pos",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmExtension target",
+              "_title": "SmartDashboard/ArmExtension target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmExtension: Goal position",
+              "_title": "SmartDashboard/ArmExtension: Goal position",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ArmExtensionSubPos",
+              "_title": "SmartDashboard/ArmExtensionSubPos",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Extension Limit",
+              "_title": "SmartDashboard/Extension Limit",
               "_glyph": 148,
               "_showGlyph": false
             }

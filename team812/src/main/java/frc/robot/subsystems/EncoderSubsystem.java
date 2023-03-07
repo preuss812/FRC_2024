@@ -28,17 +28,21 @@ public class EncoderSubsystem extends SubsystemBase {
 
     p_left_gearbox_encoder = new Encoder(EncoderConstants.kLeftDriveEncoder[0],
                                          EncoderConstants.kLeftDriveEncoder[1],
-                      false,
+                      true,
                                         Encoder.EncodingType.k2X);
     AllReset();
+    setLeftDistancePerPulse(EncoderConstants.kEncoderDistanceFactor);
+    setRightDistancePerPulse(EncoderConstants.kEncoderDistanceFactor);
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Encoder Left", getLeftNumberRate());
-    SmartDashboard.putNumber("Encoder Right", getRightNumberDist());
+    SmartDashboard.putNumber("Encoder Left Rate", getLeftNumberRate());
+    SmartDashboard.putNumber("Encoder Right Rate", getRightNumberRate());
+    SmartDashboard.putNumber("Encoder Left Dist", getLeftNumberDist());
+    SmartDashboard.putNumber("Encoder Right Dist", getRightNumberDist());
   }
 
   public void AllReset() {

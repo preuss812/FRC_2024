@@ -82,14 +82,16 @@ public final class Constants {
     }
 
     public static final class EncoderConstants {
-        public static final int[] kRightDriveEncoder = {2,3};
-        public static final int[] kLeftDriveEncoder = {1,0};
+        public static final int[] kRightDriveEncoder = {2,3}; // Channel A,B
+        public static final int[] kLeftDriveEncoder = {0,1}; // Channel A, B
 
         public static final double wheelDiameter = 6.0;
         public static final double ticksPerRevolution = 256;
+        public static final double gearRatio = 7.91;
 
-        public static final double kEncoderDistanceFactor = (wheelDiameter * Math.PI) / ticksPerRevolution;
+        public static final double kEncoderDistanceFactor = (wheelDiameter * Math.PI) / ticksPerRevolution / gearRatio;
     }
+
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
      
@@ -134,7 +136,7 @@ public final class Constants {
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
-        public static final double kArmMinPosition = 925;  // Lowest you can ask for 
+        public static final double kArmMinPosition = 1250;  // Lowest you can ask for 
         public static final double kArmLowPosition = 1250;  // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
         public static final double kArmHiPosition = 2720;  // Height for scoring on the top row

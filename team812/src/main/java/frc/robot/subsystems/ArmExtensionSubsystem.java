@@ -122,15 +122,19 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   }
   */
 // TODO Understand why this works with PID Controller - dph 2023-03-01
-  public void test_move_in_out(double speed) {
+  public void testMoveInOut(double speed) {
     double l_speed = speed;
     l_speed = MathUtil.clamp(l_speed, -0.50, 0.50); // TODO increase speed - dph 2023-03-01
     SmartDashboard.putNumber("ArmExtension test speed", l_speed);
-    m_armExtension.set(l_speed);
+    double newTarget = targetPosition + Math.signum(l_speed)*200;
+    // m_armExtension.set(ControlMode.Position, targetPosition);
+    setPosition(newTarget);
   }
 
   public double setPosition(double position) {
-    if (isHome() && position >= ArmExtensionConstants.kArmExtensionFullyRetractedPosition) {
+    position = MathUtil.clamp(position, ArmExtensionConstants.kArmExtensionMinPosition, ArmExtensionConstants.kArmExtensionMaxPosition);
+    
+    if (isHome()) {
       m_armExtension.set(ControlMode.Position, position);
       targetPosition = position;
       SmartDashboard.putNumber("ArmExtensionSubPos", position);
@@ -189,10 +193,10 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   }
 
   // Takes rotation in ticks and returns extension in ticks
-  private double maxExtensionForRotation(double rotationInTicks)
-  {
+  private double getExtensionBoundary(double rotationInTicks){
     // Transform rotation in ticks into degrees relative to horizontal arm.
     double theta = (rotationInTicks - ArmConstants.kArmHorizontalRotationPosition)*ArmConstants.kArmDegreesPerTick;
+    SmartDashboard.putNumber("ArmExtension theta", theta);
     // Find the total allowed length of the arm from the pivot point
     double maxLengthInMeters = ArmExtensionConstants.kArmExtensionHorizontalExtensionPosition/Math.cos(Units.degreesToRadians(theta));
     // Subtract the fixed length of the arm from the total length to get the extension in meters and convert that to ticks.
@@ -212,16 +216,32 @@ public class ArmExtensionSubsystem extends SubsystemBase {
       return maxExtensionPosition;
   }
 
+  private double maxExtensionForRotation() {
+    double currentRotation = RobotContainer.m_ArmRotationSubsystem.getTargetPosition();
+    double rotationInTicks = getPosition();
+
+    getExtensionBoundary(rotationInTicks);
+    double targetExtension = getTargetPosition();
+    double currentExtension = getPosition();
+    double adjustedExtension = MathUtil.clamp(getExtensionBoundary(currentRotation), ArmExtensionConstants.kArmExtensionMinPosition, targetExtension);
+
+    return adjustedExtension;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double currentRotation = RobotContainer.m_ArmRotationSubsystem.getTargetPosition();
+    double adjustedExtension = maxExtensionForRotation();
     double targetExtension = getTargetPosition();
-    double currentExtension = getPosition();
+
     // Prevent the rotation of the arm from taking the arm out of the legal perimiter of the robot.
-    double adjustedExtension = MathUtil.clamp(maxExtensionForRotation(currentRotation), ArmExtensionConstants.kArmExtensionMinPosition, targetExtension);
-    if (adjustedExtension !=  targetExtension)
-      setPosition(adjustedExtension); // Note this corrupts the target position in some cases. TODO remember the true goal
+    SmartDashboard.putNumber("Extension Limit", adjustedExtension);
+
+    if (adjustedExtension != targetExtension){
+     setPosition(adjustedExtension); // Note this corrupts the target position in some cases. TODO remember the true goal
+      // m_armExtension.set(ControlMode.Position, adjustedExtension);
+
+    }
 
     SmartDashboard.putNumber("ArmExtension pos", getPosition());
     // SmartDashboard.putNumber("ArmExtension target", m_armExtension.getClosedLoopTarget()); // This was generating a warning
