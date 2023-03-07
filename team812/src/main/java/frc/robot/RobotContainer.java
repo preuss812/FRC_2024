@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,6 +25,7 @@ import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
+import frc.robot.subsystems.DigitalIOSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -54,7 +56,8 @@ public class RobotContainer {
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
-  public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  //public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
