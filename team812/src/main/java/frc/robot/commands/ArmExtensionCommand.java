@@ -14,6 +14,7 @@ public class ArmExtensionCommand extends CommandBase {
   private final ArmExtensionSubsystem m_armExtensionSubsystem;
   private final double m_position;
   private double setPoint;  // TODO get rid of setPoint and use m_armExtensionSubsystem.getTargetPosition or getPositionError
+  private int m_counter;
 
   public ArmExtensionCommand(ArmExtensionSubsystem subsystem, double position) {
     m_armExtensionSubsystem = subsystem;
@@ -25,7 +26,7 @@ public class ArmExtensionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    m_counter = 0;
     SmartDashboard.putString("armExtensionCmd", "started");
 
     setPoint = m_position;
@@ -39,6 +40,7 @@ public class ArmExtensionCommand extends CommandBase {
   @Override
   public void execute() {
    //  m_armExtensionSubsystem.setPosition(setPoint); // TODO Verify this is not needed
+   SmartDashboard.putNumber("armExtendExCalled", ++m_counter);
   }
 
   public boolean onTarget() {
@@ -60,6 +62,7 @@ public class ArmExtensionCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //return false;
     return onTarget();
   }
 }
