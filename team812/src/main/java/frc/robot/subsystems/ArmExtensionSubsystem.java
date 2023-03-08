@@ -144,7 +144,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
 
   // Only to be used when homing the robot
   public double setHomePosition(double position) {
-    m_armExtension.set(ControlMode.Position, position);
+    // m_armExtension.set(ControlMode.Position, position); // TODO: fix
     return getPosition();
   }
 
@@ -213,7 +213,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
       if ( maxExtensionPositionForFloor< maxExtensionPosition)
         maxExtensionPosition = maxExtensionPositionForFloor;
     }
-      return maxExtensionPosition;
+      return maxExtensionPosition; // TODO: fix, this value is too small and I don't know what constant it is using for boundary
   }
 
   private double maxExtensionForRotation() {

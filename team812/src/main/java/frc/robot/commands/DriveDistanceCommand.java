@@ -20,11 +20,13 @@ import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.Constants.EncoderConstants;
 
 public class DriveDistanceCommand extends CommandBase {
-  private final Double m_speed;
+  private Double m_speed;
   private final Double m_distance;
   private final DriveTrain m_subsystem;
   private final EncoderSubsystem m_encoder;
   private final GyroSubsystem m_gyro;
+  private double target;
+  private double distance;
   public double targetAngle; // target is starting direction
 
   public DriveDistanceCommand(final DriveTrain subsystem, final Double speed, final Double distance, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
@@ -34,6 +36,7 @@ public class DriveDistanceCommand extends CommandBase {
     m_distance = distance;
     m_gyro = gyro;
     m_encoder = encoder;
+    this.distance = distance;
     addRequirements(m_subsystem, m_gyro, m_encoder);
   }
 
@@ -41,6 +44,8 @@ public class DriveDistanceCommand extends CommandBase {
   @Override
   public void initialize() {
     targetAngle = m_gyro.getAngle();
+    target = m_encoder.getLeftNumberDist() + distance;
+    if (distance < 0) m_speed *= -1; // reverse the driving if going backwards
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -64,14 +69,19 @@ public class DriveDistanceCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double dist = m_encoder.getLeftNumberDist();
+    double cur_dist = m_encoder.getLeftNumberDist();
     double rate = m_encoder.getLeftNumberRate();
-    System.out.println("Dist: " + dist + "\nRate: " + rate);
+    double error = target - cur_dist;
+    SmartDashboard.putNumber("Drive distance error", + error);
+    // SmartDashboard.putNumber("Encoder rate", + rate);
 
-    if (dist > m_distance) {
-      return true;
+    if (distance < 0){
+        if (cur_dist < target) {
+            return true;
+        } 
+    } else if (cur_dist > target){
+        return true;
     }
-
     return false;
   }
 }

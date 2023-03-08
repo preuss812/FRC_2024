@@ -1839,15 +1839,54 @@
               "_showGlyph": false
             }
           },
-          "8,1": {
+          "9,1": {
             "size": [
               1,
               1
             ],
             "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/ArmExtend",
-              "_title": "SmartDashboard/ArmExtend",
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/armExtendExCalled",
+              "_title": "/SmartDashboard/armExtendExCalled",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Encoder Left Dist",
+              "_title": "SmartDashboard/Encoder Left Dist",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Encoder Left Rate",
+              "_title": "SmartDashboard/Encoder Left Rate",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drive distance error",
+              "_title": "SmartDashboard/Drive distance error",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -1935,9 +1974,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
-    "y": 0.0,
-    "width": 1573.0,
-    "height": 867.0
+    "x": -8.0,
+    "y": -8.0,
+    "width": 1936.0,
+    "height": 1096.0
   }
 }

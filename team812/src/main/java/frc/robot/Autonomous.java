@@ -10,6 +10,7 @@ package frc.robot;
 // import org.opencv.aruco.GridBoard;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.ArmConstants;
@@ -41,30 +42,31 @@ public class Autonomous extends SequentialCommandGroup {
     // CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
     GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
     GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem;
-    EncoderSubsystem m_encoSubsystem = RobotContainer.m_EncoderSubsystem;
+    EncoderSubsystem m_encoderSubsystem = RobotContainer.m_EncoderSubsystem;
 
     blackBox.readBits();
 
     addCommands(
         new SequentialCommandGroup(
-            //new DriveDistanceCommand(m_driveTrain, 0.5, 100.0, m_GyroSubsystem, m_encoSubsystem),
             new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
             new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
             new ArmCommand(m_armSubsystem, ArmConstants.kArmHiPosition),                                     // Rotate the arm out to allow motion
             new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition), // Extend the arm to the low, gathering position.
             // new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
-            new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(2.0),
+            new DriveDistanceCommand(m_driveTrain, 0.2, 36.0, m_GyroSubsystem, m_encoderSubsystem),
             //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, -90.0),
             //new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(1.5),
             //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, 90.0),
             //new ArmCommand(m_armSubsystem, ArmConstants.kArmHiPosition),                                   // Rotate the arm up to score the maximum points.
             new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition), // Extend the arm to the proper scoring height.
+            new WaitCommand(1),
             new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),                             // Release the code/cube to score.
-            new DriveForwardCommand(m_driveTrain, -0.2, m_GyroSubsystem, null).withTimeout(1.0),                         
+            new DriveDistanceCommand(m_driveTrain, 0.2, -12.0, m_GyroSubsystem, m_encoderSubsystem),
             new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition), // Return retract arm again.
             new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),    
             new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition), 
-            new DriveForwardCommand(m_driveTrain, -0.2, m_GyroSubsystem, null).withTimeout(4.5),
+            new DriveDistanceCommand(m_driveTrain, 0.2, -(24.0), m_GyroSubsystem, m_encoderSubsystem),
+            new DriveDistanceCommand(m_driveTrain, 0.25, -(5 * 12.0), m_GyroSubsystem, m_encoderSubsystem),
             new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem)
         // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
         // new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),

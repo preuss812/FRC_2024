@@ -163,7 +163,7 @@ public final class Constants {
         public static final double kArmExtensionLowPosition = 0;
         public static final double kArmExtensionMidPosition = 6000;
         public static final double kArmExtensionHiPosition = 35000;
-        public static final double kArmExtensionMaxPosition = 36992;
+        public static final double kArmExtensionMaxPosition = 37100;
         public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
         public static final double kArmExtensionThreshold = 20;
         public static final double kArmExtensionMaxExtendedArmLength = Units.inchesToMeters(67.0);
