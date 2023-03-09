@@ -68,8 +68,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(0.4, 10);
-    m_arm.configPeakOutputReverse(-0.4, 10);
+    m_arm.configPeakOutputForward(0.6, 10);
+    m_arm.configPeakOutputReverse(-0.6, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically

@@ -58,8 +58,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_armExtension.configNominalOutputForward(0, 10);
     m_armExtension.configNominalOutputReverse(0, 10);
-    m_armExtension.configPeakOutputForward(0.3, 10);
-    m_armExtension.configPeakOutputReverse(-0.3, 10);
+    m_armExtension.configPeakOutputForward(0.5, 10);
+    m_armExtension.configPeakOutputReverse(-0.5, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
