@@ -46,7 +46,7 @@ public class Autonomous extends SequentialCommandGroup {
     EncoderSubsystem m_encoderSubsystem = RobotContainer.m_EncoderSubsystem;
 
     blackBox.readBits();
-
+/* 
     addCommands(
         new SequentialCommandGroup(
             new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
@@ -78,5 +78,14 @@ public class Autonomous extends SequentialCommandGroup {
         // new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
         // new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
         ));
+        */
+        addCommands(
+        new SequentialCommandGroup(
+            new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
+            new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
+            new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition), // untuck                           // Rotate the arm out to allow motion
+            new DriveDistanceCommand(m_driveTrain, 0.45, (36.0), m_GyroSubsystem, m_encoderSubsystem), // 0.25 was not enough
+            new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem)
+             ));
   }
 }

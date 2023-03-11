@@ -10,6 +10,8 @@ import frc.robot.subsystems.GyroSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.PidConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 
 public class BalanceCommandDebug extends CommandBase {
   /** Creates a new BalanceCommand. */
@@ -32,10 +34,14 @@ public class BalanceCommandDebug extends CommandBase {
   public void execute() {
     double currentPitch = m_gyro.getPitch();
     double ratio = currentPitch < 0.0 ? PidConstants.kProportionalBalanceBackward : PidConstants.kPorportionalBalanceForward;
-    double balanceSpeed = MathUtil.clamp(currentPitch * ratio, -0.25, 0.25);
+    double extraPower = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, -0.1, 0.1);
+    extraPower = 0.026;
+
+    double balanceSpeed = MathUtil.clamp(currentPitch * ratio, -0.25-extraPower, 0.25+extraPower);
     double deltaPitch = currentPitch - m_lastPitch;
     Integer balancePath = 0;
-
+    SmartDashboard.putNumber("dither",extraPower);
+    
     // TODO: add I and D constants
     if (currentPitch < -2.0) {
         if (deltaPitch < -0.01) {

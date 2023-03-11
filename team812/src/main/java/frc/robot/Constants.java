@@ -95,7 +95,7 @@ public final class Constants {
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
      
-        public static final double kArm_kP = 3.0;
+        public static final double kArm_kP = 2.5;
         public static final double kArm_kI = 0.0;
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
@@ -136,8 +136,8 @@ public final class Constants {
         public static final double kArmBallGathering = 200;
         public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
-        public static final double kArmMinPosition = 1250;  // Lowest you can ask for 
-        public static final double kArmLowPosition = 1250;  // Height for scoring on the bottom row
+        public static final double kArmMinPosition = 900;  // Lowest you can ask for 
+        public static final double kArmLowPosition = 900;  // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
         public static final double kArmHiPosition = 2720;  // Height for scoring on the top row
         public static final double kArmMaxPosition = 2740; // Highest you can ask for
