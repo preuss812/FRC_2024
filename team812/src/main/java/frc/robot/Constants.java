@@ -137,10 +137,11 @@ public final class Constants {
         public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
         // new for 2023
         public static final double kArmMinPosition = 900;  // Lowest you can ask for 
-        public static final double kArmLowPosition = 900;  // Height for scoring on the bottom row
+        public static final double kArmLowPosition = 1300; // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
         public static final double kArmHiPosition = 2720;  // Height for scoring on the top row
         public static final double kArmMaxPosition = 2740; // Highest you can ask for
+        public static final double kArmAutonomous = 900;
         public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
         public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
         public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;

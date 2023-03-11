@@ -35,7 +35,9 @@ public class BalanceCommandDebug extends CommandBase {
     double currentPitch = m_gyro.getPitch();
     double ratio = currentPitch < 0.0 ? PidConstants.kProportionalBalanceBackward : PidConstants.kPorportionalBalanceForward;
     double extraPower = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, -0.1, 0.1);
-    extraPower = 0.026;
+    extraPower = 0.026; // this was too much
+    extraPower = 0.018; // better but still too much;
+    extraPower = 0.014;
 
     double balanceSpeed = MathUtil.clamp(currentPitch * ratio, -0.25-extraPower, 0.25+extraPower);
     double deltaPitch = currentPitch - m_lastPitch;
