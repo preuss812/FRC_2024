@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.GyroSubsystem;
+import frc.robot.subsystems.EncoderSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.PidConstants;
@@ -17,12 +18,14 @@ public class BalanceCommandDebug extends CommandBase {
   /** Creates a new BalanceCommand. */
   private final DriveTrain m_subsystem;
   private final GyroSubsystem m_gyro;
+  private final EncoderSubsystem m_encoder;
   private static double m_lastPitch = 0.0;
 
-  public BalanceCommandDebug(final DriveTrain subsystem, final GyroSubsystem gyro) {
+  public BalanceCommandDebug(final DriveTrain subsystem, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     m_gyro = gyro;
+    m_encoder = encoder;
   }
 
   // Called when the command is initially scheduled.
@@ -37,7 +40,9 @@ public class BalanceCommandDebug extends CommandBase {
     double extraPower = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, -0.1, 0.1);
     extraPower = 0.026; // this was too much
     extraPower = 0.018; // better but still too much;
-    extraPower = 0.014;
+    extraPower = 0.014; // A little too lo but just barely failed
+    extraPower = 0.016; // This was perfect but the next 3 games it was too little.
+    extraPower = 0.020; // a guess 
 
     double balanceSpeed = MathUtil.clamp(currentPitch * ratio, -0.25-extraPower, 0.25+extraPower);
     double deltaPitch = currentPitch - m_lastPitch;

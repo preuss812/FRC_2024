@@ -110,8 +110,8 @@ public class DriveTrain extends SubsystemBase {
     double speed = throttle;
     double turn = zRotation;
 
-    speed = speed * DriveTrainConstants.kMedSpeed;
-    turn = turn * DriveTrainConstants.kTurnMedSpeed;
+    speed = speed * DriveTrainConstants.kHighSpeed;
+    turn = turn * DriveTrainConstants.kTurnHighSpeed;
 
     SmartDashboard.putNumber("Pdrive throttle", speed);
     SmartDashboard.putNumber("Pdrive turn", turn);
