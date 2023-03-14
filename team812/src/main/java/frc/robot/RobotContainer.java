@@ -26,6 +26,7 @@ import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.DigitalIOSubsystem;
+import frc.robot.subsystems.BrakeSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.ArmExtensionSubsystem;
@@ -55,6 +56,7 @@ public class RobotContainer {
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem(); // This is arm rotation - dph
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
@@ -160,6 +162,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
+    new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
+    new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));

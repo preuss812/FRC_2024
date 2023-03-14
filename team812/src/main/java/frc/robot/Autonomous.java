@@ -41,6 +41,7 @@ public class Autonomous extends SequentialCommandGroup {
     ArmRotationSubsystem m_armSubsystem = RobotContainer.m_ArmRotationSubsystem;
     ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
     // CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
+    BrakeSubsystem m_BrakeSubsystem = RobotContainer.m_BrakeSubsystem;
     GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
     GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem;
     EncoderSubsystem m_encoderSubsystem = RobotContainer.m_EncoderSubsystem;
@@ -82,6 +83,7 @@ public class Autonomous extends SequentialCommandGroup {
         addCommands(
         new SequentialCommandGroup(
             new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
+            new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),  
             new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
             new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                           // Rotate the arm out to allow motion
             new DriveDistanceCommand(m_driveTrain, 0.45, (36.0), m_GyroSubsystem, m_encoderSubsystem), // 0.25 was not enough

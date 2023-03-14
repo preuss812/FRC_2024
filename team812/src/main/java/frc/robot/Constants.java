@@ -32,6 +32,7 @@ public final class Constants {
     }
     public static final class PCMConstants {
         public static final int[] kGripper = {1,0}; // dko 20220221 need to physically verify
+        public static final int[] kBrake = {2,3}; // TODO could be backwards
         public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
         public static final int[] kBarHooks = {8,9}; // dko 20220221 need to physically verify
         public static final int kMinPresssure = 50; // minimum operating pressure for Arm control
@@ -125,28 +126,42 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+   
+        public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023        // 2022 constants
         public static final double kArmEncoderCountPerRevolution = 8192; // Need to verify this number - dph
-        public static final double kArmReferencePosition = 0; // 2023 broomstick ref position
-        public static final double kArmAutonomousReferencePosition = 0.0; // 2023 position when the arm is folded in the robot to start the game
-        public static final double kArmScorePosition = 2100;
-        public static final double kArmTopPosition = 4020; //3550;
-        public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
-        public static final double kArmHangPosition = 2550;
-        public static final double kArmEndGamePosition = 2100;
-        public static final double kArmBallGathering = 200;
-        public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023
-        // new for 2023
-        public static final double kArmMinPosition = 900;  // Lowest you can ask for 
-        public static final double kArmLowPosition = 1300; // Height for scoring on the bottom row
-        public static final double kArmMidPosition = 2000; // Height for scoring on the middle row
-        public static final double kArmHiPosition = 2720;  // Height for scoring on the top row
-        public static final double kArmMaxPosition = 2740; // Highest you can ask for
-        public static final double kArmAutonomous = 900;
-        public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
         public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
         public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;
-        public static final double kArmHorizontalRotationPosition = ArmConstants.kArmMaxPosition - kArmMaxElevationAngleToGround*kArmTicksPerDegree;
-        public static final double kArmMinRotationAngle = -(kArmHorizontalRotationPosition - kArmMinPosition)*kArmDegreesPerTick;  // Degrees below horizontal
+
+        // public static final double kArmScorePosition = 2100;
+        // public static final double kArmTopPosition = 4020; //3550;
+        // public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
+        // public static final double kArmHangPosition = 2550;
+        // public static final double kArmEndGamePosition = 2100;
+        // public static final double kArmBallGathering = 200;
+        
+        // new for 2023
+        public static final double kArmTuckAngle = -65;                  // Degrees
+        public static final double kArmOnFloorRetractedAngle = -25;      // Degrees
+        public static final double kArmHorizontalAngle = 0;              // This defines the angle coordinate system with 0 == parallel to the frame/floor.
+        public static final double kArmMidConeAngle = 25;                // Degrees
+        public static final double kArmHighConeAngle = 35;               // Degrees
+        public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
+        public static final double kArmHighLimitAngle = 41;              // Degrees
+        public static final double kArmReferencePosition = 0;            // 2023 broomstick ref position
+        public static final double kArmAutonomousReferencePosition = 0;  // 2023 position when the arm is folded in the robot to start the game     public static final double kArmMinPosition = 900;  // Lowest you can ask for 
+        // Positions are in Encode Ticks
+        public static final double kArmMinPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree - kArmThreshold; // Lowest software will rotate down.
+        public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
+        public static final double kArmMidPosition = (kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
+        public static final double kArmHiPosition  = (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
+        public static final double kArmMaxPosition = (kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
+        public static final double kArmAutonomous  = kArmLowPosition;
+        
+        
+        
+        public static final double kArmMinRotationAngle = kArmOnFloorRetractedAngle - kArmTuckAngle;  // Degrees below horizontal
+        public static final double kArmHorizontalRotationPosition = (kArmHorizontalAngle - kArmTuckAngle) * kArmTicksPerDegree;
+        
     }
     
     public static final class ArmExtensionConstants {
@@ -176,10 +191,17 @@ public final class Constants {
         public static final double kArmExtensionPivotToWheelsOnFloorLine = Math.sin(Units.degreesToRadians(ArmConstants.kArmMinRotationAngle))*kArmExtensionRetractedLength;
     }
 
+    
     public static final class GripperConstants {
         public static final String kOpen    = "Open";
-        public static final String kUnknown =  "Unknown";
-        public static final String kClosed  =  "Closed";
+        public static final String kUnknown = "Unknown";
+        public static final String kClosed  = "Closed";
+    }
+
+    public static final class BrakeConstants {
+        public static final String kNotBraking = "NotBraking";
+        public static final String kUnknown    = "Unknown";
+        public static final String kBraking    = "Braking";
     }
 
     public static final class VisionConstants {
