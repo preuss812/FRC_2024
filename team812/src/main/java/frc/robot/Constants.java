@@ -143,7 +143,7 @@ public final class Constants {
         public static final double kArmTuckAngle = -65;                  // Degrees
         public static final double kArmOnFloorRetractedAngle = -25;      // Degrees
         public static final double kArmHorizontalAngle = 0;              // This defines the angle coordinate system with 0 == parallel to the frame/floor.
-        public static final double kArmMidConeAngle = 25;                // Degrees
+        public static final double kArmMidConeAngle = 30;                // Degrees
         public static final double kArmHighConeAngle = 35;               // Degrees
         public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
         public static final double kArmHighLimitAngle = 41;              // Degrees

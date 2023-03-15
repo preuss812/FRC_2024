@@ -29,7 +29,7 @@ public class ArmCommand extends CommandBase {
 
     SmartDashboard.putString("armcmd", "started");
 
-    setPoint = MathUtil.clamp(m_position, ArmConstants.kArmMidPosition, ArmConstants.kArmMaxPosition);
+    setPoint = MathUtil.clamp(m_position, ArmConstants.kArmMinPosition, ArmConstants.kArmMaxPosition);
     
   }
 

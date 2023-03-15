@@ -157,7 +157,7 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
-    new JoystickButton(rightJoystick, 5).whileTrue(new BalanceCommandDebug(m_DriveTrain, m_GyroSubsystem)); 
+    new JoystickButton(rightJoystick, 5).whileTrue(new BalanceCommandDebug(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem)); 
     
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
@@ -167,7 +167,8 @@ public class RobotContainer {
 
     // Left Joystick for Arm Rotation and Extension Control
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem)); new JoystickButton(leftJoystick, 3
+    new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+     new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition),
