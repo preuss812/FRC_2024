@@ -125,6 +125,27 @@ public class DriveTrain extends SubsystemBase {
     driveBase.arcadeDrive(-throttle, turn, false); // CHECK THE SIGNS of throttle and turn!!!
   }
 
+  public void team4698Drive(double throttle, double turn) {
+    // This is totally untested.  Transliterated from python 3/15/2023 - dph
+    // The intention is to combine the best of constant curvature and basic arcade drive.
+    // Throttle may need to be negated.
+    // Calculate semi-constant curvature values
+    double left = (((throttle + Math.abs(throttle) * turn) + (throttle + turn)) / 2);
+    double right = (((throttle - Math.abs(throttle) * turn) + (throttle - turn)) / 2);
+
+    // Determine maximum output
+    double m = Math.max(Math.abs(throttle), Math.abs(turn));
+
+    // Scale if needed
+    if (m > 1.0) {
+        left /= m;
+        right /= m;
+    }
+    SmartDashboard.putNumber("t4698DriveL", left);
+    SmartDashboard.putNumber("t4698DriveR", right);
+    driveBase.tankDrive(left, right);
+  }
+
   public void tankDrive(double l, double r) {
     driveBase.tankDrive(l, r);
   }

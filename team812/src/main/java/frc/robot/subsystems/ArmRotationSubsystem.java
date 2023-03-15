@@ -275,6 +275,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
 
     if (isTopLimitSwitchClosed()) {
+      SmartDashboard.putNumber("ARM pos top limit", getPosition());
       setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
       //setPosition(Constants.ArmConstants.kArmMaxPosition);
     }
