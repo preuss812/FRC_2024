@@ -32,47 +32,34 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
 
     leftFront = new WPI_TalonSRX(CANConstants.kLeftMotors[0]);
-    leftBack = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
     leftFront.configFactoryDefault();
-    leftBack.configFactoryDefault();
     leftFront.setNeutralMode(NeutralMode.Brake);
-    leftBack.setNeutralMode(NeutralMode.Brake);
     leftFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    leftBack.follow(leftFront);
-    // leftMotors = new GroupMotorControllers(leftFront,leftBack);
-    /*
-     * m_leftMotor = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
-     * m_leftMotor.configFactoryDefault();
-     * m_leftMotor.setNeutralMode(NeutralMode.Brake);
-     * m_leftMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-     */
-    rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
-    rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
-    rightFront.configFactoryDefault();
-    rightBack.configFactoryDefault();
-    rightFront.setNeutralMode(NeutralMode.Brake);
-    rightBack.setNeutralMode(NeutralMode.Brake);
-    rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-    rightBack.follow(rightFront);
 
-    // New for 2022, motors have to be inverted by this code
+    leftBack = new WPI_TalonSRX(CANConstants.kLeftMotors[1]);
+    leftBack.configFactoryDefault();
+    leftBack.setNeutralMode(NeutralMode.Brake);
+    leftBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
+
+    leftBack.follow(leftFront);
+
+    // Note that the right motors are inverted in order to turn the same
+    // direction as the left motors
+    rightFront = new WPI_TalonSRX(CANConstants.kRightMotors[0]);
+    rightFront.configFactoryDefault();
+    rightFront.setNeutralMode(NeutralMode.Brake);
+    rightFront.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightFront.setInverted(true);
+
+    rightBack = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
+    rightBack.configFactoryDefault();
+    rightBack.setNeutralMode(NeutralMode.Brake);
+    rightBack.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
     rightBack.setInverted(true);
 
-    // rightMotors = new SpeedControllerGroup(rightFront, rightBack);
-    // rightMotors = new MotorControllerGroup(rightFront, rightBack);
-    /*
-     * m_rightMotor = new WPI_TalonSRX(CANConstants.kRightMotors[1]);
-     * m_rightMotor.configFactoryDefault();
-     * m_rightMotor.setNeutralMode(NeutralMode.Brake);
-     * m_rightMotor.configOpenloopRamp(DriveTrainConstants.kOpenLoopRampRate);
-     * m_rightMotor.setInverted(true);
-     */
+    rightBack.follow(rightFront);
 
     driveBase = new DifferentialDrive(leftFront, rightFront);
-    // driveBase = new DifferentialDrive(m_leftMotor, m_rightMotor);
     driveBase.setSafetyEnabled(false);
   }
 
@@ -116,7 +103,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Pdrive throttle", speed);
     SmartDashboard.putNumber("Pdrive turn", turn);
 
-    driveBase.arcadeDrive(-speed, turn, false);
+    driveBase.arcadeDrive(-speed, turn, true);
   }
   
   public void arcadeDrive(double throttle, double turn) {

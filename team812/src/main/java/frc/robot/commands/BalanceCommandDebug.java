@@ -20,6 +20,8 @@ public class BalanceCommandDebug extends CommandBase {
   private final GyroSubsystem m_gyro;
   private final EncoderSubsystem m_encoder;
   private static double m_lastPitch = 0.0;
+  private static double m_leftEncoder;
+  private static double m_rightEncoder;
 
   public BalanceCommandDebug(final DriveTrain subsystem, final GyroSubsystem gyro, final EncoderSubsystem encoder) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,12 +32,20 @@ public class BalanceCommandDebug extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_leftEncoder = m_encoder.getLeftNumberDist();
+    m_rightEncoder = m_encoder.getRightNumberDist();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double currentPitch = m_gyro.getPitch();
+    double leftEncoder = m_encoder.getLeftNumberDist();
+    double rightEncoder = m_encoder.getRightNumberDist();
+
+    
+
     double ratio = currentPitch < 0.0 ? PidConstants.kProportionalBalanceBackward : PidConstants.kPorportionalBalanceForward;
     double extraPower = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, -0.1, 0.1);
     extraPower = 0.026; // this was too much

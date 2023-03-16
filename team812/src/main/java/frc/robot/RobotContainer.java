@@ -171,7 +171,7 @@ public class RobotContainer {
      new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition),
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(10.0),
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
       ),
       new SequentialCommandGroup(
