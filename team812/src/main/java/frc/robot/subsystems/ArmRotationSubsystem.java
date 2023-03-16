@@ -31,6 +31,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   private static double targetPosition = 0;
   private static double rotateTimesCalled=0;
   private static boolean m_rotateStopped = true;
+  private static boolean m_capturedLimitPosition = false;
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
       PneumaticsModuleType.CTREPCM,
@@ -275,9 +276,12 @@ public class ArmRotationSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
 
     if (isTopLimitSwitchClosed()) {
-      SmartDashboard.putNumber("ARM pos top limit", getPosition());
+      if (!m_capturedLimitPosition) {
+        SmartDashboard.putNumber("ARM pos top limit", getPosition());
+        m_capturedLimitPosition = true;
+      }
       setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
-      //setPosition(Constants.ArmConstants.kArmMaxPosition);
+      //setPosition(Constants.ArmConstants.kArmMaxPosition); // This was a bad idea, that's why it's commented out.
     }
   }
 }

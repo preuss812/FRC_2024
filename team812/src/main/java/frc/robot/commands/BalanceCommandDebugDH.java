@@ -25,6 +25,7 @@ public class BalanceCommandDebugDH extends CommandBase {
   private static double m_lastAdjustment;
   private static double m_targetAngle;
   private final double kAdjust = 0.1;
+  private final double kVelocityCorrection = 0.1;
 
   private double optimalVelocity(double incline, double distanceSoFar) {
     double nominalVelocity = 12.0; // inches per second.
@@ -88,18 +89,18 @@ public class BalanceCommandDebugDH extends CommandBase {
     double optimalVelocity   = optimalVelocity(currentPitch, distanceSoFar); // inches per second TODO Check units.
     double velocity          =  (encoderLeftSpeed+encoderRightSpeed)/2.0;
     Integer balancePath      = 0;
-    double nominalSpeed      = 0.25;
     double extraPower        = 0.0;
+    final double maxPower    = 0.75;
     //SmartDashboard.putNumber("dither",extraPower);
     if (velocity > 0.0 && optimalVelocity > 0.0)
     {
         // using a so-called exponential adjustment
         // A(i+1) = A(i)*k + A(i-1)*(1-k) where k between 0 and 1.
-        speedAdjustment = optimalVelocity-velocity;
+        speedAdjustment = (velocity-optimalVelocity) * kVelocityCorrection;
         extraPower = (speedAdjustment)*kAdjust + m_lastAdjustment*(1.0-kAdjust); 
     }
 
-    double balanceSpeed = MathUtil.clamp(currentPitch * ratio, -(nominalSpeed+extraPower), (nominalSpeed+extraPower));
+    double balanceSpeed = MathUtil.clamp(currentPitch * ratio + extraPower, -maxPower, maxPower);
 
     // TODO: add I and D constants
     if (currentPitch < -2.0) {
@@ -145,6 +146,19 @@ public class BalanceCommandDebugDH extends CommandBase {
     SmartDashboard.putNumber("bal-extra", extraPower);
     SmartDashboard.putNumber("bal-adj", m_lastAdjustment);
     SmartDashboard.putNumber("bal-dist", distanceSoFar);
+    System.out.printf("BAL: %f %f %f %f %f %f %f %f %f %f %f\n"
+        ,balanceSpeed
+        ,currentPitch
+        ,deltaPitch
+        ,ratio
+        ,balancePath
+        ,turningValue
+        ,velocity
+        ,optimalVelocity
+        ,extraPower
+        ,m_lastAdjustment
+        ,distanceSoFar
+        );
     m_subsystem.arcadeDrive(-balanceSpeed, -turningValue);
     m_lastPitch = currentPitch;
     m_lastAdjustment = speedAdjustment; 
