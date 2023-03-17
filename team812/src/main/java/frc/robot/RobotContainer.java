@@ -192,6 +192,8 @@ public class RobotContainer {
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
     ));
+    new JoystickButton(leftJoystick, 5).whileTrue(new BalanceCommandDebugEZ(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem)); 
+
     new JoystickButton(leftJoystick, 6
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
