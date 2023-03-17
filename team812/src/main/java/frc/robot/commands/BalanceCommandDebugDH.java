@@ -119,7 +119,7 @@ public class BalanceCommandDebugDH extends CommandBase {
         if (deltaPitch > 0.01) {
             // Use default balanceSpeed, we are moving forward up toward the center.
             balancePath = 4;
-        } else if (deltaPitch > 0.1) {
+        } else if (deltaPitch < -0.1) {
             // We are reducing pitch so we are approaching or possibly past the balance point
             // Reverse a little.
             balancePath = 5;
