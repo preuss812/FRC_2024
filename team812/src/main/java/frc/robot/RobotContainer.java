@@ -162,8 +162,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
     new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
-    new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
-    new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
+    new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
+    new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));

@@ -30,8 +30,8 @@ public class BrakeSubsystem extends SubsystemBase {
   private final DoubleSolenoid m_doubleSolenoid = new DoubleSolenoid(
       CANConstants.kPCM,
       PneumaticsModuleType.CTREPCM,
-      PCMConstants.kBrake[1],
-      PCMConstants.kBrake[0]);
+      PCMConstants.kBrake[0],
+      PCMConstants.kBrake[1]);
 
   public BrakeSubsystem() {
     // This is where you might set an initial state of open or closed

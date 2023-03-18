@@ -61,12 +61,14 @@ public class BalanceCommandDebugEZ extends CommandBase {
     m_encoder = encoder;
     m_brake = brake;
     // Where are the addRequirements???? TODO
-    addRequirements(subsystem);
+    addRequirements(m_subsystem,m_gyro,m_encoder,m_brake);
+    SmartDashboard.putString("BALEZ Constructed", "TRUE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SmartDashboard.putString("BALEZ INIT", "TRUE");
     m_encoderReferenceLeft  = m_encoder.getLeftNumberDist();
     m_encoderReferenceRight = m_encoder.getRightNumberDist();
     m_targetAngle = m_gyro.getAngle();
@@ -92,6 +94,7 @@ public class BalanceCommandDebugEZ extends CommandBase {
     double extraPower        = 0.0;
     final double maxPower    = 0.75;
     //SmartDashboard.putNumber("dither",extraPower);
+    
     if (velocity > 0.0 && optimalVelocity > 0.0)
     {
         // using a so-called exponential adjustment
@@ -146,7 +149,7 @@ public class BalanceCommandDebugEZ extends CommandBase {
     SmartDashboard.putNumber("bal-extra", extraPower);
     SmartDashboard.putNumber("bal-adj", m_lastAdjustment);
     SmartDashboard.putNumber("bal-dist", distanceSoFar);
-    System.out.printf("BALEZ: %f %f %f %f %f %f %f %f %f %f %f\n"
+     System.out.printf("BALEZ: %f %f %f %f %d %f %f %f %f %f %f\n"
         ,balanceSpeed
         ,currentPitch
         ,deltaPitch
@@ -159,6 +162,7 @@ public class BalanceCommandDebugEZ extends CommandBase {
         ,m_lastAdjustment
         ,distanceSoFar
         );
+
     balanceSpeed = 0.55;
     m_subsystem.arcadeDrive(-balanceSpeed, -turningValue);
     m_lastPitch = currentPitch;
@@ -183,6 +187,7 @@ public class BalanceCommandDebugEZ extends CommandBase {
     double turningValue      = MathUtil.clamp(deltaAngle * PidConstants.kProportionalDriveStraight, -1.0, 1.0);
     double speedAdjustment   = 0.0; 
     double distanceSoFar     = ((encoderLeft+encoderRight) - (m_encoderReferenceLeft + m_encoderReferenceRight))/2.0;  // Averaging left + right
-    return distanceSoFar >= 80; // 80 inches from start to center of gravity robot == center of platform.
+    //return false;
+    return distanceSoFar >= 82; // 80 inches from start to center of gravity robot == center of platform.
   }
 }
