@@ -171,24 +171,24 @@ public class RobotContainer {
      new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(10.0),
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
       ),
       new SequentialCommandGroup(
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition)
+,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmLowPosition
     ));
     new JoystickButton(leftJoystick, 4
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition),
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0),
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
       ),
       new SequentialCommandGroup(
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition)
+,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
     ));
@@ -197,12 +197,12 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition),
+        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(5)
       ),
       new SequentialCommandGroup(
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition)
+,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
     ));

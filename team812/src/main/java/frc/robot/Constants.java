@@ -143,8 +143,8 @@ public final class Constants {
         public static final double kArmTuckAngle = -65;                  // Degrees
         public static final double kArmOnFloorRetractedAngle = -25;      // Degrees
         public static final double kArmHorizontalAngle = 0;              // This defines the angle coordinate system with 0 == parallel to the frame/floor.
-        public static final double kArmMidConeAngle = 30;                // Degrees
-        public static final double kArmHighConeAngle = 35;               // Degrees
+        public static final double kArmMidConeAngle = 32.9;                // Degrees
+        public static final double kArmHighConeAngle = 31.4;               // Degrees
         public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
         public static final double kArmHighLimitAngle = 41;              // Degrees
         public static final double kArmReferencePosition = 0;            // 2023 broomstick ref position
@@ -152,8 +152,8 @@ public final class Constants {
         // Positions are in Encode Ticks
         public static final double kArmMinPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree - kArmThreshold; // Lowest software will rotate down.
         public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
-        public static final double kArmMidPosition = (kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
-        public static final double kArmHiPosition  = (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
+        public static final double kArmMidPosition = 2314; //(kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
+        public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
         public static final double kArmMaxPosition = (kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
         public static final double kArmAutonomous  = kArmLowPosition;
         
@@ -177,8 +177,8 @@ public final class Constants {
         public static final double kArmExtensionFullyExtendedPosition = kArmExtensionTicksPerMeter; // This needs to be calibrated - dph
         public static final double kArmExtensionHomePosition = 0;
         public static final double kArmExtensionLowPosition = 0;
-        public static final double kArmExtensionMidPosition = 6000;
-        public static final double kArmExtensionHiPosition = 35000;
+        public static final double kArmExtensionMidPosition = 2185;
+        public static final double kArmExtensionHiPosition = 28386;
         public static final double kArmExtensionMaxPosition = 37100;
         public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
         public static final double kArmExtensionThreshold = 20;
