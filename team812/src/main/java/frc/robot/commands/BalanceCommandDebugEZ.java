@@ -60,15 +60,14 @@ public class BalanceCommandDebugEZ extends CommandBase {
     m_gyro = gyro;
     m_encoder = encoder;
     m_brake = brake;
-    // Where are the addRequirements???? TODO
     addRequirements(m_subsystem,m_gyro,m_encoder,m_brake);
-    SmartDashboard.putString("BALEZ Constructed", "TRUE");
+    //SmartDashboard.putString("BALEZ Constructed", "TRUE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putString("BALEZ INIT", "TRUE");
+    //SmartDashboard.putString("BALEZ INIT", "TRUE");
     m_encoderReferenceLeft  = m_encoder.getLeftNumberDist();
     m_encoderReferenceRight = m_encoder.getRightNumberDist();
     m_targetAngle = m_gyro.getAngle();

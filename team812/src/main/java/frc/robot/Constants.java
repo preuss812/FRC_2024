@@ -156,7 +156,8 @@ public final class Constants {
         public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
         public static final double kArmMaxPosition = (kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
         public static final double kArmAutonomous  = kArmLowPosition;
-        
+        public static final double kArmHighCubePosition = kArmHiPosition;       // TODO May need adjustment for automomous.
+        public static final double kArmHighCubeReleasePosition = kArmHiPosition;  // TODO May need adjustment for automomous.
         
         
         public static final double kArmMinRotationAngle = kArmOnFloorRetractedAngle - kArmTuckAngle;  // Degrees below horizontal

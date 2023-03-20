@@ -111,6 +111,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     // for debug: put subsystem info on the shuffleboard. - remove before competition.
+    /*
     SmartDashboard.putData(m_ArmExtensionSubsystem);
     SmartDashboard.putData(m_ArmRotationSubsystem);
     SmartDashboard.putData("ArmRotate", new ArmCommand(m_ArmRotationSubsystem, 1000));
@@ -120,7 +121,8 @@ public class RobotContainer {
     SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate Down", new InstantCommand(m_ArmRotationSubsystem::rotateDown50, m_ArmRotationSubsystem));
     SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
-  }
+  */
+ }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -156,8 +158,9 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
-    new JoystickButton(rightJoystick, 4).whileTrue(new BalanceCommand(m_DriveTrain, m_GyroSubsystem));                // Should this lower the arm?
-    new JoystickButton(rightJoystick, 5).whileTrue(new BalanceCommandDebug(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem)); 
+    new JoystickButton(rightJoystick, 4).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem, m_EncoderSubsystem, m_BrakeSubsystem,4.0,0.55));                // Should this lower the arm?
+    new JoystickButton(rightJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,-4.0,0.55)); 
+    new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.55));
     
     new JoystickButton(rightJoystick, 8)
         .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
@@ -192,7 +195,7 @@ public class RobotContainer {
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
     ));
-    new JoystickButton(leftJoystick, 5).whileTrue(new BalanceCommandDebugEZ(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem)); 
+    new JoystickButton(leftJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.55)); 
 
     new JoystickButton(leftJoystick, 6
     ).onTrue( new ConditionalCommand( 

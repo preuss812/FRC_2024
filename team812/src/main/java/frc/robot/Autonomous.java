@@ -32,6 +32,7 @@ public class Autonomous extends SequentialCommandGroup {
 
   // public Autonomous(DriveTrain subsystem, GyroSubsystem gyro) {
   public Autonomous(DriveTrain subsystem) {
+    boolean balancing = true;
 
     m_driveTrain = subsystem;
 
@@ -80,14 +81,38 @@ public class Autonomous extends SequentialCommandGroup {
         // new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
         ));
         */
-        addCommands(
-        new SequentialCommandGroup(
-            new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
-            new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),  
-            new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
-            new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                           // Rotate the arm out to allow motion
-            new DriveDistanceCommand(m_driveTrain, 0.45, (36.0), m_GyroSubsystem, m_encoderSubsystem), // 0.25 was not enough
-            new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem)
-             ));
+        if (balancing) {
+          // Commands to balance by driving 82 inches and slamming on the brakes.
+          addCommands(
+          new SequentialCommandGroup(
+              new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
+              new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),  
+              new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
+              new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                           // Rotate the arm out to allow motion
+              //new DriveDistanceCommand(m_driveTrain, 0.45, (36.0), m_GyroSubsystem, m_encoderSubsystem), // 0.25 was not enough
+              //new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem),
+              new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, 82, 0.55) // Drive straight 82 inches at 55% speed and stop
+              ));
+        } else {
+          // Commands to score a purple cube and prepare to score more game pieces
+          addCommands(
+          new SequentialCommandGroup(
+              new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                               // The grip is already closed. Tell it so stay closed.
+              new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),                                     // Make sure the brake is not engaged.
+              new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                        // Set the coordinates for the arm rotation and extension to 0 for both.
+              new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                              // Rotate the arm out to allow motion
+              new DriveDistanceCommand(m_driveTrain, 0.30, (12.0), m_GyroSubsystem, m_encoderSubsystem),   // drive forware 12 inches to score.
+              new ArmCommand(m_armSubsystem, ArmConstants.kArmHighCubePosition),                                  // Raise the arm up high.
+              new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition),    // Extend arm to score
+              new ArmCommand(m_armSubsystem, ArmConstants.kArmHighCubeReleasePosition),                           // Rotate down slightly to be inside the box
+              new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),                                // Release the cube.
+              new WaitCommand(0.25),                                                                     // Allow time for the grippers to release
+              new DriveDistanceCommand(m_driveTrain, 0.30, (-12.0), m_GyroSubsystem, m_encoderSubsystem),  // Back up 12 inches.
+              new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition),  // Retract and lower the arm
+              new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition),                
+              new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.4, 180.0)                    // Turn to face the field.
+          
+              ));
+        }
   }
 }
