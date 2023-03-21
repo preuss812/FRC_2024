@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants.PCMConstants;
 import frc.robot.Constants.BrakeConstants;
+import frc.robot.Constants;
 
 /**
  * Add your docs here.
@@ -34,7 +35,7 @@ public class BrakeSubsystem extends SubsystemBase {
       PneumaticsModuleType.CTREPCM,
       PCMConstants.kBrake[0],
       PCMConstants.kBrake[1]);
-  private final BrakeLight m_brakeLight = new Relay(Constants.kBrakeLightRelay, Relay.Direction.kForward);
+  private final Relay m_brakeLight = new Relay(Constants.kBrakeLightRelay, Relay.Direction.kForward);
 
   public BrakeSubsystem() {
       unBrake();

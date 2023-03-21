@@ -26,7 +26,8 @@ public class ArmExtensionSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_armExtension = new WPI_TalonSRX(CANConstants.kArmExtensionMotor);
   private static boolean hasBeenHomed = false;
   private static double targetPosition = 0.0;
-  
+  private boolean m_debug = true;  // TODO Should be false for competition.
+
   /** Creates a new ArmExtensionSubsystem. */
   public ArmExtensionSubsystem() {
     m_armExtension.configFactoryDefault();
@@ -68,6 +69,7 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     m_armExtension.config_kI(0, PidConstants.kArmExtension_kI, 10);
     m_armExtension.config_kD(0, PidConstants.kArmExtension_kD, 10);
     m_armExtension.config_kF(0, PidConstants.kArmExtension_kF, 10);
+    //m_armExtension.config_IntegralZone(0, PidConstants.kArmExtension_Izone, 10); // Needs investigation dph 2023-03-21
 
     // Velocity in sensor units per 100ms
     m_armExtension.configMotionCruiseVelocity(150.0, 10);
@@ -249,6 +251,13 @@ public class ArmExtensionSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("ArmExtension Homed?", isHome());
     SmartDashboard.putBoolean("ArmExtension outsw", isOutLimitSwitchClosed());
     SmartDashboard.putBoolean("ArmExtension insw", isInLimitSwitchClosed());
+    if (m_debug) {
+      SmartDashboard.putNumber("ArmExtension Output%", m_armExtension.getMotorOutputPercent());
+      SmartDashboard.putNumber("ArmExtension Voltage", m_armExtension.getMotorOutputVoltage());
+      SmartDashboard.putNumber("ArmExtension error", m_armExtension.getClosedLoopError(0));
+      ControlMode controlMode = m_armExtension.getControlMode();
+      SmartDashboard.putString("ArmExtension ctlrmode", controlMode.toString());
+    }
 
     // Resets the set position to 0 when the limit switch is switched
     if (isInLimitSwitchClosed()) {

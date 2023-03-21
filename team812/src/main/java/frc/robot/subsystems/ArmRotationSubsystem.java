@@ -29,6 +29,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   private static boolean hasBeenHomed = true;
   static Integer getPosition_timesCalled = 0;
   private static double targetPosition = 0;
+  private boolean m_debug = true;  // TODO Should be false for competition.
   private static double rotateTimesCalled=0;
   private static boolean m_rotateStopped = true;
   private static boolean m_capturedLimitPosition = false;
@@ -272,9 +273,15 @@ public class ArmRotationSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
     SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
     SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
-    SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
-    SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
-
+    //SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
+    //SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
+    if (m_debug) {
+      SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
+      SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
+      SmartDashboard.putNumber("ARM error", m_arm.getClosedLoopError(0));
+      ControlMode controlMode = m_arm.getControlMode();
+      SmartDashboard.putString("ARM ctlrmode", controlMode.toString());
+    }
     if (isTopLimitSwitchClosed()) {
       if (!m_capturedLimitPosition) {
         SmartDashboard.putNumber("ARM pos top limit", getPosition());
