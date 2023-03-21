@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Relay.Value;
 
 //import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -32,14 +34,17 @@ public class BrakeSubsystem extends SubsystemBase {
       PneumaticsModuleType.CTREPCM,
       PCMConstants.kBrake[0],
       PCMConstants.kBrake[1]);
+  private final BrakeLight m_brakeLight = new Relay(Constants.kBrakeLightRelay, Relay.Direction.kForward);
 
   public BrakeSubsystem() {
+      unBrake();
     // This is where you might set an initial state of open or closed
   }
 
   public void unBrake() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    m_brakeLight.set(Value.kOff);
     if (pressure > PCMConstants.kMinPresssure) {
       brakeState = BrakeConstants.kNotBraking;
     } else {
@@ -51,6 +56,7 @@ public class BrakeSubsystem extends SubsystemBase {
   public void brake() {
     double pressure = frc.robot.RobotContainer.m_Compressor.get_pressure();
     m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    m_brakeLight.set(Value.kOn);
     if (pressure > PCMConstants.kMinPresssure) {
       brakeState = BrakeConstants.kBraking;
     } else {

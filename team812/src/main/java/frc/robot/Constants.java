@@ -221,4 +221,6 @@ public final class Constants {
     public static final class CameraConstants {
         public static final String kCamName="pv-812";
     }
+
+    public static final int kBrakeLightRelay = 0;
 }
