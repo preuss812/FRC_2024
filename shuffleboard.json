@@ -936,13 +936,27 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/bal-dist",
+              "_title": "SmartDashboard/bal-dist",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
       }
     }
   ],
   "windowGeometry": {
-    "x": 1.0,
-    "y": 15.0,
+    "x": 74.0,
+    "y": 203.0,
     "width": 1777.0,
     "height": 784.0
   }

@@ -19,13 +19,13 @@ public class BalanceCommandDebugEZ2 extends CommandBase {
   private final GyroSubsystem m_gyro;
   private final EncoderSubsystem m_encoder;
   private final BrakeSubsystem m_brake;      // Maybe this should be outside in a sequential command.
-  private static double m_driveSpeed;        // Percent of drive (-1..1)
-  private static double m_targetDistance;    // Distance to travel in inches. Expecting somthing around 80..82 inches based on field and robot dimensions.
-  private static double m_distance;          // Travel since command initialized.
-  private static double m_encoderReferenceLeft;
-  private static double m_encoderReferenceRight;
+  private  double m_driveSpeed;        // Percent of drive (-1..1)
+  private  double m_targetDistance;    // Distance to travel in inches. Expecting somthing around 80..82 inches based on field and robot dimensions.
+  private  double m_distance;          // Travel since command initialized.
+  private  double m_encoderReferenceLeft;
+  private  double m_encoderReferenceRight;
   //private static double m_lastAdjustment;
-  private static double m_targetAngle;
+  private  double m_targetAngle;
   //private final double kAdjust = 0.1;
   //private final double kVelocityCorrection = 0.1;
 
@@ -87,6 +87,7 @@ public class BalanceCommandDebugEZ2 extends CommandBase {
   @Override
   public boolean isFinished() {
     // return true if we travelled the requested distance
+    SmartDashboard.putNumber("bal-goal", m_targetDistance);
     return ((m_targetDistance >= 0 && m_distance >= m_targetDistance) || (m_targetDistance < 0 && m_distance <= m_targetDistance));
   }
 }
