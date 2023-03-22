@@ -33,6 +33,7 @@ public class Autonomous extends SequentialCommandGroup {
   // public Autonomous(DriveTrain subsystem, GyroSubsystem gyro) {
   public Autonomous(DriveTrain subsystem) {
     boolean balancing = false;
+    boolean readingBlackBoxSwitch = false;
 
     m_driveTrain = subsystem;
 
@@ -48,6 +49,15 @@ public class Autonomous extends SequentialCommandGroup {
     EncoderSubsystem m_encoderSubsystem = RobotContainer.m_EncoderSubsystem;
 
     blackBox.readBits();
+    if (readingBlackBoxSwitch) {
+      if (RobotContainer.m_BlackBox.isSwitchLeft()) {
+        balancing = true;
+      } else if (RobotContainer.m_BlackBox.isSwitchCenter()) {
+        balancing = false;
+      } else {
+        balancing = false; 
+      }
+    }
 /* 
     addCommands(
         new SequentialCommandGroup(
