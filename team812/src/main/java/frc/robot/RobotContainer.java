@@ -178,7 +178,7 @@ public class RobotContainer {
         new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
       ),
       new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition).withTimeout(3.0)
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmLowPosition
@@ -187,10 +187,10 @@ public class RobotContainer {
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition).withTimeout(3.0)
       ),
       new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition).withTimeout(3.0)
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
@@ -201,10 +201,10 @@ public class RobotContainer {
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(5)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(3.0)
       ),
       new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition)
+        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(3.0)
 ,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0)
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition

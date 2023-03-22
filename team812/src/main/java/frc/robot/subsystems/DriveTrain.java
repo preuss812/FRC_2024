@@ -95,7 +95,7 @@ public class DriveTrain extends SubsystemBase {
 
   public void preussDrive(double throttle, double zRotation) {
     double speed = throttle;
-    double turn = zRotation;
+    double turn = zRotation*DriveTrainConstants.kTurnMedSpeed; /// Reduced from full speed 3/21/2023 - dph
 
     speed = speed * DriveTrainConstants.kHighSpeed;
     turn = turn * DriveTrainConstants.kTurnHighSpeed;

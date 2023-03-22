@@ -96,12 +96,12 @@ public final class Constants {
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
      
-        public static final double kArm_kP = 2.5;
+        public static final double kArm_kP = 2.7;
         public static final double kArm_kI = 0.0;
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
         public static final double kArm_rampRate = 0.5;
-        public static final double kArmExtension_kP = 3.0;
+        public static final double kArmExtension_kP = 0.3; //3.0;
         public static final double kArmExtension_kI = 0.0;
         public static final double kArmExtension_kD = 0.0;
         public static final double kArmExtension_kF = 0.0;
@@ -117,7 +117,7 @@ public final class Constants {
 	    public static final double kTurnHighSpeed = 1.0;
 
 	    public static final double kMedSpeed = 0.6;
-	    public static final double kTurnMedSpeed = 0.5;
+	    public static final double kTurnMedSpeed = 0.75; // Changed from 0.5 3/21/2023 - dph
 
 	    public static final double kLowSpeed = 0.2;
 	    public static final double kTurnLowSpeed = 0.4;
@@ -127,7 +127,7 @@ public final class Constants {
 
     public static final class ArmConstants {
    
-        public static final double kArmThreshold = 40; // Relaxed from 20 Feb 22, 2023        // 2022 constants
+        public static final double kArmThreshold = 60; // Relaxed from 20 Feb 22, 2023        // 2022 constants
         public static final double kArmEncoderCountPerRevolution = 8192; // Need to verify this number - dph
         public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
         public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;
