@@ -158,8 +158,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
-    //new JoystickButton(rightJoystick, 4).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem, m_EncoderSubsystem, m_BrakeSubsystem,4.0,0.10));                // Should this lower the arm?
-   // new JoystickButton(rightJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,-4.0,0.20)); 
+    new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem, m_EncoderSubsystem, m_BrakeSubsystem,4.0,0.40));                // Should this lower the arm?
+    new JoystickButton(rightJoystick, 4).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,-4.0,0.40)); 
     //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
     
     new JoystickButton(rightJoystick, 8)
