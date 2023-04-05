@@ -28,6 +28,9 @@ public class DriveTrain extends SubsystemBase {
   // private final MotorControllerGroup leftMotors, rightMotors;
   // private final Encoder rightEncoder, leftEncoder;
   private final DifferentialDrive driveBase;
+  private GyroSubsystem m_gyro;
+  private EncoderSubsystem m_encoder;
+  private double m_initialOrientation = -1000.0; // Robot orientation on field 0..359.9999 or -1 for undefined (90 = starting orientation)
 
   public DriveTrain() {
 
@@ -61,6 +64,10 @@ public class DriveTrain extends SubsystemBase {
 
     driveBase = new DifferentialDrive(leftFront, rightFront);
     driveBase.setSafetyEnabled(false);
+
+    // For xDrive only
+    m_gyro = frc.robot.RobotContainer.m_GyroSubsystem;
+    m_encoder = frc.robot.RobotContainer.m_EncoderSubsystem;
   }
 
   public void preussDrive2022(double throttle, double zRotation) {
@@ -151,6 +158,134 @@ public class DriveTrain extends SubsystemBase {
   // Math.copysign() is used. The third parameter to arcadeDrive() is false
   // to prevent the inputs from being squared once again.
 
+  // xDrive - eXperimental drive is an attempt to drive the robot
+  // from the perspective of the driver instead of from the perspective of the robot.
+  // Input from the joystick is interpreted as the vector for driving.
+  // For example if the Joystick is Y = 0.5 and X = 0.5 then then the vector would
+  // be pointing NorthEast relative the North being straight ahead on the field
+  // (45 degrees counter clockwise from the field X axis).
+  // The magnitude* for the joystick input is the throttle*.
+  // If the robot speed is very slow or stopped or if direction is approximately reversed,
+  // then rotation will be performed first, before x or y displacement (aka throttle).
+  // If the vector from the joystick changes by more than some percentage xDrive will
+  // consider which direction to turn (clockwise vs counterclockwise) to achieve the desired
+  // vector, possibly reversing the robot direction (ie forwards travel vs backwards travel).
+  // It is likely that an explcit input to reverse direction or rotate may be required as well
+  // (e.g. right 90 degrees or left 90 degrees buttons). 
+  public void xDrive(double joystickY, double joystickX) {
+    double kRotation = 1.0/90.0;
+    double kXDeadZone = 0.02; // Treat joystick X input below 0.02 as 0.0;
+    double kYDeadZone = 0.02; // Treat joystick Y input below 0.02 as 0.0;
+    int    kAngleTransition = 5; // start accelerations if angle is within _x_ degrees.
+    double kSpeedTransition = 3; // continue accelerations if speed is _x_ inches per second or greater.
+    double throttle = 0.0;
+    double zRotation = 0.0;
+    double robotRawOrientation = m_gyro.getAngle();
+    int robotOrientation = (int) (robotRawOrientation - m_initialOrientation + 90 + 360.0) % 360; // orientation in integer degrees.
+    if (robotOrientation > 180) robotOrientation = 360 - robotOrientation;
+
+    double robotSpeed = (m_encoder.getLeftNumberRate() + m_encoder.getRightNumberRate() )/2.0; // inches per second.
+    // If we have not captured the initial orientation, capture it now.
+    if (m_initialOrientation <= -1000.0) {
+      m_initialOrientation = robotRawOrientation; // Capture init
+      robotOrientation = 90; // default by convention robot is expected to be pointed toward the center of the field.
+    }
+    double absJoystickX = Math.abs(joystickX);
+    double absJoystickY = Math.abs(joystickY);
+    // Implement joystick dead zones.
+    if (absJoystickX < kXDeadZone) {
+      joystickX = 0.0;
+      absJoystickX = 0.0;
+    }
+    if (absJoystickY < kYDeadZone) {
+      joystickY = 0.0;
+      absJoystickY = 0.0;
+    }
+    double signJoyStickX = Math.signum(joystickX);
+    double signJoyStickY = Math.signum(joystickY);
+    double joystickMagnitude = Math.max(absJoystickX, absJoystickY);
+    int joystickOrientation = robotOrientation; // Default point to where the robot is pointing.
+    int forwardAngle = 0;
+    int reverseAngle = 0;
+    String fwdRev = "";
+    int path=0;
+
+    // Compute the vector of the joystick position
+    if (joystickMagnitude > 0.0) {
+      if (joystickX > 0.0) {
+        joystickOrientation = (int) (Math.atan(joystickY/joystickX)*360/Math.PI/2.0);
+        path=1;
+      } else if (joystickX < 0.0) {
+        if (joystickY >= 0) {
+          joystickOrientation = (int) (Math.atan(joystickY/joystickX)*360/Math.PI/2.0);
+          path=2;
+        } else {
+          joystickOrientation = (int) (Math.atan(joystickY/joystickX)*360/Math.PI/2.0) - 180;
+          path = 3;
+        }
+      } else if (joystickY > 0.0) {
+        joystickOrientation = 90;
+        path=4;
+      } else if (joystickY < 0.0) {
+        joystickOrientation = -90;
+        path=5;
+      } else {
+        joystickOrientation = robotOrientation;
+        path=6;
+      }
+      // Compute the relative angle of the robot vs the joystick;
+      // Need to try both forward and backward relative angles.
+      // convert range from 0..360 to -180..180
+      forwardAngle = (joystickOrientation - robotOrientation);
+      if (forwardAngle > 180) forwardAngle = 360 - forwardAngle;
+      if (forwardAngle <= -180) forwardAngle = 360 + forwardAngle;
+      if (forwardAngle > 360) forwardAngle = forwardAngle % 360;
+
+      if (Math.abs(forwardAngle) > 180) {
+         boolean bad = true;
+      }
+      if (forwardAngle > 0)
+        reverseAngle = forwardAngle - 180;
+      else
+        reverseAngle = forwardAngle + 180;
+      if (forwardAngle > 180 || forwardAngle < -180 || reverseAngle > 180 || reverseAngle < -180) {
+        boolean bad = true;
+    }
+      //if (reverseAngle > 180) reverseAngle = 360 - reverseAngle;
+      if (Math.abs(forwardAngle) <= Math.abs(reverseAngle)) {
+        fwdRev = "Forward";
+        zRotation = joystickMagnitude * forwardAngle * kRotation;
+        if (true || Math.abs(robotSpeed) > kSpeedTransition || Math.abs(forwardAngle) < kAngleTransition ) {
+          throttle = joystickMagnitude;
+        } else {
+          throttle = 0.0; // rotate first, then accelerate
+        }
+      } else {
+        fwdRev = "Reverse";
+        zRotation = joystickMagnitude * reverseAngle * kRotation;
+        if (true || Math.abs(robotSpeed) > kSpeedTransition || Math.abs(reverseAngle) < kAngleTransition ) {
+          throttle = -joystickMagnitude;
+        } else {
+          throttle = 0.0; // rotate first, then accelerate
+        }
+      }
+    } else { 
+      // no joystick input
+      throttle = 0.0;
+      zRotation = 0.0;
+      path=99;
+    }
+
+    preussDrive(throttle, -zRotation);
+    System.out.printf("%d %d %f %f %f %f %d %d %s %d\n"
+    , robotOrientation, joystickOrientation, joystickX, joystickY, throttle, zRotation, forwardAngle, reverseAngle, fwdRev, path);
+
+  } // xDrive
+  public void setOrientation(int angle) {
+    m_initialOrientation = m_gyro.getAngle() - angle + 90;
+    if (m_initialOrientation >= 360) m_initialOrientation -= 360;
+    if (m_initialOrientation <    0) m_initialOrientation += 360;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -55,7 +55,7 @@ public class RobotContainer {
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem(); // This is arm rotation - dph
   public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
-  public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  //public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
@@ -121,7 +121,9 @@ public class RobotContainer {
     SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate Down", new InstantCommand(m_ArmRotationSubsystem::rotateDown50, m_ArmRotationSubsystem));
     SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
+
   */
+  SmartDashboard.putData("xDrive",new testXDrive(m_DriveTrain));
  }
 
   /**
@@ -157,7 +159,7 @@ public class RobotContainer {
      */
     new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-    new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
+    //new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
     new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem, m_EncoderSubsystem, m_BrakeSubsystem,4.0,0.40));                // Should this lower the arm?
     new JoystickButton(rightJoystick, 4).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,-4.0,0.40)); 
     //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
