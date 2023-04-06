@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 // import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -182,7 +183,7 @@ public class DriveTrain extends SubsystemBase {
     double zRotation = 0.0;
     double robotRawOrientation = m_gyro.getAngle();
     int robotOrientation = (int) (robotRawOrientation - m_initialOrientation + 90 + 360.0) % 360; // orientation in integer degrees.
-    if (robotOrientation > 180) robotOrientation = 360 - robotOrientation;
+    if (robotOrientation > 180) robotOrientation = robotOrientation - 360;
 
     double robotSpeed = (m_encoder.getLeftNumberRate() + m_encoder.getRightNumberRate() )/2.0; // inches per second.
     // If we have not captured the initial orientation, capture it now.
@@ -255,7 +256,7 @@ public class DriveTrain extends SubsystemBase {
       if (Math.abs(forwardAngle) <= Math.abs(reverseAngle)) {
         fwdRev = "Forward";
         zRotation = joystickMagnitude * forwardAngle * kRotation;
-        if (true || Math.abs(robotSpeed) > kSpeedTransition || Math.abs(forwardAngle) < kAngleTransition ) {
+        if (Math.abs(robotSpeed) > kSpeedTransition || Math.abs(forwardAngle) < kAngleTransition ) {
           throttle = joystickMagnitude;
         } else {
           throttle = 0.0; // rotate first, then accelerate
@@ -263,7 +264,7 @@ public class DriveTrain extends SubsystemBase {
       } else {
         fwdRev = "Reverse";
         zRotation = joystickMagnitude * reverseAngle * kRotation;
-        if (true || Math.abs(robotSpeed) > kSpeedTransition || Math.abs(reverseAngle) < kAngleTransition ) {
+        if (Math.abs(robotSpeed) > kSpeedTransition || Math.abs(reverseAngle) < kAngleTransition ) {
           throttle = -joystickMagnitude;
         } else {
           throttle = 0.0; // rotate first, then accelerate
@@ -275,7 +276,9 @@ public class DriveTrain extends SubsystemBase {
       zRotation = 0.0;
       path=99;
     }
-
+    // For debug safety, clamp the values to safe levels
+    throttle = MathUtil.clamp(throttle, -0.1, 0.1);
+    zRotation = MathUtil.clamp(zRotation, -0.2, 0.2);
     preussDrive(throttle, -zRotation);
     System.out.printf("%d %d %f %f %f %f %d %d %s %d\n"
     , robotOrientation, joystickOrientation, joystickX, joystickY, throttle, zRotation, forwardAngle, reverseAngle, fwdRev, path);
