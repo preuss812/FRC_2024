@@ -124,7 +124,8 @@ public class RobotContainer {
 
   */
   SmartDashboard.putData("xDrive",new testXDrive(m_DriveTrain));
- }
+  SmartDashboard.putData("yawDrive",new testYawDrive(m_DriveTrain));
+}
 
   /**
    * Use this method to define your button->command mappings. Buttons can be

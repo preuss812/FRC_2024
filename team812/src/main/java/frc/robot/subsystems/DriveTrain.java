@@ -32,6 +32,8 @@ public class DriveTrain extends SubsystemBase {
   private GyroSubsystem m_gyro;
   private EncoderSubsystem m_encoder;
   private double m_initialOrientation = -1000.0; // Robot orientation on field 0..359.9999 or -1 for undefined (90 = starting orientation)
+  private double m_initialYaw = 0.0;
+  private boolean m_yawInitialized = false;
 
   public DriveTrain() {
 
@@ -289,6 +291,149 @@ public class DriveTrain extends SubsystemBase {
     if (m_initialOrientation >= 360) m_initialOrientation -= 360;
     if (m_initialOrientation <    0) m_initialOrientation += 360;
   }
+
+  // normalizeYaw - helper function to ensure that yaw angles are normalized to the range of -180 <= yaw < 180
+  public double normalizeYaw(double yaw) {
+    while (yaw < -180) yaw += 360;
+    while (yaw >= 180) yaw -= 360;
+    return yaw;
+  }
+
+  // joystickToYaw - helper function to convert joystick X/Y to yaw.
+  public double joystickToYaw(double joystickY, double joystickX) {
+    double yaw = 0.0; // return 0 if the calculations fall through
+    if (joystickX == 0.0) {
+      if (joystickY == 0.0) {
+        yaw = 0.0; // no joystick input so using 0.0 as a sentinel value.
+      }
+      else if (joystickY > 0) {
+        yaw = 0.0; // Straight ahead
+      }
+      else {
+        yaw = -180.0; // Straight behind.
+      }
+    } else if (joystickX > 0.0) {
+        if (joystickY == 0.0) {
+          yaw = 90.0;
+        } else if (joystickY > 0.0) {
+          // vector is somewhere in the first quadrant (ie between North and East)
+          yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+        } else {
+          // vector is somewhere in the fourth quadrant (ie between East and South)
+          yaw = -180 - Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+        }
+    } else {
+      if (joystickY == 0.0) {
+        yaw = -90.0;
+      } else if (joystickY > 0.0) {
+        // vector is somewhere in the first quadrant (ie between North and West)
+        yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+      } else {
+        // vector is somewhere in the fourth quadrant (ie between West and South)
+        yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0 - 180;
+      }
+    }
+    return yaw;
+  }
+
+  // setRobotYaw - Helper function for testing to set the robot yaw to a known value.
+  public void setRobotYaw(double yaw) {
+    m_yawInitialized = true;
+    m_initialYaw = normalizeYaw(-yaw); // robotYaw = normalizeYaw(m_gyro.getAngle() - m_initialYaw);
+  }
+  
+  // yawDrive - an experimental drive is an attempt to drive the robot
+  // from the perspective of the driver instead of from the perspective of the robot.
+  // Similar to xDrive but using Yaw conventions for coordinates with 
+  // Orientation == Yaw == 0 straight ahead and clockwise rotation is positive.
+  // In xDrive Orientation = Yaw + 90 and counterclockwise rotation is positive.
+  // Input from the joystick is interpreted as the vector for driving.
+  // For example if the Joystick is Y = 0.5 and X = 0.5 then then the vector would
+  // be pointing NorthEast relative the North being straight ahead on the field
+  // (45 degrees counter clockwise from the field X axis).
+  // The magnitude* for the joystick input is the throttle*.
+  // If the robot speed is very slow or stopped or if direction is approximately reversed,
+  // then rotation will be performed first, before x or y displacement (aka throttle).
+  // If the vector from the joystick changes by more than some percentage xDrive will
+  // consider which direction to turn (clockwise vs counterclockwise) to achieve the desired
+  // vector, possibly reversing the robot direction (ie forwards travel vs backwards travel).
+  // It is likely that an explcit input to reverse direction or rotate may be required as well
+  // (e.g. right 90 degrees or left 90 degrees buttons). 
+  public void yawDrive(double joystickY, double joystickX) {
+    double kRotation = 1.0/90.0; // Initial guess for P as in PID for the rotation speed vs desired change in yaw.
+    double kXDeadZone = 0.02;    // Treat joystick X input below 0.02 as 0.0;
+    double kYDeadZone = 0.02;    // Treat joystick Y input below 0.02 as 0.0;
+    double kAngleTransition = 5.0; // start throttle accelerations if angle is within _x_ degrees.
+    double kSpeedTransition = 3.0; // continue throttle accelerations if speed is _x_ inches per second or greater.
+    double throttle = 0.0;
+    double zRotation = 0.0;
+    double robotYaw = normalizeYaw(m_gyro.getAngle() - m_initialYaw);
+    double robotSpeed = (m_encoder.getLeftNumberRate() + m_encoder.getRightNumberRate() )/2.0; // inches per second.
+    // If we have not captured the initial yaw from the gyro, capture it now.
+    if (!m_yawInitialized) {
+      m_yawInitialized = true;
+      m_initialYaw = robotYaw;
+      robotYaw = 0;
+    }
+    
+    // Implement joystick dead zones.
+    if (Math.abs(joystickX) < kXDeadZone) {
+      joystickX = 0.0;
+    }
+    if (Math.abs(joystickY) < kYDeadZone) {
+      joystickY = 0.0;
+    }
+    
+    double joystickMagnitude = Math.max(Math.abs(joystickX), Math.abs(joystickY));
+    double joystickYaw = robotYaw; // Default point to where the robot is pointing.
+    double forwardDeltaYaw = 0.0;
+    double reverseDeltaYaw = 0.0;
+    String fwdRev = "";
+
+    // Compute the vector of the joystick position
+    if (joystickMagnitude > 0.0) {
+
+      // compute the yaw implied by the joystick Y,X
+      joystickYaw = joystickToYaw(joystickY, joystickX);
+      
+      // Compute the relative angle of the robot vs the joystick;
+      // Need to try both forward and backward relative angles to see which requires less turning.
+      forwardDeltaYaw = normalizeYaw(joystickYaw - robotYaw);
+      reverseDeltaYaw = normalizeYaw(forwardDeltaYaw + 180);
+      
+      if (Math.abs(forwardDeltaYaw) <= Math.abs(reverseDeltaYaw)) {
+        fwdRev = "Forward";
+        zRotation = joystickMagnitude * forwardDeltaYaw * kRotation;
+        if (Math.abs(robotSpeed) > kSpeedTransition || Math.abs(forwardDeltaYaw) < kAngleTransition ) {
+          throttle = joystickMagnitude;
+        } else {
+          throttle = 0.0; // rotate first, then accelerate
+        }
+      } else {
+        fwdRev = "Reverse";
+        zRotation = joystickMagnitude * reverseDeltaYaw * kRotation;
+        if (Math.abs(robotSpeed) > kSpeedTransition || Math.abs(reverseDeltaYaw) < kAngleTransition ) {
+          throttle = -joystickMagnitude;
+        } else {
+          throttle = 0.0; // rotate first, then accelerate
+        }
+      }
+    } else { 
+      // no joystick input
+      throttle = 0.0;
+      zRotation = 0.0;
+    }
+
+    // For debug safety, clamp the values to safe levels
+    //throttle = MathUtil.clamp(throttle, -0.1, 0.1);
+    //zRotation = MathUtil.clamp(zRotation, -0.2, 0.2);
+
+    preussDrive(throttle, -zRotation);  // TODO Verify sign of zRotation is correct.
+    System.out.printf("%f %f %f %f %f %f %f %f %s\n"
+    , robotYaw, joystickYaw, joystickX, joystickY, throttle, zRotation, forwardDeltaYaw, reverseDeltaYaw, fwdRev);
+
+  } // yawDrive
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
