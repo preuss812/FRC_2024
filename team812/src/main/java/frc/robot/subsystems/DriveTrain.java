@@ -300,13 +300,13 @@ public class DriveTrain extends SubsystemBase {
   }
 
   // joystickToYaw - helper function to convert joystick X/Y to yaw.
-  public double joystickToYaw(double joystickY, double joystickX) {
+  public static double joystickToYaw(double joystickY, double joystickX) {
     double yaw = 0.0; // return 0 if the calculations fall through
     if (joystickX == 0.0) {
       if (joystickY == 0.0) {
-        yaw = 0.0; // no joystick input so using 0.0 as a sentinel value.
+        yaw = 0.0; // no joystick input so using 0.0 as a sentinel value.  Perhaps should use robot orientation?
       }
-      else if (joystickY > 0) {
+      else if (joystickY < 0) {
         yaw = 0.0; // Straight ahead
       }
       else {
@@ -315,22 +315,22 @@ public class DriveTrain extends SubsystemBase {
     } else if (joystickX > 0.0) {
         if (joystickY == 0.0) {
           yaw = 90.0;
-        } else if (joystickY > 0.0) {
+        } else if (joystickY < 0.0) {
           // vector is somewhere in the first quadrant (ie between North and East)
-          yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+          yaw = Math.atan(-joystickX/joystickY)*360/Math.PI/2.0;
         } else {
           // vector is somewhere in the fourth quadrant (ie between East and South)
-          yaw = -180 - Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+          yaw = 180 - Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
         }
     } else {
       if (joystickY == 0.0) {
         yaw = -90.0;
-      } else if (joystickY > 0.0) {
+      } else if (joystickY < 0.0) {
         // vector is somewhere in the first quadrant (ie between North and West)
-        yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
+        yaw = Math.atan(-joystickX/joystickY)*360/Math.PI/2.0;
       } else {
         // vector is somewhere in the fourth quadrant (ie between West and South)
-        yaw = Math.atan(joystickX/joystickY)*360/Math.PI/2.0 - 180;
+        yaw = -180 - Math.atan(joystickX/joystickY)*360/Math.PI/2.0;
       }
     }
     return yaw;

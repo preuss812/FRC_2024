@@ -125,6 +125,10 @@ public class RobotContainer {
   */
   SmartDashboard.putData("xDrive",new testXDrive(m_DriveTrain));
   SmartDashboard.putData("yawDrive",new testYawDrive(m_DriveTrain));
+  SmartDashboard.putData("testJoystick2Yaw",new testJoystickToYaw());
+  SmartDashboard.putNumber("joystickX", 0.0);
+  SmartDashboard.putNumber("joystickY", 0.0);
+  
 }
 
   /**
