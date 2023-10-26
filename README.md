@@ -1,6 +1,6 @@
 # First Robotics Team 812
 
-# The 2023 CHARGED UP
+# 2024 preliminary repo
 
 ## Robot Start Up Checklist
 1. Power up the robot by attaching a well charged battery and closing the breaker
@@ -13,7 +13,7 @@
 ## How to check in the code
 
 1. Open Visual Code
-2. Open the current folder, FRC_2023
+2. Open the current folder, FRC_2024
 3. Select the Source Control icon from the left menu
 4. Hover on the files to be Staged and click the '+' sign to stage the file, continue to do this for all files to be staged
 5. Click the '...' menu and select Commit Staged
