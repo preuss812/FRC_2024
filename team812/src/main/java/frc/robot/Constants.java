@@ -22,13 +22,18 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public static final class CANConstants {
-        public static final int[] kLeftMotors   = {44, 7};
-        public static final int[] kRightMotors  = {30, 6};
+        public static final int kSwerveRightRearRotate = 24;
+        public static final int kSwerveRightRearDrive = 23;
+        public static final int kSwerveRightFrontRotate = 22;
+        public static final int kSwerveRightFrontDrive = 21;
+        public static final int kSwerveLeftFrontRotate = 28;
+        public static final int kSwerveLeftFrontDrive = 27;
+        public static final int kSwerveLeftRearRotate = 26;
+        public static final int kSwerveLeftRearDrive = 25;
 
         public static final int kPDP = 42;
         public static final int kPCM = 40;
-        public static final int kArmMotor = 31; // dph this is the arm rotation motor.  Inclined to rename after verifying with the team.
-        public static final int kArmExtensionMotor = 43; // dph Needs a real number
+
     }
     public static final class PCMConstants {
         public static final int[] kGripper = {1,0}; // dko 20220221 need to physically verify
@@ -123,6 +128,9 @@ public final class Constants {
 	    public static final double kTurnLowSpeed = 0.4;
 
         public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
+
+        public static final double kSwerveAxisLength = 22.0; // inches?
+        public static final double kSwerveAxisWidth = 22.0; // inches?
     }
 
     public static final class ArmConstants {
