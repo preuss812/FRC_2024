@@ -24,12 +24,19 @@ public final class Constants {
     public static final class CANConstants {
         public static final int kSwerveRightRearRotate = 24;
         public static final int kSwerveRightRearDrive = 23;
+        public static final int kSwerveRightRearCANCoder = 34;
+
         public static final int kSwerveRightFrontRotate = 22;
         public static final int kSwerveRightFrontDrive = 21;
-        public static final int kSwerveLeftFrontRotate = 28;
-        public static final int kSwerveLeftFrontDrive = 27;
+        public static final int kSwerveRightFrontCANCoder = 32;
+
         public static final int kSwerveLeftRearRotate = 26;
         public static final int kSwerveLeftRearDrive = 25;
+        public static final int kSwerveLeftRearCANCoder = 36;
+
+        public static final int kSwerveLeftFrontRotate = 28;
+        public static final int kSwerveLeftFrontDrive = 27;
+        public static final int kSwerveLeftFrontCANCoder = 38;
 
         public static final int kPDP = 42;
         public static final int kPCM = 40;
@@ -129,8 +136,8 @@ public final class Constants {
 
         public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
 
-        public static final double kSwerveAxisLength = 22.0; // inches?
-        public static final double kSwerveAxisWidth = 22.0; // inches?
+        public static final double kSwerveAxisLength = 17.0; // inches
+        public static final double kSwerveAxisWidth = 17.0; // inches
     }
 
     public static final class ArmConstants {
