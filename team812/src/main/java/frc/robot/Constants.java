@@ -22,16 +22,16 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public static final class CANConstants {
-        public static final int kSwerveRightRearRotate = 24;
-        public static final int kSwerveRightRearDrive = 23;
+        public static final int kSwerveRightRearRotate = 23;
+        public static final int kSwerveRightRearDrive = 24;
         public static final int kSwerveRightRearCANCoder = 34;
 
-        public static final int kSwerveRightFrontRotate = 22;
-        public static final int kSwerveRightFrontDrive = 21;
+        public static final int kSwerveRightFrontRotate = 21;
+        public static final int kSwerveRightFrontDrive = 22;
         public static final int kSwerveRightFrontCANCoder = 32;
 
-        public static final int kSwerveLeftRearRotate = 26;
-        public static final int kSwerveLeftRearDrive = 25;
+        public static final int kSwerveLeftRearRotate = 25;
+        public static final int kSwerveLeftRearDrive = 26;
         public static final int kSwerveLeftRearCANCoder = 36;
 
         public static final int kSwerveLeftFrontRotate = 27;
