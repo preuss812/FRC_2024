@@ -19,7 +19,6 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.BlackBoxSubsystem;
-import frc.robot.subsystems.ArmRotationSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -41,113 +40,6 @@ public class Autonomous extends SequentialCommandGroup {
     System.out.printf("*** Entering Autonomous mode\n");
 
     BlackBoxSubsystem blackBox = RobotContainer.m_BlackBox;
-    ArmRotationSubsystem m_armSubsystem = RobotContainer.m_ArmRotationSubsystem;
-    ArmExtensionSubsystem m_armExtensionSubsystem = RobotContainer.m_ArmExtensionSubsystem;
-    // CameraVisionSubsystem m_CameraVisionSubsystem = RobotContainer.m_CameraVisionSubsystem;
-    BrakeSubsystem m_BrakeSubsystem = RobotContainer.m_BrakeSubsystem;
-    GripperSubsystem m_GripperSubsystem = RobotContainer.m_GripperSubsystem;
-    GyroSubsystem m_GyroSubsystem = RobotContainer.m_GyroSubsystem;
-    EncoderSubsystem m_encoderSubsystem = RobotContainer.m_EncoderSubsystem;
-
-    blackBox.readBits();
-    if (readingBlackBoxSwitch) {
-      if (RobotContainer.m_BlackBox.isSwitchLeft()) {
-        balancing = true;
-      } else if (RobotContainer.m_BlackBox.isSwitchCenter()) {
-        balancing = false;
-      } else {
-        balancing = false; 
-      }
-    }
-/* 
-    addCommands(
-        new SequentialCommandGroup(
-            new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
-            new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
-            new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition), // untuck                                     // Rotate the arm out to allow motion
-            //new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition), // Extend the arm to the low, gathering position.
-            // new TestProfiledPIDCommand(m_CameraVisionSubsystem, m_driveTrain)
-            new ParallelCommandGroup(
-              new ArmCommand(m_armSubsystem, ArmConstants.kArmHiPosition),     
-              new DriveDistanceCommand(m_driveTrain, 0.2, 24.0, m_GyroSubsystem, m_encoderSubsystem),
-              new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition) // Extend the arm to the proper scoring height.
-            ).withTimeout(5),
-            //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, -90.0),
-            //new DriveForwardCommand(m_driveTrain, 0.2, m_GyroSubsystem, null).withTimeout(1.5),
-            //new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, 90.0),
-            //new ArmCommand(m_armSubsystem, ArmConstants.kArmHiPosition),                                   // Rotate the arm up to score the maximum points.
-            new WaitCommand(1),
-            new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),                             // Release the code/cube to score.
-            new ParallelCommandGroup(
-              new DriveDistanceCommand(m_driveTrain, 0.2, -24.0, m_GyroSubsystem, m_encoderSubsystem),
-              new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition), // Return retract arm again.
-              //new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),    
-              new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition)
-            ).withTimeout(5),
-            //new DriveDistanceCommand(m_driveTrain, 0.2, -(24.0), m_GyroSubsystem, m_encoderSubsystem),
-            new DriveDistanceCommand(m_driveTrain, 0.25, -(2.5 * 12.0), m_GyroSubsystem, m_encoderSubsystem),
-            new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem)
-        // new FollowApriltagCommand(m_CameraVisionSubsystem, m_driveTrain)
-        // new CameraVisionPoseCommand(m_CameraVisionSubsystem, m_driveTrain),
-        // new DriveBackwardCommand(m_driveTrain, 0.5, -0.2).withTimeout(2.0)
-        ));
-        */
-        if (balancing) {
-          // Commands to balance by driving 82 inches and slamming on the brakes.
-          addCommands(
-          new SequentialCommandGroup(
-              new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                             // The grip is already closed. Tell it so stay closed.
-              new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),  
-              new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                      // Set the coordinates for the arm rotation and extension to 0 for both.
-              new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                           // Rotate the arm out to allow motion
-              //new DriveDistanceCommand(m_driveTrain, 0.45, (36.0), m_GyroSubsystem, m_encoderSubsystem), // 0.25 was not enough
-              //new BalanceCommandDebug(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem),
-              new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, 86, 0.4), 
-              new WaitCommand(3.0),
-              new ConditionalCommand(
-                new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, 2.0, 0.4),
-                new ConditionalCommand(
-                  new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, -2.0, 0.4),
-                  new WaitCommand(3.0),
-                  ()  -> frc.robot.RobotContainer.m_GyroSubsystem.getPitch() < -3.0
-                ),
-                ()  -> frc.robot.RobotContainer.m_GyroSubsystem.getPitch() > 3.0
-              ),
-              new WaitCommand(3.0),
-              new ConditionalCommand(
-                new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, 2.0, 0.4),
-                new ConditionalCommand(
-                  new BalanceCommandDebugEZ2(m_driveTrain, m_GyroSubsystem, m_encoderSubsystem, m_BrakeSubsystem, -2.0, 0.4),
-                  new WaitCommand(3.0),
-                  ()  -> frc.robot.RobotContainer.m_GyroSubsystem.getPitch() < -3.0
-                ),
-                ()  -> frc.robot.RobotContainer.m_GyroSubsystem.getPitch() > 3.0
-              )
-              ));
-        } else {
-          // Commands to score a purple cube and prepare to score more game pieces
-          addCommands(
-          new SequentialCommandGroup(
-              new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem),                               // The grip is already closed. Tell it so stay closed.
-              new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem),                                     // Make sure the brake is not engaged.
-              new ArmHomeCommand(m_armSubsystem, m_armExtensionSubsystem),                                        // Set the coordinates for the arm rotation and extension to 0 for both.
-              // new ArmCommand(m_armSubsystem, ArmConstants.kArmAutonomous), // untuck                              // Rotate the arm out to allow motion
-              new ArmCommand(m_armSubsystem, ArmConstants.kArmHighCubePosition).withTimeout(5),                                  // Raise the arm up high.
-              new ParallelCommandGroup(
-                new DriveDistanceCommand(m_driveTrain, 0.30, (12.0), m_GyroSubsystem, m_encoderSubsystem),   // drive forware 12 inches to score.
-                new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(3.0)    // Extend arm to score
-              ),             
-              new ArmCommand(m_armSubsystem, ArmConstants.kArmHighCubeReleasePosition).withTimeout(2.0),   // Rotate down slightly to be inside the box
-              new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem),                                // Release the cube.
-              new WaitCommand(0.25),                                                                     // Allow time for the grippers to release
-              new DriveDistanceCommand(m_driveTrain, 0.30, (-12.0), m_GyroSubsystem, m_encoderSubsystem),  // Back up 12 inches.
-              new ParallelCommandGroup(
-                new ArmExtensionCommand(m_armExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition).withTimeout(3.0),  // Retr.0act and lower the arm
-                new ArmCommand(m_armSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),     
-                new DriveDistanceCommand(m_driveTrain, 0.30, (-36.0), m_GyroSubsystem, m_encoderSubsystem)  // Back up into the field.           
-                // new DriveByAngleCommand(m_driveTrain, m_GyroSubsystem, 0.2, 180.0 - 10.0)                    // Turn to face the field.
-              )
-          ));
-        }
+   
   }
 }

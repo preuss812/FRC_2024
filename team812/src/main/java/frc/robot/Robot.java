@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   public static NetworkTable nttable;
+  static int i = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putNumber("encoder",frc.robot.RobotContainer.m_enctest.getPosition().getValue());
   }
 
   @Override

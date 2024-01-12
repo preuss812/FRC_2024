@@ -34,13 +34,16 @@ public final class Constants {
         public static final int kSwerveLeftRearDrive = 25;
         public static final int kSwerveLeftRearCANCoder = 36;
 
-        public static final int kSwerveLeftFrontRotate = 28;
-        public static final int kSwerveLeftFrontDrive = 27;
+        public static final int kSwerveLeftFrontRotate = 27;
+        public static final int kSwerveLeftFrontDrive = 28;
         public static final int kSwerveLeftFrontCANCoder = 38;
 
         public static final int kPDP = 42;
         public static final int kPCM = 40;
-
+        public static final int[] kLeftMotors = {99,98}; // This is garbage - dph 2023-12-14
+        public static final int[] kRightMotors = {95,94}; // This is garbage - dph 2023-12-14
+        public static final int kArmExtensionMotor = 97;
+        public static final int kArmMotor = 96;
     }
     public static final class PCMConstants {
         public static final int[] kGripper = {1,0}; // dko 20220221 need to physically verify

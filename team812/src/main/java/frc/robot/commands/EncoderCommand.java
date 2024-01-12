@@ -7,12 +7,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EncoderSubsystem;
 
 import frc.robot.Constants.EncoderConstants;
 
-public class EncoderCommand extends CommandBase {
+public class EncoderCommand extends Command {
   private final EncoderSubsystem m_encoder;
 
   public EncoderCommand(EncoderSubsystem subsystem) {

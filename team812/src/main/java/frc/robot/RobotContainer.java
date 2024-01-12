@@ -7,33 +7,25 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import com.ctre.phoenix6.hardware.CANcoder;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmExtensionConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
-import frc.robot.subsystems.DigitalIOSubsystem;
 import frc.robot.subsystems.BrakeSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.ArmRotationSubsystem;
-import frc.robot.subsystems.ArmExtensionSubsystem;
-import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
-import frc.robot.subsystems.GyroSubsystem;
-import frc.robot.commands.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -53,8 +45,6 @@ public class RobotContainer {
   private final DriveTrain m_DriveTrain = new DriveTrain();
   public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem(); // This is arm rotation - dph
-  public static ArmExtensionSubsystem m_ArmExtensionSubsystem = new ArmExtensionSubsystem();
   //public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
@@ -65,8 +55,8 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
 
-  // Gyro
-  public static GyroSubsystem m_GyroSubsystem = new GyroSubsystem();
+  
+  public static CANcoder m_enctest = new CANcoder(38);
 
   // private final Joystick xboxController = new
   // Joystick(OIConstants.kXboxController);
@@ -91,21 +81,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_ArmRotationSubsystem.unsetHome("RobotContainer");
-
-    m_DriveTrain.setDefaultCommand(
-        new RunCommand(() -> m_DriveTrain.preussDrive(rightJoystick.getY(), -rightJoystick.getX()), m_DriveTrain));
-
-    m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate(leftJoystick.getY()), m_ArmRotationSubsystem));
-
-    m_ArmExtensionSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmExtensionSubsystem.testMoveInOut(POV_to_double(leftJoystick.getPOV())),
-            m_ArmExtensionSubsystem));
-
-    // Gyro subsystem
-    m_GyroSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_GyroSubsystem.periodic(), m_GyroSubsystem));
+   
 
     // Configure the button bindings
     configureButtonBindings();
@@ -123,12 +99,11 @@ public class RobotContainer {
     SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
 
   */
-  SmartDashboard.putData("xDrive",new testXDrive(m_DriveTrain));
-  SmartDashboard.putData("yawDrive",new testYawDrive(m_DriveTrain));
-  SmartDashboard.putData("testJoystick2Yaw",new testJoystickToYaw());
+  
   SmartDashboard.putNumber("joystickX", 0.0);
   SmartDashboard.putNumber("joystickY", 0.0);
-  
+  SmartDashboard.putNumber("encoder version", m_enctest.getDeviceID());
+  SmartDashboard.putNumber("encoder",3.14159);
 }
 
   /**
@@ -150,7 +125,6 @@ public class RobotContainer {
      * 3 Aim at an AprilTag
      * 4 Initiate Balance mode or while pressed
      */
-
     /*
      * 2023 Proposed LEFT joystick button bindings
      * Joystick FWD - moves set point on arm negative while engaged
@@ -165,20 +139,16 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     //new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
-    new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem, m_EncoderSubsystem, m_BrakeSubsystem,4.0,0.40));                // Should this lower the arm?
-    new JoystickButton(rightJoystick, 4).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,-4.0,0.40)); 
-    //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
+     //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
     
-    new JoystickButton(rightJoystick, 8)
-        .onTrue(new InstantCommand(m_GyroSubsystem::resetDisplacement, m_GyroSubsystem));
-    new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
+   // new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
     new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
     new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
     new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-     new JoystickButton(leftJoystick, 3
+/*      new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
@@ -202,9 +172,10 @@ public class RobotContainer {
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
     ));
-    //new JoystickButton(leftJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.55)); 
+   */
+   //new JoystickButton(leftJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.55)); 
 
-    new JoystickButton(leftJoystick, 6
+  /*  new JoystickButton(leftJoystick, 6
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
         new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
@@ -216,6 +187,7 @@ public class RobotContainer {
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
     ));
+    
   
   // Left Joystick for Arm Extension Control Debug
     new JoystickButton(leftJoystick, 7).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition));
@@ -223,6 +195,8 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 11).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
     new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
     new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
+
+    */
   }
 
   /**
