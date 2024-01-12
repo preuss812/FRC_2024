@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -263,9 +264,9 @@ public final class Constants {
         public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
     
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(26.5);
+        public static final double kTrackWidth = Units.inchesToMeters(26.5); // TODO
         // Distance between centers of right and left wheels on robot
-        public static final double kWheelBase = Units.inchesToMeters(26.5);
+        public static final double kWheelBase = Units.inchesToMeters(26.5); // TODO
         // Distance between front and back wheels on robot
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -280,15 +281,15 @@ public final class Constants {
         public static final double kBackRightChassisAngularOffset = Math.PI / 2;
     
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 11;
-        public static final int kRearLeftDrivingCanId = 13;
-        public static final int kFrontRightDrivingCanId = 15;
-        public static final int kRearRightDrivingCanId = 17;
+        public static final int kFrontLeftDrivingCanId = CANConstants.kSwerveLeftFrontDrive;
+        public static final int kRearLeftDrivingCanId = CANConstants.kSwerveLeftRearDrive;
+        public static final int kFrontRightDrivingCanId = CANConstants.kSwerveRightFrontDrive;
+        public static final int kRearRightDrivingCanId = CANConstants.kSwerveRightRearDrive;
     
-        public static final int kFrontLeftTurningCanId = 10;
-        public static final int kRearLeftTurningCanId = 12;
-        public static final int kFrontRightTurningCanId = 14;
-        public static final int kRearRightTurningCanId = 16;
+        public static final int kFrontLeftTurningCanId = CANConstants.kSwerveLeftFrontRotate;
+        public static final int kRearLeftTurningCanId = CANConstants.kSwerveLeftRearRotate;
+        public static final int kFrontRightTurningCanId = CANConstants.kSwerveRightFrontRotate;
+        public static final int kRearRightTurningCanId = CANConstants.kSwerveRightRearRotate;
     
         public static final boolean kGyroReversed = false;
       }
