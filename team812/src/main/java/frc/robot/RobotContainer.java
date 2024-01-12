@@ -104,6 +104,7 @@ public class RobotContainer {
   SmartDashboard.putNumber("joystickY", 0.0);
   SmartDashboard.putNumber("encoder version", m_enctest.getDeviceID());
   SmartDashboard.putNumber("encoder",3.14159);
+  SmartDashboard.putNumber("InEncode",1234.0);
 }
 
   /**
