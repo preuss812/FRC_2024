@@ -290,7 +290,12 @@ public final class Constants {
         public static final int kRearLeftTurningCanId = CANConstants.kSwerveLeftRearRotate;
         public static final int kFrontRightTurningCanId = CANConstants.kSwerveRightFrontRotate;
         public static final int kRearRightTurningCanId = CANConstants.kSwerveRightRearRotate;
-    
+
+        public static final int kFrontLeftTurningEncoderCanId = CANConstants.kSwerveLeftFrontCANCoder;
+        public static final int kRearLeftTurningEncoderCanId = CANConstants.kSwerveLeftRearCANCoder;
+        public static final int kFrontRightTurningEncoderCanId = CANConstants.kSwerveRightFrontCANCoder;
+        public static final int kRearRightTurningEncoderCanId = CANConstants.kSwerveRightRearCANCoder;
+
         public static final boolean kGyroReversed = false;
       }
     
