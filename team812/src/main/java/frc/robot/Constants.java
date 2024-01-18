@@ -96,7 +96,7 @@ public final class Constants {
         public static final int kXboxLTrigger = 9;
         public static final int kXboxRTrigger = 10;
 
-        public static final int kDriverControllerPort = 0;
+        public static final int kDriverControllerPort = 3;
         public static final double kDriveDeadband = 0.05;
     }
     public static final class AnalogIOConstants {

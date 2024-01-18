@@ -13,13 +13,13 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 public class DriveTrain extends SubsystemBase {
   /** Creates a new DriveTrain. */
-  private CANSparkMax lf_rotate;
-  public static SparkAbsoluteEncoder lf_rotate_encoder;
+  // private CANSparkMax lf_rotate;
+  // public static SparkAbsoluteEncoder lf_rotate_encoder;
 
   public DriveTrain() {
-    lf_rotate = new CANSparkMax(CANConstants.kSwerveLeftFrontRotate,MotorType.kBrushless);
-    lf_rotate.set(0.1);
-    lf_rotate_encoder = lf_rotate.getAbsoluteEncoder(Type.kDutyCycle);
+    // lf_rotate = new CANSparkMax(CANConstants.kSwerveLeftFrontRotate,MotorType.kBrushless);
+    // lf_rotate.set(0.1);
+    // lf_rotate_encoder = lf_rotate.getAbsoluteEncoder(Type.kDutyCycle);
   }
 
   @Override
