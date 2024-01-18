@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("encoder",frc.robot.RobotContainer.m_enctest.getPosition().getValue());
-    SmartDashboard.putNumber("InEncode",frc.robot.subsystems.MAXSwerveModule.m_turningEncoder.getPosition());
+  //  SmartDashboard.putNumber("InEncode",frc.robot.subsystems.MAXSwerveModule.m_turningEncoder.getPosition());
   }
 
   @Override
