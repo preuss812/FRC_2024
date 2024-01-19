@@ -43,11 +43,13 @@ public class MAXSRXSwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public MAXSRXSwerveModule(int drivingCANId, int turningCANId, int turningEncoderCanId, double chassisAngularOffset) {
+  public MAXSRXSwerveModule(int drivingCANId, int turningCANId, int turningEncoderCANId, double chassisAngularOffset) {
     double turningEncoderAngle;
 
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
+    //m_turningPIDController = new PIDController(0.5,0.0,0.1);
+    m_turningPIDController = new PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD);
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
@@ -56,7 +58,7 @@ public class MAXSRXSwerveModule {
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
-    m_turningEncoder = new CANcoder(turningEncoderCanId);
+    m_turningEncoder = new CANcoder(turningEncoderCANId);
 
     /* User can change the configs if they want, or leave it empty for factory-default */
 
@@ -124,7 +126,7 @@ public class MAXSRXSwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     turningEncoderAngle = m_turningEncoder.getPosition().getValue();  // I expect this is in degrees
     m_desiredState.angle = new Rotation2d(Math.toRadians(turningEncoderAngle%360)); // Set desired angle to current angle.
-    if (turningCANId == CANConstants.kSwerveLeftFrontCANCoder) {
+    if (turningEncoderCANId == CANConstants.kSwerveLeftFrontCANCoder) {
       SmartDashboard.putNumber("lf_angle_degrees", turningEncoderAngle);
       SmartDashboard.putNumber("lf_angle_radians", Math.toRadians(turningEncoderAngle%360));
     }
@@ -160,6 +162,9 @@ public class MAXSRXSwerveModule {
     turningEncoderAngleRadians = Math.toRadians(turningEncoderAngleDegrees%360);
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
+     if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+      SmartDashboard.putNumber("lf_angle_degrees", m_turningEncoder.getPosition().getValue());
+    }
     return new SwerveModulePosition(
         m_drivingEncoder.getPosition(),
         new Rotation2d(turningEncoderAngleRadians - m_chassisAngularOffset));
@@ -183,6 +188,14 @@ public class MAXSRXSwerveModule {
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians());
+    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+      SmartDashboard.putNumber("lf_angle_degrees", m_turningEncoder.getPosition().getValue());
+    }
+    m_turningSparkMax.set(m_turningPIDController.calculate(m_turningEncoder.getPosition().getValue()));
+
+  if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+      SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
+    }
 
     m_desiredState = desiredState;
   }

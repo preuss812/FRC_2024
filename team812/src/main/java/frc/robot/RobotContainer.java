@@ -37,7 +37,8 @@ import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.BrakeSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
+//import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.DriveSubsystemSRX;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -61,7 +62,7 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
   private final DriveTrain m_DriveTrain = new DriveTrain();
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
   public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
