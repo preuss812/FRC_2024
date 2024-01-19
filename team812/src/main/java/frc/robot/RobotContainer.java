@@ -73,8 +73,8 @@ public class RobotContainer {
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
-  private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
-  private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
+  //private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
+  //private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort); // TODO find the right port - dph
   
   public static CANcoder m_enctest = new CANcoder(38);
@@ -170,18 +170,18 @@ public class RobotContainer {
      * 5 set ARM ROTATION to GATHER and set ARM EXTENSION as appropriate (armpos1)
      * 6 set ARM ROTATION to HIGH and set ARM EXTENSION as appropriate (armpos4)
      */
-    new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+    //new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    //new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
     //new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
-     //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
+    //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
     
-   // new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
-    new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
-    new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
+    //new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
+    //new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
+    //new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
 
     // Left Joystick for Arm Rotation and Extension Control
-    new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
+    //new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
+    //new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
 /*      new JoystickButton(leftJoystick, 3
     ).onTrue( new ConditionalCommand( 
       new SequentialCommandGroup(
