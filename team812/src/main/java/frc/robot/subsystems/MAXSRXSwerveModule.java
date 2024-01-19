@@ -13,13 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+//import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.AbsoluteEncoder;
+//import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.sim.CANcoderSimState;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+//import com.ctre.phoenix6.sim.CANcoderSimState;
+//import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.CANConstants;
@@ -44,7 +44,6 @@ public class MAXSRXSwerveModule {
    * Encoder.
    */
   public MAXSRXSwerveModule(int drivingCANId, int turningCANId, int turningEncoderCANId, double chassisAngularOffset) {
-    double turningEncoderAngle;
 
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
@@ -124,14 +123,34 @@ public class MAXSRXSwerveModule {
     m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
-    turningEncoderAngle = m_turningEncoder.getPosition().getValue();  // I expect this is in degrees
-    m_desiredState.angle = new Rotation2d(Math.toRadians(turningEncoderAngle%360)); // Set desired angle to current angle.
-    if (turningEncoderCANId == CANConstants.kSwerveLeftFrontCANCoder) {
-      SmartDashboard.putNumber("lf_angle_degrees", turningEncoderAngle);
-      SmartDashboard.putNumber("lf_angle_radians", Math.toRadians(turningEncoderAngle%360));
-    }
+    m_desiredState.angle = new Rotation2d(this.CANCoderPositionRadians()); // Set desired angle to current angle so it wont move.
 
     m_drivingEncoder.setPosition(0);
+  }
+  /**
+   * Helper function that converts CANCoder output into an angle in radians
+   * in the range of 0 to 2*pi.
+   * The CANCoder returns values in units of rotation, ie 1.0 = 1 full roration counterclockwise from the 0.0 position.
+   * @return The current turning direction in radians
+   */
+  public double CANCoderPositionRadians() {
+    double CANCoderPosition;
+    CANCoderPosition = m_turningEncoder.getPosition().getValue();
+    /**
+     * Since we only care about the direction the wheel is pointing and not about how many times it has
+     * rotated away from the origin (= 0.0 == Straight ahead), make sure the value is in the range of 0.0
+     * to 1.0.  The CANCoder will count the number of rotations and that would just confuse our
+     * interpretation of the direction.
+     */
+    while (CANCoderPosition < 0.0) CANCoderPosition -= 1.0; // Make sure the value is non-negative.
+    CANCoderPosition = CANCoderPosition % 1.0; // Make sure the value is in the range of 00.0 to 1.0
+    CANCoderPosition *= 2.0 * Math.PI; // Scale the the rotations into units of Radians.
+    // Some debug that should eventually be removed:
+    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+      SmartDashboard.putNumber("lf_angle_radians", CANCoderPosition);
+      SmartDashboard.putNumber("lf_angle_degrees", CANCoderPosition/(2*Math.PI)*360.0);
+    }
+    return CANCoderPosition;
   }
 
   /**
@@ -140,10 +159,8 @@ public class MAXSRXSwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    double turningEncoderAngleDegrees;
     double turningEncoderAngleRadians;
-    turningEncoderAngleDegrees = m_turningEncoder.getPosition().getValue();  // I expect this is in degrees
-    turningEncoderAngleRadians = Math.toRadians(turningEncoderAngleDegrees%360);
+    turningEncoderAngleRadians = this.CANCoderPositionRadians();
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
     return new SwerveModuleState(m_drivingEncoder.getVelocity(),
@@ -156,15 +173,10 @@ public class MAXSRXSwerveModule {
    * @return The current position of the module.
    */
   public SwerveModulePosition getPosition() {
-    double turningEncoderAngleDegrees;
     double turningEncoderAngleRadians;
-    turningEncoderAngleDegrees = m_turningEncoder.getPosition().getValue();  // I expect this is in degrees
-    turningEncoderAngleRadians = Math.toRadians(turningEncoderAngleDegrees%360);
+    turningEncoderAngleRadians = this.CANCoderPositionRadians();
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
-     if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
-      SmartDashboard.putNumber("lf_angle_degrees", m_turningEncoder.getPosition().getValue());
-    }
     return new SwerveModulePosition(
         m_drivingEncoder.getPosition(),
         new Rotation2d(turningEncoderAngleRadians - m_chassisAngularOffset));
@@ -178,23 +190,23 @@ public class MAXSRXSwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
+    double currentTurningAngleInRadians = this.CANCoderPositionRadians();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(m_chassisAngularOffset));
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
     SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-        new Rotation2d(m_turningEncoder.getPosition().getValue()));
+        new Rotation2d(currentTurningAngleInRadians));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians());
-    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
-      SmartDashboard.putNumber("lf_angle_degrees", m_turningEncoder.getPosition().getValue());
-    }
-    m_turningSparkMax.set(m_turningPIDController.calculate(m_turningEncoder.getPosition().getValue()));
+    
+    m_turningSparkMax.set(m_turningPIDController.calculate(currentTurningAngleInRadians));
 
   if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
-      SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
+    SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
+    SmartDashboard.putNumber("optimizedTurnError", optimizedDesiredState.angle.getRadians()-currentTurningAngleInRadians);
     }
 
     m_desiredState = desiredState;
