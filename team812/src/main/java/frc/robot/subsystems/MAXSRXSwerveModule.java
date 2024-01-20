@@ -142,7 +142,8 @@ public class MAXSRXSwerveModule {
      * to 1.0.  The CANCoder will count the number of rotations and that would just confuse our
      * interpretation of the direction.
      */
-    while (CANCoderPosition < 0.0) CANCoderPosition -= 1.0; // Make sure the value is non-negative.
+    // TODO: Make this bullet proof
+    while (CANCoderPosition < 0.0) CANCoderPosition += 1.0; // Make sure the value is non-negative.
     CANCoderPosition = CANCoderPosition % 1.0; // Make sure the value is in the range of 00.0 to 1.0
     CANCoderPosition *= 2.0 * Math.PI; // Scale the the rotations into units of Radians.
     // Some debug that should eventually be removed:
@@ -202,11 +203,13 @@ public class MAXSRXSwerveModule {
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians());
     
-    m_turningSparkMax.set(m_turningPIDController.calculate(currentTurningAngleInRadians));
+    double pidOutput = m_turningPIDController.calculate(currentTurningAngleInRadians);
+    m_turningSparkMax.set(pidOutput);
 
-  if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
-    SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
-    SmartDashboard.putNumber("optimizedTurnError", optimizedDesiredState.angle.getRadians()-currentTurningAngleInRadians);
+    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+      SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
+      SmartDashboard.putNumber("optimizedTurnError", optimizedDesiredState.angle.getRadians()-currentTurningAngleInRadians);
+      SmartDashboard.putNumber("pidOutput", pidOutput);
     }
 
     m_desiredState = desiredState;
@@ -215,5 +218,9 @@ public class MAXSRXSwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
+  }
+
+  public void zeroOrientation() {
+    
   }
 }
