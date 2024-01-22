@@ -12,7 +12,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.CAN;
+//import edu.wpi.first.wpilibj.CAN;
+//import frc.robot.Constants.CANConstants;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -232,14 +233,17 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final Transform3d robotToCam =
-        new Transform3d(
-                new Translation3d(0.5, 0.0, 0.0),
-                new Rotation3d(
-                        0, 0,
-                        0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
-        // from center.
+        /**
+        * Physical location of the camera on the robot, relative to the center of the robot.
+        */
+        // TODO: Set actual Camera position with respect to the robot origin.
+        // Values in Meters.
+        public static final Transform3d CAMERA_TO_ROBOT =
+            new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d());
+        public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
+    
     }
+
     public static final class FieldConstants {
         public static final double length = Units.feetToMeters(54);
         public static final double width = Units.feetToMeters(27);

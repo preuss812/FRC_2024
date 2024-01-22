@@ -14,7 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
+//import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -71,7 +71,15 @@ public class DriveSubsystemSRX extends SubsystemBase {
   /** Creates a new DriveSubsystemSRXSRX. */
   public DriveSubsystemSRX() {
   }
-
+// TODO: This seems redundant to the code below in periodic.  Perhaps should refactor.
+  public SwerveModulePosition[] getModulePositions() {
+    return new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        };
+  }
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -235,6 +243,15 @@ public class DriveSubsystemSRX extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * Returns the rotation of the robot.
+   *
+   * @return the robot's rotation as Rotation2d.
+   */
+  public Rotation2d getRotation() {
+    return Rotation2d.fromDegrees(m_gyro.getAngle());
   }
 
   /**
