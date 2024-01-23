@@ -17,9 +17,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 //import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 //import com.ctre.phoenix6.sim.CANcoderSimState;
-//import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.CANConstants;
@@ -92,7 +94,7 @@ public class MAXSRXSwerveModule {
     //m_turningPIDController.setPositionPIDWrappingEnabled(true);
     //m_turningPIDController.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
     //m_turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
-    m_turningPIDController.enableContinuousInput(ModuleConstants.kTurningEncoderPositionPIDMinInput,ModuleConstants.kTurningEncoderPositionPIDMaxInput);
+    m_turningPIDController.enableContinuousInput(ModuleConstants.kTurningEncoderPositionPIDMinInput,ModuleConstants.kTurningSRXEncoderPositionPIDMaxInput);
 
     // Set the PID gains for the driving motor. Note these are example gains, and you
     // may need to tune them for your own robot!
@@ -117,6 +119,10 @@ public class MAXSRXSwerveModule {
     m_drivingSparkMax.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
     m_turningSparkMax.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
+    // These next two lines did nothing!!!
+    m_drivingSparkMax.setClosedLoopRampRate(0.00001);
+    m_drivingSparkMax.setOpenLoopRampRate(0.00001);
+    
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.
     m_drivingSparkMax.burnFlash();
@@ -126,6 +132,8 @@ public class MAXSRXSwerveModule {
     m_desiredState.angle = new Rotation2d(this.CANCoderPositionRadians()); // Set desired angle to current angle so it wont move.
 
     m_drivingEncoder.setPosition(0);
+    CANcoderConfigurator config = m_turningEncoder.getConfigurator();
+    
   }
   /**
    * Helper function that converts CANCoder output into an angle in radians
@@ -136,15 +144,16 @@ public class MAXSRXSwerveModule {
   public double CANCoderPositionRadians() {
     double CANCoderPosition;
     CANCoderPosition = m_turningEncoder.getPosition().getValue();
+
     /**
      * Since we only care about the direction the wheel is pointing and not about how many times it has
      * rotated away from the origin (= 0.0 == Straight ahead), make sure the value is in the range of 0.0
      * to 1.0.  The CANCoder will count the number of rotations and that would just confuse our
      * interpretation of the direction.
      */
-    // TODO: Make this bullet proof
-    while (CANCoderPosition < 0.0) CANCoderPosition += 1.0; // Make sure the value is non-negative.
-    CANCoderPosition = CANCoderPosition % 1.0; // Make sure the value is in the range of 00.0 to 1.0
+    CANCoderPosition = CANCoderPosition % 1.0;
+     // Make sure the value is in the range of 00.0 to 1.0
+     if (CANCoderPosition < 0.0) CANCoderPosition += 1.0;
     CANCoderPosition *= 2.0 * Math.PI; // Scale the the rotations into units of Radians.
     // Some debug that should eventually be removed:
     if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
