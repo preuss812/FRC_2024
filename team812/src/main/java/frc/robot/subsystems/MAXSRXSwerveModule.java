@@ -17,11 +17,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 //import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.CANcoderConfigurator;
+//import com.ctre.phoenix6.configs.CANcoderConfiguration;
+//import com.ctre.phoenix6.configs.CANcoderConfigurator;
+//import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
 //import com.ctre.phoenix6.sim.CANcoderSimState;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.CANConstants;
@@ -129,10 +129,10 @@ public class MAXSRXSwerveModule {
     m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
+    m_turningEncoder.setPosition(m_turningEncoder.getAbsolutePosition().getValue()); // An attempt to make the position == the absolute position
     m_desiredState.angle = new Rotation2d(this.CANCoderPositionRadians()); // Set desired angle to current angle so it wont move.
 
     m_drivingEncoder.setPosition(0);
-    CANcoderConfigurator config = m_turningEncoder.getConfigurator();
     
   }
   /**
