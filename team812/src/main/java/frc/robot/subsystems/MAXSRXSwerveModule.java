@@ -120,8 +120,8 @@ public class MAXSRXSwerveModule {
     m_turningSparkMax.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
     // These next two lines did nothing!!!
-    m_drivingSparkMax.setClosedLoopRampRate(0.00001);
-    m_drivingSparkMax.setOpenLoopRampRate(0.00001);
+    //m_drivingSparkMax.setClosedLoopRampRate(10.0);
+    //m_drivingSparkMax.setOpenLoopRampRate(10.0);
     
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.
@@ -156,6 +156,7 @@ public class MAXSRXSwerveModule {
      if (CANCoderPosition < 0.0) CANCoderPosition += 1.0;
     CANCoderPosition *= 2.0 * Math.PI; // Scale the the rotations into units of Radians.
     // Some debug that should eventually be removed:
+    SmartDashboard.putNumber("Absolute position"+m_turningEncoder.getDeviceID(), m_turningEncoder.getAbsolutePosition().getValue());
     if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
       SmartDashboard.putNumber("lf_angle_radians", CANCoderPosition);
       SmartDashboard.putNumber("lf_angle_degrees", CANCoderPosition/(2*Math.PI)*360.0);
