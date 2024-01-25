@@ -36,10 +36,11 @@ import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.BrakeSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.CompressorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
-
+import frc.robot.subsystems.CameraVisionSubsystem;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import java.util.List;
@@ -62,14 +63,15 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
   //private final DriveTrain m_DriveTrain = new DriveTrain();
   // The robot's subsystems
-  private final DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
+  private final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
   public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  //public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
