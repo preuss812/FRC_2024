@@ -16,10 +16,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 //import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -43,6 +44,7 @@ import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
+import frc.robot.commands.GotoPoseCommand;
 import java.util.List;
 
 
@@ -244,12 +246,18 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   
-    new JoystickButton(m_driverController, Button.kR1.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
-
+    // This next command is just for testing and should be removed or disabled for game play.
+     new JoystickButton(m_driverController, Button.kA.value)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.zeroHeading(),
+                m_robotDrive));
+    // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
+    new JoystickButton(m_driverController, Button.kB.value)
+    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 16.08, 1.25, Units.degreesToRadians(120.0)));
   }
 
     /**

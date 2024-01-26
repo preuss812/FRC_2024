@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -61,7 +60,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(-m_gyro.getAngle()), // TODO Verify this should be - angle
+      Rotation2d.fromDegrees(-m_gyro.getAngle()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -71,6 +70,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
 
   /** Creates a new DriveSubsystemSRXSRX. */
   public DriveSubsystemSRX() {
+    // TODO Do we need to reset the gyro here?
   }
 // TODO: This seems redundant to the code below in periodic.  Perhaps should refactor.
   public SwerveModulePosition[] getModulePositions() {

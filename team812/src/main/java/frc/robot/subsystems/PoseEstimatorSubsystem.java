@@ -22,7 +22,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-//import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -60,6 +60,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final Field2d field2d = new Field2d();
 
   private double previousPipelineTimestamp = 0;
+  private boolean isBlueAlliance = true;
 
   public PoseEstimatorSubsystem(PhotonCamera photonCamera, DriveSubsystemSRX drivetrainSubsystem) {
     this.photonCamera = photonCamera;
@@ -67,7 +68,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     AprilTagFieldLayout layout;
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-      //var alliance = DriverStation.getAlliance();
+      var alliance = DriverStation.getAlliance();
+      isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
       // TODO: Figure out if this is needed and fix if necessary
       //layout.setOrigin(alliance == Alliance.Blue ?
       //    OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
@@ -151,6 +153,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
    */
   public void resetFieldPosition() {
     setCurrentPose(new Pose2d());
+  }
+
+  public boolean isBlueAlliance () {
+    return this.isBlueAlliance;
   }
 
 }
