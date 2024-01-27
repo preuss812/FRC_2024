@@ -239,7 +239,9 @@ public final class Constants {
         // TODO: Set actual Camera position with respect to the robot origin.
         // Values in Meters.
         public static final Transform3d CAMERA_TO_ROBOT =
-            new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d());
+// x pos or neg doesn't get us where we want to go      w/apriltag 1    
+    new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d());
+// worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
     
     }
@@ -260,7 +262,7 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 1; // Limit how violently swerve works
+        public static final double kMaxSpeedMetersPerSecond = 2.0; // Limit how violently swerve works
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
     
         public static final double kDirectionSlewRate = 1.2; // radians per second

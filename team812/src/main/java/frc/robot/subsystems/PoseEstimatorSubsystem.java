@@ -68,8 +68,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     AprilTagFieldLayout layout;
     try {
       layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-      var alliance = DriverStation.getAlliance();
-      isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
+      //var alliance = DriverStation.getAlliance();
+      //isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
       // TODO: Figure out if this is needed and fix if necessary
       //layout.setOrigin(alliance == Alliance.Blue ?
       //    OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);

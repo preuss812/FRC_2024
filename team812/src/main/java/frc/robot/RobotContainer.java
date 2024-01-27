@@ -68,7 +68,7 @@ public class RobotContainer {
   private final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
   public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
-  public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
+ // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
   public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
@@ -257,7 +257,8 @@ public class RobotContainer {
                 m_robotDrive));
     // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
     new JoystickButton(m_driverController, Button.kB.value)
-    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 16.08, 1.25, Units.degreesToRadians(120.0)));
+    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.84, 7.20, 
+    Units.degreesToRadians(90.0)));
   }
 
     /**

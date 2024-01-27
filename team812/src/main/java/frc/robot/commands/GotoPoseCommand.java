@@ -30,14 +30,15 @@ public class GotoPoseCommand extends Command {
   final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
   final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
 
-  final double LINEAR_P = 0.0;
+  final double LINEAR_P = 2.0;
+  final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0;
   final double ANGULAR_P = 0.04;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.1; // 0 to 1 is the possible range.
+  final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.
 
   PIDController xController;
   PIDController yController;
@@ -66,7 +67,8 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("Target angular_P", angular_P);
     SmartDashboard.putNumber("Target angular_I", angular_I);
 
-    xController = new PIDController(LINEAR_P, 0, LINEAR_D);
+    xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
+    xController.setIZone(0.1);
     yController = new PIDController(LINEAR_P, 0, LINEAR_D);
 
     rotationController = new PIDController(angular_P, angular_I, ANGULAR_D);
@@ -100,16 +102,16 @@ public class GotoPoseCommand extends Command {
     } else {
       // TODO fine tune PID Controllers and max speeds
         
-      xSpeed = -MathUtil.clamp(xController.calculate(error.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
-      ySpeed = -MathUtil.clamp(yController.calculate(error.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
+      xSpeed = MathUtil.clamp(xController.calculate(error.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
+      ySpeed = MathUtil.clamp(yController.calculate(error.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
 
       // forwardSpeed= 0.0; // for safety in debug do not move forward, just turn.
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(error.getRotation().getRadians(), 0),-1.0,1.0);
     }
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
-    SmartDashboard.putNumber("GotoPose xSpeed", ySpeed);
-    SmartDashboard.putNumber("Target Rot speed", rotationSpeed);
-    //m_DriveSubsystemSRXSubsystem.drive(xSpeed, ySpeed, rotationSpeed, true, true); // TODO Verify signs of inputs 
+    SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
+    SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
+    m_DriveSubsystemSRXSubsystem.drive(xSpeed, ySpeed, rotationSpeed, true, true); // TODO Verify signs of inputs 
 
   }
 
