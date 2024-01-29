@@ -259,8 +259,15 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
     .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.84, 7.20, 
     Units.degreesToRadians(90.0)));
+    // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
+    // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
+    // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
+    new JoystickButton(m_driverController, Button.kY.value)
+            .onTrue(new RunCommand(
+                () -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose()),
+                m_robotDrive));
+    SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose())));  // For debug without robot
   }
-
     /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -85,6 +85,8 @@ public class DriveSubsystemSRX extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
+    //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
+    SmartDashboard.putString("DriveTrain", this.getPose().toString());  
     m_odometry.update(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {

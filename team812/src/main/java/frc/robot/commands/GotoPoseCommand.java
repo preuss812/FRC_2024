@@ -111,6 +111,7 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
     SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
+    // TODO Transform xSpeed/Yspeed based on the difference between the drivetrain X,Y axes and the PoseEstimator X,Y Axes
     m_DriveSubsystemSRXSubsystem.drive(xSpeed, ySpeed, rotationSpeed, true, true); // TODO Verify signs of inputs 
 
   }
