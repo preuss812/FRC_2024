@@ -87,6 +87,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
     SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
     //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
     SmartDashboard.putString("DriveTrain", this.getPose().toString());  
+    SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
+    SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
+
     m_odometry.update(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {
