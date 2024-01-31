@@ -240,7 +240,8 @@ public final class Constants {
         // Values in Meters.
         public static final Transform3d CAMERA_TO_ROBOT =
 // x pos or neg doesn't get us where we want to go      w/apriltag 1    
-    new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d());
+    //new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d()); // Before we rotated the RoboRio
+    new Transform3d(new Translation3d(0.0, -0.3425, -0.233), new Rotation3d());
 // worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
     
