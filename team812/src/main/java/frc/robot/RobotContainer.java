@@ -45,6 +45,8 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoPoseCommand;
+import frc.robot.commands.GotoPoseTestCommand;
+
 import java.util.List;
 
 
@@ -267,7 +269,8 @@ public class RobotContainer {
                 () -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose()),
                 m_robotDrive));
     SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose())));  // For debug without robot
-  }
+    SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseTestCommand()));  // For debug without robot
+    }
     /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
