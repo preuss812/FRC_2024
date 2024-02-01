@@ -259,8 +259,8 @@ public class RobotContainer {
                 m_robotDrive));
     // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
     new JoystickButton(m_driverController, Button.kB.value)
-    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.84, 7.20, 
-    Units.degreesToRadians(270.0)));
+    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
+    Units.degreesToRadians(240.0)));
     // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
     // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry

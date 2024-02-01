@@ -34,7 +34,7 @@ public class GotoPoseCommand extends Command {
   final double LINEAR_P = 2.0;
   final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0;
-  final double ANGULAR_P = 0.04;
+  final double ANGULAR_P = 0.08;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
@@ -93,17 +93,18 @@ public class GotoPoseCommand extends Command {
     double rotationSpeed = 0.0;
     //SmartDashboard.putNumber("Range", -54);
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
-    
+    SmartDashboard.putString("GotoPose Pose", estimatedPose.toString());
     // Calculate the X and Y and rotation offsets to the target location
     translationErrorToTarget = new Translation2d( m_targetPose.getX() - estimatedPose.getX(), m_targetPose.getY() - estimatedPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
     rotationError = m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians();
-    rotationError = rotationError % 2.0*Math.PI; // Could be positive or negative
+    rotationError = rotationError % (2.0*Math.PI); // Could be positive or negative
     if (rotationError > Math.PI)
       rotationError = 2.0 * Math.PI - rotationError;
     else if (rotationError < -Math.PI)
-      rotationError = rotationError + 2.0*Math.PI;
+      rotationError = rotationError + 2.0*Math.PI; 
+    SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
     SmartDashboard.putString("GotoPoseXYOffset", translationErrorToTarget.toString());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
@@ -123,7 +124,7 @@ public class GotoPoseCommand extends Command {
       // Calculate the difference in rotation between the PoseEstimator and the DriveTrainPose
       driveTrainPose = m_DriveSubsystemSRXSubsystem.getPose();
       estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
-      estimatedRotationToDriveTrainRotation = estimatedRotationToDriveTrainRotation % 2.0*Math.PI; // Could be positive or negative
+      estimatedRotationToDriveTrainRotation = estimatedRotationToDriveTrainRotation % (2.0*Math.PI); // Could be positive or negative
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
       xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
@@ -137,7 +138,7 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
     SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
     // TODO Transform xSpeed/Yspeed based on the difference between the drivetrain X,Y axes and the PoseEstimator X,Y Axes
-    m_DriveSubsystemSRXSubsystem.drive(xSpeed, ySpeed, rotationSpeed, true, true); // TODO Verify signs of inputs 
+    m_DriveSubsystemSRXSubsystem.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true); // TODO Verify signs of inputs 
 
   }
 
