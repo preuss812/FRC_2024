@@ -9,15 +9,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import java.util.List;
-import org.photonvision.targeting.PhotonTrackedTarget;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-import frc.robot.Constants.OIConstants;
 
 public class GotoPoseCommand extends Command {
   /** Creates a new command to move the robot to the specified pose. */
@@ -33,10 +29,10 @@ public class GotoPoseCommand extends Command {
 
   final double LINEAR_P = 2.0;
   final double LINEAR_I = 0.0;
-  final double LINEAR_D = 0.0;
+  final double LINEAR_D = LINEAR_P * 10.0; // NEW 2/1/2024
   final double ANGULAR_P = 0.08;
   final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0;
+  final double ANGULAR_D = ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
   final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.
@@ -63,17 +59,19 @@ public class GotoPoseCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double angular_P = 0.05; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 0.1);
-    double angular_I = 0.005; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.01);
-    SmartDashboard.putNumber("Target angular_P", angular_P);
-    SmartDashboard.putNumber("Target angular_I", angular_I);
+    //double angular_P = 0.05; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 0.1);  // Removed 2/1/2024
+    //double angular_I = 0.005; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.01); // Removed 2/1/2024
+    //SmartDashboard.putNumber("Target angular_P", angular_P);
+    //SmartDashboard.putNumber("Target angular_I", angular_I);
 
     xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
-    xController.setIZone(0.1);
-    yController = new PIDController(LINEAR_P, 0, LINEAR_D);
+    xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
+    yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
+    yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
 
-    rotationController = new PIDController(angular_P, angular_I, ANGULAR_D);
+    rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
     rotationController.setTolerance(1.0); // did not work, dont understand yet
+    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     onTarget = false;
     SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
@@ -129,10 +127,14 @@ public class GotoPoseCommand extends Command {
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
       xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
       ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
-
-      if (rotationError < 0.0)
-        rotationError += 2.0*Math.PI; // For the PID Controller make sure the rotationError is between 0 and 2*PI
-      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign
+      /*
+       * Next 2 lines I think were breaking the rotation direction calculations to turn in the closest direction so 
+       * I commented them out 2/1/2024
+       *
+       * if (rotationError < 0.0)
+       *  rotationError += 2.0*Math.PI; // For the PID Controller make sure the rotationError is between 0 and 2*PI
+       */
+      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
     }
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
