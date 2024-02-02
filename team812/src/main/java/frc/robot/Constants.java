@@ -44,20 +44,14 @@ public final class Constants {
         public static final int kSwerveLeftFrontDrive = 28;
         public static final int kSwerveLeftFrontCANCoder = 38;
 
-        public static final int kPDP = 42;
-        public static final int kPCM = 40;
-        public static final int[] kLeftMotors = {99,98}; // This is garbage - dph 2023-12-14
-        public static final int[] kRightMotors = {95,94}; // This is garbage - dph 2023-12-14
-        public static final int kArmExtensionMotor = 97;
-        public static final int kArmMotor = 96;
+        //public static final int kPDP = 42;
+        //public static final int kPCM = 40;
+        public static final int kWinchMotor = 40;
+        public static final int kArmMotor = 41;
+        public static final int kNoteIntakeMotor = 42;
     }
-    public static final class PCMConstants {
-        public static final int[] kGripper = {1,0}; // dko 20220221 need to physically verify
-        public static final int[] kBrake = {2,3}; // TODO could be backwards
-        public static final int[] kArmExtension = {6,7}; // dko 20220221 need to physicall verify
-        public static final int[] kBarHooks = {8,9}; // dko 20220221 need to physically verify
-        public static final int kMinPresssure = 50; // minimum operating pressure for Arm control
-    }
+
+    
     public static final class OIConstants {
         public static final int kLeftJoystick = 0;
         public static final int kRightJoystick = 1;
@@ -132,7 +126,14 @@ public final class Constants {
         public static final double kArmExtension_rampRate = 0.5;
         public static final double kPorportionalBalanceForward = 0.05;
         public static final double kProportionalBalanceBackward = 0.05;
-    }
+        public static final double kNoteIntake_kP = 2.7; // TODO are these needed and tuned?
+        public static final double kNoteIntake_kI = 0.0;
+        public static final double kNoteIntake_kD = 0.0;
+        public static final double kNoteIntake_kF = 0.0;
+        public static final double kWinch_kP = 2.7; // TODO are these needed and tuned?
+        public static final double kWinch_kI = 0.0;
+        public static final double kWinch_kD = 0.0;
+        public static final double kWinch_kF = 0.0; }
 
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
@@ -220,10 +221,9 @@ public final class Constants {
     }
 
     
-    public static final class GripperConstants {
-        public static final String kOpen    = "Open";
-        public static final String kUnknown = "Unknown";
-        public static final String kClosed  = "Closed";
+    public static final class NoteIntakeConstants {
+        public static final double kPickUpNoteSpeed = 1.0; // TODO needs tuning.
+        public static final double kScoreNoteSpeed = -1.0; // TODO needs tuning.
     }
 
     public static final class BrakeConstants {
@@ -245,6 +245,11 @@ public final class Constants {
 // worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
     
+    }
+
+    public static final class WinchConstants {
+        public static final double kRaiseRobotSpeed =  1.0;
+        public static final double kLowerRobotSpeed = -1.0;
     }
 
     public static final class FieldConstants {

@@ -36,10 +36,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.BlackBoxSubsystem;
 //import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
-import frc.robot.subsystems.BrakeSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-import frc.robot.subsystems.CompressorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
@@ -70,11 +67,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
-  public static CompressorSubsystem m_Compressor = new CompressorSubsystem();
- // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
+  public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
-  public static BrakeSubsystem m_BrakeSubsystem = new BrakeSubsystem();
-  public static GripperSubsystem m_GripperSubsystem = new GripperSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
@@ -267,10 +261,10 @@ public class RobotContainer {
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
     new JoystickButton(m_driverController, Button.kY.value)
             .onTrue(new InstantCommand(
-                () -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose()),
+                () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
                 m_robotDrive));
                 
-    SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose())));  // For debug without robot
+    SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees())));  // For debug without robot
     SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseTestCommand()));  // For debug without robot
     }
     /**

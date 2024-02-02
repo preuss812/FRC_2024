@@ -14,11 +14,14 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ModifiedSlewRateLimiter;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ADIS16448_IMU_Offset;
 
 public class DriveSubsystemSRX extends SubsystemBase {
   // Create MAXSRXSwerveModules
@@ -47,7 +50,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
+  private final ADIS16448_IMU_Offset m_gyro = new ADIS16448_IMU_Offset();
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -126,7 +129,16 @@ public class DriveSubsystemSRX extends SubsystemBase {
         },
         pose);
   }
-
+  public void allianceRelativeDrive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+      var alliance = DriverStation.getAlliance();
+      boolean isBlueAlliance = true; // Assume true if we cant get an answer from the DriverStation
+      if (alliance.isPresent())
+        isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
+      if (isBlueAlliance)
+        drive(xSpeed, ySpeed, rot, fieldRelative, rateLimit); // The coordinates are fine if the 
+      else
+        drive(-xSpeed, -ySpeed, rot, fieldRelative, rateLimit); // Rotate the joystick inputs 180 degrees if we are on the Red Alliance.
+  }
   /**
    * Method to drive the robot using joystick info.
    *
@@ -269,5 +281,14 @@ public class DriveSubsystemSRX extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+  /**
+   * Reset the gyro angle as specified, presumably to align the drivetrain to the field.
+   * @param desiredngle
+   * @return
+   */
+  public double setAngleDegrees(double desiredAngle) {
+    m_gyro.setAngle(desiredAngle);
+    return m_gyro.getAngle();  // Return the new angle for chaining
   }
 }
