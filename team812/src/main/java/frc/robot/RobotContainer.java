@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -265,9 +266,10 @@ public class RobotContainer {
     // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
     new JoystickButton(m_driverController, Button.kY.value)
-            .onTrue(new RunCommand(
+            .onTrue(new InstantCommand(
                 () -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose()),
                 m_robotDrive));
+                
     SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose())));  // For debug without robot
     SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseTestCommand()));  // For debug without robot
     }

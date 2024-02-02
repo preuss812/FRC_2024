@@ -29,10 +29,10 @@ public class GotoPoseCommand extends Command {
 
   final double LINEAR_P = 2.0;
   final double LINEAR_I = 0.0;
-  final double LINEAR_D = LINEAR_P * 10.0; // NEW 2/1/2024
-  final double ANGULAR_P = 0.08;
+  final double LINEAR_D = 0.0; // LINEAR_P * 10.0; // NEW 2/1/2024
+  final double ANGULAR_P = 0.16;
   final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = ANGULAR_P * 10.0; // NEW 2/1/2024
+  final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
   final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.
@@ -99,11 +99,12 @@ public class GotoPoseCommand extends Command {
     rotationError = m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians();
     rotationError = rotationError % (2.0*Math.PI); // Could be positive or negative
     if (rotationError > Math.PI)
-      rotationError = 2.0 * Math.PI - rotationError;
+      rotationError = rotationError - Math.PI * 2.0;
     else if (rotationError < -Math.PI)
       rotationError = rotationError + 2.0*Math.PI; 
     SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
-    SmartDashboard.putString("GotoPoseXYOffset", translationErrorToTarget.toString());
+    SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
+    SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationErrorToTarget.getX()) < POSITION_TOLERANCE
@@ -123,6 +124,8 @@ public class GotoPoseCommand extends Command {
       driveTrainPose = m_DriveSubsystemSRXSubsystem.getPose();
       estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
       estimatedRotationToDriveTrainRotation = estimatedRotationToDriveTrainRotation % (2.0*Math.PI); // Could be positive or negative
+      if (estimatedRotationToDriveTrainRotation < 0.0) 
+        estimatedRotationToDriveTrainRotation += 2.0 * Math.PI;
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
       xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
