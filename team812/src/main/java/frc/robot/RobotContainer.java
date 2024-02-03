@@ -67,7 +67,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
-  public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
+ // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
@@ -126,7 +126,7 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> m_robotDrive.drive(
+            () -> m_robotDrive.allianceRelativeDrive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
@@ -255,7 +255,7 @@ public class RobotContainer {
     // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
     new JoystickButton(m_driverController, Button.kB.value)
     .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
-    Units.degreesToRadians(240.0)));
+    Units.degreesToRadians(60.0)));
     // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
     // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry

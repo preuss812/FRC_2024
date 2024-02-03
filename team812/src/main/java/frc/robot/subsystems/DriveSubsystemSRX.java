@@ -57,8 +57,8 @@ public class DriveSubsystemSRX extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private ModifiedSlewRateLimiter m_magLimiter = new ModifiedSlewRateLimiter(DriveConstants.kMagnitudeSlewRate, 2 * DriveConstants.kMagnitudeSlewRate, 0);
-  private ModifiedSlewRateLimiter m_rotLimiter = new ModifiedSlewRateLimiter(DriveConstants.kRotationalSlewRate, 2 * DriveConstants.kRotationalSlewRate, 0);
+  private ModifiedSlewRateLimiter m_magLimiter = new ModifiedSlewRateLimiter(DriveConstants.kMagnitudeIncreaseSlewRate, DriveConstants.kMagnitudeDecreaseSlewRate, 0);
+  private ModifiedSlewRateLimiter m_rotLimiter = new ModifiedSlewRateLimiter(DriveConstants.kRotationalIncreaseSlewRate, DriveConstants.kRotationalDecreaseSlewRate, 0);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // Odometry class for tracking robot pose
@@ -134,6 +134,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
       boolean isBlueAlliance = true; // Assume true if we cant get an answer from the DriverStation
       if (alliance.isPresent())
         isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
+      SmartDashboard.putBoolean("BlueAlliance", isBlueAlliance);
       if (isBlueAlliance)
         drive(xSpeed, ySpeed, rot, fieldRelative, rateLimit); // The coordinates are fine if the 
       else
@@ -288,7 +289,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
    * @return
    */
   public double setAngleDegrees(double desiredAngle) {
-    m_gyro.setAngle(desiredAngle);
-    return m_gyro.getAngle();  // Return the new angle for chaining
+    // There is something wrong here as the results are 180 out.
+    SmartDashboard.putNumber("SetAngle", desiredAngle); // minus but we should have added m_gyro.inverted instead
+    m_gyro.setAngle(-desiredAngle);
+    return -m_gyro.getAngle();  // Return the new angle for chaining
   }
 }
