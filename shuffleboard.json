@@ -135,8 +135,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/rotate js": true
+              "Y-axis/Unit": "ul"
             }
           },
           "3,3": {
@@ -427,7 +426,7 @@
   "windowGeometry": {
     "x": -8.0,
     "y": -8.0,
-    "width": 1620.0,
-    "height": 920.0
+    "width": 1936.0,
+    "height": 1096.0
   }
 }
