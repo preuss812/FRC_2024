@@ -49,6 +49,9 @@ public final class Constants {
         public static final int kWinchMotor = 40;
         public static final int kArmMotor = 41;
         public static final int kNoteIntakeMotor = 42;
+
+        public static final int kPDP = 50;
+        public static final int kPCM = 51;
     }
 
     

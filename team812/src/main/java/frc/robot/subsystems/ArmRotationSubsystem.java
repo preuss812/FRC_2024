@@ -169,7 +169,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     double l_speed = speed;
     double l_position = getPosition();
 
-    l_speed = MathUtil.clamp(l_speed, -0.30, 0.10);
+    l_speed = MathUtil.clamp(l_speed, -0.10, 0.10);
 
     SmartDashboard.putNumber("test_rotate_l_speed", l_speed);
     SmartDashboard.putNumber("test_rotate_l_position", l_position);

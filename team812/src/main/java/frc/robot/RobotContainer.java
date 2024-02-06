@@ -33,6 +33,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.BlackBoxSubsystem;
 //import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
@@ -71,6 +72,7 @@ public class RobotContainer {
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
+  public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem();
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
@@ -222,7 +224,10 @@ public class RobotContainer {
       ),
       () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
     ));
-    
+   
+   */
+   new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
+    /* 
   
   // Left Joystick for Arm Extension Control Debug
     new JoystickButton(leftJoystick, 7).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition));
