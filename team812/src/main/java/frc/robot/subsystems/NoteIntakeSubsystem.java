@@ -19,6 +19,8 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 public class NoteIntakeSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_noteIntake = new WPI_TalonSRX(CANConstants.kNoteIntakeMotor);
+  public final WPI_TalonSRX m_noteIntake2 = new WPI_TalonSRX(CANConstants.kNoteIntakeMotor2);
+
   
   /** Creates a new ArmSubsystem. */
   public NoteIntakeSubsystem() {

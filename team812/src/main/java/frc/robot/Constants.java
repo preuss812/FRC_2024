@@ -49,6 +49,8 @@ public final class Constants {
         public static final int kWinchMotor = 40;
         public static final int kArmMotor = 41;
         public static final int kNoteIntakeMotor = 42;
+        public static final int kNoteIntakeMotor2 = 43;
+        public static final int kShooterMotor = 44;
 
         public static final int kPDP = 50;
         public static final int kPCM = 51;
@@ -136,7 +138,13 @@ public final class Constants {
         public static final double kWinch_kP = 2.7; // TODO are these needed and tuned?
         public static final double kWinch_kI = 0.0;
         public static final double kWinch_kD = 0.0;
-        public static final double kWinch_kF = 0.0; }
+        public static final double kWinch_kF = 0.0; 
+    
+        public static final double kShooter_kP = 2.7; // TODO are these needed and tuned?
+        public static final double kShooter_kI = 0.0;
+        public static final double kShooter_kD = 0.0;
+        public static final double kShooter_kF = 0.0; 
+    }
 
     public static final class DriveTrainConstants {
         public static final double kOpenLoopRampRate = 0.75;
@@ -253,6 +261,10 @@ public final class Constants {
     public static final class WinchConstants {
         public static final double kRaiseRobotSpeed =  1.0;
         public static final double kLowerRobotSpeed = -1.0;
+    }
+    public static final class ShooterConstants {
+        public static final double kShootSpeed =  .25;
+        public static final double kUnshootSpeed = -1.0;
     }
 
     public static final class FieldConstants {
