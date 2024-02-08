@@ -46,6 +46,7 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.GotoPoseTestCommand;
+import frc.robot.commands.ShooterCommand;
 
 import java.util.List;
 
@@ -229,7 +230,7 @@ public class RobotContainer {
    
    */
    new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
-   new JoystickButton(m_driverController,Button.kBack.value).onTrue(new InstantCommand(()-> m_ShooterSubsystem.shoot()));
+   new JoystickButton(m_driverController,Button.kBack.value).while    True(new ShooterCommand(m_ShooterSubsystem, 0.3));
     /* 
   
   // Left Joystick for Arm Extension Control Debug

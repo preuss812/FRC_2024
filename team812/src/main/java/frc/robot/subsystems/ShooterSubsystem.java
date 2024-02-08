@@ -76,8 +76,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooter.set(ControlMode.Disabled, 0);
   }
 
-  public void shoot() {
-    m_shooter.set(ShooterConstants.kShootSpeed);
+  public void shoot(double speed) {
+    m_shooter.set(ControlMode.PercentOutput,speed);
+
   } 
 
   public void unshoot() {
