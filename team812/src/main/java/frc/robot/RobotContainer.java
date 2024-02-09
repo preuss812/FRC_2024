@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 //import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,6 +36,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.BlackBoxSubsystem;
 //import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EncoderSubsystem;
@@ -47,6 +49,7 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.GotoPoseTestCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.WinchCommand;
 
 import java.util.List;
 
@@ -76,6 +79,8 @@ public class RobotContainer {
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem();
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
+
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
@@ -230,7 +235,7 @@ public class RobotContainer {
    
    */
    new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
-   new JoystickButton(m_driverController,Button.kBack.value).while    True(new ShooterCommand(m_ShooterSubsystem, 0.3));
+   new JoystickButton(m_driverController,Button.kBack.value).whileTrue(new ShooterCommand(m_ShooterSubsystem, 0.3));
     /* 
   
   // Left Joystick for Arm Extension Control Debug
@@ -261,6 +266,8 @@ public class RobotContainer {
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+      new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
+            .whileTrue(new WinchCommand(m_WinchSubsystem));
     // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
     new JoystickButton(m_driverController, Button.kB.value)
     .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
