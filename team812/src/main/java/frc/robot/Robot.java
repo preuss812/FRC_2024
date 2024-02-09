@@ -44,6 +44,7 @@ public class Robot extends TimedRobot {
 //    CameraServer.startAutomaticCapture(1);
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData(CommandScheduler.getInstance()); // This puts running commands on the shuffleboard.
+    addPeriodic(() -> Utilities.setAlliance(), 1.0 );
   }
 
   /**

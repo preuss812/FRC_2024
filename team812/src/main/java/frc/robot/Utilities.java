@@ -7,10 +7,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Add your docs here.
  */
 public class Utilities {
+    
+    private static Alliance m_alliance = null;
+    private static boolean m_isBlueAlliance = false;
+    private static boolean m_isRedAlliance = false;
 
     public static double scaleDouble(final double input, final double to_min, final double to_max) {
             final double from_min = -1.0;
@@ -26,4 +34,22 @@ public class Utilities {
         }
         return scaled_x;    
     }
+
+    public static void setAlliance() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            m_isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
+            m_isRedAlliance =  (alliance.get() == Alliance.Red);
+        }
+        SmartDashboard.putBoolean("BlueAlliance", m_isBlueAlliance);   
+    }
+    
+    public static boolean isRedAlliance() {
+        return m_isRedAlliance;
+    }
+
+    public static boolean isBlueAlliance() {
+        return m_isBlueAlliance;
+    }
+
 }

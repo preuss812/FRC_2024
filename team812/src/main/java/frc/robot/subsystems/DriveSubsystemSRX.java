@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ModifiedSlewRateLimiter;
+import frc.robot.Utilities;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -130,12 +131,8 @@ public class DriveSubsystemSRX extends SubsystemBase {
         pose);
   }
   public void allianceRelativeDrive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-      var alliance = DriverStation.getAlliance();
-      boolean isBlueAlliance = true; // Assume true if we cant get an answer from the DriverStation
-      if (alliance.isPresent())
-        isBlueAlliance = (alliance.get() == Alliance.Blue);  // Remember which alliance we are in.
-      SmartDashboard.putBoolean("BlueAlliance", isBlueAlliance);
-      if (isBlueAlliance)
+      
+      if (Utilities.isBlueAlliance())
         drive(xSpeed, ySpeed, rot, fieldRelative, rateLimit); // The coordinates are fine if the 
       else
         drive(-xSpeed, -ySpeed, rot, fieldRelative, rateLimit); // Rotate the joystick inputs 180 degrees if we are on the Red Alliance.
