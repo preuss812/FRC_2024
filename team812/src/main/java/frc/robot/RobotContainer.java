@@ -291,19 +291,25 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond*0.5,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared*0.5)
+        AutoConstants.kMaxSpeedMetersPerSecond*0.1,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared*0.1)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
     // An example trajectory to follow. All units in meters.
+    double x=2;
+    double y = 2;
+    double theta = Units.degreesToRadians(-129.0);
+    //x = 1;
+    //y = 0;
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
+        
+        new Pose2d(x+0, y+0, new Rotation2d(theta)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1), new Translation2d(3,0)),
+        List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(x+0, y+0, new Rotation2d(theta)),
         config);
 
     var thetaController = new ProfiledPIDController(
@@ -323,7 +329,9 @@ public class RobotContainer {
         m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    //m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
+    //m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
