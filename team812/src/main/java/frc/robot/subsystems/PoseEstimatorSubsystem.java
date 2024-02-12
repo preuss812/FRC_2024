@@ -61,6 +61,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private double previousPipelineTimestamp = 0;
   private boolean isBlueAlliance = true;
+  private int m_lastAprilTagSeen = 0;
 
   public PoseEstimatorSubsystem(PhotonCamera photonCamera, DriveSubsystemSRX drivetrainSubsystem) {
     this.photonCamera = photonCamera;
@@ -112,6 +113,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
         var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
         poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
+        m_lastAprilTagSeen = fiducialId;
       }
     }
     // Update pose estimator with drivetrain sensors
@@ -159,4 +161,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     return this.isBlueAlliance;
   }
 
+  public Pose2d getAprilTagPose(int aprilTagId) {
+    Optional<Pose3d> pose3d;
+    Pose2d pose2d = new Pose2d();
+    pose3d = aprilTagFieldLayout.getTagPose(aprilTagId);
+    if (pose3d.isPresent())
+      pose2d = pose3d.get().toPose2d();
+    return pose2d;
+  }
+
+  public int lastAprilTagSeen() {
+    return m_lastAprilTagSeen;
+  }
 }

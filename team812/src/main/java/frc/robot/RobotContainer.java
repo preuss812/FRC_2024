@@ -29,7 +29,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import com.ctre.phoenix6.hardware.CANcoder;
+
+import frc.robot.Constants.ArmConstants;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -44,6 +48,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
+import frc.robot.commands.ArmRotationCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoPoseCommand;
@@ -288,7 +293,18 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  enum AutonomousStrategy {
+    LABTEST,
+    BLUEALLIANCE,
+    REDALLIANCE,
+    USEALLIANCE
+  }
   public Command getAutonomousCommand() {
+    
+
+    AutonomousStrategy autonomousStrategy = AutonomousStrategy.LABTEST;
+    //autonomousStrategy = AutonomousStrategy.BLUEALLIANCE;
+
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond*0.1,
@@ -296,44 +312,106 @@ public class RobotContainer {
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
-    // An example trajectory to follow. All units in meters.
-    double x=2;
-    double y = 2;
-    double theta = Units.degreesToRadians(-129.0);
-    //x = 1;
-    //y = 0;
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        
-        new Pose2d(x+0, y+0, new Rotation2d(theta)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(x+0, y+0, new Rotation2d(theta)),
-        config);
+    if (autonomousStrategy == AutonomousStrategy.LABTEST) {
+      // An example trajectory to follow. All units in meters.
+      double x=2;
+      double y = 2;
+      double theta = Units.degreesToRadians(-129.0);
+      //x = 1;
+      //y = 0;
+      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          
+          new Pose2d(x+0, y+0, new Rotation2d(theta)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
+          // End 3 meters straight ahead of where we started, facing forward
+          new Pose2d(x+0, y+0, new Rotation2d(theta)),
+          config);
 
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+      var thetaController = new ProfiledPIDController(
+          AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+          exampleTrajectory,
+          m_robotDrive::getPose, // Functional interface to feed supplier
+          DriveConstants.kDriveKinematics,
 
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+          // Position controllers
+          new PIDController(AutoConstants.kPXController, 0, 0),
+          new PIDController(AutoConstants.kPYController, 0, 0),
+          thetaController,
+          m_robotDrive::setModuleStates,
+          m_robotDrive);
 
-    // Reset odometry to the starting pose of the trajectory.
-    //m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-    m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
-    //m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
+      // Reset odometry to the starting pose of the trajectory.
+      //m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+      m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
+      //m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
 
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+      // Run path following command, then stop at the end.
+      return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+    } else if ((autonomousStrategy == AutonomousStrategy.USEALLIANCE && Utilities.isBlueAlliance()) || 
+               (autonomousStrategy == AutonomousStrategy.BLUEALLIANCE)) {
+      // We are in the Blue Alliance.
+      //   Drive toward april tag # 6.
+      //   Rotate 180 degrees so that we are positioned for shooting.
+      //   Back in the last 1 meter to be touching the wall.
+      //   Raise the arm to the shooting position.
+      //   Run the shooting/outtake motor to score the "note".
+      Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(6);  // TODO Make enum for april tags eg BLUE_AMP, RED_AMP, ...
+      Rotation2d finalRotation = targetPose.getRotation().rotateBy(new Rotation2d(Math.PI));
+      Pose2d finalPose = new Pose2d(targetPose.getX(), targetPose.getY() - 0.5, finalRotation); // Pose for robot to be at the april tag.
+      Pose2d nearTagPose = new Pose2d(targetPose.getX(), targetPose.getY() - 1.0, finalRotation);
+      Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
+      int lastAprilTagSeen = m_PoseEstimatorSubsystem.lastAprilTagSeen(); // We can use this to be sure we have the right alliance and have decent field coordinates.
+      // Use the current pose estimator's result for the robots actual pose
+      m_robotDrive.resetOdometry(startingPose);
+
+      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          
+          startingPose,  // We are starting where we are.
+          // Pass through these zero interior waypoints, this should probably be something to make sure we dont crash into other robots.
+          List.of(),
+          nearTagPose,
+          config);
+
+      var thetaController = new ProfiledPIDController(
+          AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+      thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+          exampleTrajectory,
+          m_robotDrive::getPose, // Functional interface to feed supplier
+          DriveConstants.kDriveKinematics,
+
+          // Position controllers
+          new PIDController(AutoConstants.kPXController, 0, 0),
+          new PIDController(AutoConstants.kPYController, 0, 0),
+          thetaController,
+          m_robotDrive::setModuleStates,
+          m_robotDrive);
+        SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
+          swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
+          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians()),
+          new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
+          new ShooterCommand(m_ShooterSubsystem, 0.5),
+          new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
+          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians())
+        );
+        return fullCommandGroup;
+
+    } else if ((autonomousStrategy == AutonomousStrategy.USEALLIANCE && Utilities.isRedAlliance()) ||
+               (autonomousStrategy == AutonomousStrategy.REDALLIANCE)) {
+      // Perform the Red Alliance autonomous moves.
+      // TODO Figure out what the red alliance strategy is exactly...
+    } else {
+      // Do what we can given we do not know which alliance we are in.
+      // Currently it does nothing but stop the drive train which should already be stopped.
+      return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive);
+    }
+    return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive); // Should never reach this code.
   }
 }
