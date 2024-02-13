@@ -52,7 +52,6 @@ public class GotoPoseCommand extends Command {
     m_PoseEstimatorSubsystem = PoseEstimatorSubsystem;
     m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
     m_targetPose = new Pose2d(targetX, targetY, new Rotation2d(targetRotation));
-    Utilities.toSmartDashboard("GotoTarget", m_targetPose);
     onTarget = false;
     addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
   }
@@ -75,6 +74,7 @@ public class GotoPoseCommand extends Command {
     rotationController.setTolerance(1.0); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     onTarget = false;
+    Utilities.toSmartDashboard("GotoTarget", m_targetPose);
     SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
 
@@ -98,7 +98,7 @@ public class GotoPoseCommand extends Command {
     translationErrorToTarget = new Translation2d( m_targetPose.getX() - estimatedPose.getX(), m_targetPose.getY() - estimatedPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
-    rotationError = MathUtil.inputModulus(m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), 0.0, Math.PI*2.0);
+    rotationError = MathUtil.inputModulus(m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), -Math.PI, Math.PI);
     SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
     SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
     SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
@@ -140,7 +140,7 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
     SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
-    // TODO Transform xSpeed/Yspeed based on the difference between the drivetrain X,Y axes and the PoseEstimator X,Y Axes
+    // TODO Transform xSpeed/Yspeed based on the difference between the drivetrain X,Y axes and the PoseEstimator X,Y Axes // Done Above!
     m_DriveSubsystemSRXSubsystem.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true); // TODO Verify signs of inputs 
 
   }

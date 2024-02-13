@@ -403,11 +403,11 @@ public class RobotContainer {
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
           //swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
-          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians()),
+          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians())/*,
           new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
           new ShooterCommand(m_ShooterSubsystem, 0.5),
           new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
-          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians())
+          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians())*/
         );
         return fullCommandGroup;
 
