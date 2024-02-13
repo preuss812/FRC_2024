@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
+
 
 /**
  * Add your docs here.
@@ -52,4 +54,7 @@ public class Utilities {
         return m_isBlueAlliance;
     }
 
+    public static void toSmartDashboard(String label, Pose2d pose) {
+        SmartDashboard.putString(label, String.format("(%4.2f,%4.2f) %2.0f", pose.getX(), pose.getY(), pose.getRotation().getDegrees()) );
+    }
 }

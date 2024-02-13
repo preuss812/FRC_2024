@@ -23,6 +23,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ADIS16448_IMU_Offset;
+import frc.robot.Utilities;
 
 public class DriveSubsystemSRX extends SubsystemBase {
   // Create MAXSRXSwerveModules
@@ -91,7 +92,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
     // Update the odometry in the periodic block
     SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
     //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
-    SmartDashboard.putString("DriveTrain", this.getPose().toString());  
+    Utilities.toSmartDashboard("DriveTrain", this.getPose());  
     SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
     SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
 

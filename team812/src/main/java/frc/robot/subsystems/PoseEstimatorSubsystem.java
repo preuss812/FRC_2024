@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.DriveTrainConstants;
@@ -106,6 +107,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       var fiducialId = target.getFiducialId();
       // Get the tag pose from field layout - consider that the layout will be null if it failed to load
       Optional<Pose3d> tagPose = aprilTagFieldLayout == null ? Optional.empty() : aprilTagFieldLayout.getTagPose(fiducialId);
+      SmartDashboard.putNumber("TagAmbiguity", target.getPoseAmbiguity());
       if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && tagPose.isPresent()) {
         var targetPose = tagPose.get();
         Transform3d camToTarget = target.getBestCameraToTarget();
@@ -114,8 +116,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
         poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
         m_lastAprilTagSeen = fiducialId;
+      } else {
+        m_lastAprilTagSeen = -1;
       }
+    } else if (resultTimestamp == previousPipelineTimestamp && pipelineResult.hasTargets()) {
+        // Do nothing, we have the same result as the last call so whatever the result was then is still the result now.
+    } else {
+      m_lastAprilTagSeen = 0;
     }
+    
+    SmartDashboard.putBoolean("TagDetected", m_lastAprilTagSeen != 0);
+    SmartDashboard.putNumber("TagID", m_lastAprilTagSeen);
+
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(
       drivetrainSubsystem.getRotation(),
@@ -173,4 +185,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   public int lastAprilTagSeen() {
     return m_lastAprilTagSeen;
   }
+
+  public boolean tagInView() {
+    return (m_lastAprilTagSeen > 0);
+  }
+
 }

@@ -286,9 +286,12 @@ public class RobotContainer {
                 m_robotDrive));
                 
     SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees())));  // For debug without robot
-    SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseTestCommand()));  // For debug without robot
-    }
-    /**
+    SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
+    Units.degreesToRadians(240.0))));  // For debug without robot
+    SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug without robot
+
+  }
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
@@ -303,7 +306,7 @@ public class RobotContainer {
     
 
     AutonomousStrategy autonomousStrategy = AutonomousStrategy.LABTEST;
-    //autonomousStrategy = AutonomousStrategy.BLUEALLIANCE;
+    autonomousStrategy = AutonomousStrategy.BLUEALLIANCE;
 
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
@@ -366,6 +369,11 @@ public class RobotContainer {
       Pose2d nearTagPose = new Pose2d(targetPose.getX(), targetPose.getY() - 1.0, finalRotation);
       Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
       int lastAprilTagSeen = m_PoseEstimatorSubsystem.lastAprilTagSeen(); // We can use this to be sure we have the right alliance and have decent field coordinates.
+      Utilities.toSmartDashboard("AutoTarget", targetPose);
+      Utilities.toSmartDashboard("AutoFinal", finalPose);
+      Utilities.toSmartDashboard("AutoNearTag", nearTagPose);
+      Utilities.toSmartDashboard("AutoStart", startingPose);
+      
       // Use the current pose estimator's result for the robots actual pose
       m_robotDrive.resetOdometry(startingPose);
 
@@ -384,7 +392,7 @@ public class RobotContainer {
 
       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
           exampleTrajectory,
-          m_robotDrive::getPose, // Functional interface to feed supplier
+          m_robotDrive::getPose, // Functional interface to feed supplier  // Should this be the PoseEstimator??
           DriveConstants.kDriveKinematics,
 
           // Position controllers
@@ -394,7 +402,7 @@ public class RobotContainer {
           m_robotDrive::setModuleStates,
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
-          swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
+          //swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians()),
           new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
           new ShooterCommand(m_ShooterSubsystem, 0.5),
@@ -413,5 +421,10 @@ public class RobotContainer {
       return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive);
     }
     return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive); // Should never reach this code.
+  }
+
+  // Function to align the PoseEstimator pose and the DriveTrain pose.
+  public void alignDriveTrainToPoseEstimator() {
+    m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
   }
 }

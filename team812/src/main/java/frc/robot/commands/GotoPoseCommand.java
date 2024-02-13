@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+import frc.robot.Utilities;
 
 public class GotoPoseCommand extends Command {
   /** Creates a new command to move the robot to the specified pose. */
@@ -51,6 +52,7 @@ public class GotoPoseCommand extends Command {
     m_PoseEstimatorSubsystem = PoseEstimatorSubsystem;
     m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
     m_targetPose = new Pose2d(targetX, targetY, new Rotation2d(targetRotation));
+    Utilities.toSmartDashboard("GotoTarget", m_targetPose);
     onTarget = false;
     addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
   }
@@ -91,17 +93,12 @@ public class GotoPoseCommand extends Command {
     double rotationSpeed = 0.0;
     //SmartDashboard.putNumber("Range", -54);
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
-    SmartDashboard.putString("GotoPose Pose", estimatedPose.toString());
+    Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
     // Calculate the X and Y and rotation offsets to the target location
     translationErrorToTarget = new Translation2d( m_targetPose.getX() - estimatedPose.getX(), m_targetPose.getY() - estimatedPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
-    rotationError = m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians();
-    rotationError = rotationError % (2.0*Math.PI); // Could be positive or negative
-    if (rotationError > Math.PI)
-      rotationError = rotationError - Math.PI * 2.0;
-    else if (rotationError < -Math.PI)
-      rotationError = rotationError + 2.0*Math.PI; 
+    rotationError = MathUtil.inputModulus(m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), 0.0, Math.PI*2.0);
     SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
     SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
     SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
@@ -123,9 +120,10 @@ public class GotoPoseCommand extends Command {
       // Calculate the difference in rotation between the PoseEstimator and the DriveTrainPose
       driveTrainPose = m_DriveSubsystemSRXSubsystem.getPose();
       estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
-      estimatedRotationToDriveTrainRotation = estimatedRotationToDriveTrainRotation % (2.0*Math.PI); // Could be positive or negative
-      if (estimatedRotationToDriveTrainRotation < 0.0) 
-        estimatedRotationToDriveTrainRotation += 2.0 * Math.PI;
+      estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
+      
+      SmartDashboard.putNumber("RotationError", estimatedRotationToDriveTrainRotation);
+
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
       xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
@@ -149,7 +147,9 @@ public class GotoPoseCommand extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    var ended = true;
+  }
 
   // Returns true when the command should end.
   @Override
