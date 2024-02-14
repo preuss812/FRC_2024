@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,6 +17,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ModifiedSlewRateLimiter;
@@ -52,7 +56,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16448_IMU_Offset m_gyro = new ADIS16448_IMU_Offset();
+  private final ADIS16448_IMU_Offset gyro_old = new ADIS16448_IMU_Offset();
+  private final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB1);
+
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -87,14 +93,16 @@ public class DriveSubsystemSRX extends SubsystemBase {
             m_rearRight.getPosition()
         };
   }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
     //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
     Utilities.toSmartDashboard("DriveTrain", this.getPose());  
-    SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
-    SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
+    // SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
+    // SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
+    // SmartDashboard.putNumber("gyro_navX", m_ahrs.getAngle());
 
     m_odometry.update(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
@@ -289,7 +297,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
   public double setAngleDegrees(double desiredAngle) {
     // There is something wrong here as the results are 180 out.
     SmartDashboard.putNumber("SetAngle", desiredAngle); // minus but we should have added m_gyro.inverted instead
-    m_gyro.setAngle(-desiredAngle);
-    return -m_gyro.getAngle();  // Return the new angle for chaining
+    SmartDashboard.putNumber("SetAngleOldAdj", m_gyro.getAngleAdjustment());
+    SmartDashboard.putNumber("SetAngleNewAdj", desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment()));
+    m_gyro.setAngleAdjustment(-(desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment())));
+    return m_gyro.getAngle();  // Return the new angle for chaining
   }
 }

@@ -282,7 +282,8 @@ public class RobotContainer {
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
     new JoystickButton(m_driverController, Button.kY.value)
             .onTrue(new InstantCommand(
-                () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
+               // () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
+               () -> alignDriveTrainToPoseEstimator(),
                 m_robotDrive));
                 
     SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees())));  // For debug without robot
@@ -375,7 +376,8 @@ public class RobotContainer {
       Utilities.toSmartDashboard("AutoStart", startingPose);
       
       // Use the current pose estimator's result for the robots actual pose
-      m_robotDrive.resetOdometry(startingPose);
+      //m_robotDrive.resetOdometry(startingPose);
+      alignDriveTrainToPoseEstimator();
 
       Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
@@ -402,7 +404,7 @@ public class RobotContainer {
           m_robotDrive::setModuleStates,
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
-          //swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
+          swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), finalPose.getRotation().getRadians())/*,
           new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
           new ShooterCommand(m_ShooterSubsystem, 0.5),
@@ -425,6 +427,7 @@ public class RobotContainer {
 
   // Function to align the PoseEstimator pose and the DriveTrain pose.
   public void alignDriveTrainToPoseEstimator() {
+    m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
     m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
   }
 }
