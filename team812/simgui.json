@@ -1,0 +1,14 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Vision/Field": "Field2d",
+      "/SmartDashboard/GotoPoseTest": "Command",
+      "/SmartDashboard/ResetOdometry": "Command",
+      "/SmartDashboard/Scheduler": "Scheduler"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
