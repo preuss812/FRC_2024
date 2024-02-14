@@ -37,7 +37,9 @@ import frc.robot.Constants.ArmConstants;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
@@ -317,20 +319,27 @@ public class RobotContainer {
         .setKinematics(DriveConstants.kDriveKinematics);
 
     if (autonomousStrategy == AutonomousStrategy.LABTEST) {
+      // Use the current pose estimator's result for the robots actual pose
+      //m_robotDrive.resetOdometry(startingPose);
+      alignDriveTrainToPoseEstimator();
+
       // An example trajectory to follow. All units in meters.
-      double x=2;
-      double y = 2;
-      double theta = Units.degreesToRadians(-129.0);
-      //x = 1;
-      //y = 0;
+      Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
+      
+      //double x=2;
+      //double y = 2;
+      //double theta = Units.degreesToRadians(-129.0);
+      ////x = 1;
+      ////y = 0;
       Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           
-          new Pose2d(x+0, y+0, new Rotation2d(theta)),
+          startingPose,
           // Pass through these two interior waypoints, making an 's' curve path
-          List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
+          //List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
+          List.of(FieldConstants.NearBlueAmp, FieldConstants.NearBandSaw, FieldConstants.NearDriverStation, FieldConstants.NearHammers, FieldConstants.NearNorthDoorToClassroom),
           // End 3 meters straight ahead of where we started, facing forward
-          new Pose2d(x+0, y+0, new Rotation2d(theta)),
+          startingPose,
           config);
 
       var thetaController = new ProfiledPIDController(
@@ -349,10 +358,6 @@ public class RobotContainer {
           m_robotDrive::setModuleStates,
           m_robotDrive);
 
-      // Reset odometry to the starting pose of the trajectory.
-      //m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-      m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
-      //m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
 
       // Run path following command, then stop at the end.
       return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
@@ -364,10 +369,11 @@ public class RobotContainer {
       //   Back in the last 1 meter to be touching the wall.
       //   Raise the arm to the shooting position.
       //   Run the shooting/outtake motor to score the "note".
-      Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(6);  // TODO Make enum for april tags eg BLUE_AMP, RED_AMP, ...
-      Rotation2d finalRotation = targetPose.getRotation().rotateBy(new Rotation2d(Math.PI));
+      Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
+      Rotation2d finalRotation = targetPose.getRotation(); // This will put thte back of the robot towards the april tag.
+      Rotation2d nearTagRotation = targetPose.getRotation().rotateBy(new Rotation2d(Math.PI)); // This will face the april tag.
       Pose2d finalPose = new Pose2d(targetPose.getX(), targetPose.getY() - 0.5, finalRotation); // Pose for robot to be at the april tag.
-      Pose2d nearTagPose = new Pose2d(targetPose.getX(), targetPose.getY() - 1.0, finalRotation);
+      Pose2d nearTagPose = new Pose2d(targetPose.getX(), targetPose.getY() - 1.0, nearTagRotation);
       Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
       int lastAprilTagSeen = m_PoseEstimatorSubsystem.lastAprilTagSeen(); // We can use this to be sure we have the right alliance and have decent field coordinates.
       Utilities.toSmartDashboard("AutoTarget", targetPose);

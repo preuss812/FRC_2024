@@ -231,6 +231,50 @@ public final class Constants {
         public static final double kArmExtensionPivotToWheelsOnFloorLine = Math.sin(Units.degreesToRadians(ArmConstants.kArmMinRotationAngle))*kArmExtensionRetractedLength;
     }
 
+    // Define locations on the field as poses that may be useful for semi-automatic driving.
+    public static final class FieldConstants {
+        // All units in Meters.
+        
+        public static final double length = Units.inchesToMeters(652.73-1.50); // This is X
+        public static final double width = Units.inchesToMeters(323.0); // This is Y
+
+        // Handy values
+        public static double xMin = 0.00;
+        public static double xMax = 16.58 - 0.04; // A guess based on the coordinates april tag # 7 and 8;
+        public static double yMin = 0.00;
+        public static double yMax = 8.20;
+        public static double xCenter = (xMax - xMin)/2.0;
+        public static double yCenter = (yMax - yMin)/2.0;
+
+        public static Translation2d CenterOfTheField = new Translation2d(xCenter, yCenter);
+        public static Translation2d NearBlueAmp = new Translation2d(1.84, yMax-1.0);
+        public static Translation2d NearRedAmp = new Translation2d(14.70, yMax-1.0);
+        public static Translation2d NearBlueSource = new Translation2d(15.08, 0.88);
+        public static Translation2d NearRedSource = new Translation2d(1.46, 0.88);
+        
+        // Preloaded notes along the center line of the field.
+        public static Translation2d CenterNote1 = new Translation2d(xCenter, Units.inchesToMeters(29.64+66.0*0.0));
+        public static Translation2d CenterNote2 = new Translation2d(xCenter, Units.inchesToMeters(29.64+66.0*1.0));
+        public static Translation2d CenterNote3 = new Translation2d(xCenter, Units.inchesToMeters(29.64+66.0*2.0));
+        public static Translation2d CenterNote4 = new Translation2d(xCenter, Units.inchesToMeters(29.64+66.0*3.0));
+        public static Translation2d CenterNote5 = new Translation2d(xCenter, Units.inchesToMeters(29.64+66.0*4.0));
+
+        // From bottom of the field to the top (lowest Y coordinate to highest Y cooordinate).
+        public static Translation2d BlueNote1 = new Translation2d(Units.inchesToMeters(114.0), yCenter);
+        public static Translation2d BlueNote2 = new Translation2d(Units.inchesToMeters(114.0), yCenter+ Units.inchesToMeters(57.0));
+        public static Translation2d BlueNote3 = new Translation2d(Units.inchesToMeters(114.0), yCenter+ Units.inchesToMeters(57.0*2.0));
+
+        // From bottom of the field to the top (lowest Y coordinate to highest Y cooordinate).
+        public static Translation2d RedNote1 = new Translation2d(xMax - Units.inchesToMeters(114.0), yCenter);
+        public static Translation2d RedNote2 = new Translation2d(xMax - Units.inchesToMeters(114.0), yCenter+ Units.inchesToMeters(57.0));
+        public static Translation2d RedNote3 = new Translation2d(xMax - Units.inchesToMeters(114.0), yCenter+ Units.inchesToMeters(57.0*2.0));
+
+        // For Testing at Preuss
+        public static Translation2d NearBandSaw = new Translation2d(NearBlueAmp.getX(), NearBlueAmp.getY() - 5.0);
+        public static Translation2d NearDriverStation = new Translation2d(NearBlueAmp.getX()+1.0, NearBlueAmp.getY()-2.5);
+        public static Translation2d NearHammers = new Translation2d(NearBlueAmp.getX()+1, NearBlueAmp.getY());
+        public static Translation2d NearNorthDoorToClassroom = new Translation2d(NearBlueAmp.getX()+5.0, NearBlueAmp.getY());
+    }
     
     public static final class NoteIntakeConstants {
         public static final double kPickUpNoteSpeed = 1.0; // TODO needs tuning.
@@ -255,6 +299,32 @@ public final class Constants {
     new Transform3d(new Translation3d(0.0, -0.3425, -0.233), new Rotation3d());
 // worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
+        public enum AprilTag {
+            UNKNOWN(0),
+            BLUE_RIGHT_SOURCE(1),
+            BLUE_LEFT_SOURCE(2),
+            RED_RIGHT_SPEAKER(3),
+            RED_CENTER_SPEAKER(4),
+            RED_AMP(5),
+            BLUE_AMP(6),
+            BLUE_CENTER_SPEAKER(7),
+            BLUE_LEFT_SPEAKER(8),
+            RED_RIGHT_SOURCE(9),
+            RED_LEFT_SOURCE(10),
+            RED_LEFT_STAGE(11),
+            RED_RIGHT_STAGE(12),
+            RED_CENTER_STAGE(13),
+            BLUE_CENTER_STAGE(14),
+            BLUE_LEFT_STAGE(15),
+            BLUE_RIGHT_STAGE(16);
+            
+            private int id;
+            private AprilTag(int id) {
+                this.id = id;
+            }
+            public int id() {return id; }
+
+        }
     
     }
 
@@ -267,10 +337,7 @@ public final class Constants {
         public static final double kUnshootSpeed = -1.0;
     }
 
-    public static final class FieldConstants {
-        public static final double length = Units.feetToMeters(54);
-        public static final double width = Units.feetToMeters(27);
-    }
+    
     public static final class CameraConstants {
         public static final String kCamName="pv-812";
     }
