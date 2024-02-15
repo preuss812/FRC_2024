@@ -233,4 +233,7 @@ public class MAXSRXSwerveModule {
   public void zeroOrientation() {
     
   }
+  public void quiesce() {
+    setDesiredState(m_desiredState); // Tell the module to want to be where it already is.
+  }
 }

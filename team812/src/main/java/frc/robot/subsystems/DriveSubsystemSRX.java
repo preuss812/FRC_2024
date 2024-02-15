@@ -26,7 +26,6 @@ import frc.robot.Utilities;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.ADIS16448_IMU_Offset;
 import frc.robot.Utilities;
 
 public class DriveSubsystemSRX extends SubsystemBase {
@@ -56,7 +55,6 @@ public class DriveSubsystemSRX extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  private final ADIS16448_IMU_Offset gyro_old = new ADIS16448_IMU_Offset();
   private final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB1);
 
 
@@ -305,5 +303,12 @@ public class DriveSubsystemSRX extends SubsystemBase {
     SmartDashboard.putNumber("SetAngleNewAdj", desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment()));
     m_gyro.setAngleAdjustment(-(desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment())));
     return m_gyro.getAngle();  // Return the new angle for chaining
+  }
+
+  public void quiesce() {
+    m_frontLeft.quiesce();
+    m_frontRight.quiesce();
+    m_rearLeft.quiesce();
+    m_rearRight.quiesce();
   }
 }

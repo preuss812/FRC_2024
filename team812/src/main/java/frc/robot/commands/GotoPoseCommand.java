@@ -42,7 +42,7 @@ public class GotoPoseCommand extends Command {
   PIDController yController;
   PIDController rotationController;
   boolean onTarget;
-
+  
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem
     , double targetX
@@ -54,6 +54,7 @@ public class GotoPoseCommand extends Command {
     m_targetPose = new Pose2d(targetX, targetY, new Rotation2d(targetRotation));
     onTarget = false;
     addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
+    
   }
 
 

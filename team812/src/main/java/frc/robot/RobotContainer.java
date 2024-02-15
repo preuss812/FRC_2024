@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 //import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -57,7 +58,10 @@ import frc.robot.commands.ArmRotationCommand;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.GotoPoseTestCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.WinchCommand;
+import frc.robot.commands.CompoundCommands;
+
 
 import java.util.List;
 
@@ -157,6 +161,8 @@ public class RobotContainer {
   SmartDashboard.putNumber("encoder version", m_enctest.getDeviceID());
   SmartDashboard.putNumber("encoder",3.14159);
   SmartDashboard.putNumber("InEncode",1234.0);
+  Utilities.toSmartDashboard("NearPoseTestPose", new Pose2d(1.84, 8.2, new Rotation2d(Units.degreesToRadians(-90))));
+  Utilities.toSmartDashboard("NearPoseTestNear", Utilities.nearPose(new Pose2d(1.84, 8.2, new Rotation2d(Units.degreesToRadians(-90))), 1.0));
 }
 
   /**
@@ -411,18 +417,22 @@ public class RobotContainer {
           m_robotDrive::setModuleStates,
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
-          swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 
-          false, false)),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
+          swerveControllerCommand.withTimeout(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose1")),
+
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
-            finalPose.getRotation().getRadians()),
-          //new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
-          //new ShooterCommand(m_ShooterSubsystem, 0.5).withTimeout(1.0),
-          new InstantCommand(()->m_robotDrive.drive(0,0,0,true,false)),
-          new WaitCommand(10.0),
-          //new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
+            finalPose.getRotation().getRadians()).withTimeout(2.0),
+          new ParallelDeadlineGroup(
+            CompoundCommands.ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+            new StopRobotMotion(m_robotDrive)
+          ),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 
-            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()),
-                 new WaitCommand(10.0)
+            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()).withTimeout(3.0),
+                 new WaitCommand(10.0),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
+
  );
         return fullCommandGroup;
 

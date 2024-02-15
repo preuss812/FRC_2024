@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 
 /**
@@ -56,5 +58,18 @@ public class Utilities {
 
     public static void toSmartDashboard(String label, Pose2d pose) {
         SmartDashboard.putString(label, String.format("(%4.2f,%4.2f) %2.0f", pose.getX(), pose.getY(), pose.getRotation().getDegrees()) );
+    }
+
+    public static Pose2d Pose180(Pose2d pose) {
+        Rotation2d rotate180 = new Rotation2d(Math.PI);
+        Rotation2d newRotation = pose.getRotation().rotateBy(rotate180);
+        return new Pose2d(pose.getX(), pose.getY(), newRotation);
+    }
+
+    public static Pose2d nearPose(Pose2d pose, double distance) {
+        Rotation2d rotate180 = new Rotation2d(Math.PI);
+        Translation2d rotatedDistance = new Translation2d(distance, 0).rotateBy(pose.getRotation());
+        Rotation2d newRotation = pose.getRotation().rotateBy(rotate180);
+        return new Pose2d(pose.getX() + rotatedDistance.getX(), pose.getY() + rotatedDistance.getY(), newRotation);
     }
 }
