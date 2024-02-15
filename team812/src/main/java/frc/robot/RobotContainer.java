@@ -421,7 +421,7 @@ public class RobotContainer {
           new WaitCommand(10.0),
           //new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 
-            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians())d 
+            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()),
                  new WaitCommand(10.0)
  );
         return fullCommandGroup;
