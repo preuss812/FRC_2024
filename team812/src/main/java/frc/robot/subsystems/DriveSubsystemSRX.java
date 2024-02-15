@@ -214,6 +214,10 @@ public class DriveSubsystemSRX extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
+    SmartDashboard.putNumber("DTxSpeedDelivered", xSpeedDelivered);
+    SmartDashboard.putNumber("DTySpeedDelivered", ySpeedDelivered);
+    SmartDashboard.putNumber("DTrotDelivered", rotDelivered);
+    
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_gyro.getAngle()))

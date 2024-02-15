@@ -148,12 +148,16 @@ public class GotoPoseCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_DriveSubsystemSRXSubsystem.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
     var ended = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (onTarget)
+        m_DriveSubsystemSRXSubsystem.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
+
     return onTarget; // Run forever to make debug easier.
     // return true;
   }
