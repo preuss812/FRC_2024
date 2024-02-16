@@ -320,8 +320,8 @@ public class RobotContainer {
 
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond*0.1,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared*0.1)
+        AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
         .setKinematics(DriveConstants.kDriveKinematics);
 
@@ -418,19 +418,19 @@ public class RobotContainer {
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-          swerveControllerCommand.withTimeout(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
+          swerveControllerCommand.withTimeout(10.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose1")),
 
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
-            finalPose.getRotation().getRadians()).withTimeout(2.0),
+            finalPose.getRotation().getRadians()).withTimeout(10.0),
           new ParallelDeadlineGroup(
             CompoundCommands.ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
             new StopRobotMotion(m_robotDrive)
           ),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 
-            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()).withTimeout(3.0),
-                 new WaitCommand(10.0),
+            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()).withTimeout(10.0),
+          //new WaitCommand(10.0),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
 
  );
