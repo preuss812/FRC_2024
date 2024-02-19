@@ -12,14 +12,10 @@ import frc.robot.Constants.ArmConstants;
 
 public class NoteIntakeCommand extends Command {
   /** Creates a new ArmCommand. */
-  private final NoteIntakeSubsystem m_armSubsystem;
-  private final double m_position;
-  private double setPoint;
+  private final NoteIntakeSubsystem m_noteIntakeSubsystem;
   
-  public NoteIntakeCommand(NoteIntakeSubsystem subsystem, double position) {
-    m_armSubsystem = subsystem;
-    m_position = position;
-    System.out.println("ArmCommand class setPoint is " + m_position);
+  public NoteIntakeCommand(NoteIntakeSubsystem subsystem) {
+    m_noteIntakeSubsystem = subsystem;
     addRequirements(subsystem);
   }
 
@@ -27,10 +23,8 @@ public class NoteIntakeCommand extends Command {
   @Override
   public void initialize() {
 
-    SmartDashboard.putString("armcmd", "started");
-
-    setPoint = MathUtil.clamp(m_position, ArmConstants.kArmMinPosition, ArmConstants.kArmMaxPosition);
-    
+    SmartDashboard.putString("NoteIntakeCommand", "started");
+    m_noteIntakeSubsystem.pickUpNote();    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,7 +35,9 @@ public class NoteIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("armcmd", "end");
+    SmartDashboard.putString("NoteIntakeCommand", "end");
+    m_noteIntakeSubsystem.stop();
+
   }
 
   // Returns true when the command should end.

@@ -63,8 +63,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(0.6, 10);
-    m_arm.configPeakOutputReverse(-0.6, 10);
+    m_arm.configPeakOutputForward(0.2, 10);
+    m_arm.configPeakOutputReverse(-0.2, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -180,7 +180,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   public double setPosition(double position) {
     // position will be zero in tucked position
-    if (isHome() && position >= 0) {
+    if (isHome() && position >= -3000) { // TODO THIs is ridiculous
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
       targetPosition = position;
@@ -218,11 +218,11 @@ public class ArmRotationSubsystem extends SubsystemBase {
     setHome();
   }
 
-  public boolean isTopLimitSwitchClosed() {
+  public boolean isFwdLimitSwitchClosed() {
     return (m_arm.isFwdLimitSwitchClosed() == 1 ? true : false);
   }
 
-  public boolean isBottomLimitSwitchClosed() {
+  public boolean isRevLimitSwitchClosed() {
     return (m_arm.isRevLimitSwitchClosed() == 1 ? true : false);
   }
 
@@ -250,8 +250,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Arm pos:", getPosition());
     SmartDashboard.putNumber("Arm target", targetPosition);
     SmartDashboard.putBoolean("Arm Homed?", isHome());
-    SmartDashboard.putBoolean("ARM topsw closed", isTopLimitSwitchClosed());
-    SmartDashboard.putBoolean("ARM botsw closed",isBottomLimitSwitchClosed());
+    SmartDashboard.putBoolean("ARM fwdsw closed", isFwdLimitSwitchClosed());
+    SmartDashboard.putBoolean("ARM revsw closed",isRevLimitSwitchClosed());
     SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
     //SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
     //SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
@@ -262,9 +262,9 @@ public class ArmRotationSubsystem extends SubsystemBase {
       ControlMode controlMode = m_arm.getControlMode();
       SmartDashboard.putString("ARM ctlrmode", controlMode.toString());
     }
-    if (isTopLimitSwitchClosed()) {
+    if (isFwdLimitSwitchClosed()) {
       if (!m_capturedLimitPosition) {
-        SmartDashboard.putNumber("ARM pos top limit", getPosition());
+        SmartDashboard.putNumber("ARM pos rev limit", getPosition());
         m_capturedLimitPosition = true;
       }
       setSensorPosition(Constants.ArmConstants.kArmMaxPosition);

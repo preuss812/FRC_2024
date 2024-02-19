@@ -43,6 +43,7 @@ import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.subsystems.ArmRotationSubsystem;
+import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.BlackBoxSubsystem;
@@ -57,6 +58,7 @@ import frc.robot.commands.ArmRotationCommand;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.GotoPoseTestCommand;
+import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.WinchCommand;
@@ -91,6 +93,7 @@ public class RobotContainer {
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem();
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+  public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
 
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
@@ -248,8 +251,8 @@ public class RobotContainer {
     ));
    
    */
-   new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
-   new JoystickButton(m_driverController,Button.kBack.value).whileTrue(new ShooterCommand(m_ShooterSubsystem, 0.3));
+   //new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
+   //new JoystickButton(m_driverController,Button.kBack.value).whileTrue(new ShooterCommand(m_ShooterSubsystem, 0.3));
     /* 
   
   // Left Joystick for Arm Extension Control Debug
@@ -271,17 +274,32 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    /*new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+            
+      */
     // This next command is just for testing and should be removed or disabled for game play.
      new JoystickButton(m_driverController, Button.kA.value)
             .whileTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
-      new JoystickButton(m_driverController, Axis.kLeftTrigger.value)
-            .whileTrue(new WinchCommand(m_WinchSubsystem));
+      new JoystickButton(m_driverController, Button.kX.value)
+             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.disableMotor()));
+      new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
+      new JoystickButton(m_driverController, Button.kRightBumper.value)
+      //  .whileTrue(new RunCommand(()->m_ArmRotationSubsystem.test_rotate(-0.1)));
+      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(3000.0)));
+      new JoystickButton(m_driverController, Button.kBack.value)
+             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setHome()));
+       new JoystickButton(m_driverController, Button.kStart.value)
+             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setSensorReference()));
+
+
+           // .andThen(()->m_ArmRotationSubsystem.test_rotate(0.1));
     // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
     new JoystickButton(m_driverController, Button.kB.value)
     .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
