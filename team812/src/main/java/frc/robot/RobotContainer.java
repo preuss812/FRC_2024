@@ -18,7 +18,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
-//import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -97,7 +97,7 @@ public class RobotContainer {
 
   // Controller definitions
   //private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
-  //private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
+  private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort); // TODO find the right port - dph
   
   public static CANcoder m_enctest = new CANcoder(38);
@@ -154,6 +154,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+      m_ArmRotationSubsystem.setDefaultCommand(
+        new RunCommand(() -> m_ArmRotationSubsystem.rotate(rightJoystick.getY()), m_ArmRotationSubsystem));
+      
   
 
   SmartDashboard.putNumber("joystickX", 0.0);
