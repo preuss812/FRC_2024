@@ -53,7 +53,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
-import frc.robot.commands.ArmRotationCommand;
+import frc.robot.commands.ArmHomeCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoPoseCommand;
@@ -138,7 +138,6 @@ public class RobotContainer {
     SmartDashboard.putData(m_ArmExtensionSubsystem);
     SmartDashboard.putData(m_ArmRotationSubsystem);
     SmartDashboard.putData("ArmRotate", new ArmCommand(m_ArmRotationSubsystem, 1000));
-    SmartDashboard.putData("ArmHomeCommand", new ArmHomeCommand(m_ArmRotationSubsystem,m_ArmExtensionSubsystem));
     SmartDashboard.putData("HomeArmExtension", new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
     SmartDashboard.putData("HomeArmRotation", new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
     SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
@@ -146,6 +145,8 @@ public class RobotContainer {
     SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
 
   */
+    // SmartDashboard.putData("HomeArmRotation", new ArmHomeCommand(m_ArmRotationSubsystem));
+
       // Configure default commands
       m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -157,8 +158,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
       m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate(rightJoystick.getY()), m_ArmRotationSubsystem));
+        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-rightJoystick.getY()), m_ArmRotationSubsystem));
       
   
 

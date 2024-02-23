@@ -193,7 +193,7 @@ public final class Constants {
         public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2314; //(kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
         public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
-        public static final double kArmMaxPosition = 2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
+        public static final double kArmMaxPosition = 3200; //2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
         public static final double kArmAutonomous  = kArmLowPosition;
         public static final double kArmHighCubePosition = kArmHiPosition;       // TODO May need adjustment for automomous.
         public static final double kArmHighCubeReleasePosition = 2088;  // TODO May need adjustment for automomous.
