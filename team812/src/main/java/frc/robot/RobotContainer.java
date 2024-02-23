@@ -13,9 +13,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -37,7 +35,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 
 import frc.robot.Constants.ArmConstants;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
@@ -65,7 +62,6 @@ import frc.robot.commands.WinchCommand;
 import frc.robot.commands.CompoundCommands;
 
 
-import java.util.List;
 
 
 /**
@@ -85,7 +81,7 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
   //private final DriveTrain m_DriveTrain = new DriveTrain();
   // The robot's subsystems
-  private final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
+  public final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
  // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
@@ -329,148 +325,12 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  enum AutonomousStrategy {
-    LABTEST,
-    BLUEALLIANCE,
-    REDALLIANCE,
-    USEALLIANCE
-  }
+  
   public Command getAutonomousCommand() {
-    
-
-    AutonomousStrategy autonomousStrategy = AutonomousStrategy.LABTEST;
-    autonomousStrategy = AutonomousStrategy.BLUEALLIANCE;
-
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    if (autonomousStrategy == AutonomousStrategy.LABTEST) {
-      // Use the current pose estimator's result for the robots actual pose
-      //m_robotDrive.resetOdometry(startingPose);
-      alignDriveTrainToPoseEstimator();
-
-      // An example trajectory to follow. All units in meters.
-      Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
-      
-      //double x=2;
-      //double y = 2;
-      //double theta = Units.degreesToRadians(-129.0);
-      ////x = 1;
-      ////y = 0;
-      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-          // Start at the origin facing the +X direction
-          
-          startingPose,
-          // Pass through these two interior waypoints, making an 's' curve path
-          //List.of(new Translation2d(x+1, y+1), new Translation2d(x+2, y+ -1), new Translation2d(x+3,y+0)),
-          List.of(FieldConstants.NearBlueAmp, FieldConstants.NearBandSaw, FieldConstants.NearDriverStation, FieldConstants.NearHammers, FieldConstants.NearNorthDoorToClassroom),
-          // End 3 meters straight ahead of where we started, facing forward
-          startingPose,
-          config);
-
-      var thetaController = new ProfiledPIDController(
-          AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-          exampleTrajectory,
-          m_robotDrive::getPose, // Functional interface to feed supplier
-          DriveConstants.kDriveKinematics,
-
-          // Position controllers
-          new PIDController(AutoConstants.kPXController, 0, 0),
-          new PIDController(AutoConstants.kPYController, 0, 0),
-          thetaController,
-          m_robotDrive::setModuleStates,
-          m_robotDrive);
-
-
-      // Run path following command, then stop at the end.
-      return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-    } else if ((autonomousStrategy == AutonomousStrategy.USEALLIANCE && Utilities.isBlueAlliance()) || 
-               (autonomousStrategy == AutonomousStrategy.BLUEALLIANCE)) {
-      // We are in the Blue Alliance.
-      //   Drive toward april tag # 6.
-      //   Rotate 180 degrees so that we are positioned for shooting.
-      //   Back in the last 1 meter to be touching the wall.
-      //   Raise the arm to the shooting position.
-      //   Run the shooting/outtake motor to score the "note".
-      Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
-      Rotation2d finalRotation = targetPose.getRotation(); // This will put thte back of the robot towards the april tag.
-      Rotation2d nearTagRotation = targetPose.getRotation().rotateBy(new Rotation2d(Math.PI)); // This will face the april tag.
-      Pose2d finalPose = new Pose2d(targetPose.getX(), targetPose.getY() - 0.5, finalRotation); // Pose for robot to be at the april tag.
-      Pose2d nearTagPose = new Pose2d(targetPose.getX(), targetPose.getY() - 1.0, nearTagRotation);
-      Pose2d startingPose = m_PoseEstimatorSubsystem.getCurrentPose();
-      int lastAprilTagSeen = m_PoseEstimatorSubsystem.lastAprilTagSeen(); // We can use this to be sure we have the right alliance and have decent field coordinates.
-      Utilities.toSmartDashboard("AutoTarget", targetPose);
-      Utilities.toSmartDashboard("AutoFinal", finalPose);
-      Utilities.toSmartDashboard("AutoNearTag", nearTagPose);
-      Utilities.toSmartDashboard("AutoStart", startingPose);
-      
-      // Use the current pose estimator's result for the robots actual pose
-      //m_robotDrive.resetOdometry(startingPose);
-      alignDriveTrainToPoseEstimator();
-
-      Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-          // Start at the origin facing the +X direction
-          
-          startingPose,  // We are starting where we are.
-          // Pass through these zero interior waypoints, this should probably be something to make sure we dont crash into other robots.
-          List.of(),
-          nearTagPose,
-          config);
-
-      var thetaController = new ProfiledPIDController(
-          AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-          exampleTrajectory,
-          m_robotDrive::getPose, // Functional interface to feed supplier  // Should this be the PoseEstimator??
-          DriveConstants.kDriveKinematics,
-
-          // Position controllers
-          new PIDController(AutoConstants.kPXController, 0, 0),
-          new PIDController(AutoConstants.kPYController, 0, 0),
-          thetaController,
-          m_robotDrive::setModuleStates,
-          m_robotDrive);
-        SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-          swerveControllerCommand.withTimeout(10.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose1")),
-
-          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
-            finalPose.getRotation().getRadians()).withTimeout(10.0),
-          new ParallelDeadlineGroup(
-            CompoundCommands.ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
-            new StopRobotMotion(m_robotDrive)
-          ),
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),
-          new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 
-            startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()).withTimeout(10.0),
-          //new WaitCommand(10.0),
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
-
- );
-        return fullCommandGroup;
-
-    } else if ((autonomousStrategy == AutonomousStrategy.USEALLIANCE && Utilities.isRedAlliance()) ||
-               (autonomousStrategy == AutonomousStrategy.REDALLIANCE)) {
-      // Perform the Red Alliance autonomous moves.
-      // TODO Figure out what the red alliance strategy is exactly...
-    } else {
-      // Do what we can given we do not know which alliance we are in.
-      // Currently it does nothing but stop the drive train which should already be stopped.
-      return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive);
-    }
-    return new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive); // Should never reach this code.
+    return new Autonomous(this);
   }
 
+   
   // Function to align the PoseEstimator pose and the DriveTrain pose.
   public void alignDriveTrainToPoseEstimator() {
     m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());

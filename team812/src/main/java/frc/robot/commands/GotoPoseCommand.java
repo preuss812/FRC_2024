@@ -57,6 +57,19 @@ public class GotoPoseCommand extends Command {
     
   }
 
+  public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
+    , DriveSubsystemSRX DriveSubsystemSRXSubsystem
+    , Pose2d targetPose) {
+    
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_PoseEstimatorSubsystem = PoseEstimatorSubsystem;
+    m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
+    m_targetPose = targetPose;
+    onTarget = false;
+    addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
+    
+  }
+
 
   // Called when the command is initially scheduled.
   @Override
