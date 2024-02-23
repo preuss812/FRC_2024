@@ -25,7 +25,7 @@ public class CompoundCommands {
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Shoot")),
       new ShooterCommand(shooterSubsystem, 0.5).withTimeout(1.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmDown")),
-      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
+      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNoteDone"))
     );
   }
