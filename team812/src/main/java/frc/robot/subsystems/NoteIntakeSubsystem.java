@@ -19,7 +19,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 public class NoteIntakeSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_noteIntake = new WPI_TalonSRX(CANConstants.kNoteIntakeMotor);
-  public final WPI_TalonSRX m_noteIntake2 = new WPI_TalonSRX(CANConstants.kNoteIntakeMotor2);
+  //public final WPI_TalonSRX m_noteIntake2 = new WPI_TalonSRX(CANConstants.kNoteIntakeMotor2);
 
   
   /** Creates a new ArmSubsystem. */
@@ -34,7 +34,7 @@ public class NoteIntakeSubsystem extends SubsystemBase {
     // Invert motor (setInverted) so that the Talon LEDs are green when driving
     // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the arm up
-    m_noteIntake.setInverted(false);
+    m_noteIntake.setInverted(true);
     m_noteIntake.setSensorPhase(true); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
@@ -93,6 +93,10 @@ public class NoteIntakeSubsystem extends SubsystemBase {
 
   public void pickUpNote() {
     m_noteIntake.set(NoteIntakeConstants.kPickUpNoteSpeed);
+  } 
+
+public void stop() {
+    m_noteIntake.set(0.0);
   } 
 
   public void lowerRobot() {

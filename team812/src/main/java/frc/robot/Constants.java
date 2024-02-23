@@ -46,11 +46,11 @@ public final class Constants {
 
         //public static final int kPDP = 42;
         //public static final int kPCM = 40;
-        public static final int kWinchMotor = 40;
-        public static final int kArmMotor = 41;
-        public static final int kNoteIntakeMotor = 42;
-        public static final int kNoteIntakeMotor2 = 43;
-        public static final int kShooterMotor = 44;
+        public static final int kWinchMotor = 41;
+        public static final int kArmMotor = 43;
+        public static final int kNoteIntakeMotor = 40;
+        //public static final int kNoteIntakeMotor2 = 43;
+        public static final int kShooterMotor = 42;
 
         public static final int kPDP = 50;
         public static final int kPCM = 51;
@@ -193,7 +193,7 @@ public final class Constants {
         public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2314; //(kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
         public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
-        public static final double kArmMaxPosition = (kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
+        public static final double kArmMaxPosition = 2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
         public static final double kArmAutonomous  = kArmLowPosition;
         public static final double kArmHighCubePosition = kArmHiPosition;       // TODO May need adjustment for automomous.
         public static final double kArmHighCubeReleasePosition = 2088;  // TODO May need adjustment for automomous.
@@ -352,7 +352,7 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 0.4; //4.5; // Limit how violently swerve works
+        public static final double kMaxSpeedMetersPerSecond = 1.0; //4.5; // Limit how violently swerve works
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
     
         public static final double kDirectionSlewRate = 1.2; // radians per second

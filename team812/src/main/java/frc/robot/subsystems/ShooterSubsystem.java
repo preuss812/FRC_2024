@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // Invert motor (setInverted) so that the Talon LEDs are green when driving
     // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the shooter up
-    m_shooter.setInverted(false);
+    m_shooter.setInverted(true);
     m_shooter.setSensorPhase(true); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
