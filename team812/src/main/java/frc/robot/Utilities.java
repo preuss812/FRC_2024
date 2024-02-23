@@ -72,4 +72,30 @@ public class Utilities {
         Rotation2d newRotation = pose.getRotation().rotateBy(rotate180);
         return new Pose2d(pose.getX() + rotatedDistance.getX(), pose.getY() + rotatedDistance.getY(), newRotation);
     }
+
+    // Return direction of turn for angle a->b->c
+    // -1 if counter-clockwise
+    //  0 if collinear
+    //  1 if clockwise
+    public static int ccw(Translation2d a, Translation2d b, Translation2d c) {
+        double area2 = (b.getX() - a.getX()) * (c.getY() - a.getY()) - (c.getX() - a.getX()) * (b.getY() - a.getY());
+        if      (area2 < 0) return -1;
+        else if (area2 > 0) return +1;
+        else                return  0;
+    }
+
+    // Use a winding algorithm to determine if the point is in the polugon defined by
+    // the array of points.  The polygon must be closed meaning that the last point
+    // in the array should be the same as the first point in the array.
+    public static boolean pointInPolygon(Translation2d [] polygon, Translation2d point) {
+        int winding = 0;
+        for (int i = 0; i < polygon.length-1; i++) {
+            int ccw = ccw(polygon[i], polygon[i+1], point);
+            if (polygon[i+1].getY() >  point.getY() && point.getY() >= polygon[i].getY())  // upward crossing
+                if (ccw == +1) winding++;
+            if (polygon[i+1].getY() <= point.getY() && point.getY() <  polygon[i].getY())  // downward crossing
+                if (ccw == -1) winding--;
+        }
+        return (winding != 0);
+    }
 }

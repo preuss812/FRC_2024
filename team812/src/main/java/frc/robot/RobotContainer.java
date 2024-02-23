@@ -85,7 +85,7 @@ public class RobotContainer {
 
  // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
-  public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
+  //public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem();
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
@@ -319,6 +319,15 @@ public class RobotContainer {
     Units.degreesToRadians(240.0))));  // For debug without robot
     SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug without robot
 
+    // Debug to test out my point in polygon code - dph - 2024-02-23
+    /*
+     Translation2d [] polygon1 = {new Translation2d(0,0), new Translation2d(0,1), new Translation2d(1,1), new Translation2d(1,0),new Translation2d(0,0)};
+    SmartDashboard.putBoolean("PTest1", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,0.5)));
+    SmartDashboard.putBoolean("PTest2", Utilities.pointInPolygon(polygon1, new Translation2d(-0.5,0.5)));
+    SmartDashboard.putBoolean("PTest3", Utilities.pointInPolygon(polygon1, new Translation2d(1.5,0.5)));
+    SmartDashboard.putBoolean("PTest4", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,-0.5)));
+    SmartDashboard.putBoolean("PTest5", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,1.5)));
+    */
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
