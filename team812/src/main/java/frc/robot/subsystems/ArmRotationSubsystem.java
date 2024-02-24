@@ -63,8 +63,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(0.2, 10);
-    m_arm.configPeakOutputReverse(-0.2, 10);
+    m_arm.configPeakOutputForward(0.8, 10);
+    m_arm.configPeakOutputReverse(-0.8, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -73,6 +73,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     m_arm.config_kI(0, PidConstants.kArm_kI, 10);
     m_arm.config_kD(0, PidConstants.kArm_kD, 10);
     m_arm.config_kF(0, PidConstants.kArm_kF, 10);
+    m_arm.config_IntegralZone(0, PidConstants.kArm_IntegralZone, 10);
 
     // Velocity in sensor units per 100ms
     m_arm.configMotionCruiseVelocity(150.0, 10);
@@ -104,12 +105,12 @@ public class ArmRotationSubsystem extends SubsystemBase {
     m_rotateStopped = false;
     double newPosition = currentTarget + position * incrementSize;
     SmartDashboard.putNumber("rotate pos", newPosition);
-    if (newPosition >= ArmConstants.kArmMinPosition
-        && newPosition < ArmConstants.kArmMaxPosition) {
+    //if (newPosition >= ArmConstants.kArmMinPosition
+    //    && newPosition < ArmConstants.kArmMaxPosition) {
       setPosition(newPosition);
       rotateTimesCalled++;
 
-    }
+    //}
   };
 
   public void rotateUp50() {
@@ -180,11 +181,11 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   public double setPosition(double position) {
     // position will be zero in tucked position
-    if (isHome() && position >= -3000) { // TODO THIs is ridiculous
+    //if (isHome() && position >= -3000) { // TODO THIs is ridiculous
       m_arm.set(ControlMode.Position, position);
       SmartDashboard.putNumber("ArmSubPos", position);
       targetPosition = position;
-    }
+    //}
     return getPosition();
   }
 

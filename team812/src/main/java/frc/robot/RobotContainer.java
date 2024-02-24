@@ -58,6 +58,7 @@ import frc.robot.commands.GotoPoseTestCommand;
 import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StopRobotMotion;
+import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.CompoundCommands;
 
@@ -283,10 +284,14 @@ public class RobotContainer {
             
       */
     // This next command is just for testing and should be removed or disabled for game play.
-     new JoystickButton(m_driverController, Button.kA.value)
-            .whileTrue(new RunCommand(
+     new JoystickButton(m_driverController, Button.kBack.value)
+            .onTrue(new InstantCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
+     new JoystickButton(m_driverController, Button.kA.value)
+            .onTrue(new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
+      new JoystickButton(m_driverController, Button.kY.value)
+            .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
       new JoystickButton(m_driverController, Button.kX.value)
              .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.disableMotor()));
       new JoystickButton(m_driverController, Button.kLeftBumper.value)
@@ -297,7 +302,7 @@ public class RobotContainer {
       new JoystickButton(m_driverController, Button.kBack.value)
              .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setHome()));
        new JoystickButton(m_driverController, Button.kStart.value)
-             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setSensorReference()));
+             .onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
 
 
            // .andThen(()->m_ArmRotationSubsystem.test_rotate(0.1));
@@ -308,7 +313,7 @@ public class RobotContainer {
     // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
     // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
-    new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_driverController, Button.kStart.value)
             .onTrue(new InstantCommand(
                // () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
                () -> alignDriveTrainToPoseEstimator(),

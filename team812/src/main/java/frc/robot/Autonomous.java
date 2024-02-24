@@ -171,7 +171,7 @@ public class Autonomous extends SequentialCommandGroup {
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
             finalPose.getRotation().getRadians()).withTimeout(10.0),
           new ParallelDeadlineGroup(
-            CompoundCommands.ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+            new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
             new StopRobotMotion(m_robotDrive)
           ),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),

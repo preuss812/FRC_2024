@@ -18,20 +18,20 @@ import frc.robot.Utilities;
 
 public class CompoundCommands {
   
-  public static SequentialCommandGroup ScoreNoteInAmp(ArmRotationSubsystem armRotationSubsystem, ShooterSubsystem shooterSubsystem) {
+  public SequentialCommandGroup ScoreNoteInAmp(ArmRotationSubsystem armRotationSubsystem, ShooterSubsystem shooterSubsystem) {
     return new SequentialCommandGroup(
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmUP")),
-      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
+      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmScorePosition).withTimeout(3.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Shoot")),
       new ShooterCommand(shooterSubsystem, 0.5).withTimeout(1.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmDown")),
-      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
+      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmMaxPosition).withTimeout(3.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNoteDone"))
     );
   }
 
   // Return Pose for robot to be in scoring position for the current Alliance's AMP.
-  public static GotoPoseCommand gotoAmp(DriveSubsystemSRX driveTrain, PoseEstimatorSubsystem poseEstimatorSubsystem) {
+  public GotoPoseCommand gotoAmp(DriveSubsystemSRX driveTrain, PoseEstimatorSubsystem poseEstimatorSubsystem) {
         Pose2d ampPose;
 
         if (Utilities.isBlueAlliance()) {
@@ -48,7 +48,7 @@ public class CompoundCommands {
   }
 
   // Return Pose for robot to be facing the source for the current alliance.
-  public static GotoPoseCommand gotoSource(DriveSubsystemSRX driveTrain, PoseEstimatorSubsystem poseEstimatorSubsystem) {
+  public GotoPoseCommand gotoSource(DriveSubsystemSRX driveTrain, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     Pose2d ampPose;
 
     if (Utilities.isBlueAlliance()) {

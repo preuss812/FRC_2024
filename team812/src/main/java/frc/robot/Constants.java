@@ -120,7 +120,8 @@ public final class Constants {
         public static final double kProportionalDriveStraight = 0.05;
      
         public static final double kArm_kP = 2.7;
-        public static final double kArm_kI = 0.0;
+        public static final double kArm_kI = 0.01;
+        public static final double kArm_IntegralZone=10;
         public static final double kArm_kD = 0.0;
         public static final double kArm_kF = 0.0;
         public static final double kArm_rampRate = 0.5;
@@ -166,7 +167,7 @@ public final class Constants {
 
     public static final class ArmConstants {
    
-        public static final double kArmThreshold = 60; // Relaxed from 20 Feb 22, 2023        // 2022 constants
+        public static final double kArmThreshold =2; // Relaxed from 20 Feb 22, 2023        // 2022 constants
         public static final double kArmEncoderCountPerRevolution = 8192; // Need to verify this number - dph
         public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
         public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;
@@ -189,12 +190,13 @@ public final class Constants {
         public static final double kArmReferencePosition = 0;            // 2023 broomstick ref position
         public static final double kArmAutonomousReferencePosition = 0;  // 2023 position when the arm is folded in the robot to start the game     public static final double kArmMinPosition = 900;  // Lowest you can ask for 
         // Positions are in Encode Ticks
-        public static final double kArmMinPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree - kArmThreshold; // Lowest software will rotate down.
-        public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
+        public static final double kArmMinPosition = 0; // Lowest software will rotate down.
+        //public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
         public static final double kArmMidPosition = 2314; //(kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
         public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
-        public static final double kArmMaxPosition = 3200; //2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
-        public static final double kArmAutonomous  = kArmLowPosition;
+        public static final double kArmMaxPosition = 2509; //2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
+        public static final double kArmScorePosition = 0; // physically Highest you can ask for
+        //public static final double kArmAutonomous  = kArmLowPosition;
         public static final double kArmHighCubePosition = kArmHiPosition;       // TODO May need adjustment for automomous.
         public static final double kArmHighCubeReleasePosition = 2088;  // TODO May need adjustment for automomous.
         

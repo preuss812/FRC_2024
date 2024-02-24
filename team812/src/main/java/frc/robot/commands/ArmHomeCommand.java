@@ -28,7 +28,7 @@ public class ArmHomeCommand extends Command {
   @Override
   public void execute() {
     m_armSubsystem.setHomePosition(3000);
-    m_armSubsystem.setHome();
+   // m_armSubsystem.setHome();
     
 
   }
@@ -42,6 +42,11 @@ public class ArmHomeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    if (m_armSubsystem.isFwdLimitSwitchClosed()) {
+      m_armSubsystem.setHome(); 
+      m_armSubsystem.setPosition(m_armSubsystem.getPosition());
+      return true;
+    }
+    return false;
   }
 }
