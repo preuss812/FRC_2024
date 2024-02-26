@@ -53,14 +53,15 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.commands.ArmHomeCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
+import frc.robot.commands.GotoAmpCommand;
 import frc.robot.commands.GotoPoseCommand;
-import frc.robot.commands.GotoPoseTestCommand;
 import frc.robot.commands.NoteIntakeCommand;
+import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.WinchCommand;
-import frc.robot.commands.CompoundCommands;
+import frc.robot.commands.GotoSourceCommand;
 
 
 
@@ -98,9 +99,9 @@ public class RobotContainer {
   // Controller definitions
   //private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort); // TODO find the right port - dph
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   
-  public static CANcoder m_enctest = new CANcoder(38);
+  //public static CANcoder m_enctest = new CANcoder(38);
 
   // private final Joystick xboxController = new
   // Joystick(OIConstants.kXboxController);
@@ -177,18 +178,18 @@ public class RobotContainer {
     //  .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
-      .onTrue(new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
+      .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value)
       .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kB.value)
-      .whileTrue(new CompoundCommands().gotoSource(m_robotDrive, m_PoseEstimatorSubsystem));
+      .whileTrue(new GotoSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
 
     new JoystickButton(m_driverController, Button.kX.value)
-      .whileTrue(new CompoundCommands().gotoAmp(m_robotDrive, m_PoseEstimatorSubsystem));
-m_driverController.getPOV();
-    //new JoystickButton(m_driverController, Button.kRightBumper.value)
+      .whileTrue(new GotoAmpCommand(m_robotDrive, m_PoseEstimatorSubsystem));
+
+      //new JoystickButton(m_driverController, Button.kRightBumper.value)
     //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(3000.0)));
 
     new JoystickButton(m_driverController, Button.kStart.value)

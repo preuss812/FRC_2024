@@ -157,6 +157,9 @@ public final class Constants {
         public static final double kArmPeakOutputReverse = -0.80; // Limit output voltage to +/- 80% of the available voltage range.
         public static final double kArmSensorUnitsPer100ms = kArmRange*10.0;      // Untested: Max speed in MotionMagic mode.  Full range in 1 second.
         public static final double kArmSensorUnitsPer100msPerSec = kArmRange*10;  // Untested: Max acceleration in MotionMagicMode.  Full acceleration in 1 second
+
+        public static final double kArmRaiseTimeout = 3.0; // Seconds - for autonomous.
+        public static final double kArmLowerTimeout = 3.0; // Seconds - for autonomous.
     }
     
     // Define locations on the field as poses that may be useful for semi-automatic driving.
@@ -268,8 +271,10 @@ public final class Constants {
         public static final double kLowerRobotSpeed = -1.0;
     }
     public static final class ShooterConstants {
-        public static final double kShootSpeed =  .25;
+        public static final double kIntakeSpeed = 0.5;
+        public static final double kShootSpeed =  0.5;
         public static final double kUnshootSpeed = -1.0;
+        public static final double kShootTimeout = 1.0; // Seconds
     }
 
     

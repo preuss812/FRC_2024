@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -28,7 +29,7 @@ public class TakeInNoteCommand extends Command {
   @Override
   public void execute() {
     m_NoteIntakeSubsystem.pickUpNote();
-    m_ShooterSubsystem.shoot(0.50);
+    m_ShooterSubsystem.shoot(ShooterConstants.kIntakeSpeed);
   }
 
   // Called once the command ends or is interrupted.

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.ArmHomeCommand;
-import frc.robot.commands.CompoundCommands;
+import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.Constants.AutoConstants;
@@ -51,10 +51,10 @@ public class Autonomous extends SequentialCommandGroup {
     //boolean readingBlackBoxSwitch = false;
 
     m_robotContainer = robotContainer;
-    m_robotDrive = m_robotContainer.m_robotDrive;
-    m_ArmRotationSubsystem = m_robotContainer.m_ArmRotationSubsystem;
-    m_ShooterSubsystem = m_robotContainer.m_ShooterSubsystem;
-    m_PoseEstimatorSubsystem = m_robotContainer.m_PoseEstimatorSubsystem;
+    m_robotDrive = RobotContainer.m_robotDrive;
+    m_ArmRotationSubsystem = RobotContainer.m_ArmRotationSubsystem;
+    m_ShooterSubsystem = RobotContainer.m_ShooterSubsystem;
+    m_PoseEstimatorSubsystem = RobotContainer.m_PoseEstimatorSubsystem;
     enum AutonomousStrategy {
       LABTEST,
       BLUEALLIANCE,
@@ -171,7 +171,7 @@ public class Autonomous extends SequentialCommandGroup {
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
             finalPose.getRotation().getRadians()).withTimeout(10.0),
           new ParallelDeadlineGroup(
-            new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+            new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
             new StopRobotMotion(m_robotDrive)
           ),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),

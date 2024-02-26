@@ -26,7 +26,7 @@ import frc.robot.RobotContainer;  // To access the Black Box Controller.
 public class GotoAprilTag extends Command {
   /** Creates a new FollowApriltagCommandBB. */
   private final CameraVisionSubsystem m_cameraSubsystem;
-  private final DriveSubsystemSRX m_DriveSubsystemSRXSubsystem;
+  private final DriveSubsystemSRX m_DriveSubsystemSRX;
 
   // TODO Get these values from Constants.java
   final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
@@ -47,15 +47,15 @@ public class GotoAprilTag extends Command {
   double rotationSpeed;
 
   public GotoAprilTag(CameraVisionSubsystem cameraVisionSubsystem
-    , DriveSubsystemSRX DriveSubsystemSRXSubsystem
+    , DriveSubsystemSRX driveSubsystemSRX
     , Integer apriltagInteger
     , double desiredXOffset
     , double desiredYOffset
     , double desiredPoseAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_cameraSubsystem = cameraVisionSubsystem;
-    m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
-    addRequirements(cameraVisionSubsystem, DriveSubsystemSRXSubsystem);
+    m_DriveSubsystemSRX = driveSubsystemSRX;
+    addRequirements(cameraVisionSubsystem, driveSubsystemSRX);
   }
 
 
@@ -119,7 +119,7 @@ public class GotoAprilTag extends Command {
     SmartDashboard.putNumber("Target Fwd speed", forwardSpeed);
     SmartDashboard.putNumber("Target Rot speed", rotationSpeed);
     forwardSpeed = 0.0;
-    // TODO: m_DriveSubsystemSRXSubsystem.preussDrive(forwardSpeed, rotationSpeed); 
+    // TODO: m_DriveSubsystemSRX.preussDrive(forwardSpeed, rotationSpeed); 
 
   }
 
