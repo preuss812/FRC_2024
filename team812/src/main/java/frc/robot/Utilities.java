@@ -7,13 +7,16 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.util.ArrayList;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
+import frc.robot.TrajectoryPlans;
 
 /**
  * Add your docs here.
@@ -97,5 +100,31 @@ public class Utilities {
                 if (ccw == -1) winding--;
         }
         return (winding != 0);
+    }
+
+    public static List<Translation2d> planBlueAmpTrajectory(Pose2d pose) {
+        List<Translation2d> list = new ArrayList<>();
+        TrajectoryPlans plans = new TrajectoryPlans();
+        // convert the coordinates into indexes for 2 by 2 meter squares.
+        // 0,0 is the lower left of the field by the Red Alliance source.
+        int i = MathUtil.clamp((int)(pose.getX()/2),0,7);
+        int j = MathUtil.clamp((int)(pose.getY()/2),0,3);
+        TrajectoryPlans.FieldStep move = TrajectoryPlans.BlueAmpPlan[i][j].move;
+        while (move != TrajectoryPlans.FieldStep.Done) {
+            if (move == TrajectoryPlans.FieldStep.Left || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.DownLeft)
+                i = i - 1;
+            if (move == TrajectoryPlans.FieldStep.Right || move == TrajectoryPlans.FieldStep.UpRight || move == TrajectoryPlans.FieldStep.DownRight)
+                i = i + 1;
+            if (move == TrajectoryPlans.FieldStep.Down || move == TrajectoryPlans.FieldStep.DownLeft || move == TrajectoryPlans.FieldStep.DownRight)
+                j = j - 1;
+             if (move == TrajectoryPlans.FieldStep.Up || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.UpRight)
+                j = j + 1;
+            SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
+            if (move != TrajectoryPlans.FieldStep.Done) {
+                list.add(TrajectoryPlans.BlueAmpPlan[i][j].center);
+                move = TrajectoryPlans.BlueAmpPlan[i][j].move;
+            }
+        }
+        return list;
     }
 }

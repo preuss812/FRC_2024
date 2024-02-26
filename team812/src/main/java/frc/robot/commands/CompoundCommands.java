@@ -21,7 +21,7 @@ public class CompoundCommands {
   public SequentialCommandGroup ScoreNoteInAmp(ArmRotationSubsystem armRotationSubsystem, ShooterSubsystem shooterSubsystem) {
     return new SequentialCommandGroup(
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmUP")),
-      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmScorePosition).withTimeout(3.0),
+      new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmScoringPosition).withTimeout(3.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Shoot")),
       new ShooterCommand(shooterSubsystem, 0.5).withTimeout(1.0),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmDown")),

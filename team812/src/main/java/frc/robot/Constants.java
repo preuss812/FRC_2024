@@ -44,12 +44,9 @@ public final class Constants {
         public static final int kSwerveLeftFrontDrive = 28;
         public static final int kSwerveLeftFrontCANCoder = 38;
 
-        //public static final int kPDP = 42;
-        //public static final int kPCM = 40;
         public static final int kWinchMotor = 41;
         public static final int kArmMotor = 43;
         public static final int kNoteIntakeMotor = 40;
-        //public static final int kNoteIntakeMotor2 = 43;
         public static final int kShooterMotor = 42;
 
         public static final int kPDP = 50;
@@ -105,17 +102,6 @@ public final class Constants {
         public static final int kPressureRange = 200;
     }
 
-    public static final class EncoderConstants {
-        public static final int[] kRightDriveEncoder = {2,3}; // Channel A,B
-        public static final int[] kLeftDriveEncoder = {0,1}; // Channel A, B
-
-        public static final double wheelDiameter = 6.0;
-        public static final double ticksPerRevolution = 256;
-        public static final double gearRatio = 7.91;
-
-        public static final double kEncoderDistanceFactor = (wheelDiameter * Math.PI) / ticksPerRevolution / gearRatio;
-    }
-
     public static final class PidConstants {
         public static final double kProportionalDriveStraight = 0.05;
      
@@ -147,92 +133,32 @@ public final class Constants {
         public static final double kShooter_kF = 0.0; 
     }
 
-    public static final class DriveTrainConstants {
-        public static final double kOpenLoopRampRate = 0.75;
-	
-	    public static final double kHighSpeed = 1.0;
-	    public static final double kTurnHighSpeed = 1.0;
-
-	    public static final double kMedSpeed = 0.6;
-	    public static final double kTurnMedSpeed = 0.75; // Changed from 0.5 3/21/2023 - dph
-
-	    public static final double kLowSpeed = 0.2;
-	    public static final double kTurnLowSpeed = 0.4;
-
-        public static final double kMaxSpeedWhenArmsRaised = 0.2; // This is a wild guess to protect the robot when the arms are up and it's driving.
-
-        public static final double kSwerveAxisLength = 17.0; // inches
-        public static final double kSwerveAxisWidth = 17.0; // inches
-    }
-
     public static final class ArmConstants {
    
-        public static final double kArmThreshold =2; // Relaxed from 20 Feb 22, 2023        // 2022 constants
-        public static final double kArmEncoderCountPerRevolution = 8192; // Need to verify this number - dph
+        public static final double kArmThreshold =2; // TODO - tune this value.  2 is too small but 10 may be too large - dph 2024-02-25.
+        public static final double kArmEncoderCountPerRevolution = 8192; 
         public static final double kArmDegreesPerTick = 360.0/ArmConstants.kArmEncoderCountPerRevolution;
         public static final double kArmTicksPerDegree = ArmConstants.kArmEncoderCountPerRevolution/360.0;
+        
+        // Positions are in Encode Ticks.
+        // Ticks increase as the arm move down to the intake position.
+        // The '0' position is defined by the scoring position which is enforced by the upper/reverse.
+        // The 'max' position is defined by the arm fully rotated which is  enforced the forward limit switch.
+        // The proper starting position for the arm is in the fully down position with the forward limit switch activated.
+        public static final double kArmMinPosition = 0;    // Smallest encoder value the software will rotate to.
+        public static final double kArmMaxPosition = 3600; // Largest encoder value the software will rotote to.
+        public static final double kArmRange = kArmMaxPosition - kArmMinPosition; // The number of ticks in the active range of arm motion between limits.
 
-        // public static final double kArmScorePosition = 2100;
-        // public static final double kArmTopPosition = 4020; //3550;
-        // public static final double kArmPreGrabPosition = 2000; // Score position was too high - dph
-        // public static final double kArmHangPosition = 2550;
-        // public static final double kArmEndGamePosition = 2100;
-        // public static final double kArmBallGathering = 200;
-        
-        // new for 2023
-        public static final double kArmTuckAngle = -65;                  // Degrees
-        public static final double kArmOnFloorRetractedAngle = -25;      // Degrees
-        public static final double kArmHorizontalAngle = 0;              // This defines the angle coordinate system with 0 == parallel to the frame/floor.
-        public static final double kArmMidConeAngle = 32.9;                // Degrees
-        public static final double kArmHighConeAngle = 31.4;               // Degrees
-        public static final double kArmMaxElevationAngleToGround = 35.0; // degrees
-        public static final double kArmHighLimitAngle = 41;              // Degrees
-        public static final double kArmReferencePosition = 0;            // 2023 broomstick ref position
-        public static final double kArmAutonomousReferencePosition = 0;  // 2023 position when the arm is folded in the robot to start the game     public static final double kArmMinPosition = 900;  // Lowest you can ask for 
-        // Positions are in Encode Ticks
-        public static final double kArmMinPosition = 0; // Lowest software will rotate down.
-        //public static final double kArmLowPosition = (kArmOnFloorRetractedAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the bottom row
-        public static final double kArmMidPosition = 2314; //(kArmMidConeAngle - kArmTuckAngle) * kArmTicksPerDegree; // Height for scoring on the middle row
-        public static final double kArmHiPosition  = 2288; // (kArmHighConeAngle - kArmTuckAngle) * kArmTicksPerDegree;  // Height for scoring on the top row
-        public static final double kArmMaxPosition = 2509; //2451; //(kArmHighLimitAngle - kArmTuckAngle) * kArmTicksPerDegree; // Highest you can ask for
-        public static final double kArmScorePosition = 0; // physically Highest you can ask for
-        //public static final double kArmAutonomous  = kArmLowPosition;
-        public static final double kArmHighCubePosition = kArmHiPosition;       // TODO May need adjustment for automomous.
-        public static final double kArmHighCubeReleasePosition = 2088;  // TODO May need adjustment for automomous.
-        
-        
-        public static final double kArmMinRotationAngle = kArmOnFloorRetractedAngle - kArmTuckAngle;  // Degrees below horizontal
-        public static final double kArmHorizontalRotationPosition = (kArmHorizontalAngle - kArmTuckAngle) * kArmTicksPerDegree;
-        
+        public static final double kArmStartingPosition = kArmMaxPosition;  // We should start at the max position with the arm rotated down to intake notes.
+        public static final double kArmHookChainPosition = 1200;            // TODO find the correct value for this constant.
+        public static final double kArmScoringPosition = kArmMinPosition;  // Rotated upward to score a note.
+
+        public static final double kArmPeakOutputForward =  0.80; // Limit output voltage to +/- 80% of the available voltage range.
+        public static final double kArmPeakOutputReverse = -0.80; // Limit output voltage to +/- 80% of the available voltage range.
+        public static final double kArmSensorUnitsPer100ms = kArmRange*10.0;      // Untested: Max speed in MotionMagic mode.  Full range in 1 second.
+        public static final double kArmSensorUnitsPer100msPerSec = kArmRange*10;  // Untested: Max acceleration in MotionMagicMode.  Full acceleration in 1 second
     }
     
-    public static final class ArmExtensionConstants {
-        // Distances are in meters
-        // Positions are in encoder counts/ticks
-        public static final double kArmExtensionReferencePosition =0;
-        public static final double kArmExtensionGearToothSpacing = 0.005; // (meters)  = 5 millimeters
-        public static final double kArmExtensionTeethPerRotation = 36;
-        public static final double kArmExtensionEncoderCountPerRevolution = 8192; // Need to verify this number - dph
-        public static final double kArmExtensionTicksPerMeter = 1.0/(kArmExtensionGearToothSpacing*kArmExtensionTeethPerRotation)*kArmExtensionEncoderCountPerRevolution;
-        public static final double kArmExtensionFullyRetractedPosition = 0.0;
-        public static final double kArmExtensionMinPosition = 0.0;
-        public static final double kArmExtensionFullyExtendedPosition = kArmExtensionTicksPerMeter; // This needs to be calibrated - dph
-        public static final double kArmExtensionHomePosition = 0;
-        public static final double kArmExtensionLowPosition = 0;
-        public static final double kArmExtensionMidPosition = 2185;
-        public static final double kArmExtensionHiPosition = 28386;
-        public static final double kArmExtensionMaxPosition = 37100;
-        public static final double kArmExtensionGatheringPosition = 8000;  // clean this up
-        public static final double kArmExtensionThreshold = 20;
-        public static final double kArmExtensionMaxExtendedArmLength = Units.inchesToMeters(67.0);
-        public static final double kArmExtensionRetractedLength =  kArmExtensionMaxExtendedArmLength - kArmExtensionMaxPosition/kArmExtensionTicksPerMeter;
-        public static final double kArmExtensionMaxExtensionBeyondPerimeter = Units.inchesToMeters(42.0);
-        
-        public static final double kArmExtensionHorizontalExtensionPosition = ArmExtensionConstants.kArmExtensionMaxExtendedArmLength
-                                                                           * Math.cos(Units.degreesToRadians(ArmConstants.kArmMaxElevationAngleToGround));
-        public static final double kArmExtensionPivotToWheelsOnFloorLine = Math.sin(Units.degreesToRadians(ArmConstants.kArmMinRotationAngle))*kArmExtensionRetractedLength;
-    }
-
     // Define locations on the field as poses that may be useful for semi-automatic driving.
     public static final class FieldConstants {
         // All units in Meters.
@@ -293,15 +219,20 @@ public final class Constants {
         /**
         * Physical location of the camera on the robot, relative to the center of the robot.
         */
-        // TODO: Set actual Camera position with respect to the robot origin.
         // Values in Meters.
         public static final Transform3d CAMERA_TO_ROBOT =
-// x pos or neg doesn't get us where we want to go      w/apriltag 1    
-    //new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d()); // Before we rotated the RoboRio
-   // new Transform3d(new Translation3d(0.0, -0.3425, -0.233), new Rotation3d());
-       new Transform3d(new Translation3d(Units.inchesToMeters(-10.5), Units.inchesToMeters(0.0), -0.233), new Rotation3d());
+        // x pos or neg doesn't get us where we want to go      w/apriltag 1    
+        //new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d()); // Before we rotated the RoboRio
+        // new Transform3d(new Translation3d(0.0, -0.3425, -0.233), new Rotation3d());
+        //new Transform3d(new Translation3d(Units.inchesToMeters(-10.5), Units.inchesToMeters(0.0), -0.233), new Rotation3d());
+        // worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
 
-// worked nicely 2024-01-16 1700     w/ap-riltag 1       new Transform3d(new Translation3d(0, 0.3425, -0.233), new Rotation3d());
+        // Camera is located 10.5 inches behind the center of the robot,
+        // 0 meters offset to the side, 
+        // 0.233 meters above the ground.
+        // TODO Check values and signs of values.
+        new Transform3d(new Translation3d(Units.inchesToMeters(10.5), Units.inchesToMeters(0.0), -0.233), new Rotation3d(0.0,0.0, Math.PI));
+
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
         public enum AprilTag {
             UNKNOWN(0),

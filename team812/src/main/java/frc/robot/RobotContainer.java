@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import java.util.List;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -28,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -44,8 +46,6 @@ import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
 import frc.robot.subsystems.BlackBoxSubsystem;
-//import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.EncoderSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
@@ -130,45 +130,25 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // for debug: put subsystem info on the shuffleboard. - remove before competition.
-    /*
-    SmartDashboard.putData(m_ArmExtensionSubsystem);
-    SmartDashboard.putData(m_ArmRotationSubsystem);
-    SmartDashboard.putData("ArmRotate", new ArmCommand(m_ArmRotationSubsystem, 1000));
-    SmartDashboard.putData("HomeArmExtension", new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
-    SmartDashboard.putData("HomeArmRotation", new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
-    SmartDashboard.putData("Rotate UP", new InstantCommand(m_ArmRotationSubsystem::rotateUp50, m_ArmRotationSubsystem));
-    SmartDashboard.putData("Rotate Down", new InstantCommand(m_ArmRotationSubsystem::rotateDown50, m_ArmRotationSubsystem));
-    SmartDashboard.putData("ArmExtend",new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
-
-  */
     // SmartDashboard.putData("HomeArmRotation", new ArmHomeCommand(m_ArmRotationSubsystem));
 
-      // Configure default commands
-      m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.allianceRelativeDrive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            m_robotDrive));
+    // Configure default commands
+    m_robotDrive.setDefaultCommand(
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+      new RunCommand(
+        () -> m_robotDrive.allianceRelativeDrive(
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+            true, true),
+        m_robotDrive)
+    );
 
-      m_ArmRotationSubsystem.setDefaultCommand(
-        new RunCommand(() -> m_ArmRotationSubsystem.rotate(-rightJoystick.getY()), m_ArmRotationSubsystem));
-      
-  
-
-  SmartDashboard.putNumber("joystickX", 0.0);
-  SmartDashboard.putNumber("joystickY", 0.0);
-  SmartDashboard.putNumber("encoder version", m_enctest.getDeviceID());
-  SmartDashboard.putNumber("encoder",3.14159);
-  SmartDashboard.putNumber("InEncode",1234.0);
-  Utilities.toSmartDashboard("NearPoseTestPose", new Pose2d(1.84, 8.2, new Rotation2d(Units.degreesToRadians(-90))));
-  Utilities.toSmartDashboard("NearPoseTestNear", Utilities.nearPose(new Pose2d(1.84, 8.2, new Rotation2d(Units.degreesToRadians(-90))), 1.0));
-}
+    m_ArmRotationSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_ArmRotationSubsystem.rotate(-rightJoystick.getY()), m_ArmRotationSubsystem)
+    );
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -180,93 +160,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    /*
-     * 2023 Proposed RIGHT joystick button bindings
-     * Joystick FWD - drives the robot forward
-     * Joystick BACK - drives the robot backwards
-     * 1 close the grip (trigger)
-     * 2 open the grip (thumb button)
-     * 3 Aim at an AprilTag
-     * 4 Initiate Balance mode or while pressed
-     */
-    /*
-     * 2023 Proposed LEFT joystick button bindings
-     * Joystick FWD - moves set point on arm negative while engaged
-     * Joystick Back - moves set point on arm positive while engaged
-     * 1 extends the arm while pressed by increasing the set point
-     * 2 retracts the arm while pressed by decreasing the set point
-     * 3 set ARM ROTATION to LOW and set ARM EXTENSION as appropriate (armpos2)
-     * 4 set ARM ROTATION to MID and set ARM EXTENSION as appropriate (armpos3)
-     * 5 set ARM ROTATION to GATHER and set ARM EXTENSION as appropriate (armpos1)
-     * 6 set ARM ROTATION to HIGH and set ARM EXTENSION as appropriate (armpos4)
-     */
-    //new JoystickButton(rightJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    //new JoystickButton(rightJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-    //new JoystickButton(rightJoystick, 3).whileTrue(new FollowApriltagCommand(m_CameraVisionSubsystem, m_DriveTrain)); // Should this lower the arm?
-    //new JoystickButton(rightJoystick, 6).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.20));
-    
-    //new JoystickButton(rightJoystick, 10).onTrue(new ArmEmergencyStop(m_ArmRotationSubsystem, m_ArmExtensionSubsystem));
-    //new JoystickButton(rightJoystick, 11).onTrue(new InstantCommand(m_BrakeSubsystem::brake,m_BrakeSubsystem));
-    //new JoystickButton(rightJoystick, 12).onTrue(new InstantCommand(m_BrakeSubsystem::unBrake,m_BrakeSubsystem));
 
-    // Left Joystick for Arm Rotation and Extension Control
-    //new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(m_GripperSubsystem::closeGrip,m_GripperSubsystem));
-    //new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(m_GripperSubsystem::openGrip,m_GripperSubsystem));
-/*      new JoystickButton(leftJoystick, 3
-    ).onTrue( new ConditionalCommand( 
-      new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition)
-      ),
-      new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition).withTimeout(3.0)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmLowPosition).withTimeout(3.0)
-      ),
-      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmLowPosition
-    ));
-    new JoystickButton(leftJoystick, 4
-    ).onTrue( new ConditionalCommand( 
-      new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition).withTimeout(3.0)
-      ),
-      new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition).withTimeout(3.0)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmMidPosition).withTimeout(3.0)
-      ),
-      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmMidPosition
-    ));
-   */
-   //new JoystickButton(leftJoystick, 5).onTrue(new BalanceCommandDebugEZ2(m_DriveTrain, m_GyroSubsystem,m_EncoderSubsystem, m_BrakeSubsystem,82.0,0.55)); 
-
-  /*  new JoystickButton(leftJoystick, 6
-    ).onTrue( new ConditionalCommand( 
-      new SequentialCommandGroup(
-        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0),
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(3.0)
-      ),
-      new SequentialCommandGroup(
-        new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition).withTimeout(3.0)
-,        new ArmCommand(m_ArmRotationSubsystem, ArmConstants.kArmHiPosition).withTimeout(3.0)
-      ),
-      () -> m_ArmRotationSubsystem.getPosition() < ArmConstants.kArmHiPosition
-    ));
-   
-   */
-   //new JoystickButton(m_driverController,Button.kLeftBumper.value).onTrue(new InstantCommand(() -> m_ArmRotationSubsystem.test_rotate(0.10)));
-   //new JoystickButton(m_driverController,Button.kBack.value).whileTrue(new ShooterCommand(m_ShooterSubsystem, 0.3));
-    /* 
-  
-  // Left Joystick for Arm Extension Control Debug
-    new JoystickButton(leftJoystick, 7).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionLowPosition));
-    new JoystickButton(leftJoystick, 9).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionMidPosition));
-    new JoystickButton(leftJoystick, 11).onTrue(new ArmExtensionCommand(m_ArmExtensionSubsystem, ArmExtensionConstants.kArmExtensionHiPosition));
-    new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(m_ArmExtensionSubsystem::setSensorReference, m_ArmExtensionSubsystem));
-    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(m_ArmRotationSubsystem::setSensorReference, m_ArmRotationSubsystem));
-
-    */
-
-/**
+  /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
@@ -276,74 +171,68 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   
-    /*new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-            
-      */
+   
     // This next command is just for testing and should be removed or disabled for game play.
-     new JoystickButton(m_driverController, Button.kBack.value)
-            .onTrue(new InstantCommand(
-                () -> m_robotDrive.zeroHeading(),
-                m_robotDrive));
-     new JoystickButton(m_driverController, Button.kA.value)
-            .onTrue(new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
-      new JoystickButton(m_driverController, Button.kY.value)
-            .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
-      new JoystickButton(m_driverController, Button.kX.value)
-             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.disableMotor()));
-      new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
-      new JoystickButton(m_driverController, Button.kRightBumper.value)
-      //  .whileTrue(new RunCommand(()->m_ArmRotationSubsystem.test_rotate(-0.1)));
-      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(3000.0)));
-      new JoystickButton(m_driverController, Button.kBack.value)
-             .whileTrue(new InstantCommand(()->m_ArmRotationSubsystem.setHome()));
-       new JoystickButton(m_driverController, Button.kStart.value)
-             .onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
+    //new JoystickButton(m_driverController, Button.kBack.value)
+    //  .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+      .onTrue(new CompoundCommands().ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
-           // .andThen(()->m_ArmRotationSubsystem.test_rotate(0.1));
-    // This next command is just for testing and should be removed or disabled for game play. TODO Make sure this is the right way to use the Command
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+      .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
+
     new JoystickButton(m_driverController, Button.kB.value)
-    .whileTrue(new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
-    Units.degreesToRadians(240.0)));
+      .whileTrue(new CompoundCommands().gotoSource(m_robotDrive, m_PoseEstimatorSubsystem));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+      .whileTrue(new CompoundCommands().gotoAmp(m_robotDrive, m_PoseEstimatorSubsystem));
+m_driverController.getPOV();
+    //new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(3000.0)));
+
+    new JoystickButton(m_driverController, Button.kStart.value)
+      .onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
+
     // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
     // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
     // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
-    new JoystickButton(m_driverController, Button.kStart.value)
+    new JoystickButton(m_driverController, Button.kBack.value)
             .onTrue(new InstantCommand(
                // () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
                () -> alignDriveTrainToPoseEstimator(),
                 m_robotDrive));
                 
-    SmartDashboard.putData("ResetOdometry",  new RunCommand(() -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees())));  // For debug without robot
-    SmartDashboard.putData("GotoPoseTest",  new RunCommand( () -> new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 1.46, 1.25, 
-    Units.degreesToRadians(240.0))));  // For debug without robot
-    SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug without robot
-
-    // Debug to test out my point in polygon code - dph - 2024-02-23
-    /*
-     Translation2d [] polygon1 = {new Translation2d(0,0), new Translation2d(0,1), new Translation2d(1,1), new Translation2d(1,0),new Translation2d(0,0)};
-    SmartDashboard.putBoolean("PTest1", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,0.5)));
-    SmartDashboard.putBoolean("PTest2", Utilities.pointInPolygon(polygon1, new Translation2d(-0.5,0.5)));
-    SmartDashboard.putBoolean("PTest3", Utilities.pointInPolygon(polygon1, new Translation2d(1.5,0.5)));
-    SmartDashboard.putBoolean("PTest4", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,-0.5)));
-    SmartDashboard.putBoolean("PTest5", Utilities.pointInPolygon(polygon1, new Translation2d(0.5,1.5)));
-    */
+    //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug
+    /* Debugging below */
+    List<Translation2d> blueAmpPlan = Utilities.planBlueAmpTrajectory(new Pose2d(0,0,new Rotation2d(0)));
+    SmartDashboard.putString("blueampplan", blueAmpPlan.toString());
+    List<Translation2d> blueAmpPlan2 = Utilities.planBlueAmpTrajectory(new Pose2d(16,0,new Rotation2d(0)));
+    SmartDashboard.putString("blueampplan2", blueAmpPlan2.toString());
+    for (int i = 1; i <= 16; i+= 2) {
+      for (int j = 1; j <= 8; j+= 2) {
+        blueAmpPlan = Utilities.planBlueAmpTrajectory(new Pose2d(16,0,new Rotation2d(0)));
+      }
+    }
+    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
+    POVButton x = new POVButton(m_driverController, 180);
+    x.onTrue(
+        new GotoPoseCommand(
+          m_PoseEstimatorSubsystem,
+          m_robotDrive, 
+          Utilities.Pose180(m_PoseEstimatorSubsystem.getCurrentPose()) 
+        )
+    ).debounce(0.2);
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  
   public Command getAutonomousCommand() {
     return new Autonomous(this);
   }
-
    
   // Function to align the PoseEstimator pose and the DriveTrain pose.
   public void alignDriveTrainToPoseEstimator() {

@@ -23,10 +23,9 @@ import edu.wpi.first.math.MathUtil;
 
 public class ArmRotationSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
-  private static boolean hasBeenHomed = true;
   static Integer getPosition_timesCalled = 0;
   private static double targetPosition = 0;
-  private boolean m_debug = true;  // TODO Should be false for competition.
+  private boolean m_debug = false;
   private static double rotateTimesCalled=0;
   private static boolean m_rotateStopped = true;
   private static boolean m_capturedLimitPosition = false;
@@ -63,8 +62,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // can help the motor not burn itself out.
     m_arm.configNominalOutputForward(0, 10);
     m_arm.configNominalOutputReverse(0, 10);
-    m_arm.configPeakOutputForward(0.8, 10);
-    m_arm.configPeakOutputReverse(-0.8, 10);
+    m_arm.configPeakOutputForward(ArmConstants.kArmPeakOutputForward, 10);
+    m_arm.configPeakOutputReverse(ArmConstants.kArmPeakOutputReverse, 10);
 
     // Configure the Motion Magic parameters for PID 0 within the Talon
     // The values for P, I, D, and F will need to be determined emperically
@@ -75,6 +74,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     m_arm.config_kF(0, PidConstants.kArm_kF, 10);
     m_arm.config_IntegralZone(0, PidConstants.kArm_IntegralZone, 10);
 
+    // The next to configuration settings are for MotionMagic and are not used by the ControlMode.Position
     // Velocity in sensor units per 100ms
     m_arm.configMotionCruiseVelocity(150.0, 10);
     // Acceleration in sensor units per 100ms per second
@@ -88,29 +88,31 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
   }
 
-  private final int incrementSize = 50; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out.
+  private final int incrementSize = 50; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out. TODO tune this
 
+  // This function is used as the default command to run for arm control.
+  // The input is presumed to be an analog input that ranges from -1 to +1.
   public void rotate(double position) {
     //double absolutePosition = getPosition(); // Should get the goal, not the position. // Dont need it.
     double currentTarget = targetPosition;
     // if the joystick is nearly centered, ignore it
+    // This has the effect of stopping the arm rotation if the joystick is not being used to control the arm.
+    // Be aware that if another command ends before it gets the arm to the desired position,
+    // this function will stop the arm motiion and it will not continue rotating to the other commands target.
     SmartDashboard.putNumber("rotate js", position);
     if (Math.abs(position) < 0.1) {  // Also move to constants.java
       if (!m_rotateStopped) {
         setPosition(getPosition());
         m_rotateStopped = true;
       }
-      return;
-    }
-    m_rotateStopped = false;
-    double newPosition = currentTarget + position * incrementSize;
-    SmartDashboard.putNumber("rotate pos", newPosition);
-    //if (newPosition >= ArmConstants.kArmMinPosition
-    //    && newPosition < ArmConstants.kArmMaxPosition) {
+    } else {
+      m_rotateStopped = false;
+      double newPosition = currentTarget + position * incrementSize;
+      newPosition = MathUtil.clamp(newPosition, ArmConstants.kArmMinPosition, ArmConstants.kArmMaxPosition);
+      SmartDashboard.putNumber("rotate pos", newPosition);
       setPosition(newPosition);
       rotateTimesCalled++;
-
-    //}
+    }
   };
 
   public void rotateUp50() {
@@ -120,47 +122,6 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public void rotateDown50() {
     setPosition(targetPosition-50.0);
   }
-
-  /*
-  public void rotate2(double speed) {
-    double l_speed = speed;
-    double l_position = getPosition();
-    String path;
-
-    if (!isHome()) {
-      l_speed = 0.0;
-      path = "not homed";
-    } else if (l_speed > 0.0) {
-      if (l_position >= ArmConstants.kArmTopPosition) {
-        l_speed = 0.0;
-        path = "endgame";
-      } else if (l_position >= ArmConstants.kArmScorePosition) {
-        l_speed = 0.0;
-        path = "not end game";
-      } else {
-        path = "speed > 0 no change";
-      }
-    } else if (l_speed < 0.0) {
-      if (l_position <= ArmConstants.kArmBallGathering) {
-        l_speed = 0.0;
-        path = "speed < 0 limited";
-      } else {
-        path = "speed < 0 no change";
-      }
-    } else {
-      path = "lspeed = 0";
-      // l_speed = 0.0;
-    }
-
-    SmartDashboard.putNumber("r2_speed", speed);
-    SmartDashboard.putNumber("r2_l_speed", l_speed);
-    SmartDashboard.putNumber("r2_l_position", l_position);
-    SmartDashboard.putString("rotate2_path", path);
-
-    m_arm.set(ControlMode.PercentOutput, l_speed);
-    // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
-  }
-*/
 
   public void disableMotor() {
     m_arm.set(ControlMode.Disabled, 0);
@@ -179,17 +140,18 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
   }
 
+  // Set the arm target position after checking that it is safe to do so.
   public double setPosition(double position) {
     // position will be zero in tucked position
-    //if (isHome() && position >= -3000) { // TODO THIs is ridiculous
-      m_arm.set(ControlMode.Position, position);
+    if (isHome() && position >= ArmConstants.kArmMinPosition && position <= ArmConstants.kArmMaxPosition) {
       SmartDashboard.putNumber("ArmSubPos", position);
       targetPosition = position;
-    //}
+    }
     return getPosition();
   }
 
   // Only to be used when homing the robot
+  // This sets the goal encoder value without checking to see if it is reasonable.
   public double setHomePosition(double position) {
     m_arm.set(ControlMode.Position, position);
     return getPosition();
@@ -208,41 +170,44 @@ public class ArmRotationSubsystem extends SubsystemBase {
     return getPosition() - getTargetPosition();
   }
 
+  // Sets the target encoder value.  The PID in the TalonSRX will drive the arm to this position.
   public void setSensorPosition(double position) {
     m_arm.setSelectedSensorPosition(position, 0, 10);
   }
 
+  // This function sets the arm encoder to the expected arm starting position
   public void setSensorReference() {
-    double l_position = ArmConstants.kArmReferencePosition;
+    double l_position = ArmConstants.kArmStartingPosition;
     m_arm.setSelectedSensorPosition(l_position, 0, 10);
     setHomePosition(l_position);
-    setHome();
+    setHome(); 
   }
 
+  // Returns true if the arm is fully lowered.
   public boolean isFwdLimitSwitchClosed() {
     return (m_arm.isFwdLimitSwitchClosed() == 1 ? true : false);
   }
 
+  // Returns true if the arm is fully raised.
   public boolean isRevLimitSwitchClosed() {
     return (m_arm.isRevLimitSwitchClosed() == 1 ? true : false);
   }
 
-  
   public void setHome() {
-    hasBeenHomed = true;
-    System.out.println("setHome hasBeenHomed: " + hasBeenHomed);
+    m_capturedLimitPosition = true;
+    System.out.println("setHome m_capturedLimitPosition: " + m_capturedLimitPosition);
   }
 
   public void unsetHome() {
-    hasBeenHomed = false;
+    m_capturedLimitPosition = false;
   }
 
   public void unsetHome(String msg) {
-    hasBeenHomed = false;
+    m_capturedLimitPosition = false;
   }
 
   public boolean isHome() {
-    return hasBeenHomed;
+    return m_capturedLimitPosition;
   }
 
   @Override
@@ -263,13 +228,14 @@ public class ArmRotationSubsystem extends SubsystemBase {
       ControlMode controlMode = m_arm.getControlMode();
       SmartDashboard.putString("ARM ctlrmode", controlMode.toString());
     }
+    // If the forward limit switch is closed, we are fully rotated to the note intake position.
+    // If we have not done so already, reset the encoder coordinates to the fully rotated value.
     if (isFwdLimitSwitchClosed()) {
       if (!m_capturedLimitPosition) {
         SmartDashboard.putNumber("ARM pos rev limit", getPosition());
         m_capturedLimitPosition = true;
+        setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
       }
-      setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
-      //setPosition(Constants.ArmConstants.kArmMaxPosition); // This was a bad idea, that's why it's commented out.
     }
   }
 }

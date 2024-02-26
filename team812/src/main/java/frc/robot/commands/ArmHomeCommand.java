@@ -23,15 +23,21 @@ public class ArmHomeCommand extends Command {
   @Override
   public void initialize() {
     SmartDashboard.putString("homearm", "starting");
+    // Clear the 'homed' flag in the arm subsystem.  Without clearing the flag
+    // The arm command would not perform the full initialization.
+    m_armSubsystem.unsetHome();
+
+     // Set the arm encoder value to the expected starting position
+     m_armSubsystem.setSensorReference();
+     
+     // Set the goal arm position to be the starting position plus the full range of possible values.
+     // This ensures that even if the arm is at the opposite end of its range of motion,
+     // this goal will rotate us to the fully rotated position.
+     m_armSubsystem.setHomePosition(ArmConstants.kArmMaxPosition+ArmConstants.kArmRange);
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_armSubsystem.setHomePosition(3000);
-   // m_armSubsystem.setHome();
-    
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
