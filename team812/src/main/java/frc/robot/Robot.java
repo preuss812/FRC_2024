@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cameraserver.CameraServer;
 
 // import frc.robot.RobotContainer;
 
@@ -40,8 +40,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
     nttable = ntinst.getTable("0team812");
-   // CameraServer.startAutomaticCapture(0);
-//    CameraServer.startAutomaticCapture(1);
+    CameraServer.startAutomaticCapture(0); // 2024 forward facing camera for driverstation
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData(CommandScheduler.getInstance()); // This puts running commands on the shuffleboard.
     addPeriodic(() -> Utilities.setAlliance(), 1.0 );
