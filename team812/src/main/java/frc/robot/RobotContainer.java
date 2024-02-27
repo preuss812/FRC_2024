@@ -177,10 +177,10 @@ public class RobotContainer {
     //new JoystickButton(m_driverController, Button.kBack.value)
     //  .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
       .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kB.value)
@@ -189,10 +189,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value)
       .whileTrue(new GotoAmpCommand(m_robotDrive, m_PoseEstimatorSubsystem));
 
-      //new JoystickButton(m_driverController, Button.kRightBumper.value)
-    //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(3000.0)));
+    new JoystickButton(m_driverController, Button.kY.value)
+      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
 
-    new JoystickButton(m_driverController, Button.kStart.value)
+    new JoystickButton(m_driverController, Button.kStart.value) //For testing only, can be reasigned later. Reasign to 
       .onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
 
     // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
@@ -237,7 +237,7 @@ public class RobotContainer {
    
   // Function to align the PoseEstimator pose and the DriveTrain pose.
   public void alignDriveTrainToPoseEstimator() {
-    m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees());
+    m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+180.0);
     m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
   }
 }

@@ -146,7 +146,7 @@ public final class Constants {
         // The 'max' position is defined by the arm fully rotated which is  enforced the forward limit switch.
         // The proper starting position for the arm is in the fully down position with the forward limit switch activated.
         public static final double kArmMinPosition = 0;    // Smallest encoder value the software will rotate to.
-        public static final double kArmMaxPosition = 3600; // Largest encoder value the software will rotote to.
+        public static final double kArmMaxPosition = 2600; // Largest encoder value the software will rotote to.
         public static final double kArmRange = kArmMaxPosition - kArmMinPosition; // The number of ticks in the active range of arm motion between limits.
 
         public static final double kArmStartingPosition = kArmMaxPosition;  // We should start at the max position with the arm rotated down to intake notes.
@@ -158,8 +158,8 @@ public final class Constants {
         public static final double kArmSensorUnitsPer100ms = kArmRange*10.0;      // Untested: Max speed in MotionMagic mode.  Full range in 1 second.
         public static final double kArmSensorUnitsPer100msPerSec = kArmRange*10;  // Untested: Max acceleration in MotionMagicMode.  Full acceleration in 1 second
 
-        public static final double kArmRaiseTimeout = 3.0; // Seconds - for autonomous.
-        public static final double kArmLowerTimeout = 3.0; // Seconds - for autonomous.
+        public static final double kArmRaiseTimeout = 5.0; // Seconds - for autonomous.
+        public static final double kArmLowerTimeout = 5.0; // Seconds - for autonomous.
     }
     
     // Define locations on the field as poses that may be useful for semi-automatic driving.
@@ -234,7 +234,14 @@ public final class Constants {
         // 0 meters offset to the side, 
         // 0.233 meters above the ground.
         // TODO Check values and signs of values.
-        new Transform3d(new Translation3d(Units.inchesToMeters(10.5), Units.inchesToMeters(0.0), -0.233), new Rotation3d(0.0,0.0, Math.PI));
+        new Transform3d(
+            new Translation3d(
+                Units.inchesToMeters(11.0),
+                Units.inchesToMeters(0.0),
+                Units.inchesToMeters(-17.0)
+            ),
+            new Rotation3d(0.0,0.0, Math.PI)
+        );
 
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
         public enum AprilTag {
@@ -271,10 +278,10 @@ public final class Constants {
         public static final double kLowerRobotSpeed = -1.0;
     }
     public static final class ShooterConstants {
-        public static final double kIntakeSpeed = 0.5;
-        public static final double kShootSpeed =  0.5;
+        public static final double kIntakeSpeed = 0.70;
+        public static final double kShootSpeed =  0.7;
         public static final double kUnshootSpeed = -1.0;
-        public static final double kShootTimeout = 1.0; // Seconds
+        public static final double kShootTimeout = 3.0; // Seconds
     }
 
     

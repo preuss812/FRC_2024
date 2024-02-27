@@ -145,6 +145,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // position will be zero in tucked position
     if (isHome() && position >= ArmConstants.kArmMinPosition && position <= ArmConstants.kArmMaxPosition) {
       SmartDashboard.putNumber("ArmSubPos", position);
+      m_arm.set(ControlMode.Position, position);
       targetPosition = position;
     }
     return getPosition();
@@ -154,6 +155,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   // This sets the goal encoder value without checking to see if it is reasonable.
   public double setHomePosition(double position) {
     m_arm.set(ControlMode.Position, position);
+    m_capturedLimitPosition = false;
     return getPosition();
   }
 
