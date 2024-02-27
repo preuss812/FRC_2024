@@ -420,4 +420,25 @@ public final class Constants {
       public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
       }
+
+    public static final class ColorConstants {
+	/* Name: Construction Cone Orange
+	    URL:  https://www.computerhope.com/cgi-bin/htmlcolor.pl?c=F87431
+	    RGB:  248, 116, 49
+	    HSL:  20.20-deg, 93.43%, 58.24%
+	    HEX: #F87431
+
+	    wpilib/util/Color
+	    https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj/util/Color.html
+	    There are two constructor signatures available, one for
+	    Integer values and nother for Double values. If you send a
+	    Double, the values must be adjusted to a 0 to 1 range from
+	    0 to 255 when passed as integers. Doubles are used so that we 
+	    can better control precision if needed.
+	*/
+	public static final double[] kNoteTargetRGB = { 248/255.0, 116/255.0, 49/255.0 };
+
+	public static final double kColorConfidenceThreshold = 0.80;
+	public static final int     kColorProximityThreshold = 300; // higher closer, lower is further away
+    }
 }

@@ -14,19 +14,54 @@ import com.revrobotics.ColorMatch;
 public class ColorMatcher extends SubsystemBase {
   /** Creates a new ColorMatcher. */
   public ColorMatcher() {
-    final I2C.Port i2cPort = I2C.Port.kOnboard;
+    final I2C.Port            i2cPort = I2C.Port.kOnboard;
     final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-    final ColorMatch m_colorMatcher = new ColorMatch();
+    final ColorMatch   m_colorMatcher = new ColorMatch();
 
-    public final Color kNoteOrange = ColorMatch.makeColor(
+    public final Color kNoteTarget = Color
+        ColorConstants.kNoteTargetRBG[0], 
+	ColorConstants.kNoteTargetRBG[1],
+	ColorConstants.kNoteTargetRBG[2]
+    );
 
-    )
+    public ColorMatcher() {
+	m_colorMatcher.addColorMatch(kNoteTarget);
+	m_colorMatcher.setConfidenceThreshold(ColorConstants.kColorConfidenceThreshold);
+    }
 
-    )
-  }
+    public Color get_color() {
+	final Color detectedColor = m_colorSensor.getColor();
+	final int proximity = m_colorSensor.getProximity();
+	final ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	String colorString;
+
+	if (proximity >= 100) {
+	    if (match.color == kNoteTarget) {
+		colorString = "Orange";
+	    } else {
+		colorString = "Unknown";
+	    }
+	} else {
+	    colorString = "Out of range";
+	}
+
+	SmartDashboard.putNumber("Red", detectedColor.red);
+	SmartDashboard.putNumber("Green", detectedColor.green);
+	SmartDashboard.putNumber("Blue", detectedColor.blue);
+	SmartDashboard.putNumber("Proximity", proximity);
+	SmartDashboard.putNumber("Confidence", match.confidence);  
+	SmartDashboard.putString("Detected Color", colorString);
+	
+	return match.color;
+    }
+
+    @Override
+    public void periodic() {
+	// This method will be called once per scheduler run
+    }
+
+    public boolean isOrange(Color color) {
+	return (color == kNoteTarget);
+    }
 }
