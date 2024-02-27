@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 import edu.wpi.first.math.util.Units;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+import com.ctre.phoenix.Util;
 import com.ctre.phoenix6.hardware.CANcoder;
 
 import frc.robot.Constants.ArmConstants;
@@ -40,6 +42,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
@@ -51,6 +54,8 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.DriveRobotCommand;
+import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoAmpCommand;
@@ -97,7 +102,7 @@ public class RobotContainer {
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
-  //private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
+  private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   
@@ -203,6 +208,38 @@ public class RobotContainer {
                // () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
                () -> alignDriveTrainToPoseEstimator(),
                 m_robotDrive));
+
+
+    /**
+     * This section defines buttons for the left joystick, joystick 0, which is not intended for use during game play
+     * The buttons defined are for debug.
+     * Currently these are in order to step through the Autonomous plan
+     */
+    Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id())
+      .plus(new Transform2d(new Translation2d(0.5, 0.0), new Rotation2d(0.0))); // TODO offset by 1/2 robot length
+    Pose2d firstMove = new Pose2d(1.0,0,new Rotation2d(-Math.PI/2));
+    Utilities.toSmartDashboard("debugPose",targetPose);
+    new JoystickButton(leftJoystick, 7).onTrue(
+      new InstantCommand(()->setGyroAngleToStartMatch(0.0))
+    );
+    new JoystickButton(leftJoystick, 8).onTrue(
+      new ArmHomeCommand(m_ArmRotationSubsystem)
+    );
+    new JoystickButton(leftJoystick, 9).onTrue(
+      new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove)
+    );
+    new JoystickButton(leftJoystick, 10).onTrue(
+      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.2)
+    );
+    new JoystickButton(leftJoystick, 11).whileTrue(
+      new InstantCommand(()->alignDriveTrainToPoseEstimator())
+    );
+    new JoystickButton(leftJoystick, 12).onTrue(
+      new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose)
+    );
+    new JoystickButton(leftJoystick, 1).onTrue(
+      new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem)
+    );
                 
     //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug
     /* Debugging below */
@@ -236,8 +273,50 @@ public class RobotContainer {
   }
    
   // Function to align the PoseEstimator pose and the DriveTrain pose.
+  // This assumes that the PoseEstimator has a really good estimate.
+  // In other words, that it has a recent, accurate view of an Apriltag.
   public void alignDriveTrainToPoseEstimator() {
-    m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+180.0);
+    // Set the gyro angle to match the pose estimator 
+    // compensating for the placement of the camera on the robot.
+    m_robotDrive.setAngleDegrees( 
+      MathUtil.inputModulus(
+        m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
+        ,-180
+        , 180
+      )
+    );
+    SmartDashboard.putNumber("DebugAlign",
+      VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
+    );
+    // Update the drive trains X, Y, and robot orientation to match the pose estimator.
     m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
   }
+
+  /**
+   *  This function sets the gyro angle based on the alliance (blue or red)
+   * and the assumed starting position of the robot on the field.
+   * The current assumption is that the robot will be placed with it's back to the
+   * alliance wall.  The "Y" coordinates of the robot will be determined by the
+   * PoseEstimator once an april tag is captured by the vision system.
+   */
+   public void setGyroAngleToStartMatch( double startingAngle ) {
+    boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
+    if (isBlueAlliance) {
+      m_robotDrive.setAngleDegrees( 
+        MathUtil.inputModulus(
+          m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
+          ,-180.0
+          , 180.0
+        )
+      );
+    } else {
+      m_robotDrive.setAngleDegrees( 
+        MathUtil.inputModulus(
+          m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()+180.0
+          ,-180.0
+          , 180.0
+        )
+      );
+    }
+   }
 }

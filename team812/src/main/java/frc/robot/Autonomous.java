@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.DriveRobotCommand;
+import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.StopRobotMotion;
@@ -134,7 +136,8 @@ public class Autonomous extends SequentialCommandGroup {
       Utilities.toSmartDashboard("AutoFinal", finalPose);
       Utilities.toSmartDashboard("AutoNearTag", nearTagPose);
       Utilities.toSmartDashboard("AutoStart", startingPose);
-      
+      Pose2d firstMove = new Pose2d(1.0, 0, new Rotation2d(Math.PI/2)); // Move 1 meter into the field and turn left to face the amp.
+
       // Use the current pose estimator's result for the robots actual pose
       //m_robotDrive.resetOdometry(startingPose);
       m_robotContainer.alignDriveTrainToPoseEstimator();
@@ -164,8 +167,20 @@ public class Autonomous extends SequentialCommandGroup {
           m_robotDrive::setModuleStates,
           m_robotDrive);
         SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
+          // Set the gyro starting angle based on alliance and assumed robot placement
+          new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch(FieldConstants.robotInitialOrientation)),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
+          new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem),
+          // Drive out based on drivetrain encoders to align with and face the Amp
+          new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove),
+          // Wait to see apriltag
+          new FindAprilTagCommand(
+            RobotContainer.m_robotDrive,
+            RobotContainer.m_PoseEstimatorSubsystem, 
+            AutoConstants.kRotationSpeed), // TODO Make Alliance aware
+          new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-          swerveControllerCommand.withTimeout(10.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
+            swerveControllerCommand.withTimeout(10.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose1")),
 
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
