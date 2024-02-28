@@ -146,7 +146,7 @@ public final class Constants {
         // The 'max' position is defined by the arm fully rotated which is  enforced the forward limit switch.
         // The proper starting position for the arm is in the fully down position with the forward limit switch activated.
         public static final double kArmMinPosition = 0;    // Smallest encoder value the software will rotate to.
-        public static final double kArmMaxPosition = 2475; // Largest encoder value the software will rotote to.
+        public static final double kArmMaxPosition = 2600; // Largest encoder value the software will rotote to.
         public static final double kArmRange = kArmMaxPosition - kArmMinPosition; // The number of ticks in the active range of arm motion between limits.
 
         public static final double kArmStartingPosition = kArmMaxPosition;  // We should start at the max position with the arm rotated down to intake notes.

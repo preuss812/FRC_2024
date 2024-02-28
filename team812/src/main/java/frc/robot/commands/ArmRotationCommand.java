@@ -57,6 +57,9 @@ public class ArmRotationCommand extends Command {
     */
     if (Math.abs(error) < ArmConstants.kArmThreshold) {
       return true;
+    } else if (m_armSubsystem.getPosition() > setPoint && m_armSubsystem.isRevLimitSwitchClosed()) {
+      // We are hear because the arm was rotating up (to lower encoder values) and we hit the limit switch.
+      return true;
     } else {
       return false;
     }

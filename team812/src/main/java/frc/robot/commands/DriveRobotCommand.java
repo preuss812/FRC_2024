@@ -33,7 +33,7 @@ public class DriveRobotCommand extends Command {
   final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
   final double ROTATION_TOLERANCE = Units.degreesToRadians(360.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.
+  final double MAX_THROTTLE = 0.20; // 0 to 1 is the possible range.  // Slowed from 1.0 to 0.2
 
   /** Creates a new DriveDistanceCommand. */
   public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove) {

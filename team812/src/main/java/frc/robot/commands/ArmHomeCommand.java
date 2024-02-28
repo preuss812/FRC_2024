@@ -33,7 +33,10 @@ public class ArmHomeCommand extends Command {
      // Set the goal arm position to be the starting position plus the full range of possible values.
      // This ensures that even if the arm is at the opposite end of its range of motion,
      // this goal will rotate us to the fully rotated position.
-     m_armSubsystem.setHomePosition(ArmConstants.kArmMaxPosition+ArmConstants.kArmRange);
+     //m_armSubsystem.setHomePosition(ArmConstants.kArmMaxPosition+ArmConstants.kArmRange);
+
+     // Plan B: rotate slowly until we reach the limit switch
+     m_armSubsystem.test_rotate(0.2);  // TODO Need to check the sign for speed.
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override

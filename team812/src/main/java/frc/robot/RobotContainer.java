@@ -232,6 +232,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 9).whileTrue(
       new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove)
     );
+    SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove));
     new JoystickButton(leftJoystick, 10).onTrue(
       new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.2)
     );
