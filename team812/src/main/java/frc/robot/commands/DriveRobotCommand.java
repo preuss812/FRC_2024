@@ -25,14 +25,14 @@ public class DriveRobotCommand extends Command {
   private PIDController rotationController;
   private boolean onTarget;
 
-  final double LINEAR_P = 2.0;
+  final double LINEAR_P = 1.0;
   final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0; // LINEAR_P * 10.0; // NEW 2/1/2024
   final double ANGULAR_P = 0.16;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
-  final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
+  final double ROTATION_TOLERANCE = Units.degreesToRadians(360.0);  //TODO Tune these tolerances.
   final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.
 
   /** Creates a new DriveDistanceCommand. */
@@ -76,6 +76,7 @@ public class DriveRobotCommand extends Command {
     //SmartDashboard.putNumber("Range", -54);
     currentPose = robotDrive.getPose();
     Utilities.toSmartDashboard("Drive Pose", currentPose);
+    Utilities.toSmartDashboard("Drive target", targetPose);
     // Calculate the X and Y and rotation offsets to the target location
     translationError = new Translation2d( targetPose.getX() - currentPose.getX(), targetPose.getY() - currentPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
@@ -90,7 +91,6 @@ public class DriveRobotCommand extends Command {
     &&  Math.abs(translationError.getY()) < POSITION_TOLERANCE
     &&  Math.abs(rotationError) < ROTATION_TOLERANCE) {
       // Yes, we have arrived
-      SmartDashboard.putBoolean("Drive OnTarget", true);
       xSpeed = 0.0;
       ySpeed = 0.0;
       rotationSpeed = 0.0;
@@ -100,7 +100,11 @@ public class DriveRobotCommand extends Command {
       xSpeed = MathUtil.clamp(xController.calculate(translationError.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
       ySpeed = MathUtil.clamp(yController.calculate(translationError.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
-    }
+      onTarget = false;
+     }
+          rotationSpeed = 0.0;
+      SmartDashboard.putBoolean("Drive OnTarget", onTarget);
+
     SmartDashboard.putNumber("Drive xSpeed", xSpeed);
     SmartDashboard.putNumber("Drive ySpeed", ySpeed);
     SmartDashboard.putNumber("Drive rSpeed", rotationSpeed);
@@ -116,6 +120,7 @@ public class DriveRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //return true;
     return onTarget; 
   }
 }

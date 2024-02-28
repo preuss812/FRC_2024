@@ -124,36 +124,6 @@
               "Visible data/SmartDashboard/rotate js": true
             }
           },
-          "3,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ARM botsw closed",
-              "_title": "SmartDashboard/ARM botsw closed",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "3,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/ARM topsw closed",
-              "_title": "SmartDashboard/ARM topsw closed",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
           "6,3": {
             "size": [
               1,
@@ -279,7 +249,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Proximity",
-              "_title": "SmartDashboard/Proximity",
+              "_title": "/SmartDashboard/Proximity",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -292,7 +262,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Blue",
-              "_title": "SmartDashboard/Blue",
+              "_title": "/SmartDashboard/Blue",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -305,7 +275,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Green",
-              "_title": "SmartDashboard/Green",
+              "_title": "/SmartDashboard/Green",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -318,7 +288,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Red",
-              "_title": "SmartDashboard/Red",
+              "_title": "/SmartDashboard/Red",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -331,9 +301,93 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Detected Color",
-              "_title": "SmartDashboard/Detected Color",
+              "_title": "/SmartDashboard/Detected Color",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ARM revsw closed",
+              "_title": "SmartDashboard/ARM revsw closed",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ARM fwdsw closed",
+              "_title": "SmartDashboard/ARM fwdsw closed",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "11,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveTrain",
+              "_title": "SmartDashboard/DriveTrain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drive target",
+              "_title": "SmartDashboard/Drive target",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drive Pose",
+              "_title": "SmartDashboard/Drive Pose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "11,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Drive OnTarget",
+              "_title": "SmartDashboard/Drive OnTarget",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }

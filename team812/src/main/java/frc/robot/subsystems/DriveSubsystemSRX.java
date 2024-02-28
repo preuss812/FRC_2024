@@ -97,7 +97,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
     // Update the odometry in the periodic block
     SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
     //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
-    Utilities.toSmartDashboard("DriveTrain", this.getPose());  
+    Utilities.toSmartDashboard("DriveTrain", this.getPose()); 
+    SmartDashboard.putNumber("Robot X", this.getPose().getX()); 
+    SmartDashboard.putNumber("Robot Y", this.getPose().getY()); 
     // SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
     // SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
     // SmartDashboard.putNumber("gyro_navX", m_ahrs.getAngle());
@@ -299,9 +301,12 @@ public class DriveSubsystemSRX extends SubsystemBase {
   public double setAngleDegrees(double desiredAngle) {
     // There is something wrong here as the results are 180 out.
     SmartDashboard.putNumber("SetAngle", desiredAngle); // minus but we should have added m_gyro.inverted instead
+    SmartDashboard.putNumber("SetAngleGyro", m_gyro.getAngle());
     SmartDashboard.putNumber("SetAngleOldAdj", m_gyro.getAngleAdjustment());
     SmartDashboard.putNumber("SetAngleNewAdj", desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment()));
-    m_gyro.setAngleAdjustment(-(desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment())));
+    m_gyro.setAngleAdjustment((desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment())));    
+    SmartDashboard.putNumber("SetAngleNew", m_gyro.getAngle());
+
     return m_gyro.getAngle();  // Return the new angle for chaining
   }
 

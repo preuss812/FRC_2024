@@ -233,11 +233,10 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // If the forward limit switch is closed, we are fully rotated to the note intake position.
     // If we have not done so already, reset the encoder coordinates to the fully rotated value.
     if (isFwdLimitSwitchClosed()) {
-      if (!m_capturedLimitPosition) {
-        SmartDashboard.putNumber("ARM pos rev limit", getPosition());
+//        SmartDashboard.putNumber("ARM pos rev limit", getPosition());
         m_capturedLimitPosition = true;
         setSensorPosition(Constants.ArmConstants.kArmMaxPosition);
-      }
+//      }
     }
   }
 }

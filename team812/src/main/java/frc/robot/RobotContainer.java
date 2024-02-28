@@ -221,7 +221,7 @@ public class RobotContainer {
      */
     Pose2d targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id())
       .plus(new Transform2d(new Translation2d(0.5, 0.0), new Rotation2d(0.0))); // TODO offset by 1/2 robot length
-    Pose2d firstMove = new Pose2d(1.0,0,new Rotation2d(-Math.PI/2));
+    Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2*0.0));
     Utilities.toSmartDashboard("debugPose",targetPose);
     new JoystickButton(leftJoystick, 7).onTrue(
       new InstantCommand(()->setGyroAngleToStartMatch(0.0))
@@ -229,7 +229,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 8).onTrue(
       new ArmHomeCommand(m_ArmRotationSubsystem)
     );
-    new JoystickButton(leftJoystick, 9).onTrue(
+    new JoystickButton(leftJoystick, 9).whileTrue(
       new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove)
     );
     new JoystickButton(leftJoystick, 10).onTrue(
@@ -310,21 +310,9 @@ public class RobotContainer {
    public void setGyroAngleToStartMatch( double startingAngle ) {
     boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
     if (isBlueAlliance) {
-      m_robotDrive.setAngleDegrees( 
-        MathUtil.inputModulus(
-          m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
-          ,-180.0
-          , 180.0
-        )
-      );
+      m_robotDrive.setAngleDegrees(0.0);
     } else {
-      m_robotDrive.setAngleDegrees( 
-        MathUtil.inputModulus(
-          m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()+180.0
-          ,-180.0
-          , 180.0
-        )
-      );
+      m_robotDrive.setAngleDegrees(180.0);
     }
    }
 }
