@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,9 +14,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Utilities;
 import frc.robot.subsystems.DriveSubsystemSRX;
 
+/**
+ * This comand drives the robot the specified distance
+ * If controlRotation is set, it will try to hold the angle in the move pose.
+ * If controlRotation is set, it will just manage the X,Y of the move.
+ */
 public class DriveRobotCommand extends Command {
   private final DriveSubsystemSRX robotDrive;
   private final Pose2d relativeMove;
+  private final boolean controlRotation;
   private Pose2d startingPose;
   private Pose2d targetPose;
   private PIDController xController;
@@ -37,9 +42,10 @@ public class DriveRobotCommand extends Command {
   final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.  // Slowed from 1.0 to 0.2
 
   /** Creates a new DriveDistanceCommand. */
-  public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove) {
+  public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove, boolean controlRotation) {
     this.robotDrive = robotDrive;
     this.relativeMove = relativeMove;
+    this.controlRotation = controlRotation;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(robotDrive);
 ;  }
@@ -61,9 +67,11 @@ public class DriveRobotCommand extends Command {
     xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
     yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
     yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
-    rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    rotationController.setTolerance(1.0); // did not work, dont understand yet
-    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
+    if (controlRotation) {
+      rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
+      rotationController.setTolerance(1.0); // did not work, dont understand yet
+      rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
+    }
     onTarget = false;
   }
 
@@ -71,7 +79,7 @@ public class DriveRobotCommand extends Command {
   @Override
   public void execute() {
     Translation2d translationError;
-    double rotationError;
+    double rotationError = 0.0;
     Pose2d currentPose;
     double xSpeed = 0.0;
     double ySpeed = 0.0;
@@ -84,7 +92,8 @@ public class DriveRobotCommand extends Command {
     translationError = new Translation2d( targetPose.getX() - currentPose.getX(), targetPose.getY() - currentPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
-    rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians(), -Math.PI, Math.PI);
+    if (controlRotation)
+      rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians(), -Math.PI, Math.PI);
     SmartDashboard.putNumber("Drive R Error", Units.radiansToDegrees(rotationError));
     SmartDashboard.putNumber("Drive X Error", translationError.getX());
     SmartDashboard.putNumber("Drive Y Error", translationError.getY());
@@ -102,11 +111,13 @@ public class DriveRobotCommand extends Command {
       // TODO fine tune PID Controllers and max speeds      
       xSpeed = MathUtil.clamp(xController.calculate(translationError.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
       ySpeed = MathUtil.clamp(yController.calculate(translationError.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
-      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
+      if (controlRotation)
+        rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
+      else
+        rotationSpeed = 0.0;
       onTarget = false;
-     }
-//          rotationSpeed = 0.0;
-      SmartDashboard.putBoolean("Drive OnTarget", onTarget);
+    }
+    SmartDashboard.putBoolean("Drive OnTarget", onTarget);
 
     SmartDashboard.putNumber("Drive xSpeed", xSpeed);
     SmartDashboard.putNumber("Drive ySpeed", ySpeed);

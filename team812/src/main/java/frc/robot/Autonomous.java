@@ -27,6 +27,7 @@ import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.GotoPoseCommand;
+import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -170,29 +171,41 @@ public class Autonomous extends SequentialCommandGroup {
           // Set the gyro starting angle based on alliance and assumed robot placement
           new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch(FieldConstants.robotInitialOrientation)),
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
-          new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem),
+          new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
           // Drive out based on drivetrain encoders to align with and face the Amp
-          new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove),
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
+          new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(3.0),
+          // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "TurnCameraTowardAmp")),
+          new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(3.0),
           // Wait to see apriltag
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
           new FindAprilTagCommand(
             RobotContainer.m_robotDrive,
             RobotContainer.m_PoseEstimatorSubsystem, 
-            AutoConstants.kRotationSpeed), // TODO Make Alliance aware
+            AutoConstants.kRotationSpeed).withTimeout(3.0), // TODO Make Alliance aware
+          // set the robot drive x,y,theta to match the pose estimator (ie use camera to set x,y,theta)
           new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
+          // Use a trajectory to move close to the amp.
+          // This is a place holder for the moment.
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-            swerveControllerCommand.withTimeout(10.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose1")),
-
+            swerveControllerCommand.withTimeout(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
+          // Move to the scoring position
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose.getX(), finalPose.getY(), 
             finalPose.getRotation().getRadians()).withTimeout(10.0),
+          // Score the note.
+          // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
           new ParallelDeadlineGroup(
-            new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+            new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem).withTimeout(3.0),
             new StopRobotMotion(m_robotDrive)
           ),
-          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoPose2")),
+          // Leave the starting box to get more points.
+          new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
           new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, 
             startingPose.getX(), startingPose.getY(), startingPose.getRotation().getRadians()).withTimeout(10.0),
-          //new WaitCommand(10.0),
+          // new WaitCommand(10.0),  // - debug.
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
 
         );

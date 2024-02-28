@@ -44,7 +44,7 @@ public class FollowTrajectoryCommand extends SequentialCommandGroup {
           // Pass through these zero interior waypoints, this should probably be something to make sure we dont crash into other robots.
           waypoints,
           targetPose,
-          config);
+          config != null ? config : FollowTrajectoryCommand.config); // use default config is none was specified.
     var thetaController = new ProfiledPIDController(
       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);

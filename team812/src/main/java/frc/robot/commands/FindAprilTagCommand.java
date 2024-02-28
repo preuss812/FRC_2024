@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-import frc.robot.commands.RotateRobotCommand;
+import frc.robot.commands.SpinRobotCommand;
 import frc.robot.commands.WaitToSeeAprilTagCommand;
 
 /**
@@ -26,7 +26,7 @@ public class FindAprilTagCommand extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(
         new WaitToSeeAprilTagCommand(poseEstimatorSubsystem),  // This this ends, it will stop the rotation.
-        new RotateRobotCommand(robotDrive, speed)
+        new SpinRobotCommand(robotDrive, speed)
       )
     );
   }
