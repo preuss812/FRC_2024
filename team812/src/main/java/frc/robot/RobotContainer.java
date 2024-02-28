@@ -249,7 +249,16 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4).whileTrue(
       new DetectColorCommand(m_ColorDetectionSubsystem)
     );
-                
+    new JoystickButton(leftJoystick, 5).onTrue(
+      new InstantCommand(() -> m_robotDrive.setX())
+    );
+    new JoystickButton(leftJoystick, 6).onTrue(
+      new InstantCommand(() -> m_robotDrive.wheelsStraightAhead())
+    );
+    new JoystickButton(leftJoystick, 7).onTrue(
+      new InstantCommand(() -> m_robotDrive.wheels45())
+    );
+
     //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug
     /* Debugging below */
     List<Translation2d> blueAmpPlan = Utilities.planBlueAmpTrajectory(new Pose2d(0,0,new Rotation2d(0)));
@@ -262,12 +271,39 @@ public class RobotContainer {
       }
     }
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
-    POVButton x = new POVButton(m_driverController, 180);
-    x.onTrue(
+    POVButton dPad0 = new POVButton(m_driverController, 0);
+    dPad0.onTrue(
         new GotoPoseCommand(
           m_PoseEstimatorSubsystem,
           m_robotDrive, 
-          Utilities.Pose180(m_PoseEstimatorSubsystem.getCurrentPose()) 
+          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(0.0))
+        )
+    ).debounce(0.2);
+    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
+    POVButton dPad90 = new POVButton(m_driverController, 90);
+    dPad90.onTrue(
+        new GotoPoseCommand(
+          m_PoseEstimatorSubsystem,
+          m_robotDrive, 
+          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(90.0)) 
+        )
+    ).debounce(0.2);
+    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
+    POVButton dPad180 = new POVButton(m_driverController, 180);
+    dPad180.onTrue(
+        new GotoPoseCommand(
+          m_PoseEstimatorSubsystem,
+          m_robotDrive, 
+          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(180.0)) 
+        )
+    ).debounce(0.2);
+    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
+    POVButton dPad270 = new POVButton(m_driverController, 270);
+    dPad270.onTrue(
+        new GotoPoseCommand(
+          m_PoseEstimatorSubsystem,
+          m_robotDrive, 
+          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(270.0)) 
         )
     ).debounce(0.2);
   }
@@ -287,6 +323,7 @@ public class RobotContainer {
   public void alignDriveTrainToPoseEstimator() {
     // Set the gyro angle to match the pose estimator 
     // compensating for the placement of the camera on the robot.
+    /*
     m_robotDrive.setAngleDegrees( 
       MathUtil.inputModulus(
         m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()+VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
@@ -294,9 +331,7 @@ public class RobotContainer {
         , 180
       )
     );
-    SmartDashboard.putNumber("DebugAlign",
-      VisionConstants.CAMERA_TO_ROBOT.getRotation().toRotation2d().getDegrees()
-    );
+    */
     // Update the drive trains X, Y, and robot orientation to match the pose estimator.
     m_robotDrive.resetOdometry(m_PoseEstimatorSubsystem.getCurrentPose());
   }

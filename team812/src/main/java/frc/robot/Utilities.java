@@ -63,9 +63,26 @@ public class Utilities {
         SmartDashboard.putString(label, String.format("(%4.2f,%4.2f) %2.0f", pose.getX(), pose.getY(), pose.getRotation().getDegrees()) );
     }
 
-    public static Pose2d Pose180(Pose2d pose) {
+    public static Pose2d pose180(Pose2d pose) {
         Rotation2d rotate180 = new Rotation2d(Math.PI);
         Rotation2d newRotation = pose.getRotation().rotateBy(rotate180);
+        return new Pose2d(pose.getX(), pose.getY(), newRotation);
+    }
+
+    // Create a new pose with the same X,Y coordinates rotated by <radians>
+    public static Pose2d rotatePose(Pose2d pose, double radians) {
+        //toSmartDashboard("RP Start", pose);
+        Rotation2d rotation = new Rotation2d(radians);
+        Rotation2d newRotation = pose.getRotation().rotateBy(rotation);
+        //toSmartDashboard("RP End",new Pose2d(pose.getX(), pose.getY(), newRotation));
+        return new Pose2d(pose.getX(), pose.getY(), newRotation);
+    }
+
+    // Create a new pose with the same X,Y coordinates and the specified rotation
+    public static Pose2d setPoseAngle(Pose2d pose, double radians) {
+        //toSmartDashboard("SP Start", pose);
+        Rotation2d newRotation = new Rotation2d(radians);
+        //toSmartDashboard("SP End",new Pose2d(pose.getX(), pose.getY(), newRotation));
         return new Pose2d(pose.getX(), pose.getY(), newRotation);
     }
 
