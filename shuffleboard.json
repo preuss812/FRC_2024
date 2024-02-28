@@ -727,7 +727,7 @@
             "content": {
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/FirstMove",
-              "_title": "SmartDashboard/FirstMove",
+              "_title": "/SmartDashboard/FirstMove",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -740,7 +740,7 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Drive OnTarget",
-              "_title": "SmartDashboard/Drive OnTarget",
+              "_title": "/SmartDashboard/Drive OnTarget",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
