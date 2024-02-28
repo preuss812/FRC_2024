@@ -13,7 +13,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import frc.robot.Constants.ColorConstants;
 
-public class ColorMatcher extends SubsystemBase {
+public class ColorDetectionSubsytem extends SubsystemBase {
   /** Creates a new ColorMatcher. */
     final I2C.Port            i2cPort = I2C.Port.kOnboard;
     final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -25,8 +25,13 @@ public class ColorMatcher extends SubsystemBase {
 		ColorConstants.kNoteTargetRBG[2]
     );
 
-    public ColorMatcher() {
+	public final Color kBlack = new Color(
+		0.0, 0.0, 0.0
+	);
+
+    public ColorDetectionSubsytem() {
 		m_colorMatcher.addColorMatch(kNoteTarget);
+		m_colorMatcher.addColorMatch(kBlack);
 		m_colorMatcher.setConfidenceThreshold(ColorConstants.kColorConfidenceThreshold);
     }
 
@@ -40,6 +45,8 @@ public class ColorMatcher extends SubsystemBase {
 		if (proximity >= 100) {
 			if (match.color == kNoteTarget) {
 				colorString = "Orange";
+			} else if (match.color == kBlack) {
+				colorString = "Black";
 			} else {
 				colorString = "Unknown";
 			}

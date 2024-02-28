@@ -53,7 +53,9 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 //import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
+import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
@@ -67,6 +69,7 @@ import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.GotoSourceCommand;
+import frc.robot.commands.DetectColorCommand;
 
 
 
@@ -98,6 +101,7 @@ public class RobotContainer {
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
+  public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
 
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
@@ -239,6 +243,10 @@ public class RobotContainer {
     );
     new JoystickButton(leftJoystick, 1).onTrue(
       new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem)
+    );
+
+    new JoystickButton(leftJoystick, 4).whileTrue(
+      new DetectColorCommand(m_ColorDetectionSubsystem)
     );
                 
     //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug

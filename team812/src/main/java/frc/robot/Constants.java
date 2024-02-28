@@ -438,10 +438,9 @@ public final class Constants {
             0 to 255 when passed as integers. Doubles are used so that we 
             can better control precision if needed.
         */
-        public static final double[] kNoteTargetRGB = { 248/255.0, 116/255.0, 49/255.0 }; // TODO Verify color code
         public static final double[] kNoteTargetRBG = { 248/255.0, 49/255.0, 116/255.0 }; // TODO Verify color code // 2020 code used RBG not RGB????
 
-        public static final double kColorConfidenceThreshold = 0.80;
+        public static final double kColorConfidenceThreshold = 0.90;
         public static final int     kColorProximityThreshold = 300; // higher closer, lower is further away
     }
 }
