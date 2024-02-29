@@ -301,37 +301,38 @@ public class RobotContainer {
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
     POVButton dPad0 = new POVButton(m_driverController, 0);
     dPad0.onTrue(
-        new GotoPoseCommand(
-          m_PoseEstimatorSubsystem,
+        new RotateRobotCommand(
           m_robotDrive, 
-          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(0.0))
+          0,
+          false
         )
     ).debounce(0.2);
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
     POVButton dPad90 = new POVButton(m_driverController, 90);
     dPad90.onTrue(
-        new GotoPoseCommand(
-          m_PoseEstimatorSubsystem,
+      new RotateRobotCommand(
           m_robotDrive, 
-          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(90.0)) 
+          Units.degreesToRadians(90),
+          false
         )
+
     ).debounce(0.2);
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
     POVButton dPad180 = new POVButton(m_driverController, 180);
     dPad180.onTrue(
-        new GotoPoseCommand(
-          m_PoseEstimatorSubsystem,
+      new RotateRobotCommand(
           m_robotDrive, 
-          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(180.0)) 
+          Units.degreesToRadians(180),
+          false
         )
-    ).debounce(0.2);
+      ).debounce(0.2);
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
     POVButton dPad270 = new POVButton(m_driverController, 270);
     dPad270.onTrue(
-        new GotoPoseCommand(
-          m_PoseEstimatorSubsystem,
+      new RotateRobotCommand(
           m_robotDrive, 
-          Utilities.setPoseAngle(m_PoseEstimatorSubsystem.getCurrentPose(), Units.degreesToRadians(270.0)) 
+          Units.degreesToRadians(270),
+          false
         )
     ).debounce(0.2);
   }
