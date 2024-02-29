@@ -35,6 +35,12 @@ public class ColorDetectionSubsytem extends SubsystemBase {
 		m_colorMatcher.setConfidenceThreshold(ColorConstants.kColorConfidenceThreshold);
     }
 
+	public boolean inRange() {
+		final int proximity = m_colorSensor.getProximity();
+
+		SmartDashboard.putNumber("Proximity", proximity);
+		return (proximity >= 100);
+	}
     public Color get_color() {
 		final Color detectedColor = m_colorSensor.getColor();
 		final int proximity = m_colorSensor.getProximity();

@@ -24,16 +24,17 @@ public class DriveRobotCommand extends Command {
   private PIDController yController;
   private PIDController rotationController;
   private boolean onTarget;
+  private static int timesInitialized = 0;
 
-  final double LINEAR_P = 1.0;
+  final double LINEAR_P = 2.7;
   final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0; // LINEAR_P * 10.0; // NEW 2/1/2024
   final double ANGULAR_P = 0.16;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
-  final double ROTATION_TOLERANCE = Units.degreesToRadians(360.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.20; // 0 to 1 is the possible range.  // Slowed from 1.0 to 0.2
+  final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
+  final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.  // Slowed from 1.0 to 0.2
 
   /** Creates a new DriveDistanceCommand. */
   public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove) {
@@ -46,6 +47,8 @@ public class DriveRobotCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timesInitialized++;
+    SmartDashboard.putNumber("DR #inits", timesInitialized);
     // get the robot's current pose from the drivetrain
     startingPose = robotDrive.getPose();
     // add the relativeMove to the startingPose // There is an alliance component to this.   
@@ -102,7 +105,7 @@ public class DriveRobotCommand extends Command {
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
       onTarget = false;
      }
-          rotationSpeed = 0.0;
+//          rotationSpeed = 0.0;
       SmartDashboard.putBoolean("Drive OnTarget", onTarget);
 
     SmartDashboard.putNumber("Drive xSpeed", xSpeed);

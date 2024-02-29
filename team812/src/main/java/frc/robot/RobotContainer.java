@@ -190,7 +190,7 @@ public class RobotContainer {
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
-      .whileTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
+      .onTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem, m_ColorDetectionSubsystem));
 
     new JoystickButton(m_driverController, Button.kB.value)
       .whileTrue(new GotoSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
@@ -234,7 +234,7 @@ public class RobotContainer {
     );
     SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove));
     new JoystickButton(leftJoystick, 10).onTrue(
-      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.2)
+      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.05) // 0.1 was too fast
     );
     new JoystickButton(leftJoystick, 11).whileTrue(
       new InstantCommand(()->alignDriveTrainToPoseEstimator())
@@ -249,13 +249,13 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4).whileTrue(
       new DetectColorCommand(m_ColorDetectionSubsystem)
     );
-    new JoystickButton(leftJoystick, 5).onTrue(
+    new JoystickButton(leftJoystick, 2).onTrue(
       new InstantCommand(() -> m_robotDrive.setX())
     );
-    new JoystickButton(leftJoystick, 6).onTrue(
+    new JoystickButton(leftJoystick, 5).onTrue(
       new InstantCommand(() -> m_robotDrive.wheelsStraightAhead())
     );
-    new JoystickButton(leftJoystick, 7).onTrue(
+    new JoystickButton(leftJoystick, 6).onTrue(
       new InstantCommand(() -> m_robotDrive.wheels45())
     );
 

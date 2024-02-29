@@ -4,20 +4,28 @@
 
 package frc.robot.commands;
 
+import java.text.CollationElementIterator;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class TakeInNoteCommand extends Command {
   private final NoteIntakeSubsystem m_NoteIntakeSubsystem;
   private final ShooterSubsystem m_ShooterSubsystem;
+  private final ColorDetectionSubsytem m_colorDetectionSubsytem;
 
   /** Creates a new TakeInNoteCommand. */
-  public TakeInNoteCommand(NoteIntakeSubsystem noteIntakeSubsystem, ShooterSubsystem shooterSubsystem) {
+  public TakeInNoteCommand(
+    NoteIntakeSubsystem noteIntakeSubsystem,
+    ShooterSubsystem shooterSubsystem,
+    ColorDetectionSubsytem colorDetectionSubsytem ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_NoteIntakeSubsystem = noteIntakeSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
+    m_colorDetectionSubsytem = colorDetectionSubsytem;
     addRequirements(noteIntakeSubsystem, shooterSubsystem);
   }
 
@@ -42,6 +50,7 @@ public class TakeInNoteCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    //return m_colorDetectionSubsytem.isOrange(m_colorDetectionSubsytem.get_color());
+    return m_colorDetectionSubsytem.inRange();
   }
 }
