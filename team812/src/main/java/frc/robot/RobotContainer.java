@@ -225,8 +225,8 @@ public class RobotContainer {
      * Currently these are in order to step through the Autonomous plan
      */
     Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.0); // TODO Tune distance
-    Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() - 1, new Rotation2d(0));
-    Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2*0.0));
+    Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() - 1.0, new Rotation2d(0));
+    Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2.0));
     Utilities.toSmartDashboard("debugPose",targetPose);
     // Autonomous steps part II
     new JoystickButton(leftJoystick, 7).onTrue(
@@ -239,20 +239,23 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 9).onTrue(
       new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false)
     );
-    SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
     new JoystickButton(leftJoystick, 10).onTrue(
-      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.05) // 0.1 was too fast
-    );
-    new JoystickButton(leftJoystick, 11).whileTrue(
-      new InstantCommand(()->alignDriveTrainToPoseEstimator())
-    );
-    new JoystickButton(leftJoystick, 12).whileTrue(
       new RotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
     );
-    // Autonomous steps part II
-    new JoystickButton(rightJoystick, 7).onTrue(
-      new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, "AMP")
+    SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
+    new JoystickButton(leftJoystick, 11).onTrue(
+      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.05) // 0.1 was too fast
     );
+    new JoystickButton(leftJoystick, 12).whileTrue(
+      new InstantCommand(()->alignDriveTrainToPoseEstimator())
+    );
+    
+    // Autonomous steps part II
+    new JoystickButton(rightJoystick, 7).whileTrue(
+      new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP)
+    );
+    SmartDashboard.putData("SWcmd", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP));
+
     new JoystickButton(rightJoystick, 8).onTrue(
       new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose)
     );
@@ -270,18 +273,18 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 4).whileTrue(
       new DetectColorCommand(m_ColorDetectionSubsystem)
     );
-    new JoystickButton(leftJoystick, 2).onTrue(
-      new InstantCommand(() -> m_robotDrive.setX())
+    new JoystickButton(leftJoystick, 2).whileTrue(
+      new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
     // Nevertheless, I still want to understand how to perform these commands.
     // Tring with RunCommand().whileTrue()...
     new JoystickButton(leftJoystick, 5).whileTrue(
-      new RunCommand(() -> m_robotDrive.wheelsStraightAhead())
+      new RunCommand(() -> m_robotDrive.wheelsStraightAhead(), m_robotDrive)
     );
     new JoystickButton(leftJoystick, 6).whileTrue(
-      new RunCommand(() -> m_robotDrive.wheels45())
+      new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
     /*new JoystickButton(leftJoystick, 6).onTrue(
       new InstantCommand(() -> m_robotDrive.setX())
