@@ -86,13 +86,17 @@ public class Utilities {
         return new Pose2d(pose.getX(), pose.getY(), newRotation);
     }
 
-    public static Pose2d nearPose(Pose2d pose, double distance) {
+    public static Pose2d backToPose(Pose2d pose, double distance) {
+        Translation2d rotatedDistance = new Translation2d(distance, 0).rotateBy(pose.getRotation());
+        return new Pose2d(pose.getX() + rotatedDistance.getX(), pose.getY() + rotatedDistance.getY(), pose.getRotation());
+    }
+
+    public static Pose2d facingNearPose(Pose2d pose, double distance) {
         Rotation2d rotate180 = new Rotation2d(Math.PI);
         Translation2d rotatedDistance = new Translation2d(distance, 0).rotateBy(pose.getRotation());
         Rotation2d newRotation = pose.getRotation().rotateBy(rotate180);
         return new Pose2d(pose.getX() + rotatedDistance.getX(), pose.getY() + rotatedDistance.getY(), newRotation);
     }
-
     // Return direction of turn for angle a->b->c
     // -1 if counter-clockwise
     //  0 if collinear

@@ -224,8 +224,8 @@ public class RobotContainer {
      * The buttons defined are for debug.
      * Currently these are in order to step through the Autonomous plan
      */
-    Pose2d targetPose = Utilities.nearPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.3); // TODO Tune distance
-    Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() + 1, new Rotation2d(0));
+    Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.0); // TODO Tune distance
+    Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() - 1, new Rotation2d(0));
     Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2*0.0));
     Utilities.toSmartDashboard("debugPose",targetPose);
     // Autonomous steps part II

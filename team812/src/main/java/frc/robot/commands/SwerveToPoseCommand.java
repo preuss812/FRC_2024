@@ -12,7 +12,9 @@ import com.ctre.phoenix.Util;
 
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.Utilities;
@@ -29,12 +31,15 @@ public class SwerveToPoseCommand extends SequentialCommandGroup {
   ) {
     Pose2d startingPose = poseEstimatorSubsystem.getCurrentPose();
     List<Translation2d> waypoints = new ArrayList<>();
-    if (destination == "AMP" && Utilities.isBlueAlliance()) {
+    if (true) { //destination == "AMP" && Utilities.isBlueAlliance()) {
+      Utilities.toSmartDashboard("SW Start",startingPose);
       waypoints = Utilities.planBlueAmpTrajectory(startingPose);
+      SmartDashboard.putString("blueampplan", waypoints.toString());
       Pose2d aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
-      Pose2d nearTargetPose = Utilities.nearPose(aprilTagPose, 1.5);
-      Pose2d targetPose = Utilities.nearPose(aprilTagPose, 0.3);
-      // Fast drive with loose X,Y,theta
+      Pose2d nearTargetPose = Utilities.backToPose(aprilTagPose, 1.5);
+      Pose2d targetPose = Utilities.backToPose(aprilTagPose, 0.3);
+      Utilities.toSmartDashboard("SW target", nearTargetPose);
+// Fast drive with loose X,Y,theta
       addCommands(new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, nearTargetPose));
       // Go to exact position.
       //addCommands(new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose));
