@@ -315,7 +315,7 @@ public class RobotContainer {
     dPad90.onTrue(
       new RotateRobotCommand(
           m_robotDrive, 
-          Units.degreesToRadians(90),
+          Units.degreesToRadians(-90),
           false
         )
 
@@ -334,7 +334,7 @@ public class RobotContainer {
     dPad270.onTrue(
       new RotateRobotCommand(
           m_robotDrive, 
-          Units.degreesToRadians(270),
+          Units.degreesToRadians(90),
           false
         )
     ).debounce(0.2);

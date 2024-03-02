@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -42,6 +43,8 @@ public class SwerveToPoseCommand extends Command {
   public void initialize() {
     Pose2d startingPose = poseEstimatorSubsystem.getCurrentPose();
     Utilities.toSmartDashboard("SW Start",startingPose);
+    SmartDashboard.putString("SW","init");
+
     List<Translation2d> waypoints = new ArrayList<>();
     Pose2d aprilTagPose = null;
     Pose2d nearTargetPose = null;
@@ -53,7 +56,7 @@ public class SwerveToPoseCommand extends Command {
       waypoints = Utilities.planBlueAmpTrajectory(startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
       //nearTargetPose = Utilities.backToPose(aprilTagPose, 1.5);
-      targetPose = Utilities.backToPose(aprilTagPose, 0.3);
+      targetPose = Utilities.backToPose(aprilTagPose, 0.5);
     } else if (destination == AprilTag.RED_AMP && Utilities.isRedAlliance()) {
     } else if (destination == AprilTag.BLUE_RIGHT_SOURCE && Utilities.isBlueAlliance()) {
     } else if (destination == AprilTag.RED_LEFT_SOURCE && Utilities.isRedAlliance()) {
@@ -67,8 +70,11 @@ public class SwerveToPoseCommand extends Command {
     if (startingPose != null && waypoints.size() > 0 && nearTargetPose != null)
       commands.addCommands(new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, nearTargetPose));
     
-    if (targetPose != null) 
-      commands.addCommands(new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose));
+    if (false && targetPose != null) 
+      commands.addCommands(
+        new InstantCommand(() -> SmartDashboard.putString("SW", "GotoPose")),
+        new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose
+        ));
     commands.schedule();  // This will release the command which is not what we want.
   }
 
@@ -83,7 +89,8 @@ public class SwerveToPoseCommand extends Command {
       commands.cancel();
     } catch (Exception e) {
     }
-    SmartDashboard.putString("SW","Done");
+    SmartDashboard.putBoolean("SW Interrupted", interrupted);
+    SmartDashboard.putString("SW","Done abort");
   }
 
   // Returns true when the command should end.

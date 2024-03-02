@@ -127,7 +127,7 @@ public class Autonomous extends SequentialCommandGroup {
       //   Back in the last 1 meter to be touching the wall.
       //   Raise the arm to the shooting position.
       //   Run the shooting/outtake motor to score the "note".
-      Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0);
+      Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.5);
       Rotation2d finalRotation = targetPose.getRotation(); // This will put thte back of the robot towards the april tag.
       Rotation2d nearTagRotation = targetPose.getRotation().rotateBy(new Rotation2d(Math.PI)); // This will face the april tag.
       Pose2d finalPose = new Pose2d(targetPose.getX()+2.0, targetPose.getY() - 1.0, finalRotation); // Pose for robot to be at the april tag.
@@ -190,7 +190,7 @@ public class Autonomous extends SequentialCommandGroup {
         new FindAprilTagCommand(
           RobotContainer.m_robotDrive,
           RobotContainer.m_PoseEstimatorSubsystem, 
-          AutoConstants.kRotationSpeed).withTimeout(3.0), // TODO Make Alliance aware
+          AutoConstants.kRotationSpeed), // TODO Make Alliance aware
         // set the robot drive x,y,theta to match the pose estimator (ie use camera to set x,y,theta)
         new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
 
@@ -203,19 +203,19 @@ public class Autonomous extends SequentialCommandGroup {
         // Move to the scoring position
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
         new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose.getX(), targetPose.getY(), 
-          finalPose.getRotation().getRadians()).withTimeout(10.0),
+          finalPose.getRotation().getRadians()),
 
         // Score the note.
         // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
           new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
         new ParallelDeadlineGroup(
-          new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem).withTimeout(3.0),
+          new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
           new StopRobotMotion(m_robotDrive)
         ),
 
         // Leave the starting box to get more points.
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
-        new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose).withTimeout(10.0),
+        new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose),
 
         // new WaitCommand(10.0),  // - debug.
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
