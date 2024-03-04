@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.Constants.VisionConstants.AprilTag;
+import frc.robot.TrajectoryPlans;
 import frc.robot.Utilities;
 
 public class SwerveToPoseCommand extends Command {
@@ -53,11 +54,15 @@ public class SwerveToPoseCommand extends Command {
     commands = new SequentialCommandGroup();
 
     if (destination == AprilTag.BLUE_AMP && Utilities.isBlueAlliance()) {
-      waypoints = Utilities.planBlueAmpTrajectory(startingPose);
+      waypoints = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
-      //nearTargetPose = Utilities.backToPose(aprilTagPose, 1.5);
+      nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
       targetPose = Utilities.backToPose(aprilTagPose, 0.5);
     } else if (destination == AprilTag.RED_AMP && Utilities.isRedAlliance()) {
+      waypoints = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, startingPose);
+      aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.RED_AMP.id());
+      nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
+      targetPose = Utilities.backToPose(aprilTagPose, 0.5);
     } else if (destination == AprilTag.BLUE_RIGHT_SOURCE && Utilities.isBlueAlliance()) {
     } else if (destination == AprilTag.RED_LEFT_SOURCE && Utilities.isRedAlliance()) {
     } else {
@@ -70,6 +75,8 @@ public class SwerveToPoseCommand extends Command {
     if (startingPose != null && waypoints.size() > 0 && nearTargetPose != null)
       commands.addCommands(new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, nearTargetPose));
     
+    // The code below seems to self-cancel the sequential command group
+    // That is why it is not active.
     if (false && targetPose != null) 
       commands.addCommands(
         new InstantCommand(() -> SmartDashboard.putString("SW", "GotoPose")),

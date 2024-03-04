@@ -71,10 +71,12 @@ import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.SwerveToPoseCommand;
+import frc.robot.commands.SwerveToPoseTest;
 import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.GotoSourceCommand;
 import frc.robot.commands.DetectColorCommand;
+import frc.robot.TrajectoryPlans;
 
 
 
@@ -255,6 +257,7 @@ public class RobotContainer {
       new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP)
     );
     SmartDashboard.putData("SWcmd", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP));
+    SmartDashboard.putData("SWcmdR", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.RED_AMP));
 
     new JoystickButton(rightJoystick, 8).onTrue(
       new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose)
@@ -292,15 +295,31 @@ public class RobotContainer {
     */
     //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug
     /* Debugging below */
-    List<Translation2d> blueAmpPlan = Utilities.planBlueAmpTrajectory(new Pose2d(0,0,new Rotation2d(0)));
+    List<Translation2d> blueAmpPlan = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(0,0,new Rotation2d(0)));
     SmartDashboard.putString("blueampplan", blueAmpPlan.toString());
-    List<Translation2d> blueAmpPlan2 = Utilities.planBlueAmpTrajectory(new Pose2d(16,0,new Rotation2d(0)));
+    List<Translation2d> blueAmpPlan2 = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
     SmartDashboard.putString("blueampplan2", blueAmpPlan2.toString());
+    List<Translation2d> redAmpPlan2 = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, new Pose2d(0,0,new Rotation2d(0)));
+    SmartDashboard.putString("redampplan2", redAmpPlan2.toString());
+
     for (int i = 1; i <= 16; i+= 2) {
       for (int j = 1; j <= 8; j+= 2) {
-        blueAmpPlan = Utilities.planBlueAmpTrajectory(new Pose2d(16,0,new Rotation2d(0)));
+        blueAmpPlan = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
+        List<Translation2d> blueSourcePlan = Utilities.planTrajectory(TrajectoryPlans.BlueSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
       }
     }
+    List<Translation2d> redAmpPlan;
+    for (int i = 1; i <= 16; i+= 2) {
+      for (int j = 1; j <= 8; j+= 2) {
+        redAmpPlan = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
+        List<Translation2d> redSourcePlan = Utilities.planTrajectory(TrajectoryPlans.RedSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
+
+      }
+    }
+    Pose2d testPose1 = new Pose2d(0,0,new Rotation2d(0));
+    Pose2d redTestPose1 = testPose1.transformBy(FieldConstants.AllianceTransformation[FieldConstants.RedAlliance]);
+    Utilities.toSmartDashboard("RedTestPose1", redTestPose1);
+
     // Test of POV button rotate to 180 (ie toward the alliance Speaker).
     POVButton dPad0 = new POVButton(m_driverController, 0);
     dPad0.onTrue(
@@ -315,7 +334,7 @@ public class RobotContainer {
     dPad90.onTrue(
       new RotateRobotCommand(
           m_robotDrive, 
-          Units.degreesToRadians(-90),
+          Units.degreesToRadians(90),
           false
         )
 
@@ -334,10 +353,18 @@ public class RobotContainer {
     dPad270.onTrue(
       new RotateRobotCommand(
           m_robotDrive, 
-          Units.degreesToRadians(90),
+          Units.degreesToRadians(270),
           false
         )
     ).debounce(0.2);
+
+    /**
+     * Create smart dash button that cycles through the various paths
+     * from each 2x2 meter square on the field to the amp and source
+     * for both red and blue alliances.
+     */
+    
+    SmartDashboard.putData("TTcmd", new SwerveToPoseTest(m_robotDrive, m_PoseEstimatorSubsystem));
   }
 
   /**
@@ -377,10 +404,27 @@ public class RobotContainer {
    */
    public void setGyroAngleToStartMatch( double startingAngle ) {
     boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
+    double startingHeading; // degrees.
     if (isBlueAlliance) {
-      m_robotDrive.setAngleDegrees(0.0);
+      startingHeading = 0.0;
+      m_robotDrive.setAngleDegrees(startingHeading);
+      m_robotDrive.resetOdometry(
+        new Pose2d(
+           DriveConstants.kBackToCenterDistance // Assume robot is back to the starting wall
+          ,FieldConstants.yCenter               // Pick center of the field since we dont know where we will start.
+          ,new Rotation2d(Units.degreesToRadians(startingHeading)) // Facing toward the field.
+        )
+      );
     } else {
-      m_robotDrive.setAngleDegrees(180.0);
+      startingHeading = 180.0;
+      m_robotDrive.setAngleDegrees(startingHeading);
+      m_robotDrive.resetOdometry(
+        new Pose2d(
+           FieldConstants.xMax - DriveConstants.kBackToCenterDistance // Assume robot is back to the starting wall
+          ,FieldConstants.yCenter                                     // Pick center of the field since we dont know where we will start.
+          ,new Rotation2d(Units.degreesToRadians(startingHeading))    // Facing toward the field.
+        )
+      );
     }
    }
 }

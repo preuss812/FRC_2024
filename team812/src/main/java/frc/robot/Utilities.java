@@ -123,14 +123,16 @@ public class Utilities {
         return (winding != 0);
     }
 
-    public static List<Translation2d> planBlueAmpTrajectory(Pose2d pose) {
+    public static List<Translation2d> planTrajectory(TrajectoryPlans.TrajectoryPlan trajectoryPlan, Pose2d pose) {
         List<Translation2d> list = new ArrayList<>();
-        TrajectoryPlans plans = new TrajectoryPlans();
         // convert the coordinates into indexes for 2 by 2 meter squares.
         // 0,0 is the lower left of the field by the Red Alliance source.
-        int i = MathUtil.clamp((int)(pose.getX()/2),0,7);
-        int j = MathUtil.clamp((int)(pose.getY()/2),0,3);
-        TrajectoryPlans.FieldStep move = TrajectoryPlans.BlueAmpPlan[i][j].move;
+        int i = MathUtil.clamp((int)(pose.getX()/TrajectoryPlans.dx),0,7);
+        int j = MathUtil.clamp((int)(pose.getY()/TrajectoryPlans.dy),0,3);
+        int n = 0;
+        int maxN = 4;
+        String moves = "("+i+","+j+"),";
+        TrajectoryPlans.FieldStep move = trajectoryPlan.plan[i][j].move;
         while (move != TrajectoryPlans.FieldStep.Done) {
             if (move == TrajectoryPlans.FieldStep.Left || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.DownLeft)
                 i = i - 1;
@@ -141,11 +143,17 @@ public class Utilities {
              if (move == TrajectoryPlans.FieldStep.Up || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.UpRight)
                 j = j + 1;
             SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
+            if (i < 0 || i > 7 || j < 0 || j > 7) {
+                int x = 5;
+            }
             if (move != TrajectoryPlans.FieldStep.Done) {
-                list.add(TrajectoryPlans.BlueAmpPlan[i][j].center);
-                move = TrajectoryPlans.BlueAmpPlan[i][j].move;
+                list.add(trajectoryPlan.plan[i][j].center);
+                move = trajectoryPlan.plan[i][j].move;
+                moves = moves+ "("+i+","+j+"),";
+                //if (n++ > maxN) break;
             }
         }
+        SmartDashboard.putString("TTM",moves);
         return list;
     }
 }

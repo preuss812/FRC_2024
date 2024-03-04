@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,16 +14,22 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+//import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class FollowTrajectoryCommand extends SequentialCommandGroup {
-  
+  public static boolean debug = true;
   // These trajectory config parameters are assumed to be the same for all trajectories.
   // If that is not true, this would need to be moved elsewere or cloned+mutated to provide options.
   public static final TrajectoryConfig config = new TrajectoryConfig(
@@ -40,12 +47,28 @@ public class FollowTrajectoryCommand extends SequentialCommandGroup {
     List<Translation2d> waypoints,
     Pose2d targetPose) 
   {
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(          
+    Trajectory trajectory;
+    try {
+      trajectory = TrajectoryGenerator.generateTrajectory(          
           startingPose,  // We are starting where we are.
           // Pass through these zero interior waypoints, this should probably be something to make sure we dont crash into other robots.
           waypoints,
           targetPose,
           config != null ? config : FollowTrajectoryCommand.config); // use default config is none was specified.
+    } catch (Exception e) {
+        ListIterator<Translation2d> iter = waypoints.listIterator();
+        while (iter.hasNext()) {
+          addCommands(new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, new Pose2d(iter.next(), targetPose.getRotation()))); // For each waypoint.
+        }
+
+        addCommands(new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose)); // For each waypoint.
+        SmartDashboard.putString("FT", "catch->gotoPose");
+      return;
+    }
+    if (debug) {
+          RobotContainer.m_PoseEstimatorSubsystem.field2d.getObject("trajectory").setTrajectory(trajectory);
+    }
+
     var thetaController = new ProfiledPIDController(
       AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);

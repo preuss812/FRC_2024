@@ -7,8 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -206,6 +208,14 @@ public final class Constants {
         public static Translation2d NearDriverStation = new Translation2d(NearBlueAmp.getX()+1.0, NearBlueAmp.getY()-2.5);
         public static Translation2d NearHammers = new Translation2d(NearBlueAmp.getX()+1, NearBlueAmp.getY());
         public static Translation2d NearNorthDoorToClassroom = new Translation2d(NearBlueAmp.getX()+5.0, NearBlueAmp.getY());
+
+        // Field Coordinate transformations for alliances.
+        public static int BlueAlliance = 0;
+        public static int RedAlliance = 1;
+        public static Transform2d [] AllianceTransformation = {
+             new Transform2d(0.0,0.0,new Rotation2d(0)) // Blue alliance uses the native field coorinates.
+            ,new Transform2d(xMax, 0.0, new Rotation2d(Math.PI)) // Red alliance is rotated 180 degrees and offsets reversed.
+        };
     }
     
     public static final class NoteIntakeConstants {
@@ -341,6 +351,8 @@ public final class Constants {
         public static final int kRearRightTurningEncoderCanId = CANConstants.kSwerveRightRearCANCoder;
 
         public static final boolean kGyroReversed = false;
+
+        public static final double kBackToCenterDistance = Units.inchesToMeters(15.0); // TODO Measure this and set the right values.
       }
     
       public static final class ModuleConstants {

@@ -389,6 +389,19 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/SWcmd",
+              "_title": "/SmartDashboard/SWcmd",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -459,7 +472,7 @@
       }
     },
     {
-      "title": "VisionPersistant",
+      "title": "VisionPersistent",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -482,7 +495,8 @@
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
               "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false
+              "Visuals/Show Outside Circles": false,
+              "Colors/trajectory": "#FFFFFFFF"
             }
           },
           "9,0": {
@@ -662,6 +676,84 @@
               "_source0": "network_table:///SmartDashboard/pidOutput",
               "_title": "/SmartDashboard/pidOutput",
               "_glyph": 16,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TT i",
+              "_title": "SmartDashboard/TT i",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TT j",
+              "_title": "SmartDashboard/TT j",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,2": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TT plan",
+              "_title": "SmartDashboard/TT plan",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TT",
+              "_title": "SmartDashboard/TT",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/TTcmd",
+              "_title": "SmartDashboard/TTcmd",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,3": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TTM",
+              "_title": "SmartDashboard/TTM",
+              "_glyph": 148,
               "_showGlyph": false
             }
           }
@@ -933,7 +1025,7 @@
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
+    "x": 19.0,
     "y": 25.0,
     "width": 1620.0,
     "height": 920.0

@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -58,7 +59,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private final SwerveDrivePoseEstimator poseEstimator;
 
-  private final Field2d field2d = new Field2d();
+  public final Field2d field2d = new Field2d();
+  public final Trajectory trajectory = null;
 
   private double previousPipelineTimestamp = 0;
   private boolean isBlueAlliance = true;
@@ -94,6 +96,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     
     tab.addString("Pose", this::getFomattedPose).withPosition(0, 0).withSize(2, 0);
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
+    if (trajectory != null) 
+      field2d.getObject("trajectory").setTrajectory(trajectory);
+
   }
 
   @Override
@@ -134,9 +139,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       drivetrainSubsystem.getModulePositions());
 
     field2d.setRobotPose(getCurrentPose());
+    if (trajectory != null) 
+      field2d.getObject("trajectory").setTrajectory(trajectory);
   }
 
-  private String getFomattedPose() {
+  public String getFomattedPose() {
     var pose = getCurrentPose();
     return String.format("(%.2f, %.2f) %.2f degrees", 
         pose.getX(), 
