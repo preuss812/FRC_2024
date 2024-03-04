@@ -123,37 +123,5 @@ public class Utilities {
         return (winding != 0);
     }
 
-    public static List<Translation2d> planTrajectory(TrajectoryPlans.TrajectoryPlan trajectoryPlan, Pose2d pose) {
-        List<Translation2d> list = new ArrayList<>();
-        // convert the coordinates into indexes for 2 by 2 meter squares.
-        // 0,0 is the lower left of the field by the Red Alliance source.
-        int i = MathUtil.clamp((int)(pose.getX()/TrajectoryPlans.dx),0,7);
-        int j = MathUtil.clamp((int)(pose.getY()/TrajectoryPlans.dy),0,3);
-        int n = 0;
-        int maxN = 4;
-        String moves = "("+i+","+j+"),";
-        TrajectoryPlans.FieldStep move = trajectoryPlan.plan[i][j].move;
-        while (move != TrajectoryPlans.FieldStep.Done) {
-            if (move == TrajectoryPlans.FieldStep.Left || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.DownLeft)
-                i = i - 1;
-            if (move == TrajectoryPlans.FieldStep.Right || move == TrajectoryPlans.FieldStep.UpRight || move == TrajectoryPlans.FieldStep.DownRight)
-                i = i + 1;
-            if (move == TrajectoryPlans.FieldStep.Down || move == TrajectoryPlans.FieldStep.DownLeft || move == TrajectoryPlans.FieldStep.DownRight)
-                j = j - 1;
-             if (move == TrajectoryPlans.FieldStep.Up || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.UpRight)
-                j = j + 1;
-            SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
-            if (i < 0 || i > 7 || j < 0 || j > 7) {
-                int x = 5;
-            }
-            if (move != TrajectoryPlans.FieldStep.Done) {
-                list.add(trajectoryPlan.plan[i][j].center);
-                move = trajectoryPlan.plan[i][j].move;
-                moves = moves+ "("+i+","+j+"),";
-                //if (n++ > maxN) break;
-            }
-        }
-        SmartDashboard.putString("TTM",moves);
-        return list;
-    }
+    
 }

@@ -58,6 +58,7 @@ import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.AllianceRotateRobotCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
@@ -98,6 +99,7 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
   //private final DriveTrain m_DriveTrain = new DriveTrain();
   // The robot's subsystems
+  private static boolean debug = true;
   public final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
  // public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
@@ -136,13 +138,30 @@ public class RobotContainer {
     // SmartDashboard.putNumber("POV_Out", result);
     return result;
   }
+  
+  /**
+   * Convenience function to create xbox-direction pad rotate buttons.
+   * Comprehends alliance to turn to driver's field perspective.
+   * @param heading
+   * @return xbox-dPad button for turning to the specified heading.
+   */
+  POVButton dPadButton(int heading) {
+    POVButton button = new POVButton(m_driverController, heading);
+    button.onTrue(
+      new AllianceRotateRobotCommand(
+          m_robotDrive, 
+          Units.degreesToRadians(heading),
+          false
+        )
+
+    ).debounce(0.2);
+    return button;
+  }
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-   
 
     // Configure the button bindings
     configureButtonBindings();
@@ -220,7 +239,18 @@ public class RobotContainer {
                () -> alignDriveTrainToPoseEstimator(),
                 m_robotDrive));
 
-
+    // POV buttons to point robot to a given heading where 0 is
+    // straight downfield from the driver's perspective.
+    // These change depending on blue or red alliance.
+    POVButton   dPad0 = dPadButton(0);
+    POVButton  dPad45 = dPadButton(45);
+    POVButton  dPad90 = dPadButton(90);
+    POVButton dPad135 = dPadButton(135);
+    POVButton dPad180 = dPadButton(180);
+    POVButton dPad225 = dPadButton(225);
+    POVButton dPad270 = dPadButton(270);
+    POVButton dPad315 = dPadButton(315);
+    
     /**
      * This section defines buttons for the left joystick, joystick 0, which is not intended for use during game play
      * The buttons defined are for debug.
@@ -242,7 +272,7 @@ public class RobotContainer {
       new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false)
     );
     new JoystickButton(leftJoystick, 10).onTrue(
-      new RotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
+      new AllianceRotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
     );
     SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
     new JoystickButton(leftJoystick, 11).onTrue(
@@ -289,83 +319,37 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).whileTrue(
       new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
-    /*new JoystickButton(leftJoystick, 6).onTrue(
-      new InstantCommand(() -> m_robotDrive.setX())
-    );
-    */
-    //SmartDashboard.putData("AlignD2P",  new InstantCommand( () -> alignDriveTrainToPoseEstimator(), m_robotDrive));  // For debug
-    /* Debugging below */
-    List<Translation2d> blueAmpPlan = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(0,0,new Rotation2d(0)));
-    SmartDashboard.putString("blueampplan", blueAmpPlan.toString());
-    List<Translation2d> blueAmpPlan2 = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
-    SmartDashboard.putString("blueampplan2", blueAmpPlan2.toString());
-    List<Translation2d> redAmpPlan2 = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, new Pose2d(0,0,new Rotation2d(0)));
-    SmartDashboard.putString("redampplan2", redAmpPlan2.toString());
-
-    for (int i = 1; i <= 16; i+= 2) {
-      for (int j = 1; j <= 8; j+= 2) {
-        blueAmpPlan = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
-        List<Translation2d> blueSourcePlan = Utilities.planTrajectory(TrajectoryPlans.BlueSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
-      }
-    }
-    List<Translation2d> redAmpPlan;
-    for (int i = 1; i <= 16; i+= 2) {
-      for (int j = 1; j <= 8; j+= 2) {
-        redAmpPlan = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
-        List<Translation2d> redSourcePlan = Utilities.planTrajectory(TrajectoryPlans.RedSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
-
-      }
-    }
-    Pose2d testPose1 = new Pose2d(0,0,new Rotation2d(0));
-    Pose2d redTestPose1 = testPose1.transformBy(FieldConstants.AllianceTransformation[FieldConstants.RedAlliance]);
-    Utilities.toSmartDashboard("RedTestPose1", redTestPose1);
-
-    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
-    POVButton dPad0 = new POVButton(m_driverController, 0);
-    dPad0.onTrue(
-        new RotateRobotCommand(
-          m_robotDrive, 
-          0,
-          false
-        )
-    ).debounce(0.2);
-    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
-    POVButton dPad90 = new POVButton(m_driverController, 90);
-    dPad90.onTrue(
-      new RotateRobotCommand(
-          m_robotDrive, 
-          Units.degreesToRadians(90),
-          false
-        )
-
-    ).debounce(0.2);
-    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
-    POVButton dPad180 = new POVButton(m_driverController, 180);
-    dPad180.onTrue(
-      new RotateRobotCommand(
-          m_robotDrive, 
-          Units.degreesToRadians(180),
-          false
-        )
-      ).debounce(0.2);
-    // Test of POV button rotate to 180 (ie toward the alliance Speaker).
-    POVButton dPad270 = new POVButton(m_driverController, 270);
-    dPad270.onTrue(
-      new RotateRobotCommand(
-          m_robotDrive, 
-          Units.degreesToRadians(270),
-          false
-        )
-    ).debounce(0.2);
-
-    /**
-     * Create smart dash button that cycles through the various paths
-     * from each 2x2 meter square on the field to the amp and source
-     * for both red and blue alliances.
-     */
     
-    SmartDashboard.putData("TTcmd", new SwerveToPoseTest(m_robotDrive, m_PoseEstimatorSubsystem));
-  }
+    /* Debugging below */
+    if (debug) {
+
+      // Try all possible plans to makesure there are now obvious bad moves in the plans.
+      for (int i = 1; i <= 16; i+= 2) {
+        for (int j = 1; j <= 8; j+= 2) {
+          List<Translation2d> blueAmpPlan = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
+          List<Translation2d> blueSourcePlan = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
+        }
+      }
+      // Try all possible plans to makesure there are now obvious bad moves in the plans.
+      for (int i = 1; i <= 16; i+= 2) {
+        for (int j = 1; j <= 8; j+= 2) {
+          List<Translation2d> redAmpPlan = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedAmpPlan, new Pose2d(16,0,new Rotation2d(0)));
+          List<Translation2d> redSourcePlan = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedSourcePlan, new Pose2d(16,0,new Rotation2d(0)));
+        }
+      }
+      Pose2d testPose1 = new Pose2d(0,0,new Rotation2d(0));
+      Pose2d redTestPose1 = testPose1.transformBy(FieldConstants.AllianceTransformation[FieldConstants.RedAlliance]);
+      Utilities.toSmartDashboard("RedTestPose1", redTestPose1);
+
+      /**
+       * Create smart dash button that cycles through the various paths
+       * from each 2x2 meter square on the field to the amp and source
+       * for both red and blue alliances.
+       */
+      
+      SmartDashboard.putData("TTcmd", new SwerveToPoseTest(m_robotDrive, m_PoseEstimatorSubsystem));
+    } // (debug)
+  } // (configureButtonBindings)
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

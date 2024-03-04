@@ -60,18 +60,18 @@ public class SwerveToPoseTest extends Command {
     if (allianceID == FieldConstants.BlueAlliance) {
       if (destinationID == 0) {
         destination = VisionConstants.AprilTag.BLUE_AMP;
-        startingPose = new Pose2d(TrajectoryPlans.BlueAmpPlan.plan[i][j].center, new Rotation2d(-Math.PI/2.0));
+        startingPose = new Pose2d(TrajectoryPlans.BlueAmpPlan.plan[i][j].waypoint, new Rotation2d(-Math.PI/2.0));
       } else {
         destination = VisionConstants.AprilTag.BLUE_RIGHT_SOURCE;
-        startingPose = new Pose2d(TrajectoryPlans.BlueAmpPlan.plan[i][j].center, new Rotation2d(Math.PI/2.0));
+        startingPose = new Pose2d(TrajectoryPlans.BlueAmpPlan.plan[i][j].waypoint, new Rotation2d(Math.PI/2.0));
       }
     } else {
       if (destinationID == 0) {
         destination = VisionConstants.AprilTag.RED_AMP;
-        startingPose = new Pose2d(TrajectoryPlans.RedAmpPlan.plan[i][j].center, new Rotation2d(-Math.PI/2.0));  
+        startingPose = new Pose2d(TrajectoryPlans.RedAmpPlan.plan[i][j].waypoint, new Rotation2d(-Math.PI/2.0));  
        } else { 
         destination = VisionConstants.AprilTag.RED_LEFT_SOURCE;
-        startingPose = new Pose2d(TrajectoryPlans.RedAmpPlan.plan[i][j].center, new Rotation2d(Math.PI/2.0));
+        startingPose = new Pose2d(TrajectoryPlans.RedAmpPlan.plan[i][j].waypoint, new Rotation2d(Math.PI/2.0));
       }
     }
     Utilities.toSmartDashboard("TT Start",startingPose);
@@ -87,21 +87,21 @@ public class SwerveToPoseTest extends Command {
     //commands = new SequentialCommandGroup();
 
     if (destination == AprilTag.BLUE_AMP) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, startingPose);
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueAmpPlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
       nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
       //targetPose = Utilities.backToPose(aprilTagPose, 0.5);
     } else if (destination == AprilTag.RED_AMP) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, startingPose);
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedAmpPlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.RED_AMP.id());
       nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
       //targetPose = Utilities.backToPose(aprilTagPose, 0.5);
     } else if (destination == AprilTag.BLUE_RIGHT_SOURCE) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.BlueSourcePlan, startingPose);
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueSourcePlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_RIGHT_SOURCE.id());
       nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
     } else if (destination == AprilTag.RED_LEFT_SOURCE) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.RedSourcePlan, startingPose);
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedSourcePlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.RED_LEFT_SOURCE.id());
       nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
     } else {

@@ -9,6 +9,7 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.Constants.VisionConstants.AprilTag;
+import frc.robot.RobotContainer;
 import frc.robot.TrajectoryPlans;
 import frc.robot.Utilities;
 
@@ -24,7 +26,8 @@ public class SwerveToPoseCommand extends Command {
   private final PoseEstimatorSubsystem poseEstimatorSubsystem;
   private final AprilTag destination;
   private SequentialCommandGroup commands;
-
+  private final double finalDistanceToAmp    = 1.0; // Meters
+  private final double finalDistanceToSource = 1.0; // Meters
   /** Creates a new SwerveToPoseCommand. */
   public SwerveToPoseCommand(
     DriveSubsystemSRX robotDrive,
@@ -37,52 +40,56 @@ public class SwerveToPoseCommand extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     //addRequirements(robotDrive, poseEstimatorSubsystem);  // This may be a problem due to self cancellation.
+    // no requirements added because of self-cancellation problems when running sub-commands.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     Pose2d startingPose = poseEstimatorSubsystem.getCurrentPose();
-    Utilities.toSmartDashboard("SW Start",startingPose);
-    SmartDashboard.putString("SW","init");
-
+    
     List<Translation2d> waypoints = new ArrayList<>();
     Pose2d aprilTagPose = null;
     Pose2d nearTargetPose = null;
     Pose2d targetPose = null;
-    SmartDashboard.putString("SW","Running");
+    SmartDashboard.putString("SW","init");
+    Utilities.toSmartDashboard("SW Start",startingPose);
     commands = new SequentialCommandGroup();
 
-    if (destination == AprilTag.BLUE_AMP && Utilities.isBlueAlliance()) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.BlueAmpPlan, startingPose);
+    if (destination == AprilTag.BLUE_AMP) {
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueAmpPlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id());
-      nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
-      targetPose = Utilities.backToPose(aprilTagPose, 0.5);
-    } else if (destination == AprilTag.RED_AMP && Utilities.isRedAlliance()) {
-      waypoints = Utilities.planTrajectory(TrajectoryPlans.RedAmpPlan, startingPose);
+      nearTargetPose = Utilities.backToPose(aprilTagPose, finalDistanceToAmp);
+      //targetPose = Utilities.backToPose(aprilTagPose, 0.5);
+    } else if (destination == AprilTag.RED_AMP) {
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedAmpPlan, startingPose);
       aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.RED_AMP.id());
-      nearTargetPose = Utilities.backToPose(aprilTagPose, 1.0);
-      targetPose = Utilities.backToPose(aprilTagPose, 0.5);
-    } else if (destination == AprilTag.BLUE_RIGHT_SOURCE && Utilities.isBlueAlliance()) {
-    } else if (destination == AprilTag.RED_LEFT_SOURCE && Utilities.isRedAlliance()) {
+      nearTargetPose = Utilities.backToPose(aprilTagPose, finalDistanceToAmp);
+      //targetPose = Utilities.backToPose(aprilTagPose, 0.5);
+    } else if (destination == AprilTag.BLUE_RIGHT_SOURCE) {
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.BlueSourcePlan, startingPose);
+      aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_RIGHT_SOURCE.id());
+      nearTargetPose = Utilities.backToPose(aprilTagPose, finalDistanceToSource);
+    } else if (destination == AprilTag.RED_LEFT_SOURCE) {
+      waypoints = TrajectoryPlans.planTrajectory(TrajectoryPlans.RedSourcePlan, startingPose);
+      aprilTagPose = poseEstimatorSubsystem.getAprilTagPose(AprilTag.RED_LEFT_SOURCE.id());
+      nearTargetPose = Utilities.backToPose(aprilTagPose, finalDistanceToSource);
     } else {
-      targetPose = startingPose; // This will end up doing nothing.
+      //targetPose = startingPose; // This will end up doing nothing.
       nearTargetPose = startingPose;
     }
-    if (waypoints.size() > 0)
-      SmartDashboard.putString("SW plan", waypoints.toString());
-      //Utilities.toSmartDashboard("SW target", nearTargetPose);
-    if (startingPose != null && waypoints.size() > 0 && nearTargetPose != null)
+    if (waypoints.size() > 0 && !startingPose.equals(nearTargetPose)) {
+      new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, nearTargetPose);
+    } else {
+        RobotContainer.m_PoseEstimatorSubsystem.field2d.getObject("trajectory").setTrajectory(new Trajectory());
+    }
+    if (startingPose != null && waypoints.size() > 0 && nearTargetPose != null) {
       commands.addCommands(new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, nearTargetPose));
-    
-    // The code below seems to self-cancel the sequential command group
-    // That is why it is not active.
-    if (false && targetPose != null) 
-      commands.addCommands(
-        new InstantCommand(() -> SmartDashboard.putString("SW", "GotoPose")),
-        new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose
-        ));
-    commands.schedule();  // This will release the command which is not what we want.
+    }
+    // This effectively forks off the command from our thread.
+    // This command will stay active until the FollowTrajectoryCommand finishes 
+    // returning isFinished() only when the FTC command returns isFinished==true;
+    commands.schedule();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -92,12 +99,14 @@ public class SwerveToPoseCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // This try/catch handles the case where the FollowTrajectoryCommand no longer exists.
     try {
       commands.cancel();
     } catch (Exception e) {
+      int i = 1; // Here to allow a breakpoint here during debugging.
     }
     SmartDashboard.putBoolean("SW Interrupted", interrupted);
-    SmartDashboard.putString("SW","Done abort");
+    SmartDashboard.putString("SW","Done");
   }
 
   // Returns true when the command should end.

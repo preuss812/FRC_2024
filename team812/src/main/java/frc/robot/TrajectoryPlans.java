@@ -4,10 +4,15 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.FieldConstants;
 
 /** 
@@ -65,10 +70,10 @@ public class TrajectoryPlans {
         return result;
     }
     public static class FieldSquare {
-        public Translation2d center;
+        public Translation2d waypoint;
         public FieldStep move;
-        FieldSquare(Translation2d center, FieldStep move) {
-            this.center = center;
+        FieldSquare(Translation2d waypoint, FieldStep move) {
+            this.waypoint = waypoint;
             this.move = move;
         }
     }
@@ -84,10 +89,10 @@ public class TrajectoryPlans {
         FieldSquare[][] newPlan = new FieldSquare[8][4];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
-                Translation2d newCenter = new Translation2d(FieldConstants.xMax - trajectoryPlan.plan[i][j].center.getX(), trajectoryPlan.plan[i][j].center.getY());
+                Translation2d newWaypoint = new Translation2d(FieldConstants.xMax - trajectoryPlan.plan[i][j].waypoint.getX(), trajectoryPlan.plan[i][j].waypoint.getY());
                 FieldStep newMove = transformFieldStep(trajectoryPlan.plan[i][j].move);
                 //newPlan[7-i][j] = new TrajectoryPlans.FieldSquare( trajectoryPlan.plan[7-i][j].center, newMove);
-                newPlan[7-i][j] = new TrajectoryPlans.FieldSquare(newCenter, newMove);
+                newPlan[7-i][j] = new TrajectoryPlans.FieldSquare(newWaypoint, newMove);
             }
         }
         newTrajectoryPlan = new TrajectoryPlan(newPlan);
@@ -164,7 +169,7 @@ public class TrajectoryPlans {
             },
             { // Column 2:
                 new FieldSquare(new Translation2d(dx*2+1.0, dy*0+1.0), FieldStep.Right),
-                new FieldSquare(new Translation2d(dx*2+1.0, dy*1+1.0), FieldStep.DownRight),
+                new FieldSquare(new Translation2d(dx*2+1.0, dy*1+1.0), FieldStep.Down),
                 new FieldSquare(new Translation2d(dx*2+1.0, dy*2+1.0), FieldStep.Up),
                 new FieldSquare(new Translation2d(dx*2+1.0, dy*3+1.0), FieldStep.Right)
             },
@@ -255,5 +260,38 @@ public class TrajectoryPlans {
     public static final TrajectoryPlan RedSourcePlan = transformPlan(BlueSourcePlan, FieldConstants.AllianceTransformation[FieldConstants.RedAlliance]);
     public TrajectoryPlans() {
 
+    }
+    public static List<Translation2d> planTrajectory(TrajectoryPlans.TrajectoryPlan trajectoryPlan, Pose2d pose) {
+        List<Translation2d> list = new ArrayList<>();
+        // convert the coordinates into indexes for 2 by 2 meter squares.
+        // 0,0 is the lower left of the field by the Red Alliance source.
+        int i = MathUtil.clamp((int)(pose.getX()/TrajectoryPlans.dx),0,7);
+        int j = MathUtil.clamp((int)(pose.getY()/TrajectoryPlans.dy),0,3);
+        int n = 0;
+        int maxN = 4;
+        String moves = "("+i+","+j+"),";
+        TrajectoryPlans.FieldStep move = trajectoryPlan.plan[i][j].move;
+        while (move != TrajectoryPlans.FieldStep.Done) {
+            if (move == TrajectoryPlans.FieldStep.Left || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.DownLeft)
+                i = i - 1;
+            if (move == TrajectoryPlans.FieldStep.Right || move == TrajectoryPlans.FieldStep.UpRight || move == TrajectoryPlans.FieldStep.DownRight)
+                i = i + 1;
+            if (move == TrajectoryPlans.FieldStep.Down || move == TrajectoryPlans.FieldStep.DownLeft || move == TrajectoryPlans.FieldStep.DownRight)
+                j = j - 1;
+             if (move == TrajectoryPlans.FieldStep.Up || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.UpRight)
+                j = j + 1;
+            SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
+            if (i < 0 || i > 7 || j < 0 || j > 7) {
+                int x = 5;
+            }
+            if (move != TrajectoryPlans.FieldStep.Done) {
+                list.add(trajectoryPlan.plan[i][j].waypoint);
+                move = trajectoryPlan.plan[i][j].move;
+                moves = moves+ "("+i+","+j+"),";
+                //if (n++ > maxN) break;
+            }
+        }
+        SmartDashboard.putString("TTM",moves);
+        return list;
     }
 }
