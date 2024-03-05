@@ -55,11 +55,18 @@ public class RotateRobotCommand extends Command {
     // Calculate the target angle using absolute or relative depending on <relative>.
     // Ensure that the target is between -pi and pi to avoid rotating the long
     // way around.
-    if (relative)
+    if (relative) {
       targetTheta = MathUtil.inputModulus(startingTheta + theta, -Math.PI, Math.PI);
-    else
-      targetTheta =  MathUtil.inputModulus(theta, -Math.PI, Math.PI);
-   
+      
+    } else {
+      if (Utilities.isBlueAlliance()){
+         targetTheta =  MathUtil.inputModulus(theta, -Math.PI, Math.PI);
+         SmartDashboard.putNumber("RR 1", targetTheta);
+      } else {
+           targetTheta =  MathUtil.inputModulus(theta +Math.PI, -Math.PI, Math.PI); 
+        SmartDashboard.putNumber("RR 2", targetTheta);
+      }
+    }
     rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
     rotationController.setTolerance(1.0); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024

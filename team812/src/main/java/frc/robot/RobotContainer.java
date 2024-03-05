@@ -148,9 +148,9 @@ public class RobotContainer {
   POVButton dPadButton(int heading) {
     POVButton button = new POVButton(m_driverController, heading);
     button.onTrue(
-      new AllianceRotateRobotCommand(
+      new RotateRobotCommand(
           m_robotDrive, 
-          Units.degreesToRadians(heading),
+          Units.degreesToRadians(-heading),
           false
         )
 
@@ -272,7 +272,7 @@ public class RobotContainer {
       new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false)
     );
     new JoystickButton(leftJoystick, 10).onTrue(
-      new AllianceRotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
+      new RotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
     );
     SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
     new JoystickButton(leftJoystick, 11).onTrue(
