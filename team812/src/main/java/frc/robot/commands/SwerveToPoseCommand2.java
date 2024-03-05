@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,15 +21,17 @@ import frc.robot.RobotContainer;
 import frc.robot.TrajectoryPlans;
 import frc.robot.Utilities;
 
-public class SwerveToPoseCommand extends Command {
+public class SwerveToPoseCommand2 extends Command {
   private final DriveSubsystemSRX robotDrive;
   private final PoseEstimatorSubsystem poseEstimatorSubsystem;
   private final AprilTag destination;
   private SequentialCommandGroup commands;
   private final double finalDistanceToAmp    = 1.0; // Meters
   private final double finalDistanceToSource = 1.0; // Meters
-  /** Creates a new SwerveToPoseCommand. */
-  public SwerveToPoseCommand(
+  private enum Action{FIRST_TURN, travel, lastTurn}
+
+  /** Creates a new SwerveToPoseCommand2. */
+  public SwerveToPoseCommand2(
     DriveSubsystemSRX robotDrive,
     PoseEstimatorSubsystem poseEstimatorSubsystem,
     AprilTag destination
@@ -45,6 +48,7 @@ public class SwerveToPoseCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Action action = Action.FIRST_TURN;
     Pose2d startingPose = poseEstimatorSubsystem.getCurrentPose();
     
     List<Translation2d> waypoints = new ArrayList<>();
@@ -76,8 +80,26 @@ public class SwerveToPoseCommand extends Command {
       //targetPose = startingPose; // This will end up doing nothing.
       targetPose = startingPose;
     }
+    Pose2d rotatedStartingPose = startingPose;
+    Pose2d rotatedTargetPose = targetPose;
+    if (waypoints.size() > 1) {
+      Rotation2d faceFirstWaypoint = new Rotation2d(
+        waypoints.get(0).getX() - startingPose.getX(),
+        waypoints.get(0).getY() - startingPose.getY()
+      );
+      rotatedStartingPose = new Pose2d(startingPose.getTranslation(), faceFirstWaypoint);
+      //commands.addCommands(new RotateRobotCommand(robotDrive, faceFirstWaypoint.getRadians(), false));
+    }
+    if (waypoints.size() > 1) {
+      Rotation2d faceTargetPose = new Rotation2d(
+        targetPose.getX() - waypoints.get(waypoints.size() - 1).getX(),
+        targetPose.getY() - waypoints.get(waypoints.size() - 1).getY()
+      );
+      rotatedTargetPose = new Pose2d(targetPose.getTranslation(), faceTargetPose);
+      //commands.addCommands(new RotateRobotCommand(robotDrive, faceFirstWaypoint.getRadians(), false));
+    }
     if (waypoints.size() > 0 && !startingPose.equals(targetPose)) {
-      new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, startingPose, waypoints, targetPose);
+      new FollowTrajectoryCommand(robotDrive, poseEstimatorSubsystem, null, rotatedStartingPose, waypoints, rotatedTargetPose);
     } else {
         RobotContainer.m_PoseEstimatorSubsystem.field2d.getObject("trajectory").setTrajectory(new Trajectory());
     }

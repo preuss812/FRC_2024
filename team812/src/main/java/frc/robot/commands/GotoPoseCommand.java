@@ -18,9 +18,10 @@ import frc.robot.Utilities;
 
 public class GotoPoseCommand extends Command {
   /** Creates a new command to move the robot to the specified pose. */
-  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem;
-  private final DriveSubsystemSRX m_DriveSubsystemSRXSubsystem;
-  private final Pose2d m_targetPose;
+  protected final PoseEstimatorSubsystem m_PoseEstimatorSubsystem;
+  protected final DriveSubsystemSRX m_DriveSubsystemSRXSubsystem;
+  protected final Pose2d m_targetPose;
+  protected Pose2d targetPose;
 
   // TODO Get these values from Constants.java
   final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
@@ -38,10 +39,10 @@ public class GotoPoseCommand extends Command {
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
   final double MAX_THROTTLE = 0.4; // 0 to 1 is the possible range.
 
-  PIDController xController;
-  PIDController yController;
-  PIDController rotationController;
-  boolean onTarget;
+  protected PIDController xController;
+  protected PIDController yController;
+  protected PIDController rotationController;
+  protected boolean onTarget;
   
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem
@@ -88,7 +89,8 @@ public class GotoPoseCommand extends Command {
     rotationController.setTolerance(1.0); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     onTarget = false;
-    Utilities.toSmartDashboard("GotoTarget", m_targetPose);
+    targetPose = m_targetPose;
+    Utilities.toSmartDashboard("GotoTarget", targetPose);
     SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
 
@@ -109,10 +111,10 @@ public class GotoPoseCommand extends Command {
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
     Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
     // Calculate the X and Y and rotation offsets to the target location
-    translationErrorToTarget = new Translation2d( m_targetPose.getX() - estimatedPose.getX(), m_targetPose.getY() - estimatedPose.getY());
+    translationErrorToTarget = new Translation2d( targetPose.getX() - estimatedPose.getX(), targetPose.getY() - estimatedPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
-    rotationError = MathUtil.inputModulus(m_targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), -Math.PI, Math.PI);
+    rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), -Math.PI, Math.PI);
     SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
     SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
     SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
@@ -154,8 +156,7 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
     SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
-    // TODO Transform xSpeed/Yspeed based on the difference between the drivetrain X,Y axes and the PoseEstimator X,Y Axes // Done Above!
-    m_DriveSubsystemSRXSubsystem.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true); // TODO Verify signs of inputs 
+    m_DriveSubsystemSRXSubsystem.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
 
   }
 
@@ -163,7 +164,6 @@ public class GotoPoseCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_DriveSubsystemSRXSubsystem.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
-    var ended = true;
   }
 
   // Returns true when the command should end.

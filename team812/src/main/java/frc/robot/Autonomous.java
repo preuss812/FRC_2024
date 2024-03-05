@@ -7,25 +7,20 @@
 
 package frc.robot;
 
-import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
+import frc.robot.commands.GotoAmpCommand;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.StopRobotMotion;
@@ -43,19 +38,13 @@ public class Autonomous extends SequentialCommandGroup {
   /**
    * Creates a new Autonomous.
    */
-  private final RobotContainer m_robotContainer;
   private final DriveSubsystemSRX m_robotDrive;
   private final ArmRotationSubsystem m_ArmRotationSubsystem;
   private final ShooterSubsystem m_ShooterSubsystem;
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem;
-  // public GyroSubsystem m_gyro;
 
-  // public Autonomous(DriveTrain subsystem, GyroSubsystem gyro) {
   public Autonomous(RobotContainer robotContainer) {
-    //boolean balancing = true;
-    //boolean readingBlackBoxSwitch = false;
 
-    m_robotContainer = robotContainer;
     m_robotDrive = RobotContainer.m_robotDrive;
     m_ArmRotationSubsystem = RobotContainer.m_ArmRotationSubsystem;
     m_ShooterSubsystem = RobotContainer.m_ShooterSubsystem;
@@ -87,38 +76,19 @@ public class Autonomous extends SequentialCommandGroup {
        * o Score the Note.
        * o GotoPoseDrive out of the starting box toward field center.
        */
-      final double distanceToAmp = 0.5; // If it matters, these are Blue Alliance values.
-      final double firstMoveX = 1.0;
+      final double firstMoveX = 1.84 - DriveConstants.kBackToCenterDistance;
       final double firstMoveY = 0.0;
-      final double finalMoveX = 2.0;
-      final double finalMoveY = -1.0;
-      VisionConstants.AprilTag ampAprilTag;
-      Pose2d targetPose;
-      Pose2d finalPose;
-      Rotation2d finalRotation;
+      final double finalMoveX = 2.0; // Arbitrary move out of the starting box
+      final double finalMoveY = -1.0; // Arbitrary move out of the starting box and away from the wall.
+      
+      Pose2d finalMove;
       Pose2d firstMove;
-      double robotInitialOrientation;
-      if (Utilities.isBlueAlliance()) {
-        robotInitialOrientation = FieldConstants.robotInitialOrientation;
-        ampAprilTag = AprilTag.BLUE_AMP;
-        targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(ampAprilTag.id()),distanceToAmp);
-        finalRotation = targetPose.getRotation(); // This will put thte back of the robot towards the april tag.
-        finalPose = new Pose2d(targetPose.getX()+finalMoveX, targetPose.getY() + finalMoveY, finalRotation); // Pose for robot to be at the april tag.
-        firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(-Math.PI/2));
-      } else /* Assuming !blue == red */ {
-        robotInitialOrientation = FieldConstants.robotInitialOrientation + Math.PI; // Rotated 180.
-        ampAprilTag = AprilTag.RED_AMP;
-        targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(ampAprilTag.id()),distanceToAmp);
-        finalRotation = targetPose.getRotation(); // This will put thte back of the robot towards the april tag.
-        finalPose = new Pose2d(targetPose.getX()-finalMoveX, targetPose.getY() + finalMoveY, finalRotation); // Pose for robot to be at the april tag.
-        firstMove = new Pose2d(-firstMoveX, firstMoveY, new Rotation2d(Math.PI/2));
-      }
-      Utilities.toSmartDashboard("AutoTarget", targetPose);
-      Utilities.toSmartDashboard("AutoFinal", finalPose);
+      finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d(0.0));    // Pose for robot to face the center of the field.
+      firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(-Math.PI/2.0)); // Pose for robot to be at the april tag.
 
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
         // Set the gyro starting angle based on alliance and assumed robot placement
-        new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch(robotInitialOrientation)),
+        new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
 
         // Home the arm (should already be homed but this sets the encoder coordinates)
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
@@ -126,11 +96,11 @@ public class Autonomous extends SequentialCommandGroup {
 
         // Drive out based on drivetrain encoders to align with and face the Amp
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
-        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(3.0),
+        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0),
 
         // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "TurnCameraTowardAmp")),
-        new RotateRobotCommand(RobotContainer.m_robotDrive, targetPose.getRotation().getRadians(), false).withTimeout(3.0),
+        new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
@@ -145,12 +115,11 @@ public class Autonomous extends SequentialCommandGroup {
         // Use a trajectory to move close to the amp.
         // This is a place holder for the moment.
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-        //swerveControllerCommand.withTimeout(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, true, true)),
-        new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, ampAprilTag),
+        //new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, ampAprilTag),
 
         // Move to the scoring position
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
-        new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose),
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive),
 
         // Score the note.
         // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
@@ -162,7 +131,7 @@ public class Autonomous extends SequentialCommandGroup {
 
         // Leave the starting box to get more points.
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
-        new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose),
+        new DriveRobotCommand(m_robotDrive, finalMove, false),
 
         // quiesce the drive and finish.
         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),

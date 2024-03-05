@@ -9,14 +9,10 @@ package frc.robot;
 
 import java.util.List;
 
-import org.opencv.features2d.MSER;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 import edu.wpi.first.math.util.Units;
@@ -24,41 +20,30 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-//import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+// import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-import com.ctre.phoenix.Util;
-import com.ctre.phoenix6.hardware.CANcoder;
-
-import frc.robot.Constants.ArmConstants;
-// import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.subsystems.ArmRotationSubsystem;
+//import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
-import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-//import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
-import frc.robot.commands.AllianceRotateRobotCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
@@ -73,6 +58,8 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.commands.SwerveToPoseTest;
+import frc.robot.commands.SwerveToPoseTest2;
+import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.WinchCommand;
 import frc.robot.commands.GotoSourceCommand;
@@ -222,7 +209,7 @@ public class RobotContainer {
       .whileTrue(new GotoSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
 
     new JoystickButton(m_driverController, Button.kX.value)
-      .whileTrue(new GotoAmpCommand(m_robotDrive, m_PoseEstimatorSubsystem));
+      .whileTrue(new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive));
 
     new JoystickButton(m_driverController, Button.kY.value)
       .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
@@ -262,7 +249,7 @@ public class RobotContainer {
     Utilities.toSmartDashboard("debugPose",targetPose);
     // Autonomous steps part II
     new JoystickButton(leftJoystick, 7).onTrue(
-      new InstantCommand(()->setGyroAngleToStartMatch(0.0))
+      new InstantCommand(()->setGyroAngleToStartMatch())
     );
     new JoystickButton(leftJoystick, 8).onTrue(
       new ArmHomeCommand(m_ArmRotationSubsystem)
@@ -347,7 +334,7 @@ public class RobotContainer {
        * for both red and blue alliances.
        */
       
-      SmartDashboard.putData("TTcmd", new SwerveToPoseTest(m_robotDrive, m_PoseEstimatorSubsystem));
+      SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
     } // (debug)
   } // (configureButtonBindings)
 
@@ -386,7 +373,7 @@ public class RobotContainer {
    * alliance wall.  The "Y" coordinates of the robot will be determined by the
    * PoseEstimator once an april tag is captured by the vision system.
    */
-   public void setGyroAngleToStartMatch( double startingAngle ) {
+   public void setGyroAngleToStartMatch() {
     boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
     double startingHeading; // degrees.
     if (isBlueAlliance) {

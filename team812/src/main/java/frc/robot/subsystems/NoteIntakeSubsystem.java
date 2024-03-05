@@ -73,10 +73,6 @@ public class NoteIntakeSubsystem extends SubsystemBase {
 
   }
 
-  private final int incrementSize = 50; // Move to Constants.java?  // 5*50 = 250 per second = 10 degrees per second when joystick maxed out.
-
-  
-
   public void disableMotor() {
     m_noteIntake.set(ControlMode.Disabled, 0);
   }

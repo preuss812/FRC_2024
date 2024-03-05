@@ -7,23 +7,18 @@
 
 package frc.robot;
 
-import java.util.List;
-import java.util.ArrayList;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.TrajectoryPlans;
 
 /**
  * Add your docs here.
  */
 public class Utilities {
     
-    private static Alliance m_alliance = null;
     private static boolean m_isBlueAlliance = false;
     private static boolean m_isRedAlliance = false;
 

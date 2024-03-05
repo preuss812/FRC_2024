@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,10 +60,20 @@ public class DriveRobotCommand extends Command {
     startingPose = robotDrive.getPose();
     // add the relativeMove to the startingPose // There is an alliance component to this.   
     // I'm assuming the caller has handled it in the relativeMove.
+    if (Utilities.isBlueAlliance()) {
     targetPose = new Pose2d(
       startingPose.getX() + relativeMove.getX(),
       startingPose.getY() + relativeMove.getY(),
       startingPose.getRotation().rotateBy(relativeMove.getRotation()));
+    } if (Utilities.isRedAlliance()) {
+      // This just inverts the X move as the field this year is mirrored about the center of the field.
+      targetPose = new Pose2d(
+      startingPose.getX() - relativeMove.getX(),
+      startingPose.getY() + relativeMove.getY(),
+      startingPose.getRotation().rotateBy(relativeMove.getRotation().rotateBy(new Rotation2d(Math.PI))));
+    } else {
+      targetPose = startingPose; // Do nothing if we dont have an alliance.
+    }
     xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
     xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
     yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
