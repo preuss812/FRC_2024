@@ -101,6 +101,7 @@ public class GotoPoseCommand extends Command {
   protected PIDController yController;
   protected PIDController rotationController;
   protected boolean onTarget;
+  private boolean debug = false;
   
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem
@@ -150,11 +151,13 @@ public class GotoPoseCommand extends Command {
     double angularP = m_config.getAngularP();
     double angularI = m_config.getAngularI();
 
-    angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
-    angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
-    SmartDashboard.putNumber("G2P P", angularP);
-    SmartDashboard.putNumber("G2P I", angularI);
-
+    if (debug) {
+      angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
+      angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
+      SmartDashboard.putNumber("G2P P", angularP);
+      SmartDashboard.putNumber("G2P I", angularI);
+    }
+    
     xController = new PIDController(
       m_config.getLinearP(),
       m_config.getLinearI(),

@@ -12,6 +12,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Utilities;
 import frc.robot.subsystems.DriveSubsystemSRX;
 
@@ -103,6 +105,7 @@ public class DriveRobotCommand extends Command {
   private PIDController rotationController;
   private boolean onTarget;
   private static int timesInitialized = 0;
+  private boolean debug = false;
 
   /** Creates a new DriveDistanceCommand. */
   public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove, boolean controlRotation) {
@@ -112,13 +115,24 @@ public class DriveRobotCommand extends Command {
     this.config = new DriveRobotConfig();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(robotDrive);
-;  }
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     timesInitialized++;
     SmartDashboard.putNumber("DR #inits", timesInitialized);
+
+    double angularP = config.getAngularP();
+    double angularI = config.getAngularI();
+
+    if (debug) {
+      angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
+      angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
+      SmartDashboard.putNumber("G2P P", angularP);
+      SmartDashboard.putNumber("G2P I", angularI);
+    }
+
     // get the robot's current pose from the drivetrain
     startingPose = robotDrive.getPose();
     // add the relativeMove to the startingPose // There is an alliance component to this.   
@@ -148,7 +162,7 @@ public class DriveRobotCommand extends Command {
     yController = new PIDController(config.getLinearP(), config.getLinearI(), config.getLinearD());
     yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
     if (controlRotation) {
-      rotationController = new PIDController(config.getAngularP(), config.getAngularI(), config.getAngularD());
+      rotationController = new PIDController(angularP, angularI, config.getAngularD());
       rotationController.setTolerance(1.0); // did not work, dont understand yet
       rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     }

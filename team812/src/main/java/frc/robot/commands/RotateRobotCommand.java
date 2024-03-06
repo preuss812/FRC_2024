@@ -9,6 +9,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Utilities;
 import frc.robot.subsystems.DriveSubsystemSRX;
 
@@ -19,26 +21,64 @@ import frc.robot.subsystems.DriveSubsystemSRX;
  * All angles are in radians.
  */
 public class RotateRobotCommand extends Command {
+
+  public class RotateRobotConfig {
+    
+    private double maxRotation;
+    private double angularP;
+    private double angularI;
+    private double angularD;
+    private double angularF;
+    private double angularIZone;
+    private double angularTolerance;
+
+    /**
+     * default constructor
+     */
+    public RotateRobotConfig() {
+      maxRotation = 0.8;
+      angularP = 0.16;
+      angularI = angularI/100.0;
+      angularD = angularP*10.0;
+      angularF = 0.0;
+      angularIZone = Units.degreesToRadians(10.0);
+      angularTolerance = Units.degreesToRadians(5.0);
+    }
+
+    public RotateRobotConfig setMaxRotation(double maxRotation) {this.maxRotation = maxRotation; return this; };
+    public RotateRobotConfig setAngularP(double angularP) {this.angularP = angularP; return this; };
+    public RotateRobotConfig setAngularI(double angularI) {this.angularI = angularI; return this; };
+    public RotateRobotConfig setAngularD(double angularD) {this.angularD = angularD; return this; };
+    public RotateRobotConfig setAngularF(double angularF) {this.angularF = angularF; return this; };
+    public RotateRobotConfig setAngularIZone(double angularIZone) {this.angularIZone = angularIZone; return this; };
+    public RotateRobotConfig setAngularTolerance(double angularTolerance) {this.angularTolerance = angularTolerance; return this; };
+    
+    public double getMaxRotation() { return maxRotation; }
+    public double getAngularP() { return angularP; }
+    public double getAngularI() { return angularI; }
+    public double getAngularD() { return angularD; }
+    public double getAngularF() { return angularF; }
+    public double getAngularIZone() { return angularIZone; }
+    public double getAngularTolerance() { return angularTolerance; }
+  } // RotateRobotConfig Class
+
   private final DriveSubsystemSRX robotDrive;
   private final double theta;
   private final boolean relative;
+  private final RotateRobotConfig config;
   private double startingTheta;
   private double targetTheta;
+  private boolean debug = false;
   
   private PIDController rotationController;
   private boolean onTarget;
-
-  final double ANGULAR_P = 0.16;
-  final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
-  final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.8; // 0 to 1 is the possible range.  // TODO undo Slowed from 1.0 to 0.2
 
   /** Creates a new DriveDistanceCommand. */
   public RotateRobotCommand(DriveSubsystemSRX robotDrive, double theta, boolean relative) {
     this.robotDrive = robotDrive;
     this.theta = theta;
     this.relative = relative;
+    this.config = new RotateRobotConfig();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(robotDrive);
 ;  }
@@ -47,6 +87,14 @@ public class RotateRobotCommand extends Command {
   @Override
   public void initialize() {
 
+    double angularP = config.getAngularP();
+    double angularI = config.getAngularI();
+
+    if (debug) {
+      angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
+      angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
+    }
+    
     // get the robot's current rotation from the drivetrain
     startingTheta = robotDrive.getPose().getRotation().getRadians(); 
 
@@ -65,8 +113,8 @@ public class RotateRobotCommand extends Command {
         SmartDashboard.putNumber("RR 2", targetTheta);
       }
     }
-    rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    rotationController.setTolerance(1.0); // did not work, dont understand yet
+    rotationController = new PIDController(angularP, angularI, config.getAngularD());
+    rotationController.setTolerance(config.getAngularTolerance()); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     onTarget = false;
   }
@@ -88,14 +136,14 @@ public class RotateRobotCommand extends Command {
     SmartDashboard.putNumber("RR Error", Units.radiansToDegrees(rotationError));
     
     // Test to see if we have arrived at the requested angle within the specified tolerance.
-    if (Math.abs(rotationError) < ROTATION_TOLERANCE) {
+    if (Math.abs(rotationError) < config.getAngularTolerance()) {
       // Yes, we have arrived
       xSpeed = 0.0;
       ySpeed = 0.0;
       rotationSpeed = 0.0;
       onTarget = true;
     } else {
-      rotationSpeed = MathUtil.clamp(rotationController.calculate(rotationError, 0),-1.0,1.0);
+      rotationSpeed = MathUtil.clamp(rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation());
       onTarget = false;
     }
     SmartDashboard.putBoolean("RR OnTarget", onTarget);
