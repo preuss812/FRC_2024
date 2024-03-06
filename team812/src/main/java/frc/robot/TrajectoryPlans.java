@@ -9,7 +9,7 @@ import java.util.List;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+//import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -267,8 +267,8 @@ public class TrajectoryPlans {
         // 0,0 is the lower left of the field by the Red Alliance source.
         int i = MathUtil.clamp((int)(pose.getX()/TrajectoryPlans.dx),0,7);
         int j = MathUtil.clamp((int)(pose.getY()/TrajectoryPlans.dy),0,3);
-        int n = 0;
-        int maxN = 4;
+        //int n = 0;
+        //int maxN = 4;
         String moves = "("+i+","+j+"),";
         TrajectoryPlans.FieldStep move = trajectoryPlan.plan[i][j].move;
         while (move != TrajectoryPlans.FieldStep.Done) {
@@ -282,7 +282,7 @@ public class TrajectoryPlans {
                 j = j + 1;
             SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
             if (i < 0 || i > 7 || j < 0 || j > 7) {
-                int x = 5;
+                //int x = 5;
             }
             if (move != TrajectoryPlans.FieldStep.Done) {
                 list.add(trajectoryPlan.plan[i][j].waypoint);

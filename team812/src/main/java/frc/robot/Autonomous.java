@@ -21,16 +21,16 @@ import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.GotoAmpCommand;
-import frc.robot.commands.GotoPoseCommand;
+//import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.RotateRobotCommand;
-import frc.robot.commands.StopRobotMotion;
+//import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.PushTowardsWall;
-import frc.robot.commands.SwerveToPoseCommand;
+//import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.Constants.VisionConstants.AprilTag;
+//import frc.robot.Constants.FieldConstants;
+//import frc.robot.Constants.VisionConstants;
+//import frc.robot.Constants.VisionConstants.AprilTag;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -121,6 +121,7 @@ public class Autonomous extends SequentialCommandGroup {
         // Move to the scoring position
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
         new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive),
+        // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
 
         // Score the note.
         // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.

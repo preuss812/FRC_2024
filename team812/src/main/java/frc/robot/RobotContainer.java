@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -51,20 +51,20 @@ import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoAmpCommand;
 import frc.robot.commands.GotoPoseCommand;
-import frc.robot.commands.NoteIntakeCommand;
+//import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.ScoreNoteInAmp;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.StopRobotMotion;
+//import frc.robot.commands.ShooterCommand;
+//import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.SwerveToPoseCommand;
-import frc.robot.commands.SwerveToPoseTest;
-import frc.robot.commands.SwerveToPoseTest2;
+//import frc.robot.commands.SwerveToPoseTest;
+//import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteCommand;
-import frc.robot.commands.WinchCommand;
+//import frc.robot.commands.WinchCommand;
 import frc.robot.commands.GotoSourceCommand;
-import frc.robot.commands.DetectColorCommand;
-import frc.robot.TrajectoryPlans;
+//import frc.robot.commands.DetectColorCommand;
+//import frc.robot.TrajectoryPlans;
 
 
 
