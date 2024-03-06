@@ -43,21 +43,12 @@ public class ArmRotationCommand extends Command {
     double error = m_armSubsystem.getPosition() - setPoint;
     SmartDashboard.putNumber("armcmderr", error);
 
-    /*
-    // add more threshold as the arm goes up
-    // we think increasing acceptable error is better than adding a PID.I term
-    // after 1000 ticks it will increase slightly as a multiplier of kArmThreshold
-    double extraThreshold = Math.max(m_armSubsystem.getPosition() * 0.001 - 1, 1);
-
-    if (Math.abs(error) < ArmConstants.kArmThreshold * extraThreshold) {
-      return true;
-    } else {
-      return false;
-    }
-    */
     if (Math.abs(error) < ArmConstants.kArmThreshold) {
       return true;
     } else if (m_armSubsystem.getPosition() > setPoint && m_armSubsystem.isRevLimitSwitchClosed()) {
+      // We are hear because the arm was rotating up (to lower encoder values) and we hit the limit switch.
+      return true;
+    } else if (m_armSubsystem.getPosition() < setPoint && m_armSubsystem.isFwdLimitSwitchClosed()) {
       // We are hear because the arm was rotating up (to lower encoder values) and we hit the limit switch.
       return true;
     } else {

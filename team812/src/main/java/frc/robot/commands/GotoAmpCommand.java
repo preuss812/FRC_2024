@@ -29,19 +29,27 @@ public class GotoAmpCommand extends GotoPoseCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //double angular_P = 0.05; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 0.1);  // Removed 2/1/2024
-    //double angular_I = 0.005; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.01); // Removed 2/1/2024
-    //SmartDashboard.putNumber("Target angular_P", angular_P);
-    //SmartDashboard.putNumber("Target angular_I", angular_I);
 
-    xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
-    xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
-    yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
-    yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
+    xController = new PIDController(
+      m_config.getLinearP(),
+      m_config.getLinearI(),
+      m_config.getLinearD()
+    );
+    xController.setIZone(m_config.getLinearIZone());
+    yController = new PIDController(
+      m_config.getLinearP(),
+      m_config.getLinearI(),
+      m_config.getLinearD()
+    );
+    yController.setIZone(m_config.getAngularIZone()); // TODO Needs Tuning.
 
-    rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    rotationController.setTolerance(1.0); // did not work, dont understand yet
-    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
+    rotationController = new PIDController(
+      m_config.getAngularP(),
+      m_config.getAngularI(),
+      m_config.getAngularD()
+      );
+    rotationController.setTolerance(m_config.getAngularTolerance()); // did not work, dont understand yet
+    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians).
     onTarget = false;
 
     if (Utilities.isBlueAlliance()) {

@@ -21,9 +21,81 @@ import frc.robot.subsystems.DriveSubsystemSRX;
  * If controlRotation is set, it will just manage the X,Y of the move.
  */
 public class DriveRobotCommand extends Command {
+
+  public class DriveRobotConfig {
+    private double maxThrottle;
+    private double linearP;
+    private double linearI;
+    private double linearD;
+    private double linearF;
+    private double linearIZone;
+    private double linearTolerance;
+
+    private double maxRotation;
+    private double angularP;
+    private double angularI;
+    private double angularD;
+    private double angularF;
+    private double angularIZone;
+    private double angularTolerance;
+
+    /**
+     * default constructor
+     */
+    public DriveRobotConfig() {
+      maxThrottle = 0.80;
+      linearP = 2.7;
+      linearI = linearP/100.0;
+      linearD = linearP*10.0;
+      linearF = 0.0;
+      linearIZone = Units.inchesToMeters(4.0);
+      linearTolerance = Units.inchesToMeters(2.0);
+
+      maxRotation = 0.8;
+      angularP = 0.16;
+      angularI = angularI/100.0;
+      angularD = angularP*10.0;
+      angularF = 0.0;
+      angularIZone = Units.degreesToRadians(10.0);
+      angularTolerance = Units.degreesToRadians(5.0);
+    }
+    public DriveRobotConfig setMaxThrottle(double maxThrottle) {this.maxThrottle = maxThrottle; return this; };
+    public DriveRobotConfig setLinearP(double linearP) {this.linearP = linearP; return this; };
+    public DriveRobotConfig setLinearI(double linearI) {this.linearI = linearI; return this; };
+    public DriveRobotConfig setLinearD(double linearD) {this.linearD = linearD; return this; };
+    public DriveRobotConfig setLinearF(double linearF) {this.linearF = linearF; return this; };
+    public DriveRobotConfig setLinearIZone(double linearIZone) {this.linearIZone = linearIZone; return this; };
+    public DriveRobotConfig setLinearTolerance(double linearTolerance) {this.linearTolerance = linearTolerance; return this; };
+
+    public DriveRobotConfig setMaxRotation(double maxRotation) {this.maxRotation = maxRotation; return this; };
+    public DriveRobotConfig setAngularP(double angularP) {this.angularP = angularP; return this; };
+    public DriveRobotConfig setAngularI(double angularI) {this.angularI = angularI; return this; };
+    public DriveRobotConfig setAngularD(double angularD) {this.angularD = angularD; return this; };
+    public DriveRobotConfig setAngularF(double angularF) {this.angularF = angularF; return this; };
+    public DriveRobotConfig setAngularIZone(double angularIZone) {this.angularIZone = angularIZone; return this; };
+    public DriveRobotConfig setAngularTolerance(double angularTolerance) {this.angularTolerance = angularTolerance; return this; };
+
+    public double getMaxThrottle() { return maxThrottle; }
+    public double getLinearP() { return linearP; }
+    public double getLinearI() { return linearI; }
+    public double getLinearD() { return linearD; }
+    public double getLinearF() { return linearF; }
+    public double getLinearIZone() { return linearIZone; }
+    public double getLinearTolerance() { return linearTolerance; }
+    
+    public double getMaxRotation() { return maxRotation; }
+    public double getAngularP() { return angularP; }
+    public double getAngularI() { return angularI; }
+    public double getAngularD() { return angularD; }
+    public double getAngularF() { return angularF; }
+    public double getAngularIZone() { return angularIZone; }
+    public double getAngularTolerance() { return angularTolerance; }
+  } // DriveRobotConfig Class
+
   private final DriveSubsystemSRX robotDrive;
   private final Pose2d relativeMove;
   private final boolean controlRotation;
+  private final DriveRobotConfig config;
   private Pose2d startingPose;
   private Pose2d targetPose;
   private PIDController xController;
@@ -32,21 +104,12 @@ public class DriveRobotCommand extends Command {
   private boolean onTarget;
   private static int timesInitialized = 0;
 
-  final double LINEAR_P = 2.7;
-  final double LINEAR_I = 0.0;
-  final double LINEAR_D = 0.0; // LINEAR_P * 10.0; // NEW 2/1/2024
-  final double ANGULAR_P = 0.16;
-  final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
-  final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
-  final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 1.0; // 0 to 1 is the possible range.  // Slowed from 1.0 to 0.2
-
   /** Creates a new DriveDistanceCommand. */
   public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove, boolean controlRotation) {
     this.robotDrive = robotDrive;
     this.relativeMove = relativeMove;
     this.controlRotation = controlRotation;
+    this.config = new DriveRobotConfig();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(robotDrive);
 ;  }
@@ -80,12 +143,12 @@ public class DriveRobotCommand extends Command {
       SmartDashboard.putString("DR all", "None");
 
     }
-    xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
+    xController = new PIDController(config.getLinearP(), config.getLinearI(), config.getLinearD());
     xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
-    yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
+    yController = new PIDController(config.getLinearP(), config.getLinearI(), config.getLinearD());
     yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
     if (controlRotation) {
-      rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
+      rotationController = new PIDController(config.getAngularP(), config.getAngularI(), config.getAngularD());
       rotationController.setTolerance(1.0); // did not work, dont understand yet
       rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     }
@@ -116,9 +179,9 @@ public class DriveRobotCommand extends Command {
     SmartDashboard.putNumber("Drive Y Error", translationError.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
-    if (Math.abs(translationError.getX()) < POSITION_TOLERANCE
-    &&  Math.abs(translationError.getY()) < POSITION_TOLERANCE
-    &&  Math.abs(rotationError) < ROTATION_TOLERANCE) {
+    if (Math.abs(translationError.getX()) < config.getLinearTolerance()
+    &&  Math.abs(translationError.getY()) < config.getLinearTolerance()
+    &&  Math.abs(rotationError) < config.getAngularTolerance()) {
       // Yes, we have arrived
       xSpeed = 0.0;
       ySpeed = 0.0;
@@ -126,10 +189,10 @@ public class DriveRobotCommand extends Command {
       onTarget = true;
     } else {
       // TODO fine tune PID Controllers and max speeds      
-      xSpeed = MathUtil.clamp(xController.calculate(translationError.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
-      ySpeed = MathUtil.clamp(yController.calculate(translationError.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
+      xSpeed = MathUtil.clamp(xController.calculate(translationError.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
+      ySpeed = MathUtil.clamp(yController.calculate(translationError.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
       if (controlRotation)
-        rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
+        rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
       else
         rotationSpeed = 0.0;
       onTarget = false;

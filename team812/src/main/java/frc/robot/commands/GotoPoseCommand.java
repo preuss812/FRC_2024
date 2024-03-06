@@ -14,30 +14,88 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.Utilities;
 
 public class GotoPoseCommand extends Command {
+
+  public class GotoPoseConfig {
+    private double maxThrottle;
+    private double linearP;
+    private double linearI;
+    private double linearD;
+    private double linearF;
+    private double linearIZone;
+    private double linearTolerance;
+
+    private double maxRotation;
+    private double angularP;
+    private double angularI;
+    private double angularD;
+    private double angularF;
+    private double angularIZone;
+    private double angularTolerance;
+
+    /**
+     * default constructor
+     */
+    public GotoPoseConfig() {
+      maxThrottle = 0.80;
+      linearP = 2.0;
+      linearI = linearP/100.0;
+      linearD = linearP*10.0;
+      linearF = 0.0;
+      linearIZone = Units.inchesToMeters(4.0);
+      linearTolerance = Units.inchesToMeters(2.0);
+
+      maxRotation = 0.8;
+      angularP = 0.16;
+      angularI = angularI/100.0;
+      angularD = angularP*10.0;
+      angularF = 0.0;
+      angularIZone = Units.degreesToRadians(10.0);
+      angularTolerance = Units.degreesToRadians(5.0);
+    }
+    public GotoPoseConfig setMaxThrottle(double maxThrottle) {this.maxThrottle = maxThrottle; return this; };
+    public GotoPoseConfig setLinearP(double linearP) {this.linearP = linearP; return this; };
+    public GotoPoseConfig setLinearI(double linearI) {this.linearI = linearI; return this; };
+    public GotoPoseConfig setLinearD(double linearD) {this.linearD = linearD; return this; };
+    public GotoPoseConfig setLinearF(double linearF) {this.linearF = linearF; return this; };
+    public GotoPoseConfig setLinearIZone(double linearIZone) {this.linearIZone = linearIZone; return this; };
+    public GotoPoseConfig setLinearTolerance(double linearTolerance) {this.linearTolerance = linearTolerance; return this; };
+
+    public GotoPoseConfig setMaxRotation(double maxRotation) {this.maxRotation = maxRotation; return this; };
+    public GotoPoseConfig setAngularP(double angularP) {this.angularP = angularP; return this; };
+    public GotoPoseConfig setAngularI(double angularI) {this.angularI = angularI; return this; };
+    public GotoPoseConfig setAngularD(double angularD) {this.angularD = angularD; return this; };
+    public GotoPoseConfig setAngularF(double angularF) {this.angularF = angularF; return this; };
+    public GotoPoseConfig setAngularIZone(double angularIZone) {this.angularIZone = angularIZone; return this; };
+    public GotoPoseConfig setAngularTolerance(double angularTolerance) {this.angularTolerance = angularTolerance; return this; };
+
+    public double getMaxThrottle() { return maxThrottle; }
+    public double getLinearP() { return linearP; }
+    public double getLinearI() { return linearI; }
+    public double getLinearD() { return linearD; }
+    public double getLinearF() { return linearF; }
+    public double getLinearIZone() { return linearIZone; }
+    public double getLinearTolerance() { return linearTolerance; }
+    
+    public double getMaxRotation() { return maxRotation; }
+    public double getAngularP() { return angularP; }
+    public double getAngularI() { return angularI; }
+    public double getAngularD() { return angularD; }
+    public double getAngularF() { return angularF; }
+    public double getAngularIZone() { return angularIZone; }
+    public double getAngularTolerance() { return angularTolerance; }
+  } // GotoPoseConfig Class
+
   /** Creates a new command to move the robot to the specified pose. */
   protected final PoseEstimatorSubsystem m_PoseEstimatorSubsystem;
   protected final DriveSubsystemSRX m_DriveSubsystemSRXSubsystem;
   protected final Pose2d m_targetPose;
+  protected final GotoPoseConfig m_config;
   protected Pose2d targetPose;
-
-  // TODO Get these values from Constants.java
-  final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(32.5);
-  final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.0);
-  final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0.0);
-  final double GOAL_RANGE_METERS = Units.feetToMeters(0.5);
-
-  final double LINEAR_P = 2.0;
-  final double LINEAR_I = 0.0;
-  final double LINEAR_D = 0.0; // LINEAR_P * 10.0; // NEW 2/1/2024
-  final double ANGULAR_P = 0.16;
-  final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
-  final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
-  final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.8; // 0 to 1 is the possible range.
 
   protected PIDController xController;
   protected PIDController yController;
@@ -54,8 +112,8 @@ public class GotoPoseCommand extends Command {
     m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
     m_targetPose = new Pose2d(targetX, targetY, new Rotation2d(targetRotation));
     onTarget = false;
+    m_config = new GotoPoseConfig();
     addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
-    
   }
 
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
@@ -67,27 +125,56 @@ public class GotoPoseCommand extends Command {
     m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
     m_targetPose = targetPose;
     onTarget = false;
+    m_config = new GotoPoseConfig();
     addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
     
   }
 
+  public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
+    , DriveSubsystemSRX DriveSubsystemSRXSubsystem
+    , Pose2d targetPose
+    , GotoPoseConfig config) {
+    
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_PoseEstimatorSubsystem = PoseEstimatorSubsystem;
+    m_DriveSubsystemSRXSubsystem = DriveSubsystemSRXSubsystem;
+    m_targetPose = targetPose;
+    onTarget = false;
+    this.m_config = config;
+    addRequirements(PoseEstimatorSubsystem, DriveSubsystemSRXSubsystem);
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //double angular_P = 0.05; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 0.1);  // Removed 2/1/2024
-    //double angular_I = 0.005; // TODO RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.01); // Removed 2/1/2024
-    //SmartDashboard.putNumber("Target angular_P", angular_P);
-    //SmartDashboard.putNumber("Target angular_I", angular_I);
+    double angularP = m_config.getAngularP();
+    double angularI = m_config.getAngularI();
 
-    xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
-    xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
-    yController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
-    yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
+    angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
+    angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
+    SmartDashboard.putNumber("G2P P", angularP);
+    SmartDashboard.putNumber("G2P I", angularI);
 
-    rotationController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-    rotationController.setTolerance(1.0); // did not work, dont understand yet
-    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
+    xController = new PIDController(
+      m_config.getLinearP(),
+      m_config.getLinearI(),
+      m_config.getLinearD()
+    );
+    xController.setIZone(m_config.getLinearIZone());
+    yController = new PIDController(
+      m_config.getLinearP(),
+      m_config.getLinearI(),
+      m_config.getLinearD()
+    );
+    yController.setIZone(m_config.getAngularIZone()); // TODO Needs Tuning.
+
+    rotationController = new PIDController(
+      angularP, // m_config.getAngularP(),
+      angularI, // m_config.getAngularI(),
+      m_config.getAngularD()
+      );
+    rotationController.setTolerance(m_config.getAngularTolerance()); // did not work, dont understand yet
+    rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians).
     onTarget = false;
     targetPose = m_targetPose;
     Utilities.toSmartDashboard("GotoTarget", targetPose);
@@ -120,9 +207,9 @@ public class GotoPoseCommand extends Command {
     SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
-    if (Math.abs(translationErrorToTarget.getX()) < POSITION_TOLERANCE
-    &&  Math.abs(translationErrorToTarget.getY()) < POSITION_TOLERANCE
-    &&  Math.abs(rotationError) < ROTATION_TOLERANCE) {
+    if (Math.abs(translationErrorToTarget.getX()) < m_config.getLinearTolerance()
+    &&  Math.abs(translationErrorToTarget.getY()) < m_config.getLinearTolerance()
+    &&  Math.abs(rotationError) < m_config.getAngularTolerance()) {
       // Yes, we have arrived
       SmartDashboard.putBoolean("GotoPoseOnTarget", true);
       xSpeed = 0.0;
@@ -142,8 +229,8 @@ public class GotoPoseCommand extends Command {
 
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
-      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -MAX_THROTTLE, MAX_THROTTLE);
-      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -MAX_THROTTLE, MAX_THROTTLE);
+      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
+      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
       /*
        * Next 2 lines I think were breaking the rotation direction calculations to turn in the closest direction so 
        * I commented them out 2/1/2024
@@ -151,7 +238,7 @@ public class GotoPoseCommand extends Command {
        * if (rotationError < 0.0)
        *  rotationError += 2.0*Math.PI; // For the PID Controller make sure the rotationError is between 0 and 2*PI
        */
-      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-1.0,1.0); // TODO Check sign  & Clean up 3 negations :-)
+      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-m_config.getMaxRotation(), m_config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
     }
     SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
@@ -172,7 +259,6 @@ public class GotoPoseCommand extends Command {
     if (onTarget)
         m_DriveSubsystemSRXSubsystem.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
 
-    return onTarget; // Run forever to make debug easier.
-    // return true;
+    return onTarget; 
   }
 }
