@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Utilities;
 import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.DriveTrainConstants;
 //import frc.robot.subsystems.DriveSubsystemSRX;
@@ -37,7 +38,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final PhotonCamera photonCamera;
   private final DriveSubsystemSRX drivetrainSubsystem;
   private final AprilTagFieldLayout aprilTagFieldLayout;
-  
+  private boolean debug = true;
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
   // "trust" the estimate from that particular component more than the others. 
@@ -118,6 +119,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
 
         var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
+        if (debug)
+          Utilities.toSmartDashboard("PE pose",visionMeasurement.toPose2d());
         poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
         m_lastAprilTagSeen = fiducialId;
       } else {
