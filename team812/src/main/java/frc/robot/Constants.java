@@ -253,6 +253,16 @@ public final class Constants {
             ),
             new Rotation3d(0.0,0.0, Math.PI)
         );
+        public static double cameraXOffsetToRobot = Units.inchesToMeters(11.0); // TODO verify sign.
+        public static double cameraYOffsetToRobot = Units.inchesToMeters(0.0);
+        public static double cameraHeightToGround = Units.inchesToMeters(-17); // TODO Measure height and check sign.
+        public static double cameraRoll  = Units.degreesToRadians(0.0);
+        public static double cameraPitch = Units.degreesToRadians(30.0); // TODO measure angle and check sign.
+        public static double cameraYaw   = Units.degreesToRadians(180.0); // Rear facing camera.
+        public static final Transform3d TEST_CAMERA_TO_ROBOT = new Transform3d(
+            new Translation3d(cameraXOffsetToRobot,cameraYOffsetToRobot,cameraHeightToGround),
+            new Rotation3d(cameraRoll, cameraPitch, cameraYaw)
+        );
 
         public static final Transform3d ROBOT_TO_CAMERA = CAMERA_TO_ROBOT.inverse();
         public enum AprilTag {
