@@ -37,7 +37,7 @@ public class GotoPoseCommand extends Command {
   final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double POSITION_TOLERANCE = Units.inchesToMeters(2.0);
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.4; // 0 to 1 is the possible range.
+  final double MAX_THROTTLE = 0.8; // 0 to 1 is the possible range.
 
   protected PIDController xController;
   protected PIDController yController;

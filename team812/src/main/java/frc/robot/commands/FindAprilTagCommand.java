@@ -23,9 +23,9 @@ public class FindAprilTagCommand extends SequentialCommandGroup {
   /** Creates a new FindAprilTagCommand. */
   public FindAprilTagCommand(DriveSubsystemSRX robotDrive, PoseEstimatorSubsystem poseEstimatorSubsystem, double speed) {
     // Start the robot spining and rotate until an april tag is in view.
-    addCommands(
+        addCommands(
       new ParallelDeadlineGroup(
-        new WaitToSeeAprilTagCommand(poseEstimatorSubsystem),  // This this ends, it will stop the rotation.
+        new WaitToSeeAprilTagCommand(poseEstimatorSubsystem),  // This ends, it will stop the rotation.
         new SpinRobotCommand(robotDrive, speed)
       )
     );

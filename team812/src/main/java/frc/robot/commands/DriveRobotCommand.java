@@ -65,14 +65,20 @@ public class DriveRobotCommand extends Command {
       startingPose.getX() + relativeMove.getX(),
       startingPose.getY() + relativeMove.getY(),
       startingPose.getRotation().rotateBy(relativeMove.getRotation()));
-    } if (Utilities.isRedAlliance()) {
+      SmartDashboard.putString("DR all", "Blue");
+
+    } else if (Utilities.isRedAlliance()) {
       // This just inverts the X move as the field this year is mirrored about the center of the field.
       targetPose = new Pose2d(
       startingPose.getX() - relativeMove.getX(),
       startingPose.getY() + relativeMove.getY(),
       startingPose.getRotation().rotateBy(relativeMove.getRotation().rotateBy(new Rotation2d(Math.PI))));
+      SmartDashboard.putString("DR all", "Red");
+
     } else {
       targetPose = startingPose; // Do nothing if we dont have an alliance.
+      SmartDashboard.putString("DR all", "None");
+
     }
     xController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
     xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.

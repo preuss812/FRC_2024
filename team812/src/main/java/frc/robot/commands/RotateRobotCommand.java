@@ -32,7 +32,7 @@ public class RotateRobotCommand extends Command {
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0; // ANGULAR_P * 10.0; // NEW 2/1/2024
   final double ROTATION_TOLERANCE = Units.degreesToRadians(5.0);  //TODO Tune these tolerances.
-  final double MAX_THROTTLE = 0.4; // 0 to 1 is the possible range.  // TODO undo Slowed from 1.0 to 0.2
+  final double MAX_THROTTLE = 0.8; // 0 to 1 is the possible range.  // TODO undo Slowed from 1.0 to 0.2
 
   /** Creates a new DriveDistanceCommand. */
   public RotateRobotCommand(DriveSubsystemSRX robotDrive, double theta, boolean relative) {

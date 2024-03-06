@@ -24,6 +24,7 @@ import frc.robot.commands.GotoAmpCommand;
 import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.StopRobotMotion;
+import frc.robot.commands.PushTowardsWall;
 import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -126,7 +127,7 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
         new ParallelDeadlineGroup(
           new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
-          new StopRobotMotion(m_robotDrive)
+          new PushTowardsWall(m_robotDrive)
         ),
 
         // Leave the starting box to get more points.
