@@ -111,6 +111,14 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //SmartDashboard.putNumber("encoder",frc.robot.RobotContainer.m_enctest.getPosition().getValue());
   //  SmartDashboard.putNumber("InEncode",frc.robot.subsystems.MAXSwerveModule.m_turningEncoder.getPosition());
+    if (RobotContainer.m_BlackBox.isSwitchLeft())
+      SmartDashboard.putString("Debug","None");
+    else if  (RobotContainer.m_BlackBox.isSwitchCenter())
+      SmartDashboard.putString("Debug","Drive");
+    else if  (RobotContainer.m_BlackBox.isSwitchLeft())
+      SmartDashboard.putString("Debug","Rotate");
+    else
+      SmartDashboard.putString("Debug","N/A");
   }
 
   @Override

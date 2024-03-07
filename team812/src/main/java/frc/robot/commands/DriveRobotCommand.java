@@ -47,16 +47,16 @@ public class DriveRobotCommand extends Command {
     public DriveRobotConfig() {
       maxThrottle = 0.80;
       linearP = 2.7;
-      linearI = linearP/100.0;
-      linearD = linearP*10.0;
+      linearI = 0.0; // linearP/100.0;
+      linearD = 0.0; // linearP*10.0;
       linearF = 0.0;
       linearIZone = Units.inchesToMeters(4.0);
       linearTolerance = Units.inchesToMeters(2.0);
 
       maxRotation = 0.8;
-      angularP = 0.16;
-      angularI = angularI/100.0;
-      angularD = angularP*10.0;
+      angularP =  0.35;
+      angularI = 0.0; // angularI/100.0;
+      angularD = 0.0; // angularP*10.0;
       angularF = 0.0;
       angularIZone = Units.degreesToRadians(10.0);
       angularTolerance = Units.degreesToRadians(5.0);
@@ -106,6 +106,8 @@ public class DriveRobotCommand extends Command {
   private boolean onTarget;
   private static int timesInitialized = 0;
   private boolean debug = false;
+  private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
+  private int debugIterations = 0;
 
   /** Creates a new DriveDistanceCommand. */
   public DriveRobotCommand(DriveSubsystemSRX robotDrive, Pose2d relativeMove, boolean controlRotation) {
@@ -121,16 +123,20 @@ public class DriveRobotCommand extends Command {
   @Override
   public void initialize() {
     timesInitialized++;
+
     SmartDashboard.putNumber("DR #inits", timesInitialized);
 
-    double angularP = config.getAngularP();
-    double angularI = config.getAngularI();
-
+    debug = RobotContainer.m_BlackBox.isSwitchCenter();
+    double linearP = config.getLinearP();
+    double linearI = config.getLinearI();
+    
     if (debug) {
-      angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
-      angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
-      SmartDashboard.putNumber("G2P P", angularP);
-      SmartDashboard.putNumber("G2P I", angularI);
+      debugIterations = 0;
+      config.setLinearTolerance(0.01); // tighter tolerance of 1cm
+      linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
+      linearI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.1);
+      SmartDashboard.putNumber("BB P", linearP);
+      SmartDashboard.putNumber("BB I", linearI);
     }
 
     // get the robot's current pose from the drivetrain
@@ -157,12 +163,12 @@ public class DriveRobotCommand extends Command {
       SmartDashboard.putString("DR all", "None");
 
     }
-    xController = new PIDController(config.getLinearP(), config.getLinearI(), config.getLinearD());
+    xController = new PIDController(linearP, linearI, config.getLinearD());
     xController.setIZone(0.1); // This is meters so about 4 inches  // TODO Needs tuning.
-    yController = new PIDController(config.getLinearP(), config.getLinearI(), config.getLinearD());
+    yController = new PIDController(linearP, linearI, config.getLinearD());
     yController.setIZone(0.1); // NEW 2/1/2024 // TODO Needs Tuning.
     if (controlRotation) {
-      rotationController = new PIDController(angularP, angularI, config.getAngularD());
+      rotationController = new PIDController(config.getAngularP(), config.getAngularI(), config.getAngularD());
       rotationController.setTolerance(1.0); // did not work, dont understand yet
       rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     }
@@ -179,6 +185,7 @@ public class DriveRobotCommand extends Command {
     double ySpeed = 0.0;
     double rotationSpeed = 0.0;
     //SmartDashboard.putNumber("Range", -54);
+    debugIterations++;
     currentPose = robotDrive.getPose();
     Utilities.toSmartDashboard("Drive Pose", currentPose);
     Utilities.toSmartDashboard("Drive target", targetPose);
@@ -228,7 +235,9 @@ public class DriveRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return true;
-    return onTarget; 
+    if (!debug || (debugIterations >= debugMinIterations))
+      return onTarget;
+    else
+      return false; 
   }
 }

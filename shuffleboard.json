@@ -495,8 +495,7 @@
               "_showGlyph": false,
               "Game/Game": "k2024Crescendo",
               "Visuals/Robot Icon Size": 50.0,
-              "Visuals/Show Outside Circles": false,
-              "Colors/trajectory": "#FFFFFFFF"
+              "Visuals/Show Outside Circles": false
             }
           },
           "9,0": {
@@ -756,6 +755,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "0,4": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PE CurrentPose",
+              "_title": "SmartDashboard/PE CurrentPose",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -855,7 +867,8 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Drive X Error": true
             }
           },
           "6,3": {
@@ -874,7 +887,8 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Drive Y Error": true
             }
           },
           "8,1": {
@@ -893,7 +907,8 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Drive xSpeed": true
             }
           },
           "8,3": {
@@ -912,7 +927,8 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Drive ySpeed": true
             }
           }
         }
@@ -1016,6 +1032,125 @@
               "_type": "Network Table Tree",
               "_source0": "network_table:///SmartDashboard/Scheduler",
               "_title": "SmartDashboard/Scheduler",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "PID",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/RRcmd",
+              "_title": "/SmartDashboard/RRcmd",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DRcmd",
+              "_title": "/SmartDashboard/DRcmd",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "2,0": {
+            "size": [
+              8,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/RR Error",
+              "_title": "SmartDashboard/RR Error",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/RR Error": true
+            }
+          },
+          "2,3": {
+            "size": [
+              8,
+              2
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Drive X Error",
+              "_title": "/SmartDashboard/Drive X Error",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Drive X Error": true
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/BB P",
+              "_title": "/SmartDashboard/BB P",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/BB I",
+              "_title": "/SmartDashboard/BB I",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Debug",
+              "_title": "SmartDashboard/Debug",
               "_glyph": 148,
               "_showGlyph": false
             }

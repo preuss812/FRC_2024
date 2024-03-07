@@ -39,7 +39,7 @@ public class RotateRobotCommand extends Command {
       maxRotation = 0.8;
       angularP = 0.35;
       angularI = 0; // angularI/100.0;
-      angularD = angularP * 0; // angularP*10.0;
+      angularD = 0.0; // angularP*10.0;
       angularF = 0.0;
       angularIZone = Units.degreesToRadians(10.0);
       angularTolerance = Units.degreesToRadians(5.0);
@@ -69,6 +69,8 @@ public class RotateRobotCommand extends Command {
   private double startingTheta;
   private double targetTheta;
   private boolean debug = false;
+  private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
+  private int debugIterations = 0;
   
   private PIDController rotationController;
   private boolean onTarget;
@@ -87,14 +89,18 @@ public class RotateRobotCommand extends Command {
   @Override
   public void initialize() {
 
+    debug = (RobotContainer.m_BlackBox.isSwitchRight());
+
     double angularP = config.getAngularP();
     double angularI = config.getAngularI();
 
     if (debug) {
+      debugIterations = 0;
+      config.setAngularTolerance(Units.degreesToRadians(0.1)); // set a smaller window for success.
       angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
       angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
-      SmartDashboard.putNumber("G2P P", angularP);
-      SmartDashboard.putNumber("G2P I", angularI);
+      SmartDashboard.putNumber("BB P", angularP);
+      SmartDashboard.putNumber("BB I", angularI);
     }
     
     // get the robot's current rotation from the drivetrain
@@ -116,9 +122,11 @@ public class RotateRobotCommand extends Command {
       }
     }
     rotationController = new PIDController(angularP, angularI, config.getAngularD());
+    rotationController.setIZone(config.getAngularIZone());
     rotationController.setTolerance(config.getAngularTolerance()); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians). // NEW 2/1/2024
     onTarget = false;
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -130,6 +138,7 @@ public class RotateRobotCommand extends Command {
     double ySpeed = 0.0;
     double rotationSpeed = 0.0;
 
+    debugIterations++;
     currentTheta = robotDrive.getPose().getRotation().getRadians();
     SmartDashboard.putNumber("RR theta", currentTheta);
     SmartDashboard.putNumber("RR target", targetTheta);
@@ -138,6 +147,7 @@ public class RotateRobotCommand extends Command {
     SmartDashboard.putNumber("RR Error", Units.radiansToDegrees(rotationError));
     
     // Test to see if we have arrived at the requested angle within the specified tolerance.
+    // Need to also test for velocity, otherwise momentum could send us past the goal.
     if (Math.abs(rotationError) < config.getAngularTolerance()) {
       // Yes, we have arrived
       xSpeed = 0.0;
@@ -162,6 +172,9 @@ public class RotateRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return onTarget; 
+    if (!debug || (debugIterations >= debugMinIterations))
+      return onTarget;
+    else
+      return false;
   }
 }

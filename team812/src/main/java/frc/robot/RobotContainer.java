@@ -337,8 +337,10 @@ public class RobotContainer {
        * for both red and blue alliances.
        */
       
-      SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
-    } // (debug)
+       SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
+       SmartDashboard.putData("RRcmd", new RotateRobotCommand(m_robotDrive, 0.0, false));
+       SmartDashboard.putData("DRcmd", new DriveRobotCommand(m_robotDrive, new Pose2d(1.0,0.0, new Rotation2d()), false));
+      } // (debug)
   } // (configureButtonBindings)
 
   /**

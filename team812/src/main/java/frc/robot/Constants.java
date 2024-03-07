@@ -234,7 +234,7 @@ public final class Constants {
         * Physical location of the camera on the robot, relative to the center of the robot.
         */
         // Values in Meters.
-        public static final Transform3d CAMERA_TO_ROBOT =
+        public static final Transform3d XCAMERA_TO_ROBOT =
         // x pos or neg doesn't get us where we want to go      w/apriltag 1    
         //new Transform3d(new Translation3d(-0.3425, 0.0, -0.233), new Rotation3d()); // Before we rotated the RoboRio
         // new Transform3d(new Translation3d(0.0, -0.3425, -0.233), new Rotation3d());
@@ -249,17 +249,17 @@ public final class Constants {
             new Translation3d(
                 Units.inchesToMeters(-11.0),
                 Units.inchesToMeters(0.0),
-                Units.inchesToMeters(-18.25)
+                Units.inchesToMeters(0.0) // Distance is 10.5 inches but emperically 0 works better.
             ),
             new Rotation3d(0.0,0.0, Math.PI)
         );
-        public static double cameraXOffsetToRobot = Units.inchesToMeters(11.0); // TODO verify sign.
+        public static double cameraXOffsetToRobot = Units.inchesToMeters(-11.0*0);
         public static double cameraYOffsetToRobot = Units.inchesToMeters(0.0);
-        public static double cameraHeightToGround = Units.inchesToMeters(-17); // TODO Measure height and check sign.
+        public static double cameraHeightToGround = Units.inchesToMeters(0);
         public static double cameraRoll  = Units.degreesToRadians(0.0);
-        public static double cameraPitch = Units.degreesToRadians(30.0); // TODO measure angle and check sign.
+        public static double cameraPitch = Units.degreesToRadians(0.0); 
         public static double cameraYaw   = Units.degreesToRadians(180.0); // Rear facing camera.
-        public static final Transform3d TEST_CAMERA_TO_ROBOT = new Transform3d(
+        public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
             new Translation3d(cameraXOffsetToRobot,cameraYOffsetToRobot,cameraHeightToGround),
             new Rotation3d(cameraRoll, cameraPitch, cameraYaw)
         );

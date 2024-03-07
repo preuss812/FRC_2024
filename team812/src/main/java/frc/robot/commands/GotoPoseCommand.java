@@ -43,16 +43,16 @@ public class GotoPoseCommand extends Command {
     public GotoPoseConfig() {
       maxThrottle = 0.80;
       linearP = 2.0;
-      linearI = linearP/100.0;
-      linearD = linearP*10.0;
+      linearI = 0.0; // linearP/100.0;
+      linearD = 0.0; // linearP*10.0;
       linearF = 0.0;
       linearIZone = Units.inchesToMeters(4.0);
       linearTolerance = Units.inchesToMeters(2.0);
 
       maxRotation = 0.8;
-      angularP = 0.16;
-      angularI = angularI/100.0;
-      angularD = angularP*10.0;
+      angularP =  0.35;
+      angularI = 0.0; // angularI/100.0;
+      angularD = 0.0; //angularP*10.0;
       angularF = 0.0;
       angularIZone = Units.degreesToRadians(10.0);
       angularTolerance = Units.degreesToRadians(5.0);
@@ -102,6 +102,8 @@ public class GotoPoseCommand extends Command {
   protected PIDController rotationController;
   protected boolean onTarget;
   private boolean debug = false;
+  private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
+  private int debugIterations = 0;
   
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem
@@ -148,32 +150,36 @@ public class GotoPoseCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double angularP = m_config.getAngularP();
-    double angularI = m_config.getAngularI();
+
+    debug = RobotContainer.m_BlackBox.isSwitchCenter();
+    double linearP = m_config.getLinearP();
+    double linearI = m_config.getLinearI();
 
     if (debug) {
-      angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
-      angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
-      SmartDashboard.putNumber("G2P P", angularP);
-      SmartDashboard.putNumber("G2P I", angularI);
+      debugIterations = 0;
+      m_config.setLinearTolerance(0.01); // tighter tolerance of 1cm
+      linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
+      linearI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.1);
+      SmartDashboard.putNumber("BB P", linearP);
+      SmartDashboard.putNumber("BB I", linearI);
     }
     
     xController = new PIDController(
-      m_config.getLinearP(),
-      m_config.getLinearI(),
+      linearP, // m_config.getLinearP(),
+      linearI, // m_config.getLinearI(),
       m_config.getLinearD()
     );
     xController.setIZone(m_config.getLinearIZone());
     yController = new PIDController(
-      m_config.getLinearP(),
-      m_config.getLinearI(),
+      linearP, // m_config.getLinearP(),
+      linearI, // m_config.getLinearI(),
       m_config.getLinearD()
     );
     yController.setIZone(m_config.getAngularIZone()); // TODO Needs Tuning.
 
     rotationController = new PIDController(
-      angularP, // m_config.getAngularP(),
-      angularI, // m_config.getAngularI(),
+      m_config.getAngularP(),
+      m_config.getAngularI(),
       m_config.getAngularD()
       );
     rotationController.setTolerance(m_config.getAngularTolerance()); // did not work, dont understand yet
@@ -197,7 +203,8 @@ public class GotoPoseCommand extends Command {
     double xSpeed = 0.0;
     double ySpeed = 0.0;
     double rotationSpeed = 0.0;
-    //SmartDashboard.putNumber("Range", -54);
+
+    debugIterations++;
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
     Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
     // Calculate the X and Y and rotation offsets to the target location
@@ -259,9 +266,9 @@ public class GotoPoseCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (onTarget)
-        m_DriveSubsystemSRXSubsystem.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
-
-    return onTarget; 
+    if (!debug || (debugIterations >= debugMinIterations))
+      return onTarget;
+    else
+      return false; 
   }
 }
