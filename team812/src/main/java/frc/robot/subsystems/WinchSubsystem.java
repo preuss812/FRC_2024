@@ -89,7 +89,7 @@ public class WinchSubsystem extends SubsystemBase {
    * For debug or possibly attach to joystick.
    */
   public void runMotor(double speed) {
-    m_winch.set(MathUtil.clamp(speed,-0.8,0.8));
+    m_winch.set(MathUtil.clamp(speed,-0.2,0.2));
   }
 
   @Override
