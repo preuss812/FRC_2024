@@ -49,7 +49,7 @@ public class ArmRotationCommand extends Command {
       // We are hear because the arm was rotating up (to lower encoder values) and we hit the limit switch.
       return true;
     } else if (m_armSubsystem.getPosition() < setPoint && m_armSubsystem.isFwdLimitSwitchClosed()) {
-      // We are hear because the arm was rotating up (to lower encoder values) and we hit the limit switch.
+      // We are here because the arm was rotating up (to lower encoder values) and we hit the limit switch.
       return true;
     } else {
       return false;

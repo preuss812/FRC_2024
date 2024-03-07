@@ -37,9 +37,9 @@ public class RotateRobotCommand extends Command {
      */
     public RotateRobotConfig() {
       maxRotation = 0.8;
-      angularP = 0.16;
-      angularI = angularI/100.0;
-      angularD = angularP*10.0;
+      angularP = 0.35;
+      angularI = 0; // angularI/100.0;
+      angularD = angularP * 0; // angularP*10.0;
       angularF = 0.0;
       angularIZone = Units.degreesToRadians(10.0);
       angularTolerance = Units.degreesToRadians(5.0);
@@ -93,6 +93,8 @@ public class RotateRobotCommand extends Command {
     if (debug) {
       angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
       angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
+      SmartDashboard.putNumber("G2P P", angularP);
+      SmartDashboard.putNumber("G2P I", angularI);
     }
     
     // get the robot's current rotation from the drivetrain

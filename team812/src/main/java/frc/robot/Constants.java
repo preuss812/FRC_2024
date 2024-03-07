@@ -249,7 +249,7 @@ public final class Constants {
             new Translation3d(
                 Units.inchesToMeters(-11.0),
                 Units.inchesToMeters(0.0),
-                Units.inchesToMeters(0.0)
+                Units.inchesToMeters(-18.25)
             ),
             new Rotation3d(0.0,0.0, Math.PI)
         );
@@ -318,8 +318,8 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 1.0; //4.5; // Limit how violently swerve works
-        public static final double kMaxAngularSpeed = 3 * Math.PI; // radians per second
+        public static final double kMaxSpeedMetersPerSecond = 4.5; //4.5; // Limit how violently swerve works
+        public static final double kMaxAngularSpeed = 4 * Math.PI; // radians per second
     
         public static final double kDirectionSlewRate = 1.2; // radians per second
         public static final double kMagnitudeIncreaseSlewRate = 0.8; // percent per second (1 = 100%)
@@ -467,8 +467,6 @@ public final class Constants {
     }
 
     public static final class UltrasonicConstants {
-        public static final int kUltrasonicAnalogPort = 0;
-        public static final int kUltrasonicFullRange = 180;  // not used as of 3/6/2024
-        public static final int kUltrasonicZeroVoltOffset = 30; // not used as of 3/6/2024
+        public static final int kUltrasonicAnalogPort = 3;
     }
 }

@@ -103,6 +103,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+        SmartDashboard.putString("PE CurrentPose", getCurrentPose().toString());
+
     // Update pose estimator with the best visible target
     var pipelineResult = photonCamera.getLatestResult();
     var resultTimestamp = pipelineResult.getTimestampSeconds();
@@ -143,6 +145,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     field2d.setRobotPose(getCurrentPose());
     if (trajectory != null) 
       field2d.getObject("trajectory").setTrajectory(trajectory);
+      
   }
 
   public String getFomattedPose() {

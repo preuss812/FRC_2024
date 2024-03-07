@@ -6,17 +6,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.UltrasonicConstants;
 
 public class UltrasonicDistanceSubsystem extends SubsystemBase {
-  private final AnalogPotentiometer ultrasonicSensor;
+  private final AnalogInput ultrasonicSensor;
   public double voltageScaleFactor = 1;
 
   /** Creates a new UltrasonicDistanceSubsystem. */
   public UltrasonicDistanceSubsystem() {
-    this.ultrasonicSensor = new AnalogPotentiometer(UltrasonicConstants.kUltrasonicAnalogPort);
+    this.ultrasonicSensor = new AnalogInput(UltrasonicConstants.kUltrasonicAnalogPort);
+   //                                                 UltrasonicConstants.kUltrasonicFullRange,
+     //                                               UltrasonicConstants.kUltrasonicZeroVoltOffset);  
 
   /* We use the AnalogPotentiometer class for our Analog range sensor model MB1013
    * which is plugged into an analog port (kUltrasonicAnalogPort) on the RoboRio.
@@ -34,14 +36,16 @@ public class UltrasonicDistanceSubsystem extends SubsystemBase {
     voltageScaleFactor = 5/RobotController.getVoltage5V();
     SmartDashboard.putNumber("US vsf", voltageScaleFactor);
     SmartDashboard.putNumber("US cm",getRange());
+    //SmartDashboard.putNumber("US voltage", ultrasonicSensor.getAverageVoltage());
+    //SmartDashboard.putNumber("US value", ultrasonicSensor.getAverageValue());
   }
   /**
    * return the range to the nearest object to the sensor.
    * @return
    */
   // Get the value from the sensor, scale it by the current Voltage Scale Factor
-  // then scale it to centimeters.
+  // then scale it to centimeters. 
   public double getRange() {
-    return ultrasonicSensor.get()*voltageScaleFactor*0.125;
+    return ultrasonicSensor.getAverageValue()*voltageScaleFactor*0.125;
   }
 }
