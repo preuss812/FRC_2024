@@ -174,6 +174,10 @@ public class RobotContainer {
     m_ArmRotationSubsystem.setDefaultCommand(
       new RunCommand(() -> m_ArmRotationSubsystem.rotate(-rightJoystick.getY()), m_ArmRotationSubsystem)
     );
+    
+    m_WinchSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_WinchSubsystem.runMotor(-leftJoystick.getY()), m_WinchSubsystem)
+    );
   }
 
   /**

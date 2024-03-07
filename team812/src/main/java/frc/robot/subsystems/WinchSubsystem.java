@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
@@ -82,6 +83,13 @@ public class WinchSubsystem extends SubsystemBase {
 
   public void lowerRobot() {
     m_winch.set(WinchConstants.kLowerRobotSpeed);
+  }
+
+  /*
+   * For debug or possibly attach to joystick.
+   */
+  public void runMotor(double speed) {
+    m_winch.set(MathUtil.clamp(speed,-0.8,0.8));
   }
 
   @Override
