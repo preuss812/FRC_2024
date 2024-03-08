@@ -1083,8 +1083,8 @@
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/RR Error",
-              "_source1": "network_table:///SmartDashboard/Pot 0:",
+              "_source0": "network_table:///SmartDashboard/Pot 0:",
+              "_source1": "network_table:///SmartDashboard/RR Error",
               "_title": "SmartDashboard/RR Error",
               "_glyph": 148,
               "_showGlyph": false,
@@ -1192,6 +1192,53 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Pot 1:",
               "_title": "SmartDashboard/Pot 1:",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Autonomous",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              7,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Auto Step",
+              "_title": "SmartDashboard/Auto Step",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": false,
+              "Y-axis/Upper bound": 10.0,
+              "Y-axis/Lower bound": -0.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Auto Step": true
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ActiveCommand",
+              "_title": "SmartDashboard/ActiveCommand",
               "_glyph": 148,
               "_showGlyph": false
             }

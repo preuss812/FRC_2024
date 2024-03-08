@@ -89,53 +89,64 @@ public class Autonomous extends SequentialCommandGroup {
 
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
         // Set the gyro starting angle based on alliance and assumed robot placement
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
         new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
 
         // Home the arm (should already be homed but this sets the encoder coordinates)
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
 
         // Drive out based on drivetrain encoders to align with and face the Amp
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
         new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0),
 
         // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 4)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "TurnCameraTowardAmp")),
         new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
         new FindAprilTagCommand(
           RobotContainer.m_robotDrive,
           RobotContainer.m_PoseEstimatorSubsystem, 
-          AutoConstants.kRotationSpeed),
+          AutoConstants.kRotationSpeed).withTimeout(10.0), // This is too slow for just 10 seconds
 
         // set the robot drive x,y,theta to match the pose estimator (ie use camera to set x,y,theta)
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 6)),
         new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
 
         // Use a trajectory to move close to the amp.
         // This is a place holder for the moment.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 7)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
         //new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, ampAprilTag),
 
         // Move to the scoring position
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 8)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive),
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0),
         // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
 
         // Score the note.
         // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 9)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
         new ParallelDeadlineGroup(
           new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
           new PushTowardsWall(m_robotDrive)
-        ),
+        ).withTimeout(10.0),
 
         // Leave the starting box to get more points.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
-        new DriveRobotCommand(m_robotDrive, finalMove, false),
+        new DriveRobotCommand(m_robotDrive, finalMove, false).withTimeout(5.0),
 
         // quiesce the drive and finish.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
 
