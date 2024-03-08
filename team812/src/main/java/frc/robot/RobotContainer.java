@@ -44,7 +44,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
-import frc.robot.subsystems.UltrasonicDistanceSubsystem;
+import frc.robot.subsystems.AnalogUltrasonicDistanceSubsystem;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveRobotCommand;
@@ -101,8 +101,8 @@ public class RobotContainer {
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
   public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
-  public static UltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
-            new UltrasonicDistanceSubsystem();
+  public static AnalogUltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
+            new AnalogUltrasonicDistanceSubsystem();
 
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 

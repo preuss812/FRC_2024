@@ -327,6 +327,16 @@ public final class Constants {
         public static final double kRotationalIncreaseSlewRate = 0.4;// 2.0; // percent per second (1 = 100%) // UNDO
         public static final double kRotationalDecreaseSlewRate = 4.0;
 
+        // Driving Parameters for PRECISION DrivingMode.  This is a slower mode for more precise positioning.
+        public static final double kMaxSpeedMetersPerSecondPM = 1.0; //4.5; 1.0 in the lab // Limit how violently swerve works
+        public static final double kMaxAngularSpeedPM = 1 * Math.PI; // radians per second
+    
+        public static final double kDirectionSlewRatePM = 0.6; // radians per second
+        public static final double kMagnitudeIncreaseSlewRatePM = 0.3; // percent per second (1 = 100%)
+        public static final double kMagnitudeDecreaseSlewRatePM = 3.6; // percent per second (1 = 100%)
+        public static final double kRotationalIncreaseSlewRatePM = 0.2;// 2.0; // percent per second (1 = 100%) // UNDO
+        public static final double kRotationalDecreaseSlewRatePM = 4.0;
+        
         // Chassis configuration
         public static final double kTrackWidth = Units.inchesToMeters(17.75); // was 26.5 until 3/5/2024, actual is 17.75
         // Distance between centers of right and left wheels on robot

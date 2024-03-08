@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.DriveSubsystemSRX;
 import edu.wpi.first.cameraserver.CameraServer;
 
 // import frc.robot.RobotContainer;
@@ -29,7 +31,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   public static NetworkTable nttable;
   static int i = 0;
-
+  private boolean drivingSwitchPosition = false; // Assume the switch is not set (SPEED mode).
+  private boolean endGameSwitchPosition = false; // Assume we are not starting in endgame.
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -119,6 +122,25 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("Debug","Rotate");
     else
       SmartDashboard.putString("Debug","N/A");
+
+    // If the black box rightmost switch, #4 has change position, update the driving mode.
+    if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && !drivingSwitchPosition) {
+      RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.PRECISION);
+      drivingSwitchPosition = true;
+    } else if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && drivingSwitchPosition) {
+      RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.SPEED);
+      drivingSwitchPosition = false;
+    }
+    
+    // if the black box #3 switch has changed position, update the endGame mode.
+    if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && !endGameSwitchPosition) {
+      RobotContainer.m_WinchSubsystem.setEndGame(true);
+      endGameSwitchPosition = true;
+    } else if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && endGameSwitchPosition) {
+      RobotContainer.m_WinchSubsystem.setEndGame(false);
+      endGameSwitchPosition = false;
+    }
+    
   }
 
   @Override

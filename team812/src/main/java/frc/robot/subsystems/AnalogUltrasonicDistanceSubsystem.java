@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.UltrasonicConstants;
 
-public class UltrasonicDistanceSubsystem extends SubsystemBase {
+public class AnalogUltrasonicDistanceSubsystem extends SubsystemBase {
   private final AnalogInput ultrasonicSensor;
   public double voltageScaleFactor = 1;
 
   /** Creates a new UltrasonicDistanceSubsystem. */
-  public UltrasonicDistanceSubsystem() {
+  public AnalogUltrasonicDistanceSubsystem() {
     this.ultrasonicSensor = new AnalogInput(UltrasonicConstants.kUltrasonicAnalogPort);
    //                                                 UltrasonicConstants.kUltrasonicFullRange,
      //                                               UltrasonicConstants.kUltrasonicZeroVoltOffset);  

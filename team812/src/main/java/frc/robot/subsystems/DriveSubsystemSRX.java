@@ -72,6 +72,20 @@ public class DriveSubsystemSRX extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  public enum DrivingMode {
+    SPEED,
+    PRECISION
+  }
+  // Default driving mode and associated constants to SPEED mode.
+  private DrivingMode drivingMode = DrivingMode.SPEED; // Default to full speed driving mode.
+  private double maxSpeedMetersPerSecond    = DriveConstants.kMaxSpeedMetersPerSecond;
+  private double maxAngularSpeed            = DriveConstants.kMaxAngularSpeed;
+  private double directionSlewRate          = DriveConstants.kDirectionSlewRate;
+  private double magnitudeIncreaseSlewRate  = DriveConstants.kMagnitudeIncreaseSlewRate;
+  private double magnitudeDecreaseSlewRate  = DriveConstants.kMagnitudeDecreaseSlewRate;
+  private double rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
+  private double rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+
   /** Creates a new DriveSubsystemSRXSRX. */
   public DriveSubsystemSRX() {
     // TODO Do we need to reset the gyro here?
@@ -330,4 +344,43 @@ public class DriveSubsystemSRX extends SubsystemBase {
     m_rearLeft.quiesce();
     m_rearRight.quiesce();
   }
+
+  /**
+   * setDrivingMode
+   * @param drivingMode - SPEED or PRECISION
+   * @return the previous drivingMode
+   */
+  public DrivingMode setDrivingMode(DrivingMode drivingMode) {
+    DrivingMode result = this.drivingMode;
+    this.drivingMode = drivingMode;
+    if (drivingMode == DrivingMode.SPEED) {
+      maxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
+      maxAngularSpeed = DriveConstants.kMaxAngularSpeed;
+      directionSlewRate = DriveConstants.kDirectionSlewRate;
+      magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRate;
+      magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRate;
+      rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
+      rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+      SmartDashboard.putString("DriveMode", "SPEED");
+    } else /* if (drivingMode == DrivingMode.PRECISION) */ {
+      maxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecondPM;
+      maxAngularSpeed = DriveConstants.kMaxAngularSpeedPM;
+      directionSlewRate = DriveConstants.kDirectionSlewRatePM;
+      magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRatePM;
+      magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRatePM;
+      rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRatePM;
+      rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRatePM;
+      SmartDashboard.putString("DriveMode", "PRECISION");
+    }
+    return result;
+  }
+  
+  /**
+   * getDrivingMode
+   * @return the current drivingMode either SPEED or PRECISION
+   */
+  public DrivingMode getDrivingMode() {
+    return drivingMode;
+  }
+  
 }
