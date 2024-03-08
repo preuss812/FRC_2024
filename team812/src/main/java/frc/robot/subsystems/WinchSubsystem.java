@@ -34,7 +34,7 @@ public class WinchSubsystem extends SubsystemBase {
     // Invert motor (setInverted) so that the Talon LEDs are green when driving
     // forward (up)
     // Phase sensor should have a positive increment as the Talon drives the winch up
-    m_winch.setInverted(false);
+    m_winch.setInverted(true);
     m_winch.setSensorPhase(true); // Attempts to make it positive
 
     // Set status frame period to 10ms with a timeout of 10ms
@@ -89,7 +89,7 @@ public class WinchSubsystem extends SubsystemBase {
    * For debug or possibly attach to joystick.
    */
   public void runMotor(double speed) {
-    m_winch.set(MathUtil.clamp(speed,-0.2,0.2));
+    m_winch.set(MathUtil.clamp(speed,-0.8,0.8));
   }
 
   @Override

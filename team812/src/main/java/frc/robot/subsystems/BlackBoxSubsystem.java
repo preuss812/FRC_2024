@@ -71,6 +71,10 @@ public class BlackBoxSubsystem extends SubsystemBase {
 			//Robot.nttable.getEntry(eString).setString(iString);
     		prespace = " ";
 		}	
+		SmartDashboard.putNumber("Pot 0:", getPotValueScaled(0,0.0,5.0));
+		SmartDashboard.putNumber("Pot 1:", getPotValueScaled(1,0.0,0.1));
+
+
     /*
     Robot.nttable.getEntry("ControlBox pot 0").setDouble(getPotValue(0));
 		Robot.nttable.getEntry("ControlBox pot 1").setDouble(getPotValue(1));

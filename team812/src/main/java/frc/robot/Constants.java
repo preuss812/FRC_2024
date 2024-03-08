@@ -148,7 +148,7 @@ public final class Constants {
         // The 'max' position is defined by the arm fully rotated which is  enforced the forward limit switch.
         // The proper starting position for the arm is in the fully down position with the forward limit switch activated.
         public static final double kArmMinPosition = 0;    // Smallest encoder value the software will rotate to.
-        public static final double kArmMaxPosition = 2600; // Largest encoder value the software will rotote to.
+        public static final double kArmMaxPosition = 2800; // Largest encoder value the software will rotote to.
         public static final double kArmRange = kArmMaxPosition - kArmMinPosition; // The number of ticks in the active range of arm motion between limits.
 
         public static final double kArmStartingPosition = kArmMaxPosition;  // We should start at the max position with the arm rotated down to intake notes.
@@ -318,17 +318,17 @@ public final class Constants {
     public static final class DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        public static final double kMaxSpeedMetersPerSecond = 4.5; //4.5; // Limit how violently swerve works
+        public static final double kMaxSpeedMetersPerSecond = 4.5; //4.5; 1.0 in the lab // Limit how violently swerve works
         public static final double kMaxAngularSpeed = 4 * Math.PI; // radians per second
     
         public static final double kDirectionSlewRate = 1.2; // radians per second
-        public static final double kMagnitudeIncreaseSlewRate = 0.8; // percent per second (1 = 100%)
+        public static final double kMagnitudeIncreaseSlewRate = 0.6; // percent per second (1 = 100%)
         public static final double kMagnitudeDecreaseSlewRate = 3.6; // percent per second (1 = 100%)
         public static final double kRotationalIncreaseSlewRate = 0.4;// 2.0; // percent per second (1 = 100%) // UNDO
         public static final double kRotationalDecreaseSlewRate = 4.0;
 
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(17.75); // was 26.5 until 3/5/2024, actual is 17.74
+        public static final double kTrackWidth = Units.inchesToMeters(17.75); // was 26.5 until 3/5/2024, actual is 17.75
         // Distance between centers of right and left wheels on robot
         public static final double kWheelBase = Units.inchesToMeters(17.75); //  was 26.5 until 3/5/2024, actual is 17.75
         // Distance between front and back wheels on robot
@@ -377,7 +377,7 @@ public final class Constants {
     
         // Calculations required for driving motor conversion factors and feed forward
         public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-        public static final double kWheelDiameterMeters =Units.inchesToMeters(4.0); // wheels 4" x 1.5"
+        public static final double kWheelDiameterMeters = Units.inchesToMeters(4.0); // wheels 4" x 1.5"
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
         public static final double kDrivingMotorReduction = 8.14; //(45.0 * 22) / (kDrivingMotorPinionTeeth * 15);

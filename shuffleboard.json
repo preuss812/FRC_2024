@@ -1084,6 +1084,7 @@
             "content": {
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/RR Error",
+              "_source1": "network_table:///SmartDashboard/Pot 0:",
               "_title": "SmartDashboard/RR Error",
               "_glyph": 148,
               "_showGlyph": false,
@@ -1093,6 +1094,7 @@
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
               "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Pot 0:": true,
               "Visible data/SmartDashboard/RR Error": true
             }
           },
@@ -1151,6 +1153,45 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Debug",
               "_title": "SmartDashboard/Debug",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DriveTrain",
+              "_title": "SmartDashboard/DriveTrain",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pot 0:",
+              "_title": "SmartDashboard/Pot 0:",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "10,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pot 1:",
+              "_title": "SmartDashboard/Pot 1:",
               "_glyph": 148,
               "_showGlyph": false
             }

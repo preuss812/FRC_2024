@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 import frc.robot.subsystems.ArmRotationSubsystem;
 import frc.robot.subsystems.BlackBoxSubsystem;
@@ -55,6 +56,7 @@ import frc.robot.commands.GotoPoseCommand;
 //import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.ScoreNoteInAmp;
+import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.SwerveToPoseCommand;
@@ -291,6 +293,10 @@ public class RobotContainer {
     );
     new JoystickButton(rightJoystick, 10).onTrue(
       new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose)
+    );
+
+    new JoystickButton(rightJoystick, 11).onTrue(
+      new ShooterCommand(m_ShooterSubsystem, ShooterConstants.kShootSpeed).withTimeout(ShooterConstants.kShootTimeout)
     );
 
     new JoystickButton(leftJoystick, 1).onTrue(

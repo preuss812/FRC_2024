@@ -45,8 +45,8 @@ public class DriveRobotCommand extends Command {
      * default constructor
      */
     public DriveRobotConfig() {
-      maxThrottle = 0.80;
-      linearP = 2.7;
+      maxThrottle = 0.70;
+      linearP = 2.0; // 03-07-2024 was 2.7, changed to 2.0
       linearI = 0.0; // linearP/100.0;
       linearD = 0.0; // linearP*10.0;
       linearF = 0.0;
