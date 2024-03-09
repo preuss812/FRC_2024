@@ -57,8 +57,8 @@ public class DriveSubsystemSRX extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private ModifiedSlewRateLimiter m_magLimiter = new ModifiedSlewRateLimiter(this.magnitudeIncreaseSlewRate, this.magnitudeDecreaseSlewRate, 0);
-  private ModifiedSlewRateLimiter m_rotLimiter = new ModifiedSlewRateLimiter(this.rotationalIncreaseSlewRate, this.rotationalDecreaseSlewRate, 0);
+  private ModifiedSlewRateLimiter m_magLimiter = new ModifiedSlewRateLimiter(DriveConstants.kMagnitudeIncreaseSlewRate, DriveConstants.kMagnitudeDecreaseSlewRate, 0);
+  private ModifiedSlewRateLimiter m_rotLimiter = new ModifiedSlewRateLimiter(DriveConstants.kRotationalIncreaseSlewRate, DriveConstants.kRotationalDecreaseSlewRate, 0);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // Odometry class for tracking robot pose
@@ -81,13 +81,15 @@ public class DriveSubsystemSRX extends SubsystemBase {
   private double maxSpeedMetersPerSecond    = DriveConstants.kMaxSpeedMetersPerSecond;
   private double maxAngularSpeed            = DriveConstants.kMaxAngularSpeed;
   private double directionSlewRate          = DriveConstants.kDirectionSlewRate;
-  private double magnitudeIncreaseSlewRate  = DriveConstants.kMagnitudeIncreaseSlewRate;
-  private double magnitudeDecreaseSlewRate  = DriveConstants.kMagnitudeDecreaseSlewRate;
-  private double rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
-  private double rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+  //private double magnitudeIncreaseSlewRate  = DriveConstants.kMagnitudeIncreaseSlewRate;
+  //private double magnitudeDecreaseSlewRate  = DriveConstants.kMagnitudeDecreaseSlewRate;
+  //private double rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
+  //private double rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
 
   /** Creates a new DriveSubsystemSRXSRX. */
   public DriveSubsystemSRX() {
+    setDrivingMode(DrivingMode.SPEED);
+
     // TODO Do we need to reset the gyro here?
   }
 // TODO: This seems redundant to the code below in periodic.  Perhaps should refactor.
@@ -233,9 +235,9 @@ public class DriveSubsystemSRX extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * maxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * maxAngularSpeed;
 
-    SmartDashboard.putNumber("DTxSpeedDelivered", xSpeedDelivered);
-    SmartDashboard.putNumber("DTySpeedDelivered", ySpeedDelivered);
-    SmartDashboard.putNumber("DTrotDelivered", rotDelivered);
+    //SmartDashboard.putNumber("DTxSpeedDelivered", xSpeedDelivered);
+    //SmartDashboard.putNumber("DTySpeedDelivered", ySpeedDelivered);
+    //SmartDashboard.putNumber("DTrotDelivered", rotDelivered);
     
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
@@ -248,13 +250,13 @@ public class DriveSubsystemSRX extends SubsystemBase {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
 
-    SmartDashboard.putNumber("maxSpeedMetersPerSecond", maxSpeedMetersPerSecond);
-    SmartDashboard.putNumber("maxAngularSpeed", maxAngularSpeed);
-    SmartDashboard.putNumber("directionSlewRate",directionSlewRate); //          = DriveConstants.kDirectionSlewRate;
-    SmartDashboard.putNumber("magnitudeIncreaseSlewRate",magnitudeIncreaseSlewRate); //  = DriveConstants.kMagnitudeIncreaseSlewRate;
-    SmartDashboard.putNumber("magnitudeDecreaseSlewRate",magnitudeDecreaseSlewRate); //  = DriveConstants.kMagnitudeDecreaseSlewRate;
-    SmartDashboard.putNumber("rotationalIncreaseSlewRate",rotationalIncreaseSlewRate); // = DriveConstants.kRotationalIncreaseSlewRate;
-    SmartDashboard.putNumber("rotationalDecreaseSlewRate",rotationalDecreaseSlewRate); // = DriveConstants.kRotationalDecreaseSlewRate;
+    //SmartDashboard.putNumber("maxSpeedMetersPerSecond", maxSpeedMetersPerSecond);
+    //SmartDashboard.putNumber("maxAngularSpeed", maxAngularSpeed);
+    //SmartDashboard.putNumber("directionSlewRate",directionSlewRate); //          = DriveConstants.kDirectionSlewRate;
+    //SmartDashboard.putNumber("magnitudeIncreaseSlewRate",magnitudeIncreaseSlewRate); //  = DriveConstants.kMagnitudeIncreaseSlewRate;
+    //SmartDashboard.putNumber("magnitudeDecreaseSlewRate",magnitudeDecreaseSlewRate); //  = DriveConstants.kMagnitudeDecreaseSlewRate;
+    //SmartDashboard.putNumber("rotationalIncreaseSlewRate",rotationalIncreaseSlewRate); // = DriveConstants.kRotationalIncreaseSlewRate;
+    //SmartDashboard.putNumber("rotationalDecreaseSlewRate",rotationalDecreaseSlewRate); // = DriveConstants.kRotationalDecreaseSlewRate;
   }
 
   /**
@@ -376,19 +378,24 @@ public class DriveSubsystemSRX extends SubsystemBase {
       maxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecond;
       maxAngularSpeed = DriveConstants.kMaxAngularSpeed;
       directionSlewRate = DriveConstants.kDirectionSlewRate;
-      magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRate;
-      magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRate;
-      rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
-      rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+      //magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRate;
+      //magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRate;
+      //rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
+      //rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+      m_magLimiter = new ModifiedSlewRateLimiter(DriveConstants.kMagnitudeIncreaseSlewRate, DriveConstants.kMagnitudeDecreaseSlewRate, 0);
+      m_rotLimiter = new ModifiedSlewRateLimiter(DriveConstants.kRotationalIncreaseSlewRate, DriveConstants.kRotationalDecreaseSlewRate, 0);
       SmartDashboard.putString("DriveMode", "SPEED");
     } else /* if (drivingMode == DrivingMode.PRECISION) */ {
       maxSpeedMetersPerSecond = DriveConstants.kMaxSpeedMetersPerSecondPM;
       maxAngularSpeed = DriveConstants.kMaxAngularSpeedPM;
       directionSlewRate = DriveConstants.kDirectionSlewRatePM;
-      magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRatePM;
-      magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRatePM;
-      rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRatePM;
-      rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRatePM;
+      //magnitudeIncreaseSlewRate = DriveConstants.kMagnitudeIncreaseSlewRatePM;
+      //magnitudeDecreaseSlewRate = DriveConstants.kMagnitudeDecreaseSlewRatePM;
+      //rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRatePM;
+      //rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRatePM;
+      m_magLimiter = new ModifiedSlewRateLimiter(DriveConstants.kMagnitudeIncreaseSlewRatePM, DriveConstants.kMagnitudeDecreaseSlewRatePM, 0);
+      m_rotLimiter = new ModifiedSlewRateLimiter(DriveConstants.kRotationalIncreaseSlewRatePM, DriveConstants.kRotationalDecreaseSlewRatePM, 0);
+
       SmartDashboard.putString("DriveMode", "PRECISION");
     }
     return result;

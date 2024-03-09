@@ -124,19 +124,19 @@ public class Robot extends TimedRobot {
       SmartDashboard.putString("Debug","N/A");
 
     // If the black box rightmost switch, #4 has change position, update the driving mode.
-    if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && !drivingSwitchPosition) {
+    if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && !drivingSwitchPosition) {
       RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.PRECISION);
       drivingSwitchPosition = true;
-    } else if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && drivingSwitchPosition) {
+    } else if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && drivingSwitchPosition) {
       RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.SPEED);
       drivingSwitchPosition = false;
     }
     
     // if the black box #3 switch has changed position, update the endGame mode.
-    if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && !endGameSwitchPosition) {
+    if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && !endGameSwitchPosition) {
       RobotContainer.m_WinchSubsystem.setEndGame(true);
       endGameSwitchPosition = true;
-    } else if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && endGameSwitchPosition) {
+    } else if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && endGameSwitchPosition) {
       RobotContainer.m_WinchSubsystem.setEndGame(false);
       endGameSwitchPosition = false;
     }
