@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +35,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.UltrasonicConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 //import frc.robot.subsystems.AnalogUltrasonicDistanceSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
@@ -104,8 +106,13 @@ public class RobotContainer {
   public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
   //public static AnalogUltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
   //          new AnalogUltrasonicDistanceSubsystem();
-  //public static PingResponseUltrasonicSubsystem m_PingResponseUltrasonicSubsystem =
-  //  new PingResponseUltrasonicSubsystem(0, 1); // TODO Need to check which is 0 and which is 1.
+  public static PingResponseUltrasonicSubsystem m_PingResponseUltrasonicSubsystem =
+    new PingResponseUltrasonicSubsystem(
+      UltrasonicConstants.kPingChannel,
+      UltrasonicConstants.kEchoChannel,
+      UltrasonicConstants.kOffsetToBumper
+    );
+
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
   // Controller definitions
@@ -171,7 +178,7 @@ public class RobotContainer {
             -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
             -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
             -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            true, true),
+            true,  true),
         m_robotDrive)
     );
 
@@ -182,6 +189,8 @@ public class RobotContainer {
     m_WinchSubsystem.setDefaultCommand(
       new RunCommand(() -> m_WinchSubsystem.runMotor(-leftJoystick.getY()), m_WinchSubsystem)
     );
+
+    Ultrasonic.setAutomaticMode(true);
   }
 
   /**

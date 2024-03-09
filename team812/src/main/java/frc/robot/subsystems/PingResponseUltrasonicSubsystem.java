@@ -10,22 +10,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PingResponseUltrasonicSubsystem extends SubsystemBase {
   private final Ultrasonic ultrasonicSensor;
+  private final double offsetToBumper;
 
   /** Creates a new UltrasonicDistanceSubsystem. */
-  public PingResponseUltrasonicSubsystem(int pingChannel, int echoChannel) {
+  public PingResponseUltrasonicSubsystem(int pingChannel, int echoChannel, double offsetToBumper) {
     this.ultrasonicSensor = new Ultrasonic(pingChannel, echoChannel);
+    this.offsetToBumper = offsetToBumper;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("US mm"+ultrasonicSensor.getEchoChannel(), ultrasonicSensor.getRangeMM());
+    SmartDashboard.putNumber("US m", getRange());
   }
+  
   /**
    * return the range to the nearest object to the sensor.
    * @return
    */
   public double getRange() {
-    return ultrasonicSensor.getRangeMM()/1000.0;
+    return ultrasonicSensor.getRangeMM()/1000.0 - offsetToBumper;
   }
 }

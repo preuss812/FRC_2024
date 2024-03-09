@@ -478,5 +478,8 @@ public final class Constants {
 
     public static final class UltrasonicConstants {
         public static final int kUltrasonicAnalogPort = 3;
+        public static int kPingChannel = 0;
+        public static int kEchoChannel = 1;
+        public static double kOffsetToBumper = 0.157; // Meters
     }
 }
