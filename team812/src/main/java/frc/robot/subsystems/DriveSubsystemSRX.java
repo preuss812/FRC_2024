@@ -85,6 +85,7 @@ public class DriveSubsystemSRX extends SubsystemBase {
   //private double magnitudeDecreaseSlewRate  = DriveConstants.kMagnitudeDecreaseSlewRate;
   //private double rotationalIncreaseSlewRate = DriveConstants.kRotationalIncreaseSlewRate;
   //private double rotationalDecreaseSlewRate = DriveConstants.kRotationalDecreaseSlewRate;
+  private final boolean debug = true;
 
   /** Creates a new DriveSubsystemSRXSRX. */
   public DriveSubsystemSRX() {
@@ -105,14 +106,16 @@ public class DriveSubsystemSRX extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
-    //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
-    Utilities.toSmartDashboard("DriveTrain", this.getPose()); 
-    SmartDashboard.putNumber("Robot X", this.getPose().getX()); 
-    SmartDashboard.putNumber("Robot Y", this.getPose().getY()); 
-    // SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
-    // SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
-    // SmartDashboard.putNumber("gyro_navX", m_ahrs.getAngle());
+    if (debug) {
+      SmartDashboard.putNumber("gyro_angle", -m_gyro.getAngle());
+      //SmartDashboard.putNumber("gyro_offset", this.m_odometry.I want the angle offset but it's not public);
+      Utilities.toSmartDashboard("DriveTrain", this.getPose()); 
+      SmartDashboard.putNumber("Robot X", this.getPose().getX()); 
+      SmartDashboard.putNumber("Robot Y", this.getPose().getY()); 
+      // SmartDashboard.putNumber("gyro_Xaccel", m_gyro.getAccelX());
+      // SmartDashboard.putNumber("gyro_Yaccel", m_gyro.getAccelY());
+      // SmartDashboard.putNumber("gyro_navX", m_ahrs.getAngle());
+    }
 
     m_odometry.update(
         Rotation2d.fromDegrees(-m_gyro.getAngle()),
@@ -171,8 +174,8 @@ public class DriveSubsystemSRX extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    SmartDashboard.putNumber("DT x input", xSpeed);
-    SmartDashboard.putNumber("DT y input", ySpeed);
+    if (debug) SmartDashboard.putNumber("DT x input", xSpeed);
+    if (debug) SmartDashboard.putNumber("DT y input", ySpeed);
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -187,38 +190,38 @@ public class DriveSubsystemSRX extends SubsystemBase {
         directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
       }
       
-      SmartDashboard.putNumber("directionSlewRate", directionSlewRate);
+      if (debug) SmartDashboard.putNumber("directionSlewRate", directionSlewRate);
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
       if (angleDif < 0.45*Math.PI) {
-        SmartDashboard.putNumber("Branch", 1);
+        if (debug) SmartDashboard.putNumber("Branch", 1);
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
       }
       else if (angleDif > 0.85*Math.PI) {
         if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
-                  SmartDashboard.putNumber("Branch", 2);
+          if (debug) SmartDashboard.putNumber("Branch", 2);
 
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
         }
         else {
-                  SmartDashboard.putNumber("Branch",3);
+          if (debug) SmartDashboard.putNumber("Branch",3);
 
           m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
       }
       else {
-                SmartDashboard.putNumber("Branch", 4);
+        if (debug)  SmartDashboard.putNumber("Branch", 4);
 
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
       m_prevTime = currentTime;
-      SmartDashboard.putNumber("m_currentTranslationMag", m_currentTranslationMag);
+      if (debug) SmartDashboard.putNumber("m_currentTranslationMag", m_currentTranslationMag);
       xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
@@ -349,12 +352,14 @@ public class DriveSubsystemSRX extends SubsystemBase {
    */
   public double setAngleDegrees(double desiredAngle) {
     // There is something wrong here as the results are 180 out.
-    SmartDashboard.putNumber("SetAngle", desiredAngle); // minus but we should have added m_gyro.inverted instead
-    SmartDashboard.putNumber("SetAngleGyro", m_gyro.getAngle());
-    SmartDashboard.putNumber("SetAngleOldAdj", m_gyro.getAngleAdjustment());
-    SmartDashboard.putNumber("SetAngleNewAdj", desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment()));
+    if (debug) {
+      SmartDashboard.putNumber("SetAngle", desiredAngle); // minus but we should have added m_gyro.inverted instead
+      SmartDashboard.putNumber("SetAngleGyro", m_gyro.getAngle());
+      SmartDashboard.putNumber("SetAngleOldAdj", m_gyro.getAngleAdjustment());
+      SmartDashboard.putNumber("SetAngleNewAdj", desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment()));
+    }
     m_gyro.setAngleAdjustment((desiredAngle - (m_gyro.getAngle() - m_gyro.getAngleAdjustment())));    
-    SmartDashboard.putNumber("SetAngleNew", m_gyro.getAngle());
+    if (debug) SmartDashboard.putNumber("SetAngleNew", m_gyro.getAngle());
 
     return m_gyro.getAngle();  // Return the new angle for chaining
   }

@@ -12,6 +12,7 @@ import frc.robot.Constants.UltrasonicConstants;
 
 public class AnalogUltrasonicDistanceSubsystem extends SubsystemBase {
   private final AnalogInput ultrasonicSensor;
+  private final boolean debug = true;
   public double voltageScaleFactor = 1;
 
   /** Creates a new UltrasonicDistanceSubsystem. */
@@ -34,8 +35,8 @@ public class AnalogUltrasonicDistanceSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     voltageScaleFactor = 5/RobotController.getVoltage5V();
-    SmartDashboard.putNumber("US vsf", voltageScaleFactor);
-    SmartDashboard.putNumber("US cm",getRange());
+    if (debug) SmartDashboard.putNumber("US vsf", voltageScaleFactor);
+    if (debug) SmartDashboard.putNumber("US cm",getRange());
     //SmartDashboard.putNumber("US voltage", ultrasonicSensor.getAverageVoltage());
     //SmartDashboard.putNumber("US value", ultrasonicSensor.getAverageValue());
   }

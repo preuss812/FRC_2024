@@ -195,7 +195,7 @@ public class GotoAprilTagCommand extends Command {
         rotationController.setTolerance(config.getAngularTolerance()); // did not work, dont understand yet
         rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians).
         onTarget = false;
-        SmartDashboard.putNumber("G2A dist", targetDistance);
+        if (debug) SmartDashboard.putNumber("G2A dist", targetDistance);
       }
     }
   }
@@ -223,16 +223,16 @@ public class GotoAprilTagCommand extends Command {
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
     rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), -Math.PI, Math.PI);
-    SmartDashboard.putNumber("G2A R", Units.radiansToDegrees(rotationError));
-    SmartDashboard.putNumber("G2A X", translationErrorToTarget.getX());
-    SmartDashboard.putNumber("G2A Y", translationErrorToTarget.getY());
+    if (debug) SmartDashboard.putNumber("G2A R", Units.radiansToDegrees(rotationError));
+    if (debug) SmartDashboard.putNumber("G2A X", translationErrorToTarget.getX());
+    if (debug) SmartDashboard.putNumber("G2A Y", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
     &&  Math.abs(translationErrorToTarget.getY()) < config.getLinearTolerance()
     &&  Math.abs(rotationError) < config.getAngularTolerance()) {
       // Yes, we have arrived
-      SmartDashboard.putBoolean("G2A OnTarget", true);
+      if (debug) SmartDashboard.putBoolean("G2A OnTarget", true);
       xSpeed = 0.0;
       ySpeed = 0.0;
       rotationSpeed = 0.0;
@@ -246,7 +246,7 @@ public class GotoAprilTagCommand extends Command {
       estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
       estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
       
-      SmartDashboard.putNumber("G2A P2Derr", estimatedRotationToDriveTrainRotation);
+      if (debug) SmartDashboard.putNumber("G2A P2Derr", estimatedRotationToDriveTrainRotation);
 
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
@@ -261,9 +261,9 @@ public class GotoAprilTagCommand extends Command {
        */
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
     }
-    SmartDashboard.putNumber("G2A xSpeed", xSpeed);
-    SmartDashboard.putNumber("G2A ySpeed", ySpeed);
-    SmartDashboard.putNumber("G2A rSpeed", rotationSpeed);
+    if (debug) SmartDashboard.putNumber("G2A xSpeed", xSpeed);
+    if (debug) SmartDashboard.putNumber("G2A ySpeed", ySpeed);
+    if (debug) SmartDashboard.putNumber("G2A rSpeed", rotationSpeed);
     robotDrive.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
 
   }

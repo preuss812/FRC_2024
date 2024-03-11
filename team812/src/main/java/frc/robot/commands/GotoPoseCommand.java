@@ -186,8 +186,8 @@ public class GotoPoseCommand extends Command {
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians).
     onTarget = false;
     targetPose = m_targetPose;
-    Utilities.toSmartDashboard("GotoTarget", targetPose);
-    SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
+    if (debug) Utilities.toSmartDashboard("GotoTarget", targetPose);
+    if (debug) SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -206,22 +206,22 @@ public class GotoPoseCommand extends Command {
 
     debugIterations++;
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
-    Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
+    if (debug) Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
     // Calculate the X and Y and rotation offsets to the target location
     translationErrorToTarget = new Translation2d( targetPose.getX() - estimatedPose.getX(), targetPose.getY() - estimatedPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
     rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - estimatedPose.getRotation().getRadians(), -Math.PI, Math.PI);
-    SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
-    SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
-    SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
+    if (debug) SmartDashboard.putNumber("GotoPose RError", Units.radiansToDegrees(rotationError));
+    if (debug) SmartDashboard.putNumber("GotoPoseXOffset", translationErrorToTarget.getX());
+    if (debug) SmartDashboard.putNumber("GotoPoseYOffset", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationErrorToTarget.getX()) < m_config.getLinearTolerance()
     &&  Math.abs(translationErrorToTarget.getY()) < m_config.getLinearTolerance()
     &&  Math.abs(rotationError) < m_config.getAngularTolerance()) {
       // Yes, we have arrived
-      SmartDashboard.putBoolean("GotoPoseOnTarget", true);
+      if (debug) SmartDashboard.putBoolean("GotoPoseOnTarget", true);
       xSpeed = 0.0;
       ySpeed = 0.0;
       rotationSpeed = 0.0;
@@ -235,7 +235,7 @@ public class GotoPoseCommand extends Command {
       estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
       estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
       
-      SmartDashboard.putNumber("RotationError", estimatedRotationToDriveTrainRotation);
+      if (debug) SmartDashboard.putNumber("RotationError", estimatedRotationToDriveTrainRotation);
 
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
@@ -250,9 +250,9 @@ public class GotoPoseCommand extends Command {
        */
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-m_config.getMaxRotation(), m_config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
     }
-    SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
-    SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
-    SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
+    if (debug) SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
+    if (debug) SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);
+    if (debug) SmartDashboard.putNumber("GotoPose rSpeed", rotationSpeed);
     m_DriveSubsystemSRXSubsystem.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
 
   }

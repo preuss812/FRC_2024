@@ -266,13 +266,13 @@ public class DriveOnAprilTagProjectionCommand extends Command {
 
     debugIterations++;
     throttle = -xbox.getRightY();
-    throttle = 0.5;
+    //throttle = 0.5;
     currentPose = poseEstimatorSubsystem.getCurrentPose();
     nominalMove = new Translation2d(throttle*config.getLinearP()/1.0, 0.0);
     move = nominalMove.rotateBy(tagPose.getRotation().plus(new Rotation2d(Math.PI))); // Rotate the nominal move to the tag pose.
     uncorrectedGoal = currentPose.getTranslation().plus(move);
-    SmartDashboard.putString("DA Move",move.toString());
-    SmartDashboard.putString("DA unc",uncorrectedGoal.toString());
+    if (debug) SmartDashboard.putString("DA Move",move.toString());
+    if (debug) SmartDashboard.putString("DA unc",uncorrectedGoal.toString());
     
     // We now have the goal position ignoring the distance from the april tag projection
     // Compute a correction factor to keep us on the projection line.
@@ -293,7 +293,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       correctedGoal = new Translation2d(intersectX, intersectY);
     }
 
-    SmartDashboard.putString("DA goal", correctedGoal.toString());
+    if (debug) SmartDashboard.putString("DA goal", correctedGoal.toString());
 
     // Calculate the X and Y and rotation offsets to the target location
     translationErrorToTarget = new Translation2d( correctedGoal.getX() - currentPose.getX(), correctedGoal.getY() - currentPose.getY());
@@ -301,9 +301,9 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
     rotationError = MathUtil.inputModulus(tagPose.getRotation().getRadians() - currentPose.getRotation().getRadians(), -Math.PI, Math.PI);
-    SmartDashboard.putNumber("DA R", Units.radiansToDegrees(rotationError));
-    SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
-    SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
+    if (debug) SmartDashboard.putNumber("DA R", Units.radiansToDegrees(rotationError));
+    if (debug) SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
+    if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
@@ -324,7 +324,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       estimatedRotationToDriveTrainRotation = currentPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
       estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
       
-      SmartDashboard.putNumber("DA P2Derr", Units.radiansToDegrees(estimatedRotationToDriveTrainRotation));
+      if (debug) SmartDashboard.putNumber("DA P2Derr", Units.radiansToDegrees(estimatedRotationToDriveTrainRotation));
 
       rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
       translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
@@ -340,9 +340,9 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
     }
     rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband); // Based on xbox right joystick / ignore calculations above.
-    SmartDashboard.putNumber("DA xSpeed", xSpeed);
-    SmartDashboard.putNumber("DA ySpeed", ySpeed);
-    SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
+    if (debug) SmartDashboard.putNumber("DA xSpeed", xSpeed);
+    if (debug) SmartDashboard.putNumber("DA ySpeed", ySpeed);
+    if (debug) SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
     robotDrive.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
 
   }

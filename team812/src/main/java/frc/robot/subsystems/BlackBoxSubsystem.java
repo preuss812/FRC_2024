@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class BlackBoxSubsystem extends SubsystemBase {
 
 	private static int flagBits = 0;
+	private final boolean debug = false;
 
 
   private final Joystick m_BlackBox = new Joystick (OIConstants.kControlBox);
@@ -67,12 +68,12 @@ public class BlackBoxSubsystem extends SubsystemBase {
 //			System.out.print(prespace + i + "=" + (isSet(i) ? "on":"off"));
 			String iString = String.format( prespace + i + "=" + (isSet(i) ? "on":"off") );
 			String eString = String.format("ControlBox bit %d", i);
-			SmartDashboard.putString(eString, iString);
+			if (debug) SmartDashboard.putString(eString, iString);
 			//Robot.nttable.getEntry(eString).setString(iString);
     		prespace = " ";
 		}	
-		SmartDashboard.putNumber("Pot 0:", getPotValueScaled(0,0.0,5.0));
-		SmartDashboard.putNumber("Pot 1:", getPotValueScaled(1,0.0,0.1));
+		if (debug) SmartDashboard.putNumber("Pot 0:", getPotValueScaled(0,0.0,5.0));
+		if (debug) SmartDashboard.putNumber("Pot 1:", getPotValueScaled(1,0.0,0.1));
 
 
     /*

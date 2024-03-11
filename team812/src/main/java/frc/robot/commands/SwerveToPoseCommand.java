@@ -27,6 +27,8 @@ public class SwerveToPoseCommand extends Command {
   private SequentialCommandGroup commands;
   private final double finalDistanceToAmp    = 1.0; // Meters
   private final double finalDistanceToSource = 1.0; // Meters
+  private final boolean debug = false;
+
   /** Creates a new SwerveToPoseCommand. */
   public SwerveToPoseCommand(
     DriveSubsystemSRX robotDrive,
@@ -50,8 +52,8 @@ public class SwerveToPoseCommand extends Command {
     List<Translation2d> waypoints = new ArrayList<>();
     Pose2d aprilTagPose = null;
     Pose2d targetPose = null;
-    SmartDashboard.putString("SW","init");
-    Utilities.toSmartDashboard("SW Start",startingPose);
+    if (debug) SmartDashboard.putString("SW","init");
+    if (debug) Utilities.toSmartDashboard("SW Start",startingPose);
     commands = new SequentialCommandGroup();
 
     if (destination == AprilTag.BLUE_AMP) {
@@ -102,8 +104,8 @@ public class SwerveToPoseCommand extends Command {
       commands.cancel();
     } catch (Exception e) {
     }
-    SmartDashboard.putBoolean("SW Interrupted", interrupted);
-    SmartDashboard.putString("SW","Done");
+    if (debug) SmartDashboard.putBoolean("SW Interrupted", interrupted);
+    if (debug) SmartDashboard.putString("SW","Done");
   }
 
   // Returns true when the command should end.

@@ -25,7 +25,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_arm = new WPI_TalonSRX(CANConstants.kArmMotor);
   static Integer getPosition_timesCalled = 0;
   private static double targetPosition = 0;
-  private boolean m_debug = false;
+  private boolean debug = false;
   private static double rotateTimesCalled=0;
   private static boolean m_rotateStopped = true;
   private static boolean m_capturedLimitPosition = false;
@@ -99,7 +99,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
     // This has the effect of stopping the arm rotation if the joystick is not being used to control the arm.
     // Be aware that if another command ends before it gets the arm to the desired position,
     // this function will stop the arm motiion and it will not continue rotating to the other commands target.
-    SmartDashboard.putNumber("rotate js", position);
+    if (debug) SmartDashboard.putNumber("rotate js", position);
     if (Math.abs(position) < 0.1) {  // Also move to constants.java
       if (!m_rotateStopped) {
         setPosition(getPosition());
@@ -109,7 +109,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
       m_rotateStopped = false;
       double newPosition = currentTarget + position * incrementSize;
       newPosition = MathUtil.clamp(newPosition, ArmConstants.kArmMinPosition, ArmConstants.kArmMaxPosition);
-      SmartDashboard.putNumber("rotate pos", newPosition);
+      if (debug) SmartDashboard.putNumber("rotate pos", newPosition);
       setPosition(newPosition);
       rotateTimesCalled++;
     }
@@ -133,8 +133,8 @@ public class ArmRotationSubsystem extends SubsystemBase {
 
     l_speed = MathUtil.clamp(l_speed, -0.10, 0.10);
 
-    SmartDashboard.putNumber("test_rotate_l_speed", l_speed);
-    SmartDashboard.putNumber("test_rotate_l_position", l_position);
+    if (debug) SmartDashboard.putNumber("test_rotate_l_speed", l_speed);
+    if (debug) SmartDashboard.putNumber("test_rotate_l_position", l_position);
 
     m_arm.set(ControlMode.PercentOutput, l_speed);
     // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
@@ -144,7 +144,7 @@ public class ArmRotationSubsystem extends SubsystemBase {
   public double setPosition(double position) {
     // position will be zero in tucked position
     if (isHome() && position >= ArmConstants.kArmMinPosition && position <= ArmConstants.kArmMaxPosition) {
-      SmartDashboard.putNumber("ArmSubPos", position);
+      if (debug) SmartDashboard.putNumber("ArmSubPos", position);
       m_arm.set(ControlMode.Position, position);
       targetPosition = position;
     }
@@ -226,10 +226,11 @@ public class ArmRotationSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Arm Homed?", isHome());
     SmartDashboard.putBoolean("ARM fwdsw closed", isFwdLimitSwitchClosed());
     SmartDashboard.putBoolean("ARM revsw closed",isRevLimitSwitchClosed());
-    SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
-    //SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
-    //SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
-    if (m_debug) {
+   
+    if (debug) {
+      SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
+      //SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
+      //SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
       SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());
       SmartDashboard.putNumber("ARM Voltage", m_arm.getMotorOutputVoltage());
       SmartDashboard.putNumber("ARM error", m_arm.getClosedLoopError(0));

@@ -14,7 +14,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class CameraVisionSubsystem extends SubsystemBase {
   /** Creates a new CameraVisionSubsystem. */
   public PhotonCamera camera = new PhotonCamera("pv-812");
-  
+  private final boolean debug = false;
+
   public CameraVisionSubsystem() {
     //camera.setDriverMode(true); // a guess
     //camera.setPipelineIndex(0);
@@ -24,13 +25,13 @@ public class CameraVisionSubsystem extends SubsystemBase {
   {
     var result = camera.getLatestResult();
     var idx = camera.getPipelineIndex();
-    SmartDashboard.putNumber("pipeline",idx);
+    if (debug) SmartDashboard.putNumber("pipeline",idx);
   //camera.setDriverMode(false); // a test if this does what we expect
 
     if (result.hasTargets()) {
-      SmartDashboard.putString("Visual Target", "Yes");
+      if (debug) SmartDashboard.putString("Visual Target", "Yes");
     } else {
-      SmartDashboard.putString("Visual Target", "No");
+      if (debug) SmartDashboard.putString("Visual Target", "No");
     }
     return result.hasTargets();
   }
@@ -69,8 +70,8 @@ public class CameraVisionSubsystem extends SubsystemBase {
                   CAMERA_PITCH_RADIANS,
                   Units.degreesToRadians(target.getPitch()));
                   
-        SmartDashboard.putNumber("April Tag Target Distance (Predicted) (in)", Units.metersToInches(distance));
-        SmartDashboard.putNumber("detected April tag pitch (degree)", target.getPitch());
+        if (debug) SmartDashboard.putNumber("April Tag Target Distance (Predicted) (in)", Units.metersToInches(distance));
+        if (debug) SmartDashboard.putNumber("detected April tag pitch (degree)", target.getPitch());
       }
   }
 

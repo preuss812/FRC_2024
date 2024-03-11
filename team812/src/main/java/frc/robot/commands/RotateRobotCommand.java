@@ -115,10 +115,10 @@ public class RotateRobotCommand extends Command {
     } else {
       if (Utilities.isBlueAlliance()){
          targetTheta =  MathUtil.inputModulus(theta, -Math.PI, Math.PI);
-         SmartDashboard.putNumber("RR 1", targetTheta);
+         if (debug) SmartDashboard.putNumber("RR 1", targetTheta);
       } else {
            targetTheta =  MathUtil.inputModulus(theta +Math.PI, -Math.PI, Math.PI); 
-        SmartDashboard.putNumber("RR 2", targetTheta);
+           if (debug) SmartDashboard.putNumber("RR 2", targetTheta);
       }
     }
     rotationController = new PIDController(angularP, angularI, config.getAngularD());
@@ -140,11 +140,11 @@ public class RotateRobotCommand extends Command {
 
     debugIterations++;
     currentTheta = robotDrive.getPose().getRotation().getRadians();
-    SmartDashboard.putNumber("RR theta", currentTheta);
-    SmartDashboard.putNumber("RR target", targetTheta);
+    if (debug) SmartDashboard.putNumber("RR theta", currentTheta);
+    if (debug) SmartDashboard.putNumber("RR target", targetTheta);
     
     rotationError = MathUtil.inputModulus(targetTheta - currentTheta, -Math.PI, Math.PI);
-    SmartDashboard.putNumber("RR Error", Units.radiansToDegrees(rotationError));
+    if (debug) SmartDashboard.putNumber("RR Error", Units.radiansToDegrees(rotationError));
     
     // Test to see if we have arrived at the requested angle within the specified tolerance.
     // Need to also test for velocity, otherwise momentum could send us past the goal.
@@ -158,8 +158,8 @@ public class RotateRobotCommand extends Command {
       rotationSpeed = MathUtil.clamp(rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation());
       onTarget = false;
     }
-    SmartDashboard.putBoolean("RR OnTarget", onTarget);
-    SmartDashboard.putNumber("RR rSpeed", rotationSpeed);
+    if (debug) SmartDashboard.putBoolean("RR OnTarget", onTarget);
+    if (debug) SmartDashboard.putNumber("RR rSpeed", rotationSpeed);
     robotDrive.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
   }
 

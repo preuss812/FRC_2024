@@ -38,7 +38,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   private final PhotonCamera photonCamera;
   private final DriveSubsystemSRX drivetrainSubsystem;
   private final AprilTagFieldLayout aprilTagFieldLayout;
-  private boolean debug = true;
+  private boolean debug = false;
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
   // "trust" the estimate from that particular component more than the others. 
@@ -103,7 +103,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-        SmartDashboard.putString("PE CurrentPose", getCurrentPose().toString());
+    Utilities.toSmartDashboard("PE CurrentPose", getCurrentPose());
 
     // Update pose estimator with the best visible target
     var pipelineResult = photonCamera.getLatestResult();
@@ -114,7 +114,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       var fiducialId = target.getFiducialId();
       // Get the tag pose from field layout - consider that the layout will be null if it failed to load
       Optional<Pose3d> tagPose = aprilTagFieldLayout == null ? Optional.empty() : aprilTagFieldLayout.getTagPose(fiducialId);
-      SmartDashboard.putNumber("TagAmbiguity", target.getPoseAmbiguity());
+      if (debug) SmartDashboard.putNumber("TagAmbiguity", target.getPoseAmbiguity());
       if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && tagPose.isPresent()) {
         var targetPose = tagPose.get();
         Transform3d camToTarget = target.getBestCameraToTarget();
@@ -134,8 +134,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       m_lastAprilTagSeen = 0;
     }
     
-    SmartDashboard.putBoolean("TagDetected", m_lastAprilTagSeen != 0);
-    SmartDashboard.putNumber("TagID", m_lastAprilTagSeen);
+    if (debug) SmartDashboard.putBoolean("TagDetected", m_lastAprilTagSeen != 0);
+    if (debug) SmartDashboard.putNumber("TagID", m_lastAprilTagSeen);
 
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(

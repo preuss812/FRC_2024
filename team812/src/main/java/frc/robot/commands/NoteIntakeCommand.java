@@ -11,7 +11,8 @@ import frc.robot.subsystems.NoteIntakeSubsystem;
 public class NoteIntakeCommand extends Command {
   /** Creates a new ArmCommand. */
   private final NoteIntakeSubsystem m_noteIntakeSubsystem;
-  
+  private final boolean debug = false;
+
   public NoteIntakeCommand(NoteIntakeSubsystem subsystem) {
     m_noteIntakeSubsystem = subsystem;
     addRequirements(subsystem);
@@ -21,7 +22,7 @@ public class NoteIntakeCommand extends Command {
   @Override
   public void initialize() {
 
-    SmartDashboard.putString("NoteIntakeCommand", "started");
+    if (debug) SmartDashboard.putString("NoteIntakeCommand", "started");
     m_noteIntakeSubsystem.pickUpNote();    
   }
 
@@ -33,7 +34,7 @@ public class NoteIntakeCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("NoteIntakeCommand", "end");
+    if (debug) SmartDashboard.putString("NoteIntakeCommand", "end");
     m_noteIntakeSubsystem.stop();
 
   }

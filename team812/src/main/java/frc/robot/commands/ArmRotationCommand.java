@@ -15,7 +15,8 @@ public class ArmRotationCommand extends Command {
   private final ArmRotationSubsystem m_armSubsystem;
   private final double m_position;
   private double setPoint;
-  
+  private final boolean debug = false;
+
   public ArmRotationCommand(ArmRotationSubsystem subsystem, double position) {
     m_armSubsystem = subsystem;
     m_position = position;
@@ -27,7 +28,7 @@ public class ArmRotationCommand extends Command {
   @Override
   public void initialize() {
 
-    SmartDashboard.putString("armcmd", "started");
+    if (debug) SmartDashboard.putString("armcmd", "started");
 
     setPoint = MathUtil.clamp(m_position, ArmConstants.kArmMinPosition, ArmConstants.kArmMaxPosition);
     
@@ -41,7 +42,7 @@ public class ArmRotationCommand extends Command {
 
   public boolean onTarget() {
     double error = m_armSubsystem.getPosition() - setPoint;
-    SmartDashboard.putNumber("armcmderr", error);
+    if (debug) SmartDashboard.putNumber("armcmderr", error);
 
     if (Math.abs(error) < ArmConstants.kArmThreshold) {
       return true;
@@ -59,7 +60,7 @@ public class ArmRotationCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putString("armcmd", "end");
+    if (debug) SmartDashboard.putString("armcmd", "end");
   }
 
   // Returns true when the command should end.

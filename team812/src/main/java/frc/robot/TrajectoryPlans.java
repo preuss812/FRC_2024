@@ -22,6 +22,9 @@ import frc.robot.Constants.FieldConstants;
  * best path to travel from each starting square.
  */
 public class TrajectoryPlans {
+
+    private static boolean debug = false;
+
     public enum FieldStep {
         Done,
         Up,
@@ -280,7 +283,7 @@ public class TrajectoryPlans {
                 j = j - 1;
              if (move == TrajectoryPlans.FieldStep.Up || move == TrajectoryPlans.FieldStep.UpLeft || move == TrajectoryPlans.FieldStep.UpRight)
                 j = j + 1;
-            SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
+                if (debug) SmartDashboard.putString("move","i="+i+" j="+j+" move="+move);
             if (i < 0 || i > 7 || j < 0 || j > 7) {
                 //int x = 5;
             }
@@ -291,7 +294,7 @@ public class TrajectoryPlans {
                 //if (n++ > maxN) break;
             }
         }
-        SmartDashboard.putString("TTM",moves);
+        if (debug) SmartDashboard.putString("TTM",moves);
         return list;
     }
 }

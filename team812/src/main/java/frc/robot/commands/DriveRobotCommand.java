@@ -122,9 +122,6 @@ public class DriveRobotCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timesInitialized++;
-
-    SmartDashboard.putNumber("DR #inits", timesInitialized);
 
     debug = RobotContainer.m_BlackBox.isSwitchCenter();
     double linearP = config.getLinearP();
@@ -148,7 +145,7 @@ public class DriveRobotCommand extends Command {
       startingPose.getX() + relativeMove.getX(),
       startingPose.getY() + relativeMove.getY(),
       startingPose.getRotation().rotateBy(relativeMove.getRotation()));
-      SmartDashboard.putString("DR all", "Blue");
+      if (debug) SmartDashboard.putString("DR all", "Blue");
 
     } else if (Utilities.isRedAlliance()) {
       // This just inverts the X move as the field this year is mirrored about the center of the field.
@@ -156,11 +153,11 @@ public class DriveRobotCommand extends Command {
       startingPose.getX() - relativeMove.getX(),
       startingPose.getY() + relativeMove.getY(),
       startingPose.getRotation().rotateBy(relativeMove.getRotation().rotateBy(new Rotation2d(Math.PI))));
-      SmartDashboard.putString("DR all", "Red");
+      if (debug) SmartDashboard.putString("DR all", "Red");
 
     } else {
       targetPose = startingPose; // Do nothing if we dont have an alliance.
-      SmartDashboard.putString("DR all", "None");
+      if (debug) SmartDashboard.putString("DR all", "None");
 
     }
     xController = new PIDController(linearP, linearI, config.getLinearD());
@@ -187,17 +184,17 @@ public class DriveRobotCommand extends Command {
     //SmartDashboard.putNumber("Range", -54);
     debugIterations++;
     currentPose = robotDrive.getPose();
-    Utilities.toSmartDashboard("Drive Pose", currentPose);
-    Utilities.toSmartDashboard("Drive target", targetPose);
+    if (debug) Utilities.toSmartDashboard("Drive Pose", currentPose);
+    if (debug) Utilities.toSmartDashboard("Drive target", targetPose);
     // Calculate the X and Y and rotation offsets to the target location
     translationError = new Translation2d( targetPose.getX() - currentPose.getX(), targetPose.getY() - currentPose.getY());
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
     if (controlRotation)
       rotationError = MathUtil.inputModulus(targetPose.getRotation().getRadians() - currentPose.getRotation().getRadians(), -Math.PI, Math.PI);
-    SmartDashboard.putNumber("Drive R Error", Units.radiansToDegrees(rotationError));
-    SmartDashboard.putNumber("Drive X Error", translationError.getX());
-    SmartDashboard.putNumber("Drive Y Error", translationError.getY());
+      if (debug) SmartDashboard.putNumber("Drive R Error", Units.radiansToDegrees(rotationError));
+      if (debug) SmartDashboard.putNumber("Drive X Error", translationError.getX());
+      if (debug) SmartDashboard.putNumber("Drive Y Error", translationError.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationError.getX()) < config.getLinearTolerance()
@@ -218,11 +215,11 @@ public class DriveRobotCommand extends Command {
         rotationSpeed = 0.0;
       onTarget = false;
     }
-    SmartDashboard.putBoolean("Drive OnTarget", onTarget);
+    if (debug) SmartDashboard.putBoolean("Drive OnTarget", onTarget);
 
-    SmartDashboard.putNumber("Drive xSpeed", xSpeed);
-    SmartDashboard.putNumber("Drive ySpeed", ySpeed);
-    SmartDashboard.putNumber("Drive rSpeed", rotationSpeed);
+    if (debug) SmartDashboard.putNumber("Drive xSpeed", xSpeed);
+    if (debug) SmartDashboard.putNumber("Drive ySpeed", ySpeed);
+    if (debug) SmartDashboard.putNumber("Drive rSpeed", rotationSpeed);
     robotDrive.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
   }
 

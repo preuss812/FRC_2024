@@ -38,6 +38,7 @@ public class MAXSRXSwerveModule {
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+  private boolean debug = false;
 
   /**
    * Constructs a MAXSRXSwerveModule and configures the driving and turning motor,
@@ -156,8 +157,8 @@ public class MAXSRXSwerveModule {
      if (CANCoderPosition < 0.0) CANCoderPosition += 1.0;
     CANCoderPosition *= 2.0 * Math.PI; // Scale the the rotations into units of Radians.
     // Some debug that should eventually be removed:
-    SmartDashboard.putNumber("Absolute position"+m_turningEncoder.getDeviceID(), m_turningEncoder.getAbsolutePosition().getValue());
-    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+    if (debug) SmartDashboard.putNumber("Absolute position"+m_turningEncoder.getDeviceID(), m_turningEncoder.getAbsolutePosition().getValue());
+    if (debug && (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder)) {
       SmartDashboard.putNumber("lf_angle_radians", CANCoderPosition);
       SmartDashboard.putNumber("lf_angle_degrees", CANCoderPosition/(2*Math.PI)*360.0);
     }
@@ -216,7 +217,7 @@ public class MAXSRXSwerveModule {
     double pidOutput = m_turningPIDController.calculate(currentTurningAngleInRadians);
     m_turningSparkMax.set(pidOutput);
 
-    if (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder) {
+    if (debug && (m_turningEncoder.getDeviceID() == CANConstants.kSwerveLeftFrontCANCoder)) {
       SmartDashboard.putNumber("optimizedTurn", optimizedDesiredState.angle.getRadians());
       SmartDashboard.putNumber("optimizedTurnError", optimizedDesiredState.angle.getRadians()-currentTurningAngleInRadians);
       SmartDashboard.putNumber("pidOutput", pidOutput);

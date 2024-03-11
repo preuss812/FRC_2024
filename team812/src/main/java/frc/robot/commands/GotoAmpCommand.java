@@ -21,6 +21,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
  */
 public class GotoAmpCommand extends GotoPoseCommand {
   /** Creates a new GotoAmpCommand. */
+  private final boolean debug = false;
   public GotoAmpCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem) { 
     super(PoseEstimatorSubsystem,DriveSubsystemSRXSubsystem, new Pose2d()); // Pose is a place holder.
@@ -63,7 +64,7 @@ public class GotoAmpCommand extends GotoPoseCommand {
       targetPose = m_PoseEstimatorSubsystem.getCurrentPose(); // Hack:: if we dont know the alliance. Dont move. 
     }
 
-    Utilities.toSmartDashboard("GotoTarget", targetPose);
-    SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
+    if (debug) Utilities.toSmartDashboard("GotoTarget", targetPose);
+    if (debug) SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
 }

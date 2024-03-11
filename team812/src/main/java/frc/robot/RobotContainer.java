@@ -93,7 +93,7 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
   //private final DriveTrain m_DriveTrain = new DriveTrain();
   // The robot's subsystems
-  private static boolean debug = true;
+  private static boolean debug = false;
   public final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
   public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
@@ -267,7 +267,7 @@ public class RobotContainer {
     Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.0); // TODO Tune distance
     Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() - 1.0, new Rotation2d(0));
     Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2.0));
-    Utilities.toSmartDashboard("debugPose",targetPose);
+    if (debug) Utilities.toSmartDashboard("debugPose",targetPose);
     // Autonomous steps part II
     new JoystickButton(leftJoystick, 7).onTrue(
       new InstantCommand(()->setGyroAngleToStartMatch())
@@ -282,7 +282,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).onTrue(
       new RotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
     );
-    SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
+    if (debug) SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
     new JoystickButton(leftJoystick, 11).onTrue(
       new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.05) // 0.1 was too fast
     );
@@ -294,8 +294,8 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 7).whileTrue(
       new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP)
     );
-    SmartDashboard.putData("SWcmd", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP));
-    SmartDashboard.putData("SWcmdR", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.RED_AMP));
+    if (debug) SmartDashboard.putData("SWcmd", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP));
+    if (debug) SmartDashboard.putData("SWcmdR", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.RED_AMP));
 
     new JoystickButton(rightJoystick, 8).onTrue(
       new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose)
@@ -351,7 +351,7 @@ public class RobotContainer {
       }
       Pose2d testPose1 = new Pose2d(0,0,new Rotation2d(0));
       Pose2d redTestPose1 = testPose1.transformBy(FieldConstants.AllianceTransformation[FieldConstants.RedAlliance]);
-      Utilities.toSmartDashboard("RedTestPose1", redTestPose1);
+      if (debug) Utilities.toSmartDashboard("RedTestPose1", redTestPose1);
 
       /**
        * Create smart dash button that cycles through the various paths
@@ -359,11 +359,13 @@ public class RobotContainer {
        * for both red and blue alliances.
        */
       
-       SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
-       SmartDashboard.putData("RRcmd", new RotateRobotCommand(m_robotDrive, 0.0, false));
-       SmartDashboard.putData("DRcmd", new DriveRobotCommand(m_robotDrive, new Pose2d(1.0,0.0, new Rotation2d()), false));
-       SmartDashboard.putData("DAcmd", new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController));
-      } // (debug)
+      if (debug) {
+        SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
+        SmartDashboard.putData("RRcmd", new RotateRobotCommand(m_robotDrive, 0.0, false));
+        SmartDashboard.putData("DRcmd", new DriveRobotCommand(m_robotDrive, new Pose2d(1.0,0.0, new Rotation2d()), false));
+        SmartDashboard.putData("DAcmd", new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController));
+      }
+    } // (debug)
   } // (configureButtonBindings)
 
   /**

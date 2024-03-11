@@ -26,7 +26,7 @@ import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class FollowTrajectoryCommand extends SequentialCommandGroup {
-  public static boolean debug = true;
+  public static boolean debug = false;
   // These trajectory config parameters are assumed to be the same for all trajectories.
   // If that is not true, this would need to be moved elsewere or cloned+mutated to provide options.
   public static final TrajectoryConfig config = new TrajectoryConfig(
@@ -59,7 +59,7 @@ public class FollowTrajectoryCommand extends SequentialCommandGroup {
         }
 
         addCommands(new GotoPoseCommand(poseEstimatorSubsystem, robotDrive, targetPose)); // For each waypoint.
-        SmartDashboard.putString("FT", "catch->gotoPose");
+        if (debug) SmartDashboard.putString("FT", "catch->gotoPose");
       return;
     }
     if (debug) {
@@ -83,7 +83,7 @@ public class FollowTrajectoryCommand extends SequentialCommandGroup {
       robotDrive);
     
     addCommands(swerveControllerCommand);
-    SmartDashboard.putString("FT", "added");
+    if (debug) SmartDashboard.putString("FT", "added");
   }
 
 }

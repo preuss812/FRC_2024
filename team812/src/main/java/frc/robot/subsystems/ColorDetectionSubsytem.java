@@ -18,6 +18,7 @@ public class ColorDetectionSubsytem extends SubsystemBase {
     final I2C.Port            i2cPort = I2C.Port.kOnboard;
     final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
     final ColorMatch   m_colorMatcher = new ColorMatch();
+	private final boolean debug = false;
 
     public final Color kNoteTarget = new Color(
     	ColorConstants.kNoteTargetRBG[0], 
@@ -38,7 +39,7 @@ public class ColorDetectionSubsytem extends SubsystemBase {
 	public boolean inRange() {
 		final int proximity = m_colorSensor.getProximity();
 
-		SmartDashboard.putNumber("Proximity", proximity);
+		if (debug) SmartDashboard.putNumber("Proximity", proximity);
 		return (proximity >= 100);
 	}
     public Color get_color() {
@@ -60,20 +61,21 @@ public class ColorDetectionSubsytem extends SubsystemBase {
 			colorString = "Out of range";
 		}
 
-		SmartDashboard.putNumber("Red", detectedColor.red);
-		SmartDashboard.putNumber("Green", detectedColor.green);
-		SmartDashboard.putNumber("Blue", detectedColor.blue);
-		SmartDashboard.putNumber("Proximity", proximity);
-		SmartDashboard.putNumber("Confidence", match.confidence);  
-		SmartDashboard.putString("Detected Color", colorString);
-		
+		if (debug) {
+			SmartDashboard.putNumber("Red", detectedColor.red);
+			SmartDashboard.putNumber("Green", detectedColor.green);
+			SmartDashboard.putNumber("Blue", detectedColor.blue);
+			SmartDashboard.putNumber("Proximity", proximity);
+			SmartDashboard.putNumber("Confidence", match.confidence);  
+			SmartDashboard.putString("Detected Color", colorString);
+		}			
 		return match.color;
     }
 
     @Override
     public void periodic() {
 		final int proximity = m_colorSensor.getProximity();
-		SmartDashboard.putNumber("Proximity", proximity);
+		if (debug) SmartDashboard.putNumber("Proximity", proximity);
 
 	// This method will be called once per scheduler run
     }
