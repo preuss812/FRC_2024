@@ -50,6 +50,7 @@ import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.DetectColorCommand;
+import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
@@ -361,6 +362,7 @@ public class RobotContainer {
        SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
        SmartDashboard.putData("RRcmd", new RotateRobotCommand(m_robotDrive, 0.0, false));
        SmartDashboard.putData("DRcmd", new DriveRobotCommand(m_robotDrive, new Pose2d(1.0,0.0, new Rotation2d()), false));
+       SmartDashboard.putData("DAcmd", new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController));
       } // (debug)
   } // (configureButtonBindings)
 
