@@ -58,7 +58,8 @@ public class GotoAmpCommand extends GotoPoseCommand {
       targetPose = new Pose2d(tag.getX(), tag.getY() - 0.4, tag.getRotation());
 
     } else if (Utilities.isRedAlliance()) {
-      targetPose = m_PoseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.RED_AMP.id());
+      Pose2d tag = m_PoseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.RED_AMP.id());
+      targetPose = new Pose2d(tag.getX(), tag.getY() - 0.4, tag.getRotation());
     }
     else {
       targetPose = m_PoseEstimatorSubsystem.getCurrentPose(); // Hack:: if we dont know the alliance. Dont move. 

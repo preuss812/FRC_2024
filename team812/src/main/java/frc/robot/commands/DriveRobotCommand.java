@@ -106,6 +106,7 @@ public class DriveRobotCommand extends Command {
   private boolean onTarget;
   private static int timesInitialized = 0;
   private boolean debug = false;
+  private boolean debugPID = false;
   private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
   private int debugIterations = 0;
 
@@ -123,11 +124,11 @@ public class DriveRobotCommand extends Command {
   @Override
   public void initialize() {
 
-    debug = RobotContainer.m_BlackBox.isSwitchCenter();
+    //debugPID = RobotContainer.m_BlackBox.isSwitchCenter();
     double linearP = config.getLinearP();
     double linearI = config.getLinearI();
     
-    if (debug) {
+    if (debugPID) {
       debugIterations = 0;
       config.setLinearTolerance(0.01); // tighter tolerance of 1cm
       linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
@@ -232,9 +233,6 @@ public class DriveRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!debug || (debugIterations >= debugMinIterations))
-      return onTarget;
-    else
-      return false; 
+    return onTarget;
   }
 }

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
@@ -93,6 +94,7 @@ public class Autonomous extends SequentialCommandGroup {
         // Set the gyro starting angle based on alliance and assumed robot placement
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
         new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
+        new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
 
         // Home the arm (should already be homed but this sets the encoder coordinates)
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),

@@ -102,6 +102,8 @@ public class GotoPoseCommand extends Command {
   protected PIDController rotationController;
   protected boolean onTarget;
   private boolean debug = false;
+  private boolean debugPID = false;
+
   private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
   private int debugIterations = 0;
   
@@ -151,11 +153,11 @@ public class GotoPoseCommand extends Command {
   @Override
   public void initialize() {
 
-    debug = RobotContainer.m_BlackBox.isSwitchCenter();
+    //debugPID = RobotContainer.m_BlackBox.isSwitchCenter();
     double linearP = m_config.getLinearP();
     double linearI = m_config.getLinearI();
 
-    if (debug) {
+    if (debugPID) {
       debugIterations = 0;
       m_config.setLinearTolerance(0.01); // tighter tolerance of 1cm
       linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
@@ -266,9 +268,6 @@ public class GotoPoseCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!debug || (debugIterations >= debugMinIterations))
-      return onTarget;
-    else
-      return false; 
+    return onTarget;
   }
 }

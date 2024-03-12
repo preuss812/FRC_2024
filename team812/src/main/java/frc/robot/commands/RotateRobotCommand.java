@@ -69,7 +69,7 @@ public class RotateRobotCommand extends Command {
   private double startingTheta;
   private double targetTheta;
   private boolean debug = true;
-  private final boolean debugPid = false;
+  private boolean debugPID = false;
   private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
   private int debugIterations = 0;
   
@@ -90,12 +90,12 @@ public class RotateRobotCommand extends Command {
   @Override
   public void initialize() {
 
-    debug = (RobotContainer.m_BlackBox.isSwitchRight());
+    //debugPID = (RobotContainer.m_BlackBox.isSwitchRight());
 
     double angularP = config.getAngularP();
     double angularI = config.getAngularI();
 
-    if (debugPid) {
+    if (debugPID) {
       debugIterations = 0;
       //config.setAngularTolerance(Units.degreesToRadians(0.1)); // set a smaller window for success.
       angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
@@ -176,9 +176,6 @@ public class RotateRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //if (!debug || (debugIterations >= debugMinIterations))
-      return onTarget;
-   // else
-     // return false;
+    return onTarget;
   }
 }
