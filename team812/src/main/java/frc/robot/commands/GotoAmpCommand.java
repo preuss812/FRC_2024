@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Utilities;
 import frc.robot.subsystems.DriveSubsystemSRX;
@@ -55,11 +56,13 @@ public class GotoAmpCommand extends GotoPoseCommand {
 
     if (Utilities.isBlueAlliance()) {
       Pose2d tag = m_PoseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.BLUE_AMP.id());
-      targetPose = new Pose2d(tag.getX(), tag.getY() - 0.4, tag.getRotation());
+      // This should position the robot back to the AMP touching the wall.
+      targetPose = new Pose2d(tag.getX(), tag.getY() - DriveConstants.kBackToCenterDistance, tag.getRotation());
 
     } else if (Utilities.isRedAlliance()) {
       Pose2d tag = m_PoseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.RED_AMP.id());
-      targetPose = new Pose2d(tag.getX(), tag.getY() - 0.4, tag.getRotation());
+      // This should position the robot back to the AMP touching the wall.
+      targetPose = new Pose2d(tag.getX(), tag.getY() - DriveConstants.kBackToCenterDistance, tag.getRotation());
     }
     else {
       targetPose = m_PoseEstimatorSubsystem.getCurrentPose(); // Hack:: if we dont know the alliance. Dont move. 

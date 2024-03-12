@@ -21,6 +21,7 @@ public class Utilities {
     
     private static boolean m_isBlueAlliance = false;
     private static boolean m_isRedAlliance = false;
+    private static boolean m_isAutonomous = true;
 
     public static double scaleDouble(final double input, final double to_min, final double to_max) {
             final double from_min = -1.0;
@@ -35,6 +36,14 @@ public class Utilities {
                         to_min;
         }
         return scaled_x;    
+    }
+
+    public static void setAutonomous() {
+        m_isAutonomous = DriverStation.isAutonomous();
+    }
+
+    public static boolean isAutonomous() {
+        return m_isAutonomous;
     }
 
     public static void setAlliance() {

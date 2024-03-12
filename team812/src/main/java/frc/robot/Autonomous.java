@@ -9,7 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,7 +27,8 @@ import frc.robot.commands.GotoAmpCommand;
 //import frc.robot.commands.GotoPoseCommand;
 import frc.robot.commands.RotateRobotCommand;
 //import frc.robot.commands.StopRobotMotion;
-import frc.robot.commands.PushTowardsWall;
+//import frc.robot.commands.PushTowardsWall;
+import frc.robot.commands.PushTowardsWallUltrasonic;
 //import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -45,6 +46,7 @@ public class Autonomous extends SequentialCommandGroup {
   private final DriveSubsystemSRX m_robotDrive;
   private final ArmRotationSubsystem m_ArmRotationSubsystem;
   private final ShooterSubsystem m_ShooterSubsystem;
+  private final PingResponseUltrasonicSubsystem m_PingResponseUltrasonicSubsystem;
   private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem;
 
   public Autonomous(RobotContainer robotContainer) {
@@ -53,6 +55,8 @@ public class Autonomous extends SequentialCommandGroup {
     m_ArmRotationSubsystem = RobotContainer.m_ArmRotationSubsystem;
     m_ShooterSubsystem = RobotContainer.m_ShooterSubsystem;
     m_PoseEstimatorSubsystem = RobotContainer.m_PoseEstimatorSubsystem;
+    m_PingResponseUltrasonicSubsystem = RobotContainer.m_PingResponseUltrasonicSubsystem;
+
     enum AutonomousStrategy {
       LABTEST,
       BLUEALLIANCE,
@@ -104,7 +108,7 @@ public class Autonomous extends SequentialCommandGroup {
         // Drive out based on drivetrain encoders to align with and face the Amp
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
-        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0),
+        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0), // TODO Try controlRotation == true.
 
         // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 4)),
@@ -112,7 +116,7 @@ public class Autonomous extends SequentialCommandGroup {
         new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
-        new WaitCommand(5.0),
+        new WaitCommand(5.0), // TODO reduce or eliminate wait.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
         new FindAprilTagCommand(
@@ -133,7 +137,7 @@ public class Autonomous extends SequentialCommandGroup {
         // Move to the scoring position
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 8)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0),
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0), // TODO raise arm in parallel.
         // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
 
         // Score the note.
@@ -142,19 +146,19 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
         new ParallelDeadlineGroup(
           new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
-          new PushTowardsWall(m_robotDrive)
+          new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
         ).withTimeout(10.0),
 
         // Leave the starting box to get more points.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
-        new DriveRobotCommand(m_robotDrive, finalMove, false).withTimeout(5.0),
+        new DriveRobotCommand(m_robotDrive, finalMove, true).withTimeout(5.0),
 
         // quiesce the drive and finish.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
-
+        
       );
       addCommands(fullCommandGroup);
     } else {

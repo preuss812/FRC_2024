@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-//import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -63,7 +63,9 @@ import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
+import frc.robot.commands.SwerveToAmpCommand;
 import frc.robot.commands.SwerveToPoseCommand;
+import frc.robot.commands.SwerveToSourceCommand;
 //import frc.robot.commands.SwerveToPoseTest;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
@@ -226,11 +228,15 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
       .onTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem, m_ColorDetectionSubsystem));
 
-    new JoystickButton(m_driverController, Button.kB.value)
-      .whileTrue(new GotoSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
+    new JoystickButton(m_driverController, Button.kB.value) // TODO test
+      .whileTrue(new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
 
-    new JoystickButton(m_driverController, Button.kX.value)
-      .whileTrue(new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive));
+    new JoystickButton(m_driverController, Button.kX.value) // TODO test.
+      .whileTrue(new SequentialCommandGroup(
+        new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive) // Go the rest of the way to the AMP.
+      )
+    );
 
     new JoystickButton(m_driverController, Button.kY.value)
       .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
