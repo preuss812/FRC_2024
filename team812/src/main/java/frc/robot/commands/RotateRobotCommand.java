@@ -68,7 +68,8 @@ public class RotateRobotCommand extends Command {
   private final RotateRobotConfig config;
   private double startingTheta;
   private double targetTheta;
-  private boolean debug = false;
+  private boolean debug = true;
+  private final boolean debugPid = false;
   private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
   private int debugIterations = 0;
   
@@ -94,9 +95,9 @@ public class RotateRobotCommand extends Command {
     double angularP = config.getAngularP();
     double angularI = config.getAngularI();
 
-    if (debug) {
+    if (debugPid) {
       debugIterations = 0;
-      config.setAngularTolerance(Units.degreesToRadians(0.1)); // set a smaller window for success.
+      //config.setAngularTolerance(Units.degreesToRadians(0.1)); // set a smaller window for success.
       angularP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 1.0);
       angularI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.001);
       SmartDashboard.putNumber("BB P", angularP);
@@ -148,14 +149,17 @@ public class RotateRobotCommand extends Command {
     
     // Test to see if we have arrived at the requested angle within the specified tolerance.
     // Need to also test for velocity, otherwise momentum could send us past the goal.
+      SmartDashboard. putNumber ("RRConfig", Units.radiansToDegrees( config.getAngularTolerance()));
     if (Math.abs(rotationError) < config.getAngularTolerance()) {
       // Yes, we have arrived
       xSpeed = 0.0;
       ySpeed = 0.0;
       rotationSpeed = 0.0;
+      SmartDashboard.putString ("RR Test", "onTarget"); 
       onTarget = true;
     } else {
       rotationSpeed = MathUtil.clamp(rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation());
+     SmartDashboard.putString ("RR Tes  t", "onMark"); 
       onTarget = false;
     }
     if (debug) SmartDashboard.putBoolean("RR OnTarget", onTarget);
@@ -172,9 +176,9 @@ public class RotateRobotCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (!debug || (debugIterations >= debugMinIterations))
+    //if (!debug || (debugIterations >= debugMinIterations))
       return onTarget;
-    else
-      return false;
+   // else
+     // return false;
   }
 }

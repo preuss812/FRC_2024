@@ -41,7 +41,7 @@ public class GotoPoseCommand extends Command {
      * default constructor
      */
     public GotoPoseConfig() {
-      maxThrottle = 0.70;
+      maxThrottle = 0.20;
       linearP = 2.0;
       linearI = 0.0; // linearP/100.0;
       linearD = 0.0; // linearP*10.0;

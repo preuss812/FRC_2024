@@ -11,7 +11,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -108,6 +110,7 @@ public class Autonomous extends SequentialCommandGroup {
         new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
+        new WaitCommand(5.0),
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
         new FindAprilTagCommand(
