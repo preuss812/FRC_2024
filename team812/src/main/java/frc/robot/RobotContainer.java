@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -343,6 +344,24 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileTrue(
       new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
+
+    // Possible aide for end game.  In this command the xbox right joystick controls 
+    // rotation as normal but the Y axis now controls driving along the 
+    // line that projects perpendicularly from the april tag in view when the command
+    // is started.
+    new JoystickButton(leftJoystick, 3).onTrue(
+      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
+    );
+
+    // This command should just stop the robot from driving and stop the shooter and arm motors.
+    new JoystickButton(leftJoystick,5).onTrue(
+      new ParallelCommandGroup(
+        new InstantCommand(()->m_robotDrive.drive(0,0,0,true,true), m_robotDrive),
+        new InstantCommand(()->m_ShooterSubsystem.disableMotor()),
+        new InstantCommand(()->m_ArmRotationSubsystem.disableMotor())
+      )   
+    );
+
     /*
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
