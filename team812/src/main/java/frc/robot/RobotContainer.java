@@ -108,7 +108,7 @@ public class RobotContainer {
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
-  //public static PowerDistribution m_PowerDistribution = new PowerDistribution(0, ModuleType.kCTRE); // TODO Enable this and add SmartDashboard for Winch.
+  public static PowerDistribution m_PowerDistribution = new PowerDistribution(0, ModuleType.kCTRE); // TODO Enable this and add SmartDashboard for Winch.
   public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
   //public static AnalogUltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
   //          new AnalogUltrasonicDistanceSubsystem();

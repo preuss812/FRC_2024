@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.ArmRotationCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
@@ -29,6 +31,7 @@ import frc.robot.commands.RotateRobotCommand;
 //import frc.robot.commands.StopRobotMotion;
 //import frc.robot.commands.PushTowardsWall;
 import frc.robot.commands.PushTowardsWallUltrasonic;
+import frc.robot.Constants.ArmConstants;
 //import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -99,6 +102,7 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
         new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
         new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
+        new InstantCommand(() -> m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(0.4,6.0,new Rotation2d(0.0)))),
 
         // Home the arm (should already be homed but this sets the encoder coordinates)
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
@@ -116,7 +120,7 @@ public class Autonomous extends SequentialCommandGroup {
         new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
-        new WaitCommand(5.0), // TODO reduce or eliminate wait.
+        new WaitCommand(2.5), // TODO reduce or eliminate wait.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
         new FindAprilTagCommand(
@@ -137,7 +141,10 @@ public class Autonomous extends SequentialCommandGroup {
         // Move to the scoring position
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 8)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0), // TODO raise arm in parallel.
+        new ParallelCommandGroup(
+          new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0),
+          
+         new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmMinPosition)), // TODO raise arm in parallel. 100 fudge factor
         // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
 
         // Score the note.

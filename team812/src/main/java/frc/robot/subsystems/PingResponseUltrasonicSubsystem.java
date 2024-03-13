@@ -21,7 +21,7 @@ public class PingResponseUltrasonicSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("US m", getRange());
+    SmartDashboard.putNumber("US cm", getRange()*100.0);
   }
   
   /**

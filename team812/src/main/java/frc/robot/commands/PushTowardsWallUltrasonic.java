@@ -32,9 +32,9 @@ public class PushTowardsWallUltrasonic extends Command {
     double distanceToClosestObject = ultrasonic.getRange();
     // Push less if we are very close to the wall.
     if (distanceToClosestObject < 0.020) {
-      robotDrive.drive(0, 0.55, 0, true, true);
+      robotDrive.drive(0, 0.02, 0, true, true);
     } else {
-      robotDrive.drive(0, 0.1, 0, true, true);
+      robotDrive.drive(0, 0.07, 0, true, true);
     }
   }
 

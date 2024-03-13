@@ -174,6 +174,45 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/US cm",
+              "_title": "SmartDashboard/US cm",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Winch Current",
+              "_title": "/SmartDashboard/Winch Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Robot Current",
+              "_title": "/SmartDashboard/Robot Current",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -849,8 +888,8 @@
             ],
             "content": {
               "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/RR Error",
-              "_source1": "network_table:///SmartDashboard/Pot 0:",
+              "_source0": "network_table:///SmartDashboard/Pot 0:",
+              "_source1": "network_table:///SmartDashboard/RR Error",
               "_title": "SmartDashboard/RR Error",
               "_glyph": 148,
               "_showGlyph": false,

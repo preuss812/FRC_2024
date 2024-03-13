@@ -141,15 +141,15 @@ public class Robot extends TimedRobot {
       endGameSwitchPosition = false;
     }
     // TODO Enable the PowerDistibution object in RobotContainer.
-    /*
+    
     double totalCurrent = RobotContainer.m_PowerDistribution.getTotalCurrent();
     SmartDashboard.putNumber("Robot Current", totalCurrent);
     // Get the current going through channel 7, in Amperes.
     // The PDP returns the current in increments of 0.125A.
     // At low currents the current readings tend to be less accurate.
-    double winchCurrent = RobotContainer.m_PowerDistribution.getCurrent(7); // TODO Need the right channel
+    double winchCurrent = RobotContainer.m_PowerDistribution.getCurrent(6); // TODO Need the right channel
     SmartDashboard.putNumber("Winch Current", winchCurrent);
-    */
+    
 
   }
 

@@ -51,7 +51,7 @@ public final class Constants {
         public static final int kNoteIntakeMotor = 40;
         public static final int kShooterMotor = 42;
 
-        public static final int kPDP = 50;
+        public static final int kPDP = 0; // was 50 until 3/12/2024
         public static final int kPCM = 51;
     }
 
@@ -302,7 +302,7 @@ public final class Constants {
         public static final double kIntakeSpeed = 0.70;
         public static final double kShootSpeed =  0.7;
         public static final double kUnshootSpeed = -1.0;
-        public static final double kShootTimeout = 3.0; // Seconds
+        public static final double kShootTimeout = 2.0; // Seconds
     }
 
     
