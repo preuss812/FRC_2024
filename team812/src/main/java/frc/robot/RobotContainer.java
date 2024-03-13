@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
@@ -51,6 +51,7 @@ import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.ArmRotationCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
@@ -268,6 +269,18 @@ public class RobotContainer {
     POVButton dPad270 = dPadButton(270);
     POVButton dPad315 = dPadButton(315);
     
+    // Try out shooting notes on both left and right joystick triggers.
+    new JoystickButton(rightJoystick, 1).whileTrue(
+      new RunCommand( () -> m_ShooterSubsystem.shoot(ShooterConstants.kShootSpeed))
+    );
+    new JoystickButton(leftJoystick, 1).whileTrue(
+      new RunCommand( () -> m_ShooterSubsystem.shoot(ShooterConstants.kShootSpeed))
+    );
+
+    // Arm up/down commands to try on for size.
+    new JoystickButton(rightJoystick, 6).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmScoringPosition));
+    new JoystickButton(rightJoystick, 4).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmMaxPosition));
+
     /**
      * This section defines buttons for the left joystick, joystick 0, which is not intended for use during game play
      * The buttons defined are for debug.
@@ -330,6 +343,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileTrue(
       new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
+    /*
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
     // Nevertheless, I still want to understand how to perform these commands.
@@ -340,7 +354,8 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).whileTrue(
       new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
-    
+    */
+
     /* Debugging below */
     if (debug) {
 
