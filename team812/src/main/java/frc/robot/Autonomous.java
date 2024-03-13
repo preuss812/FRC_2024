@@ -38,6 +38,7 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.FieldConstants;
 //import frc.robot.Constants.VisionConstants;
 //import frc.robot.Constants.VisionConstants.AprilTag;
+import frc.robot.Constants.FieldConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -94,7 +95,7 @@ public class Autonomous extends SequentialCommandGroup {
       
       Pose2d finalMove;
       Pose2d firstMove;
-      finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d(0.0));    // Pose for robot to face the center of the field.
+      finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d( Math.PI/2.0)); // Pose for robot to face the center of the field.
       firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(-Math.PI/2.0)); // Pose for robot to be at the april tag.
 
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
@@ -102,7 +103,11 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
         new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
         new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
-        new InstantCommand(() -> m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(0.4,6.0,new Rotation2d(0.0)))),
+        new InstantCommand(() -> Utilities.allianceSetCurrentPose(
+          new Pose2d(
+            DriveConstants.kBackToCenterDistance,
+            DriveConstants.kApproximateStartingY,
+            new Rotation2d(DriveConstants.kStartingOrientation)))),
 
         // Home the arm (should already be homed but this sets the encoder coordinates)
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
@@ -120,6 +125,7 @@ public class Autonomous extends SequentialCommandGroup {
         new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
+        //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
         new WaitCommand(2.5), // TODO reduce or eliminate wait.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
@@ -157,6 +163,7 @@ public class Autonomous extends SequentialCommandGroup {
         ).withTimeout(10.0),
 
         // Leave the starting box to get more points.
+        //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
         new DriveRobotCommand(m_robotDrive, finalMove, true).withTimeout(5.0),

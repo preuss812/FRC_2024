@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -126,6 +128,39 @@ public class Utilities {
         }
         return (winding != 0);
     }
+    
+    /**
+     * refineYCoordinate - use the ultrasonic sensor to set the Pose estimator's
+     * Y axis position on the field.  For this to make sense, the robot has to be
+     * rotated to -90 degrees (ie back facing the amp wall) and near the 
+     * amp wall.
+    */
+    public static void refineYCoordinate() {
+        boolean reset = false;
+        double ultrasonicRange = RobotContainer.m_PingResponseUltrasonicSubsystem.getRange();
+        if (ultrasonicRange < 2.0 /* Meters */) {
+            Pose2d currentPose = RobotContainer.m_PoseEstimatorSubsystem.getCurrentPose();
+            if (Math.abs(currentPose.getRotation().getDegrees() -  -90.0) < 5.0 /* degrees */) {
+                reset = true;
+                RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(
+                new Pose2d(
+                    currentPose.getX(),
+                    FieldConstants.yMax - ultrasonicRange,
+                    currentPose.getRotation()
+                )
+                );
+            }
+            
+        }
+        // For debug, display whether we did reset the coordinate or not.
+        SmartDashboard.putBoolean("refineY", reset);
+    }
 
+    public static void allianceSetCurrentPose(Pose2d newPose) {
+        if (isBlueAlliance())
+          RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(newPose);
+        else // For the red alliance translate the X coordinates and rotate the pose 180 degrees.
+        RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(FieldConstants.xMax - newPose.getX(), newPose.getY(), new Rotation2d(Math.PI)));
+      }
     
 }

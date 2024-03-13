@@ -373,6 +373,8 @@ public final class Constants {
         public static final boolean kGyroReversed = false;
 
         public static final double kBackToCenterDistance = Units.inchesToMeters(17.5); //was 15.0 until 3/5/2024
+        public static final double kApproximateStartingY = 6.0; // Meters (ie near the amp)
+        public static final double kStartingOrientation = 0.0; // Starting orientation in radians (ie robot back against the alliance wall)
       }
     
       public static final class ModuleConstants {
