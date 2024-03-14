@@ -157,6 +157,7 @@ public class GotoPoseCommand extends Command {
     double linearP = m_config.getLinearP();
     double linearI = m_config.getLinearI();
 
+    /*
     if (debugPID) {
       debugIterations = 0;
       m_config.setLinearTolerance(0.01); // tighter tolerance of 1cm
@@ -165,6 +166,7 @@ public class GotoPoseCommand extends Command {
       SmartDashboard.putNumber("BB P", linearP);
       SmartDashboard.putNumber("BB I", linearI);
     }
+    */
     
     xController = new PIDController(
       linearP, // m_config.getLinearP(),

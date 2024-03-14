@@ -157,6 +157,7 @@ public class GotoAprilTagCommand extends Command {
     double linearP = config.getLinearP();
     double linearI = config.getLinearI();
 
+    /*
     if (debugPID) {
       debugIterations = 0;
       config.setLinearTolerance(0.01); // tighter tolerance of 1cm
@@ -165,6 +166,8 @@ public class GotoAprilTagCommand extends Command {
       SmartDashboard.putNumber("BB P", linearP);
       SmartDashboard.putNumber("BB I", linearI);
     }
+    */
+    
     var pipelineResult = photonCamera.getLatestResult();
     if (pipelineResult.hasTargets()) {
       var target = pipelineResult.getBestTarget();

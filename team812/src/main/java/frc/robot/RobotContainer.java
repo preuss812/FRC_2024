@@ -40,7 +40,7 @@ import frc.robot.Constants.UltrasonicConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
 //import frc.robot.subsystems.AnalogUltrasonicDistanceSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
-import frc.robot.subsystems.BlackBoxSubsystem;
+//import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
@@ -104,7 +104,7 @@ public class RobotContainer {
   private static boolean debug = false;
   public final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
-  public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
+  //public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
   public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
   //public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
   public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);

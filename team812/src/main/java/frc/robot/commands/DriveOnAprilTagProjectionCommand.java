@@ -170,6 +170,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     double linearP = 0; // If no tag is found, do not energize the motors.
     double linearI = 0;
 
+    /*
     if (debugPID) {
       debugIterations = 0;
       config.setLinearTolerance(0.01); // tighter tolerance of 1cm
@@ -177,6 +178,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       linearI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.1);
       
     }
+    */
+    
     var pipelineResult = photonCamera.getLatestResult();
     if (pipelineResult.hasTargets()) {
       var target = pipelineResult.getBestTarget();

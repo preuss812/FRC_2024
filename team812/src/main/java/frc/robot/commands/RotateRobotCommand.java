@@ -95,6 +95,7 @@ public class RotateRobotCommand extends Command {
     double angularP = config.getAngularP();
     double angularI = config.getAngularI();
 
+    /*
     if (debugPID) {
       debugIterations = 0;
       //config.setAngularTolerance(Units.degreesToRadians(0.1)); // set a smaller window for success.
@@ -103,6 +104,7 @@ public class RotateRobotCommand extends Command {
       SmartDashboard.putNumber("BB P", angularP);
       SmartDashboard.putNumber("BB I", angularI);
     }
+    */
     
     // get the robot's current rotation from the drivetrain
     startingTheta = robotDrive.getPose().getRotation().getRadians(); 
