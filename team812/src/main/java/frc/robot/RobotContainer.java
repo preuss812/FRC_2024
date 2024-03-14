@@ -26,14 +26,13 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants.ArmConstants;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
@@ -52,7 +51,6 @@ import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
-import frc.robot.commands.ArmRotationCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
@@ -270,18 +268,6 @@ public class RobotContainer {
     POVButton dPad270 = dPadButton(270);
     POVButton dPad315 = dPadButton(315);
     
-    // Try out shooting notes on both left and right joystick triggers.
-    new JoystickButton(rightJoystick, 1).whileTrue(
-      new RunCommand( () -> m_ShooterSubsystem.shoot(ShooterConstants.kShootSpeed))
-    );
-    new JoystickButton(leftJoystick, 1).whileTrue(
-      new RunCommand( () -> m_ShooterSubsystem.shoot(ShooterConstants.kShootSpeed))
-    );
-
-    // Arm up/down commands to try on for size.
-    new JoystickButton(rightJoystick, 6).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmScoringPosition));
-    new JoystickButton(rightJoystick, 4).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmMaxPosition));
-
     /**
      * This section defines buttons for the left joystick, joystick 0, which is not intended for use during game play
      * The buttons defined are for debug.
@@ -344,25 +330,6 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileTrue(
       new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
-
-    // Possible aide for end game.  In this command the xbox right joystick controls 
-    // rotation as normal but the Y axis now controls driving along the 
-    // line that projects perpendicularly from the april tag in view when the command
-    // is started.
-    new JoystickButton(leftJoystick, 3).onTrue(
-      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
-    );
-
-    // This command should just stop the robot from driving and stop the shooter and arm motors.
-    new JoystickButton(leftJoystick,5).onTrue(
-      new ParallelCommandGroup(
-        new InstantCommand(()->m_robotDrive.drive(0,0,0,true,true), m_robotDrive),
-        new InstantCommand(()->m_ShooterSubsystem.disableMotor()),
-        new InstantCommand(()->m_ArmRotationSubsystem.disableMotor())
-      )   
-    );
-
-    /*
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
     // Nevertheless, I still want to understand how to perform these commands.
@@ -373,8 +340,12 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).whileTrue(
       new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
-    */
 
+    new JoystickButton(rightJoystick, 3).onTrue(
+      new InstantCommand(() -> m_NoteIntakeSubsystem.expelNote()).withTimeout(1.0)
+    );
+    
+    
     /* Debugging below */
     if (debug) {
 

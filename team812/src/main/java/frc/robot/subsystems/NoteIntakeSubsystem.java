@@ -91,6 +91,10 @@ public class NoteIntakeSubsystem extends SubsystemBase {
     m_noteIntake.set(NoteIntakeConstants.kPickUpNoteSpeed);
   } 
 
+  public void expelNote() {
+        m_noteIntake.set(NoteIntakeConstants.kScoreNoteSpeed);
+  }
+
 public void stop() {
     m_noteIntake.set(0.0);
   } 

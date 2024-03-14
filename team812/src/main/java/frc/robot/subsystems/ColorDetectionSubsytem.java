@@ -13,7 +13,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 import frc.robot.Constants.ColorConstants;
 
-public class ColorDetectionSubsytem extends SubsystemBase {
+public class ColorDetectionSubsytem {
   /** Creates a new ColorMatcher. */
     final I2C.Port            i2cPort = I2C.Port.kOnboard;
     final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -39,7 +39,7 @@ public class ColorDetectionSubsytem extends SubsystemBase {
 	public boolean inRange() {
 		final int proximity = m_colorSensor.getProximity();
 
-		if (debug) SmartDashboard.putNumber("Proximity", proximity);
+		SmartDashboard.putNumber("Proximity", proximity);
 		return (proximity >= 100);
 	}
     public Color get_color() {
@@ -72,13 +72,6 @@ public class ColorDetectionSubsytem extends SubsystemBase {
 		return match.color;
     }
 
-    @Override
-    public void periodic() {
-		final int proximity = m_colorSensor.getProximity();
-		if (debug) SmartDashboard.putNumber("Proximity", proximity);
-
-	// This method will be called once per scheduler run
-    }
 
     public boolean isOrange(Color color) {
 		return (color == kNoteTarget);

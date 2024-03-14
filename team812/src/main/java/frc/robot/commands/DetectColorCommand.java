@@ -13,7 +13,7 @@ public class DetectColorCommand extends Command {
   ColorDetectionSubsytem m_ColorDetector;
   public DetectColorCommand(ColorDetectionSubsytem subsystem) {
     m_ColorDetector = subsystem;
-    addRequirements(subsystem);
+ //   addRequirements(subsystem); // March 13, 2024 - colordetector is no longer a subsystem, but a class
   }
 
   // Called when the command is initially scheduled.

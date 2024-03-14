@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -145,7 +146,7 @@ public class Utilities {
                 RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(
                 new Pose2d(
                     currentPose.getX(),
-                    FieldConstants.yMax - ultrasonicRange,
+                    FieldConstants.yMax - ultrasonicRange - DriveConstants.kBackToCenterDistance,
                     currentPose.getRotation()
                 )
                 );
