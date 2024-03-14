@@ -68,7 +68,7 @@ public class GotoAmpCommand extends GotoPoseCommand {
       targetPose = m_PoseEstimatorSubsystem.getCurrentPose(); // Hack:: if we dont know the alliance. Dont move. 
     }
 
-    if (debug) Utilities.toSmartDashboard("GotoTarget", targetPose);
+    if (true) Utilities.toSmartDashboard("GotoTarget", targetPose);
     if (debug) SmartDashboard.putBoolean("GotoPoseOnTarget", false); // We will need to check in execute
   }
 }

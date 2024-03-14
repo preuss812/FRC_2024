@@ -82,6 +82,8 @@ import frc.robot.commands.TakeInNoteCommand;
 import frc.robot.commands.GotoSourceCommand;
 //import frc.robot.commands.DetectColorCommand;
 //import frc.robot.TrajectoryPlans;
+import frc.robot.commands.PushTowardsWall;
+import frc.robot.commands.PushTowardsWallUltrasonic;
 
 
 
@@ -206,12 +208,12 @@ public class RobotContainer {
 
     // Default is to expel notes based on the percentage pulled of the left trigger.
     m_NoteIntakeSubsystem.setDefaultCommand(
-      new RunCommand(()->m_NoteIntakeSubsystem.runMotor(-m_driverController.getLeftTriggerAxis()))
+      new RunCommand(()->m_NoteIntakeSubsystem.runMotor(-m_driverController.getLeftTriggerAxis()), m_NoteIntakeSubsystem)
     );
 
     // Default is to score notes based on the percentage pulled of the left trigger.
     m_ShooterSubsystem.setDefaultCommand(
-      new RunCommand(()->m_ShooterSubsystem.runMotor(m_driverController.getRightTriggerAxis()))
+      new RunCommand(()->m_ShooterSubsystem.runMotor(m_driverController.getRightTriggerAxis()), m_ShooterSubsystem)
     );
 
     Ultrasonic.setAutomaticMode(true);
@@ -247,7 +249,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       new SequentialCommandGroup(
         //new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem),
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive)
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive),
+        new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
       )
     );
 
