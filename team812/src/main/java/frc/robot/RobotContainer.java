@@ -44,12 +44,14 @@ import frc.robot.subsystems.BlackBoxSubsystem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WinchSubsystem;
+import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.subsystems.PingResponseUltrasonicSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
+import frc.robot.commands.ArmRotationCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
@@ -255,22 +257,17 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kA.value)
       .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)));
 
-    new JoystickButton(m_driverController, Button.kA.value)
+    new JoystickButton(m_driverController, Button.kY.value)
       .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
 
-    /**
-     * The start button will perform several setup functions which might be helpful for testing.
-     * It will:
-     * o Stop all motors.
-     * o Home the arm
-     * o align the gyro to the current robot rotation,
-     * o put the robot in fast driving mode.
-     */
     new JoystickButton(m_driverController, Button.kStart.value).onTrue(
-      new StartButtonCommand()
+      new InstantCommand(()->m_robotDrive.setDrivingMode(DrivingMode.SPEED))
+    );
+    
+    new JoystickButton(m_driverController, Button.kBack.value).onTrue(
+      new InstantCommand(()->m_robotDrive.setDrivingMode(DrivingMode.PRECISION))
     );
 
-    new JoystickButton(m_driverController, Button.kBack.value).onTrue(new StopAllMotorsCommand());
 
     // POV buttons to point robot to a given heading where 0 is
     // straight downfield from the driver's perspective.
@@ -285,12 +282,22 @@ public class RobotContainer {
     POVButton dPad315 = dPadButton(315);
 
     new JoystickButton(rightJoystick, 11).onTrue( new ArmHomeCommand(m_ArmRotationSubsystem));
+    new JoystickButton(rightJoystick, 4).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmIntakePosition));
+    new JoystickButton(rightJoystick, 6).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition));
     
-    new JoystickButton(leftJoystick, 7).onTrue(
-      new StartButtonCommand()
+    new JoystickButton(leftJoystick, 7).onTrue(new StartButtonCommand());
+    new JoystickButton(leftJoystick, 11).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(true)));
+    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(false)));
+    new JoystickButton(leftJoystick, 3).onTrue(
+      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
+    );
+    // This command should just stop the robot from driving and stop the shooter and arm motors.
+    new JoystickButton(leftJoystick,5).onTrue(
+      new StopAllMotorsCommand()
     );
 
-    new JoystickButton(leftJoystick, 11).onTrue(
+    /*
+    new JoystickButton(RightJoystick, 11).onTrue(
       new ArmHomeCommand(m_ArmRotationSubsystem)
     );
     
@@ -304,20 +311,13 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileTrue(
       new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
+    */
 
     // Possible aide for end game.  In this command the xbox right joystick controls 
     // rotation as normal but the Y axis now controls driving along the 
     // line that projects perpendicularly from the april tag in view when the command
     // is started.
-    new JoystickButton(leftJoystick, 3).onTrue(
-      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
-    );
-
-    // This command should just stop the robot from driving and stop the shooter and arm motors.
-    new JoystickButton(leftJoystick,5).onTrue(
-      new StopAllMotorsCommand()
-    );
-
+    
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
     // Nevertheless, I still want to understand how to perform these commands.
@@ -329,12 +329,12 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).whileTrue(
       new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
-    */
 
     new JoystickButton(rightJoystick, 3).whileTrue(
       new ExpelNoteCommand(m_NoteIntakeSubsystem)
     );
-    
+    */
+
     
     /* Debugging below */
     if (debug) {
