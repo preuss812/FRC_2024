@@ -9,6 +9,8 @@ package frc.robot;
 
 import java.util.List;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.math.MathUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -105,9 +107,11 @@ public class RobotContainer {
   public final static DriveSubsystemSRX m_robotDrive = new DriveSubsystemSRX();
 
   //public static BlackBoxSubsystem m_BlackBox = new BlackBoxSubsystem();
-  public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  //public static CameraVisionSubsystem m_CameraVisionSubsystem = new CameraVisionSubsystem();
+  public static PhotonCamera m_camera = new PhotonCamera("pv-812");
+
   //public static EncoderSubsystem m_EncoderSubsystem = new EncoderSubsystem();
-  public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_CameraVisionSubsystem.camera, m_robotDrive);
+  public static PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem( m_camera, m_robotDrive);
   public static ArmRotationSubsystem m_ArmRotationSubsystem = new ArmRotationSubsystem();
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
@@ -289,7 +293,7 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 11).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(true)));
     new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(false)));
     new JoystickButton(leftJoystick, 3).onTrue(
-      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
+      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
     );
     // This command should just stop the robot from driving and stop the shooter and arm motors.
     new JoystickButton(leftJoystick,5).onTrue(
@@ -367,7 +371,7 @@ public class RobotContainer {
         SmartDashboard.putData("TTcmd", new SwerveToPoseTest3(m_robotDrive, m_PoseEstimatorSubsystem));
         SmartDashboard.putData("RRcmd", new RotateRobotCommand(m_robotDrive, 0.0, false));
         SmartDashboard.putData("DRcmd", new DriveRobotCommand(m_robotDrive, new Pose2d(1.0,0.0, new Rotation2d()), false));
-        SmartDashboard.putData("DAcmd", new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController));
+        SmartDashboard.putData("DAcmd", new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController));
       }
     } // (debug)
   } // (configureButtonBindings)
