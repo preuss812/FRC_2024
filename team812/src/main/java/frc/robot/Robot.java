@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystemSRX;
+import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
+//import frc.robot.Constants.OIConstants;
+//import frc.robot.subsystems.DriveSubsystemSRX;
 import edu.wpi.first.cameraserver.CameraServer;
 
 // import frc.robot.RobotContainer;
@@ -31,8 +32,13 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   public static NetworkTable nttable;
   static int i = 0;
+  /*
   private boolean drivingSwitchPosition = false; // Assume the switch is not set (SPEED mode).
   private boolean endGameSwitchPosition = false; // Assume we are not starting in endgame.
+  private boolean blackBox = false; // For now we are not using the black box.
+  private boolean powerDistribution = false; // For now we are not tracking power distribution.
+  */
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -105,6 +111,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    // Ensure that at startup, the robot is in a known speed mode.
+    RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED);
+    
+    // Ensure that at startup, we are not in endgame mode.
+    RobotContainer.m_WinchSubsystem.setEndGame(false);
+
   }
 
   /**
@@ -112,26 +124,28 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //SmartDashboard.putNumber("encoder",frc.robot.RobotContainer.m_enctest.getPosition().getValue());
-  //  SmartDashboard.putNumber("InEncode",frc.robot.subsystems.MAXSwerveModule.m_turningEncoder.getPosition());
-    if (RobotContainer.m_BlackBox.isSwitchLeft())
-      SmartDashboard.putString("Debug","None");
-    else if  (RobotContainer.m_BlackBox.isSwitchCenter())
-      SmartDashboard.putString("Debug","Drive");
-    else if  (RobotContainer.m_BlackBox.isSwitchLeft())
-      SmartDashboard.putString("Debug","Rotate");
-    else
-      SmartDashboard.putString("Debug","N/A");
-
-    // If the black box rightmost switch, #4 has change position, update the driving mode.
-    if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && !drivingSwitchPosition) {
-      RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.PRECISION);
-      drivingSwitchPosition = true;
-    } else if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && drivingSwitchPosition) {
-      RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.SPEED);
-      drivingSwitchPosition = false;
-    }
     
+    /*
+    if (blackBox) {
+      if (RobotContainer.m_BlackBox.isSwitchLeft())
+        SmartDashboard.putString("Debug","None");
+      else if  (RobotContainer.m_BlackBox.isSwitchCenter())
+        SmartDashboard.putString("Debug","Drive");
+      else if  (RobotContainer.m_BlackBox.isSwitchLeft())
+        SmartDashboard.putString("Debug","Rotate");
+      else
+        SmartDashboard.putString("Debug","N/A");
+
+      // If the black box rightmost switch, #4 has change position, update the driving mode.
+      if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && !drivingSwitchPosition) {
+        RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.PRECISION);
+        drivingSwitchPosition = true;
+      } else if (RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw4) && drivingSwitchPosition) {
+        RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.SPEED);
+        drivingSwitchPosition = false;
+      }
+    }
+
     // if the black box #3 switch has changed position, update the endGame mode.
     if (!RobotContainer.m_BlackBox.isSet(OIConstants.kControlBoxSw3) && !endGameSwitchPosition) {
       RobotContainer.m_WinchSubsystem.setEndGame(true);
@@ -140,16 +154,19 @@ public class Robot extends TimedRobot {
       RobotContainer.m_WinchSubsystem.setEndGame(false);
       endGameSwitchPosition = false;
     }
-    // TODO Enable the PowerDistibution object in RobotContainer.
-    
-    double totalCurrent = RobotContainer.m_PowerDistribution.getTotalCurrent();
-    SmartDashboard.putNumber("Robot Current", totalCurrent);
-    // Get the current going through channel 7, in Amperes.
-    // The PDP returns the current in increments of 0.125A.
-    // At low currents the current readings tend to be less accurate.
-    double winchCurrent = RobotContainer.m_PowerDistribution.getCurrent(6); // TODO Need the right channel
-    SmartDashboard.putNumber("Winch Current", winchCurrent);
-    
+    */
+
+    /*
+    if (powerDistribution) {
+      double totalCurrent = RobotContainer.m_PowerDistribution.getTotalCurrent();
+      SmartDashboard.putNumber("Robot Current", totalCurrent);
+      // Get the current going through channel 7, in Amperes.
+      // The PDP returns the current in increments of 0.125A.
+      // At low currents the current readings tend to be less accurate.
+      double winchCurrent = RobotContainer.m_PowerDistribution.getCurrent(6); // TODO Need the right channel
+      SmartDashboard.putNumber("Winch Current", winchCurrent);
+    }
+    */
 
   }
 

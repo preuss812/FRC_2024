@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
@@ -73,11 +74,9 @@ public class NoteIntakeSubsystem extends SubsystemBase {
 
   }
 
-  public void disableMotor() {
-    m_noteIntake.set(ControlMode.Disabled, 0);
+  public void stop() {
+    m_noteIntake.set(ControlMode.PercentOutput, 0);
   }
-
-  
 
   public boolean isTopLimitSwitchClosed() {
     return (m_noteIntake.isFwdLimitSwitchClosed() == 1 ? true : false);
@@ -88,20 +87,17 @@ public class NoteIntakeSubsystem extends SubsystemBase {
   }
 
   public void pickUpNote() {
-    m_noteIntake.set(NoteIntakeConstants.kPickUpNoteSpeed);
+    m_noteIntake.set(ControlMode.PercentOutput, NoteIntakeConstants.kPickUpNoteSpeed);
   } 
 
   public void expelNote() {
-        m_noteIntake.set(NoteIntakeConstants.kScoreNoteSpeed);
+        m_noteIntake.set(ControlMode.PercentOutput, NoteIntakeConstants.kExpelNoteSpeed);
   }
 
-public void stop() {
-    m_noteIntake.set(0.0);
+  public void runMotor(double speed) {
+    double clampedSpeed = MathUtil.clamp(speed,NoteIntakeConstants.kExpelNoteSpeed,NoteIntakeConstants.kPickUpNoteSpeed);
+    m_noteIntake.set(ControlMode.PercentOutput, clampedSpeed);
   } 
-
-  public void lowerRobot() {
-    m_noteIntake.set(NoteIntakeConstants.kScoreNoteSpeed);
-  }
 
   @Override
   public void periodic() {

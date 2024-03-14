@@ -123,21 +123,14 @@ public class ArmRotationSubsystem extends SubsystemBase {
     setPosition(targetPosition-50.0);
   }
 
-  public void disableMotor() {
-    m_arm.set(ControlMode.Disabled, 0);
+  public void stop() {
+    m_arm.set(ControlMode.PercentOutput, 0);
   }
 
-  public void test_rotate(double speed) {
-    double l_speed = speed;
-    double l_position = getPosition();
+  public void runMotor(double speed) {
 
-    l_speed = MathUtil.clamp(l_speed, -0.10, 0.10);
-
-    if (debug) SmartDashboard.putNumber("test_rotate_l_speed", l_speed);
-    if (debug) SmartDashboard.putNumber("test_rotate_l_position", l_position);
-
-    m_arm.set(ControlMode.PercentOutput, l_speed);
-    // m_arm.set(ControlMode.Velocity, l_speed, DemandType.Neutral, demand1);
+    double clampedSpeed = MathUtil.clamp(speed, ArmConstants.kArmPeakOutputReverse, ArmConstants.kArmPeakOutputForward);
+    m_arm.set(ControlMode.PercentOutput, clampedSpeed);
   }
 
   // Set the arm target position after checking that it is safe to do so.
@@ -221,12 +214,19 @@ public class ArmRotationSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm pos:", getPosition());
-    SmartDashboard.putNumber("Arm target", targetPosition);
-    SmartDashboard.putBoolean("Arm Homed?", isHome());
-    SmartDashboard.putBoolean("ARM fwdsw closed", isFwdLimitSwitchClosed());
-    SmartDashboard.putBoolean("ARM revsw closed",isRevLimitSwitchClosed());
-   
+    if (!m_capturedLimitPosition) {
+      if (isFwdLimitSwitchClosed()) {
+        setHome(); // Added 2024-03-13
+      }
+    }
+    if (debug) {
+      SmartDashboard.putNumber("Arm pos:", getPosition());
+      SmartDashboard.putNumber("Arm target", targetPosition);
+      SmartDashboard.putBoolean("Arm Homed?", isHome());
+      SmartDashboard.putBoolean("ARM fwdsw closed", isFwdLimitSwitchClosed());
+      SmartDashboard.putBoolean("ARM revsw closed",isRevLimitSwitchClosed());
+    }
+
     if (debug) {
       SmartDashboard.putNumber("ARM rotate calls", rotateTimesCalled);
       //SmartDashboard.putNumber("ARM Output%", m_arm.getMotorOutputPercent());

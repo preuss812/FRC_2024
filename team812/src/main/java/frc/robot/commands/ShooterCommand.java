@@ -10,10 +10,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShooterCommand extends Command {
   /** Creates a new ShooterCommand. */
   private final ShooterSubsystem m_ShooterSubsystem;
-  private final double m_speed;
-    public ShooterCommand(ShooterSubsystem subsystem, double speed) {
+    public ShooterCommand(ShooterSubsystem subsystem) {
       m_ShooterSubsystem = subsystem;
-      m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
     }
@@ -21,7 +19,7 @@ public class ShooterCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSubsystem.shoot(m_speed);
+    m_ShooterSubsystem.shoot();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +29,7 @@ public class ShooterCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ShooterSubsystem.shoot(0.0);
+    m_ShooterSubsystem.stop();
   }
 
   // Returns true when the command should end.

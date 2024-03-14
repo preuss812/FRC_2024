@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.subsystems.NoteIntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -19,7 +18,8 @@ public class TakeInNoteCommand extends Command {
   public TakeInNoteCommand(
     NoteIntakeSubsystem noteIntakeSubsystem,
     ShooterSubsystem shooterSubsystem,
-    ColorDetectionSubsytem colorDetectionSubsytem ) {
+    ColorDetectionSubsytem colorDetectionSubsytem
+  ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_NoteIntakeSubsystem = noteIntakeSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
@@ -35,14 +35,14 @@ public class TakeInNoteCommand extends Command {
   @Override
   public void execute() {
     m_NoteIntakeSubsystem.pickUpNote();
-    m_ShooterSubsystem.shoot(ShooterConstants.kIntakeSpeed);
+    m_ShooterSubsystem.intake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
       m_NoteIntakeSubsystem.stop();
-      m_ShooterSubsystem.shoot(0.0);
+      m_ShooterSubsystem.stop();
   }
 
   // Returns true when the command should end.

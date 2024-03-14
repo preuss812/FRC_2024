@@ -18,7 +18,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
+//import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,12 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-// import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
@@ -54,6 +53,7 @@ import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
+import frc.robot.commands.ExpelNoteCommand;
 import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -62,7 +62,9 @@ import frc.robot.commands.GotoPoseCommand;
 //import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.ScoreNoteInAmp;
-import frc.robot.commands.ShooterCommand;
+//import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.StartButtonCommand;
+import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
 import frc.robot.commands.SwerveToAmpCommand;
@@ -108,7 +110,7 @@ public class RobotContainer {
   public static ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
-  public static PowerDistribution m_PowerDistribution = new PowerDistribution(0, ModuleType.kCTRE); // TODO Enable this and add SmartDashboard for Winch.
+  //public static PowerDistribution m_PowerDistribution = new PowerDistribution(0, ModuleType.kCTRE); // TODO Enable this and add SmartDashboard for Winch.
   public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
   //public static AnalogUltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
   //          new AnalogUltrasonicDistanceSubsystem();
@@ -196,6 +198,16 @@ public class RobotContainer {
       new RunCommand(() -> m_WinchSubsystem.runMotor(-leftJoystick.getY()), m_WinchSubsystem)
     );
 
+    // Default is to expel notes based on the percentage pulled of the left trigger.
+    m_NoteIntakeSubsystem.setDefaultCommand(
+      new RunCommand(()->m_NoteIntakeSubsystem.runMotor(-m_driverController.getLeftTriggerAxis()))
+    );
+
+    // Default is to score notes based on the percentage pulled of the left trigger.
+    m_ShooterSubsystem.setDefaultCommand(
+      new RunCommand(()->m_ShooterSubsystem.runMotor(m_driverController.getRightTriggerAxis()))
+    );
+
     Ultrasonic.setAutomaticMode(true);
   }
 
@@ -220,41 +232,45 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   
-   
-    // This next command is just for testing and should be removed or disabled for game play.
-    //new JoystickButton(m_driverController, Button.kBack.value)
-    //  .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-
     new JoystickButton(m_driverController, Button.kRightBumper.value)
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
       .onTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem, m_ColorDetectionSubsystem));
 
-    new JoystickButton(m_driverController, Button.kB.value) // TODO test
-      .whileTrue(new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem));
-
-    new JoystickButton(m_driverController, Button.kX.value) // TODO test.
-      .whileTrue(new SequentialCommandGroup(
-        new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive) // Go the rest of the way to the AMP.
+    new JoystickButton(m_driverController, Button.kB.value).whileTrue(
+      new SequentialCommandGroup(
+        //new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem),
+        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive)
       )
     );
 
-    new JoystickButton(m_driverController, Button.kY.value)
-      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(0.0)));
+    new JoystickButton(m_driverController, Button.kX.value).whileTrue(
+        new SequentialCommandGroup(
+          //new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
+          new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive) // Go the rest of the way to the AMP.
+      )
+    );
 
-    new JoystickButton(m_driverController, Button.kStart.value) //For testing only, can be reasigned later. Reasign to 
-      .onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
+    new JoystickButton(m_driverController, Button.kA.value)
+      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)));
 
-    // This command resets the drive train's pose to the current pose from the pose estimator.  It is also for debug
-    // although it might be useful during game play to initialize the robot's coordinate system.  That is TBD.
-    // This might be better calling m_PoseEstimatorSubsystem.setCurrentPose() instead of resetOdometry
-    new JoystickButton(m_driverController, Button.kBack.value)
-            .onTrue(new InstantCommand(
-               // () -> m_robotDrive.setAngleDegrees(m_PoseEstimatorSubsystem.getCurrentPose().getRotation().getDegrees()),
-               () -> alignDriveTrainToPoseEstimator(),
-                m_robotDrive));
+    new JoystickButton(m_driverController, Button.kA.value)
+      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
+
+    /**
+     * The start button will perform several setup functions which might be helpful for testing.
+     * It will:
+     * o Stop all motors.
+     * o Home the arm
+     * o align the gyro to the current robot rotation,
+     * o put the robot in fast driving mode.
+     */
+    new JoystickButton(m_driverController, Button.kStart.value).onTrue(
+      new StartButtonCommand()
+    );
+
+    new JoystickButton(m_driverController, Button.kBack.value).onTrue(new StopAllMotorsCommand());
 
     // POV buttons to point robot to a given heading where 0 is
     // straight downfield from the driver's perspective.
@@ -267,59 +283,17 @@ public class RobotContainer {
     POVButton dPad225 = dPadButton(225);
     POVButton dPad270 = dPadButton(270);
     POVButton dPad315 = dPadButton(315);
+
+    new JoystickButton(rightJoystick, 11).onTrue( new ArmHomeCommand(m_ArmRotationSubsystem));
     
-    /**
-     * This section defines buttons for the left joystick, joystick 0, which is not intended for use during game play
-     * The buttons defined are for debug.
-     * Currently these are in order to step through the Autonomous plan
-     */
-    Pose2d targetPose = Utilities.backToPose(m_PoseEstimatorSubsystem.getAprilTagPose(AprilTag.BLUE_AMP.id()),0.0); // TODO Tune distance
-    Pose2d finalPose = new Pose2d(targetPose.getX() + 2.0, targetPose.getY() - 1.0, new Rotation2d(0));
-    Pose2d firstMove = new Pose2d(1.0,0.0,new Rotation2d(-Math.PI/2.0));
-    if (debug) Utilities.toSmartDashboard("debugPose",targetPose);
-    // Autonomous steps part II
     new JoystickButton(leftJoystick, 7).onTrue(
-      new InstantCommand(()->setGyroAngleToStartMatch())
+      new StartButtonCommand()
     );
-    new JoystickButton(leftJoystick, 8).onTrue(
+
+    new JoystickButton(leftJoystick, 11).onTrue(
       new ArmHomeCommand(m_ArmRotationSubsystem)
     );
-    // Feb 28, 2024 - changed from whileTrue to onTrue.
-    new JoystickButton(leftJoystick, 9).onTrue(
-      new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false)
-    );
-    new JoystickButton(leftJoystick, 10).onTrue(
-      new RotateRobotCommand(m_robotDrive, -Math.PI/2.0, false)
-    );
-    if (debug) SmartDashboard.putData("FirstMove", new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false));
-    new JoystickButton(leftJoystick, 11).onTrue(
-      new FindAprilTagCommand(m_robotDrive, m_PoseEstimatorSubsystem, 0.05) // 0.1 was too fast
-    );
-    new JoystickButton(leftJoystick, 12).whileTrue(
-      new InstantCommand(()->alignDriveTrainToPoseEstimator())
-    );
     
-    // Autonomous steps part II
-    new JoystickButton(rightJoystick, 7).whileTrue(
-      new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP)
-    );
-    if (debug) SmartDashboard.putData("SWcmd", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.BLUE_AMP));
-    if (debug) SmartDashboard.putData("SWcmdR", new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, AprilTag.RED_AMP));
-
-    new JoystickButton(rightJoystick, 8).onTrue(
-      new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, targetPose)
-    );
-    new JoystickButton(rightJoystick, 9).onTrue(
-      new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem)
-    );
-    new JoystickButton(rightJoystick, 10).onTrue(
-      new GotoPoseCommand(m_PoseEstimatorSubsystem, m_robotDrive, finalPose)
-    );
-
-    new JoystickButton(rightJoystick, 11).onTrue(
-      new ShooterCommand(m_ShooterSubsystem, ShooterConstants.kShootSpeed).withTimeout(ShooterConstants.kShootTimeout)
-    );
-
     new JoystickButton(leftJoystick, 1).onTrue(
       new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem)
     );
@@ -330,19 +304,35 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 2).whileTrue(
       new InstantCommand(() -> m_robotDrive.setX(), m_robotDrive)
     );
+
+    // Possible aide for end game.  In this command the xbox right joystick controls 
+    // rotation as normal but the Y axis now controls driving along the 
+    // line that projects perpendicularly from the april tag in view when the command
+    // is started.
+    new JoystickButton(leftJoystick, 3).onTrue(
+      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_CameraVisionSubsystem.camera, m_driverController)
+    );
+
+    // This command should just stop the robot from driving and stop the shooter and arm motors.
+    new JoystickButton(leftJoystick,5).onTrue(
+      new StopAllMotorsCommand()
+    );
+
     // The next 2 buttons did not work with InstantCommand().onTrue().
     //  They are not needed for game play.
     // Nevertheless, I still want to understand how to perform these commands.
     // Tring with RunCommand().whileTrue()...
+    /*
     new JoystickButton(leftJoystick, 5).whileTrue(
       new RunCommand(() -> m_robotDrive.wheelsStraightAhead(), m_robotDrive)
     );
     new JoystickButton(leftJoystick, 6).whileTrue(
       new RunCommand(() -> m_robotDrive.wheels45(), m_robotDrive)
     );
+    */
 
-    new JoystickButton(rightJoystick, 3).onTrue(
-      new InstantCommand(() -> m_NoteIntakeSubsystem.expelNote()).withTimeout(1.0)
+    new JoystickButton(rightJoystick, 3).whileTrue(
+      new ExpelNoteCommand(m_NoteIntakeSubsystem)
     );
     
     
@@ -417,7 +407,7 @@ public class RobotContainer {
    * alliance wall.  The "Y" coordinates of the robot will be determined by the
    * PoseEstimator once an april tag is captured by the vision system.
    */
-   public void setGyroAngleToStartMatch() {
+   public static void setGyroAngleToStartMatch() {
     boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
     double startingHeading; // degrees.
     if (isBlueAlliance) {

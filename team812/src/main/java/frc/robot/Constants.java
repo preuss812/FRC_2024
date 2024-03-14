@@ -152,7 +152,8 @@ public final class Constants {
         public static final double kArmRange = kArmMaxPosition - kArmMinPosition; // The number of ticks in the active range of arm motion between limits.
 
         public static final double kArmStartingPosition = kArmMaxPosition;  // We should start at the max position with the arm rotated down to intake notes.
-        public static final double kArmHookChainPosition = 1200;            // TODO find the correct value for this constant.
+        public static final double kArmIntakePosition = kArmMaxPosition;
+        public static final double kArmHookChainPosition = kArmMaxPosition;
         public static final double kArmScoringPosition = kArmMinPosition;  // Rotated upward to score a note.
 
         public static final double kArmPeakOutputForward =  0.80; // Limit output voltage to +/- 80% of the available voltage range.
@@ -162,6 +163,7 @@ public final class Constants {
 
         public static final double kArmRaiseTimeout = 5.0; // Seconds - for autonomous.
         public static final double kArmLowerTimeout = 5.0; // Seconds - for autonomous.
+        public static final double kArmHomeSpeed = 0.2;    // Percent
     }
     
     // Define locations on the field as poses that may be useful for semi-automatic driving.
@@ -220,7 +222,7 @@ public final class Constants {
     
     public static final class NoteIntakeConstants {
         public static final double kPickUpNoteSpeed = 1.0; // TODO needs tuning.
-        public static final double kScoreNoteSpeed = -1.0; // TODO needs tuning.
+        public static final double kExpelNoteSpeed = -1.0; // TODO needs tuning.
     }
 
     public static final class BrakeConstants {
@@ -297,11 +299,13 @@ public final class Constants {
     public static final class WinchConstants {
         public static final double kRaiseRobotSpeed =  1.0;
         public static final double kLowerRobotSpeed = -1.0;
+        public static final double kMaxRaiseRobotSpeed = 1.0;
+        public static final double kMaxLowerRobotSpeed = -1.0;
     }
     public static final class ShooterConstants {
-        public static final double kIntakeSpeed = 0.70;
+        public static final double kIntakeSpeed = 0.7;
         public static final double kShootSpeed =  0.7;
-        public static final double kUnshootSpeed = -1.0;
+        public static final double kUnshootSpeed = -0.7;
         public static final double kShootTimeout = 2.0; // Seconds
     }
 

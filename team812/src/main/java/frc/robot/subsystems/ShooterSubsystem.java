@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.Constants.CANConstants;
@@ -72,17 +73,24 @@ public class ShooterSubsystem extends SubsystemBase {
 
   }
   
-  public void disableMotor() {
-    m_shooter.set(ControlMode.Disabled, 0);
+  public void stop() {
+    m_shooter.set(ControlMode.PercentOutput, 0);
   }
 
-  public void shoot(double speed) {
-    m_shooter.set(ControlMode.PercentOutput,speed);
+  public void runMotor(double speed) {
+    double clampedSpeed = MathUtil.clamp(speed, ShooterConstants.kUnshootSpeed,ShooterConstants.kShootSpeed);
+    m_shooter.set(ControlMode.PercentOutput, clampedSpeed);
+  }
+  public void intake() {
+    m_shooter.set(ControlMode.PercentOutput,ShooterConstants.kIntakeSpeed);
+  } 
 
+  public void shoot() {
+    m_shooter.set(ControlMode.PercentOutput,ShooterConstants.kShootSpeed);
   } 
 
   public void unshoot() {
-    m_shooter.set(ShooterConstants.kUnshootSpeed);
+    m_shooter.set(ControlMode.PercentOutput, ShooterConstants.kUnshootSpeed);
   }
 
   @Override

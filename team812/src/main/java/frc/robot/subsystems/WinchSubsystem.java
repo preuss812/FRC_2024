@@ -74,18 +74,18 @@ public class WinchSubsystem extends SubsystemBase {
 
   }
   
-  public void disableMotor() {
-    m_winch.set(ControlMode.Disabled, 0);
+  public void stop() {
+    m_winch.set(ControlMode.PercentOutput, 0);
   }
 
   public void raiseRobot() {
     if (endGame)
-      m_winch.set(WinchConstants.kRaiseRobotSpeed);
+      m_winch.set(ControlMode.PercentOutput, WinchConstants.kRaiseRobotSpeed);
   } 
 
   public void lowerRobot() {
     if (endGame)
-      m_winch.set(WinchConstants.kLowerRobotSpeed);
+      m_winch.set(ControlMode.PercentOutput, WinchConstants.kLowerRobotSpeed);
   }
 
   /**
@@ -93,8 +93,10 @@ public class WinchSubsystem extends SubsystemBase {
    * @param speed - the percent energy to send to the winch motor
    */
   public void runMotor(double speed) {
-    if (endGame)
-      m_winch.set(MathUtil.clamp(speed,-0.8,0.8));
+    if (endGame) {
+      double clampedSpeed = MathUtil.clamp(speed,WinchConstants.kMaxLowerRobotSpeed, WinchConstants.kMaxRaiseRobotSpeed);
+      m_winch.set(ControlMode.PercentOutput, clampedSpeed);
+    }
   }
 
   /**
