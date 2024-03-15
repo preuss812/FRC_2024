@@ -40,6 +40,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.UltrasonicConstants;
 import frc.robot.Constants.VisionConstants.AprilTag;
+import frc.robot.Constants.WinchConstants;
 //import frc.robot.subsystems.AnalogUltrasonicDistanceSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 //import frc.robot.subsystems.BlackBoxSubsystem;
@@ -133,7 +134,7 @@ public class RobotContainer {
 
   // Controller definitions
   private final Joystick leftJoystick = new Joystick(OIConstants.kLeftJoystick);
-  private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
+  //private final Joystick rightJoystick = new Joystick(OIConstants.kRightJoystick);
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   
   //public static CANcoder m_enctest = new CANcoder(38);
@@ -199,13 +200,9 @@ public class RobotContainer {
     );
 
     m_ArmRotationSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_ArmRotationSubsystem.rotate(-rightJoystick.getY()), m_ArmRotationSubsystem)
+      new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getY()), m_ArmRotationSubsystem)
     );
     
-    m_WinchSubsystem.setDefaultCommand(
-      new RunCommand(() -> m_WinchSubsystem.runMotor(-leftJoystick.getY()), m_WinchSubsystem)
-    );
-
     // Default is to expel notes based on the percentage pulled of the left trigger.
     m_NoteIntakeSubsystem.setDefaultCommand(
       new RunCommand(()->m_NoteIntakeSubsystem.runMotor(-m_driverController.getLeftTriggerAxis()), m_NoteIntakeSubsystem)
@@ -289,20 +286,21 @@ public class RobotContainer {
     POVButton dPad270 = dPadButton(270);
     POVButton dPad315 = dPadButton(315);
 
-    new JoystickButton(rightJoystick, 11).onTrue( new ArmHomeCommand(m_ArmRotationSubsystem));
-    new JoystickButton(rightJoystick, 4).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmIntakePosition));
-    new JoystickButton(rightJoystick, 6).onTrue( new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition));
     
-    new JoystickButton(leftJoystick, 7).onTrue(new StartButtonCommand());
-    new JoystickButton(leftJoystick, 11).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(true)));
-    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(()->m_WinchSubsystem.setEndGame(false)));
+    
     new JoystickButton(leftJoystick, 3).onTrue(
       new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
     );
+    new JoystickButton(leftJoystick, 4).onTrue(new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmIntakePosition));
     // This command should just stop the robot from driving and stop the shooter and arm motors.
-    new JoystickButton(leftJoystick,5).onTrue(
-      new StopAllMotorsCommand()
-    );
+    new JoystickButton(leftJoystick, 5).onTrue(new StopAllMotorsCommand());
+    new JoystickButton(leftJoystick, 6).onTrue(new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition));
+    new JoystickButton(leftJoystick, 7).onTrue(new StartButtonCommand());
+    new JoystickButton(leftJoystick, 8).onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
+    new JoystickButton(leftJoystick, 11).whileTrue( new RunCommand(()->m_WinchSubsystem.raiseRobot()));
+    new JoystickButton(leftJoystick, 12).whileTrue( new RunCommand(()->m_WinchSubsystem.lowerRobot()));
+    
+    
 
     /*
     new JoystickButton(RightJoystick, 11).onTrue(

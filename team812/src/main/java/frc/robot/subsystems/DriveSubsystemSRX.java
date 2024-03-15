@@ -196,32 +196,24 @@ public class DriveSubsystemSRX extends SubsystemBase {
       double elapsedTime = currentTime - m_prevTime;
       double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
       if (angleDif < 0.45*Math.PI) {
-        if (debug) SmartDashboard.putNumber("Branch", 1);
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
       }
       else if (angleDif > 0.85*Math.PI) {
         if (m_currentTranslationMag > 1e-4) { //some small number to avoid floating-point errors with equality checking
           // keep currentTranslationDir unchanged
-          if (debug) SmartDashboard.putNumber("Branch", 2);
-
           m_currentTranslationMag = m_magLimiter.calculate(0.0);
         }
         else {
-          if (debug) SmartDashboard.putNumber("Branch",3);
-
           m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
           m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
         }
       }
       else {
-        if (debug)  SmartDashboard.putNumber("Branch", 4);
-
         m_currentTranslationDir = SwerveUtils.StepTowardsCircular(m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
         m_currentTranslationMag = m_magLimiter.calculate(0.0);
       }
       m_prevTime = currentTime;
-      if (debug) SmartDashboard.putNumber("m_currentTranslationMag", m_currentTranslationMag);
       xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);

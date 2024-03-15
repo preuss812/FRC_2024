@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 public class WinchSubsystem extends SubsystemBase {
   public final WPI_TalonSRX m_winch = new WPI_TalonSRX(CANConstants.kWinchMotor);
-  boolean endGame = false;
+  //boolean endGame = false;
 
   /** Creates a new WinchSubsystem. */
   public WinchSubsystem() {
@@ -79,12 +79,12 @@ public class WinchSubsystem extends SubsystemBase {
   }
 
   public void raiseRobot() {
-    if (endGame)
+    //if (endGame)
       m_winch.set(ControlMode.PercentOutput, WinchConstants.kRaiseRobotSpeed);
   } 
 
   public void lowerRobot() {
-    if (endGame)
+    //if (endGame)
       m_winch.set(ControlMode.PercentOutput, WinchConstants.kLowerRobotSpeed);
   }
 
@@ -93,10 +93,10 @@ public class WinchSubsystem extends SubsystemBase {
    * @param speed - the percent energy to send to the winch motor
    */
   public void runMotor(double speed) {
-    if (endGame) {
+    //if (endGame) {
       double clampedSpeed = MathUtil.clamp(speed,WinchConstants.kMaxLowerRobotSpeed, WinchConstants.kMaxRaiseRobotSpeed);
       m_winch.set(ControlMode.PercentOutput, clampedSpeed);
-    }
+    //}
   }
 
   /**
@@ -104,19 +104,21 @@ public class WinchSubsystem extends SubsystemBase {
    * @param newEndGame the desired setting for endGame
    * @return original endGame value.
    */
+  /*
   public boolean setEndGame(boolean newEndGame) {
     boolean result = endGame;
     endGame = newEndGame;
     return result;
   }
-
+  */
   /**
    * get the current endGame setting.
    * @return the current endGame setting. True indicates winch operation is enabled.
    */
-  public boolean getEndGame() {
+  /*public boolean getEndGame() {
     return endGame;
   }
+  */
 
   @Override
   public void periodic() {

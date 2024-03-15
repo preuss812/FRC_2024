@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
     RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED);
     
     // Ensure that at startup, we are not in endgame mode.
-    RobotContainer.m_WinchSubsystem.setEndGame(false);
+    //RobotContainer.m_WinchSubsystem.setEndGame(false);
 
   }
 
