@@ -21,7 +21,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+//import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -37,10 +37,10 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants;
+//import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.UltrasonicConstants;
-import frc.robot.Constants.VisionConstants.AprilTag;
-import frc.robot.Constants.WinchConstants;
+//import frc.robot.Constants.VisionConstants.AprilTag;
+//import frc.robot.Constants.WinchConstants;
 //import frc.robot.subsystems.AnalogUltrasonicDistanceSubsystem;
 import frc.robot.subsystems.ArmRotationSubsystem;
 //import frc.robot.subsystems.BlackBoxSubsystem;
@@ -51,19 +51,19 @@ import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.subsystems.PingResponseUltrasonicSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
-import frc.robot.subsystems.CameraVisionSubsystem;
+//import frc.robot.subsystems.CameraVisionSubsystem;
 import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.ArmRotationCommand;
-import frc.robot.commands.DetectColorCommand;
+//import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
-import frc.robot.commands.ExpelNoteCommand;
-import frc.robot.commands.FindAprilTagCommand;
+//import frc.robot.commands.ExpelNoteCommand;
+//import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.commands.GotoAmpCommand;
-import frc.robot.commands.GotoPoseCommand;
+//import frc.robot.commands.GotoPoseCommand;
 //import frc.robot.commands.NoteIntakeCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.ScoreNoteInAmp;
@@ -72,18 +72,18 @@ import frc.robot.commands.StartButtonCommand;
 import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
-import frc.robot.commands.SwerveToAmpCommand;
-import frc.robot.commands.SwerveToPoseCommand;
-import frc.robot.commands.SwerveToSourceCommand;
+//import frc.robot.commands.SwerveToAmpCommand;
+//import frc.robot.commands.SwerveToPoseCommand;
+//import frc.robot.commands.SwerveToSourceCommand;
 //import frc.robot.commands.SwerveToPoseTest;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
-import frc.robot.commands.TakeInNoteCommand;
+import frc.robot.commands.TakeInNoteOLSCommand;
 //import frc.robot.commands.WinchCommand;
-import frc.robot.commands.GotoSourceCommand;
+//import frc.robot.commands.GotoSourceCommand;
 //import frc.robot.commands.DetectColorCommand;
 //import frc.robot.TrajectoryPlans;
-import frc.robot.commands.PushTowardsWall;
+//import frc.robot.commands.PushTowardsWall;
 import frc.robot.commands.PushTowardsWallUltrasonic;
 
 
@@ -241,7 +241,7 @@ public class RobotContainer {
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
-      .onTrue(new TakeInNoteCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem, m_ColorDetectionSubsystem));
+      .onTrue(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       new SequentialCommandGroup(

@@ -223,6 +223,7 @@ public final class Constants {
     public static final class NoteIntakeConstants {
         public static final double kPickUpNoteSpeed = 1.0; // TODO needs tuning.
         public static final double kExpelNoteSpeed = -1.0; // TODO needs tuning.
+        public static final int kLimitSwitchChannel = 2;
     }
 
     public static final class BrakeConstants {
