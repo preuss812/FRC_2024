@@ -898,7 +898,8 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/RR Error": true
             }
           },
           "2,3": {
@@ -1028,7 +1029,8 @@
               "Y-axis/Automatic bounds": false,
               "Y-axis/Upper bound": 10.0,
               "Y-axis/Lower bound": -0.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Auto Step": true
             }
           },
           "0,0": {
