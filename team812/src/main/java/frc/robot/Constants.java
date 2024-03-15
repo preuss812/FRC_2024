@@ -255,7 +255,7 @@ public final class Constants {
             ),
             new Rotation3d(0.0,0.0, Math.PI)
         );
-        public static double cameraXOffsetToRobot = Units.inchesToMeters(-4.5);
+        public static double cameraXOffsetToRobot = Units.inchesToMeters(-12.5);
         public static double cameraYOffsetToRobot = Units.inchesToMeters(0.0);
         public static double cameraHeightToGround = Units.inchesToMeters(0);
         public static double cameraRoll  = Units.degreesToRadians(0.0);
