@@ -9,9 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -38,7 +37,6 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.FieldConstants;
 //import frc.robot.Constants.VisionConstants;
 //import frc.robot.Constants.VisionConstants.AprilTag;
-import frc.robot.Constants.FieldConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -92,16 +90,20 @@ public class Autonomous extends SequentialCommandGroup {
       final double firstMoveY = 0.0;
       final double finalMoveX = 2.0; // Arbitrary move out of the starting box
       final double finalMoveY = -1.0; // Arbitrary move out of the starting box and away from the wall.
-      
+      final double noTagSeenMoveX = 2.0; // Arbitrary move 2 meters forward to exit the starting box.
+      final double noTagSeenMoveY = 0.0; // Straight ahead since we do not know where we are.
+
       Pose2d finalMove;
       Pose2d firstMove;
+      Pose2d noTagSeenMove;
       finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d( Math.PI/2.0)); // Pose for robot to face the center of the field.
       firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(-Math.PI/2.0)); // Pose for robot to be at the april tag.
+      noTagSeenMove = new Pose2d(noTagSeenMoveX, noTagSeenMoveY, new Rotation2d( Math.PI/2.0)); // Pose for robot to face the center of the field.
 
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
         // Set the gyro starting angle based on alliance and assumed robot placement
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
-        new InstantCommand(() -> robotContainer.setGyroAngleToStartMatch()),
+        new InstantCommand(() -> RobotContainer.setGyroAngleToStartMatch()),
         new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
         new InstantCommand(() -> Utilities.allianceSetCurrentPose(
           new Pose2d(
@@ -127,47 +129,58 @@ public class Autonomous extends SequentialCommandGroup {
         // Wait to see apriltag
         //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
         new WaitCommand(2.5), // TODO reduce or eliminate wait.
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
-        new FindAprilTagCommand(
-          RobotContainer.m_robotDrive,
-          RobotContainer.m_PoseEstimatorSubsystem, 
-          AutoConstants.kRotationSpeed).withTimeout(10.0), // This is too slow for just 10 seconds
+        new ConditionalCommand(
+          new SequentialCommandGroup(
+            
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 5)),
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "FindAprilTag")),
+            new FindAprilTagCommand(
+              RobotContainer.m_robotDrive,
+              RobotContainer.m_PoseEstimatorSubsystem, 
+              AutoConstants.kRotationSpeed).withTimeout(10.0), // This is too slow for just 10 seconds
 
-        // set the robot drive x,y,theta to match the pose estimator (ie use camera to set x,y,theta)
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 6)),
-        new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
+            // set the robot drive x,y,theta to match the pose estimator (ie use camera to set x,y,theta)
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 6)),
+            new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
 
-        // Use a trajectory to move close to the amp.
-        // This is a place holder for the moment.
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 7)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
-        //new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, ampAprilTag),
+            // Use a trajectory to move close to the amp.
+            // This is a place holder for the moment.
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 7)),
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "SwerveController")),
+            //new SwerveToPoseCommand(m_robotDrive, m_PoseEstimatorSubsystem, ampAprilTag),
 
-        // Move to the scoring position
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 8)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
-        new ParallelCommandGroup(
-          new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0),
-          
-         new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmMinPosition)), // TODO raise arm in parallel. 100 fudge factor
-        // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
+            // Move to the scoring position
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 8)),
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "GotoScoringPosition")),
+            new ParallelCommandGroup(
+              new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive).withTimeout(3.0),
+              
+            new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmMinPosition)), // TODO raise arm in parallel. 100 fudge factor
+            // TODO: Could try raising the arm in parallel with this move to the amp - dph 2024-03-06.
 
-        // Score the note.
-        // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 9)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
-        new ParallelDeadlineGroup(
-          new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
-          new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
-        ).withTimeout(10.0),
+            // Score the note.
+            // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 9)),
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
+            new ParallelDeadlineGroup(
+              new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+              new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
+            ).withTimeout(10.0),
 
-        // Leave the starting box to get more points.
-        //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
-        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
-        new DriveRobotCommand(m_robotDrive, finalMove, true).withTimeout(5.0),
-
+            // Leave the starting box to get more points.
+            //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
+            new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
+            new DriveRobotCommand(m_robotDrive, finalMove, true).withTimeout(5.0)
+          ),
+          // When no tag is in view, just leave the starting box.
+          new SequentialCommandGroup(
+            // We did not find an april tag so just leave the starting box.
+            new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
+            new DriveRobotCommand(m_robotDrive, noTagSeenMove, true).withTimeout(5.0)
+          ),
+        m_PoseEstimatorSubsystem.tagInViewSupplier
+        ), // ConditionalCommand if we see a tag or not
         // quiesce the drive and finish.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),

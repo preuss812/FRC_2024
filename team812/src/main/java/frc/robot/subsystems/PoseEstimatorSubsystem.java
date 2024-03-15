@@ -7,6 +7,7 @@ import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 import org.photonvision.PhotonCamera;
 
@@ -201,5 +202,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   public boolean tagInView() {
     return (m_lastAprilTagSeen > 0);
   }
+
+  public BooleanSupplier tagInViewSupplier = () -> (m_lastAprilTagSeen > 0);
 
 }
