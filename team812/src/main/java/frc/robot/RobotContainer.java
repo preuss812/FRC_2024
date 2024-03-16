@@ -297,8 +297,12 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).onTrue(new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition));
     new JoystickButton(leftJoystick, 7).onTrue(new StartButtonCommand());
     new JoystickButton(leftJoystick, 8).onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
-    new JoystickButton(leftJoystick, 11).whileTrue( new RunCommand(()->m_WinchSubsystem.raiseRobot()));
-    new JoystickButton(leftJoystick, 12).whileTrue( new RunCommand(()->m_WinchSubsystem.lowerRobot()));
+    new JoystickButton(leftJoystick, 11).whileTrue( 
+      new RunCommand(()->m_WinchSubsystem.raiseRobot(),m_WinchSubsystem)
+        .andThen(()->m_WinchSubsystem.stop(), m_WinchSubsystem));
+    new JoystickButton(leftJoystick, 12).whileTrue( 
+      new RunCommand(()->m_WinchSubsystem.lowerRobot())
+      .andThen(()->m_WinchSubsystem.stop(), m_WinchSubsystem));
     
     
 
