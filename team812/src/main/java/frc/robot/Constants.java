@@ -258,7 +258,7 @@ public final class Constants {
         );
         public static double cameraXOffsetToRobot = Units.inchesToMeters(-12.5);
         public static double cameraYOffsetToRobot = Units.inchesToMeters(0.0);
-        public static double cameraHeightToGround = Units.inchesToMeters(0);
+        public static double cameraHeightToGround = Units.inchesToMeters(0.0);
         public static double cameraRoll  = Units.degreesToRadians(0.0);
         public static double cameraPitch = Units.degreesToRadians(0.0); 
         public static double cameraYaw   = Units.degreesToRadians(180.0); // Rear facing camera.
