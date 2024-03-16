@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -164,4 +165,57 @@ public class Utilities {
         RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(FieldConstants.xMax - newPose.getX(), newPose.getY(), new Rotation2d(Math.PI)));
       }
     
+    public static Pose2d getAllianceRobotAmpPose(PoseEstimatorSubsystem poseEstimatorSubsystem) {
+        Pose2d robotPose = null;
+        if (isBlueAlliance()) {
+            Pose2d tag = poseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.BLUE_AMP.id());
+            // This should position the robot back to the AMP touching the wall.
+            robotPose = new Pose2d(tag.getX(), tag.getY() - DriveConstants.kBackToCenterDistance, tag.getRotation());
+    
+        } else if (isRedAlliance()) {
+            Pose2d tag = poseEstimatorSubsystem.getAprilTagPose(VisionConstants.AprilTag.RED_AMP.id());
+            // This should position the robot back to the AMP touching the wall.
+            robotPose = new Pose2d(tag.getX(), tag.getY() - DriveConstants.kBackToCenterDistance, tag.getRotation());
+        }
+        else {
+            robotPose = null; // Hack:: if we dont know the alliance. Dont move. 
+        }
+        
+        return robotPose;
+    }
+
+    /**
+     * resetPoseAtAmp - set the pose estimator's pose to be at the alliance amp.
+     * This is to help keep the pose estimator's result up to date as reading april
+     * tags it not working well when the robot is moving quickly and due to 
+     * the steep angle of the camera limiting the location on the field where
+     * the robot can see an april tag.
+    */
+    public static void resetPoseAtAmp() {
+        boolean reset = false;
+        double ultrasonicRange = RobotContainer.m_PingResponseUltrasonicSubsystem.getRange();
+        // Verify we are up against the wall.
+        if (ultrasonicRange < 0.030 /* Meters */) { // Ie 3 centimeters
+            // Trusting the gyro most so dont reset rotation instead, use the current pose's rotation.
+            Pose2d currentPose = RobotContainer.m_PoseEstimatorSubsystem.getCurrentPose();
+            if (Math.abs(currentPose.getRotation().getDegrees() -  -90.0) < 5.0 /* degrees */) {
+                Pose2d robotPoseAtAmp = getAllianceRobotAmpPose(RobotContainer.m_PoseEstimatorSubsystem);
+                // If the alliance is unknown, this cant be used.
+                if (robotPoseAtAmp != null) {
+                    reset = true;
+                    // It seems safe, set the pose to be the proper pose for the robot
+                    // perfectly positioned in front of the amp, touching the wall.
+                    RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(
+                    new Pose2d(
+                        robotPoseAtAmp.getTranslation(),
+                        currentPose.getRotation()
+                    )
+                    );
+                }
+            }
+            
+        }
+        // For debug, display whether we did reset the coordinate or not.
+        SmartDashboard.putBoolean("PoseReset", reset);
+    }
 }

@@ -118,9 +118,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
 
   private boolean onTarget;
   private boolean debug = false;
-  private boolean debugPID = false;
-  private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
-  private int debugIterations = 0;
 
   /**
    * Drive to the specified distance from the best april tag currently in view.
@@ -170,16 +167,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     double linearP = 0; // If no tag is found, do not energize the motors.
     double linearI = 0;
 
-    /*
-    if (debugPID) {
-      debugIterations = 0;
-      config.setLinearTolerance(0.01); // tighter tolerance of 1cm
-      linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
-      linearI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.1);
-      
-    }
-    */
-    
     var pipelineResult = photonCamera.getLatestResult();
     if (pipelineResult.hasTargets()) {
       var target = pipelineResult.getBestTarget();
@@ -253,12 +240,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   @Override
   public void execute() {
     Translation2d translationErrorToTarget;
-    Translation2d translationErrorToTargetCorrectedForRotation;
-    double rotationError;
-    Rotation2d rotationErrorEstimationToDriveTrain;
     Pose2d currentPose;
-    Pose2d driveTrainPose;
-    double estimatedRotationToDriveTrainRotation;
     double xSpeed = 0.0;
     double ySpeed = 0.0;
     double rotationSpeed = 0.0;
@@ -268,8 +250,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     Translation2d correctedGoal;
     double throttle;
 
-    debugIterations++;
     throttle = -xbox.getRightY();
+    SmartDashboard.putNumber("DA throttle", throttle);
     //throttle = 0.5;
     currentPose = poseEstimatorSubsystem.getCurrentPose();
     nominalMove = new Translation2d(throttle*config.getLinearP()/1.0, 0.0);
@@ -304,15 +286,13 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     
     // Calculate the difference in rotation between the PoseEstimator and the TargetPose
     // Make sure the rotation error is between -PI and PI
-    rotationError = MathUtil.inputModulus(tagPose.getRotation().getRadians() - currentPose.getRotation().getRadians(), -Math.PI, Math.PI);
-    if (debug) SmartDashboard.putNumber("DA R", Units.radiansToDegrees(rotationError));
     if (debug) SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
     if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
     if (Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
     &&  Math.abs(translationErrorToTarget.getY()) < config.getLinearTolerance()
-    &&  Math.abs(rotationError) < config.getAngularTolerance()) {
+    ) {
       // Yes, we have arrived
       SmartDashboard.putBoolean("DA OnTarget", true);
       xSpeed = 0.0;
@@ -320,46 +300,26 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       rotationSpeed = 0.0;
       onTarget = true;
     } else {
-      // TODO fine tune PID Controllers and max speeds
-      // Rotate the drive X and Y taking into account the difference in the coordinates
-      // between the DriveTrain and the PoseEstimator.
-      // Calculate the difference in rotation between the PoseEstimator and the DriveTrainPose
-      driveTrainPose = robotDrive.getPose();
-      estimatedRotationToDriveTrainRotation = currentPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
-      estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
       
-      if (debug) SmartDashboard.putNumber("DA P2Derr", Units.radiansToDegrees(estimatedRotationToDriveTrainRotation));
-
-      rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
-      translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
-      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-      /*
-       * Next 2 lines I think were breaking the rotation direction calculations to turn in the closest direction so 
-       * I commented them out 2/1/2024
-       *
-       * if (rotationError < 0.0)
-       *  rotationError += 2.0*Math.PI; // For the PID Controller make sure the rotationError is between 0 and 2*PI
-       */
-      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-config.getMaxRotation(), config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
+      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
+      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
     }
     rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband); // Based on xbox right joystick / ignore calculations above.
     if (debug) SmartDashboard.putNumber("DA xSpeed", xSpeed);
     if (debug) SmartDashboard.putNumber("DA ySpeed", ySpeed);
     if (debug) SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
     robotDrive.drive(-xSpeed, -ySpeed, -rotationSpeed, true, true);
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    robotDrive.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
+    robotDrive.drive(0, 0, 0, true, true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return onTarget;
+    return false; // This is a really a mode, so external forces need to end this command.
   }
 } // DriveOnAprilTagProjectionCommand class

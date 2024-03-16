@@ -79,7 +79,8 @@ import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteOLSCommand;
-//import frc.robot.commands.WinchCommand;
+import frc.robot.commands.WinchDownCommand;
+import frc.robot.commands.WinchUpCommand;
 //import frc.robot.commands.GotoSourceCommand;
 //import frc.robot.commands.DetectColorCommand;
 //import frc.robot.TrajectoryPlans;
@@ -297,8 +298,10 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 6).onTrue(new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition));
     new JoystickButton(leftJoystick, 7).onTrue(new StartButtonCommand());
     new JoystickButton(leftJoystick, 8).onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
-    new JoystickButton(leftJoystick, 11).whileTrue( new RunCommand(()->m_WinchSubsystem.raiseRobot()));
-    new JoystickButton(leftJoystick, 12).whileTrue( new RunCommand(()->m_WinchSubsystem.lowerRobot()));
+    new JoystickButton(leftJoystick, 9).onTrue(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
+    new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(()->Utilities.resetPoseAtAmp()));
+    new JoystickButton(leftJoystick, 11).whileTrue( new WinchUpCommand(m_WinchSubsystem));
+    new JoystickButton(leftJoystick, 12).whileTrue( new WinchDownCommand(m_WinchSubsystem));
     
     
 

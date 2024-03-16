@@ -102,10 +102,6 @@ public class GotoPoseCommand extends Command {
   protected PIDController rotationController;
   protected boolean onTarget;
   private boolean debug = false;
-  private boolean debugPID = false;
-
-  private final int debugMinIterations = 5*50; // For debug do not end the command so we can observe oscillations.
-  private int debugIterations = 0;
   
   public GotoPoseCommand(PoseEstimatorSubsystem PoseEstimatorSubsystem
     , DriveSubsystemSRX DriveSubsystemSRXSubsystem
@@ -156,17 +152,6 @@ public class GotoPoseCommand extends Command {
     //debugPID = RobotContainer.m_BlackBox.isSwitchCenter();
     double linearP = m_config.getLinearP();
     double linearI = m_config.getLinearI();
-
-    /*
-    if (debugPID) {
-      debugIterations = 0;
-      m_config.setLinearTolerance(0.01); // tighter tolerance of 1cm
-      linearP = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotX, 0.0, 5.0);
-      linearI = RobotContainer.m_BlackBox.getPotValueScaled(OIConstants.kControlBoxPotY, 0.0, 0.1);
-      SmartDashboard.putNumber("BB P", linearP);
-      SmartDashboard.putNumber("BB I", linearI);
-    }
-    */
     
     xController = new PIDController(
       linearP, // m_config.getLinearP(),
@@ -197,6 +182,7 @@ public class GotoPoseCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    boolean correctRotation = true; // TODO test with this = false;
     Translation2d translationErrorToTarget;
     Translation2d translationErrorToTargetCorrectedForRotation;
     double rotationError;
@@ -208,7 +194,6 @@ public class GotoPoseCommand extends Command {
     double ySpeed = 0.0;
     double rotationSpeed = 0.0;
 
-    debugIterations++;
     estimatedPose = m_PoseEstimatorSubsystem.getCurrentPose();
     if (debug) Utilities.toSmartDashboard("GotoPose Pose", estimatedPose);
     // Calculate the X and Y and rotation offsets to the target location
@@ -231,28 +216,30 @@ public class GotoPoseCommand extends Command {
       rotationSpeed = 0.0;
       onTarget = true;
     } else {
-      // TODO fine tune PID Controllers and max speeds
       // Rotate the drive X and Y taking into account the difference in the coordinates
       // between the DriveTrain and the PoseEstimator.
       // Calculate the difference in rotation between the PoseEstimator and the DriveTrainPose
-      driveTrainPose = m_DriveSubsystemSRXSubsystem.getPose();
-      estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
-      estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
-      
-      if (debug) SmartDashboard.putNumber("RotationError", estimatedRotationToDriveTrainRotation);
+      if (correctRotation) {
+        driveTrainPose = m_DriveSubsystemSRXSubsystem.getPose();
+        estimatedRotationToDriveTrainRotation = estimatedPose.getRotation().getRadians() - driveTrainPose.getRotation().getRadians();
+        estimatedRotationToDriveTrainRotation = MathUtil.inputModulus(estimatedRotationToDriveTrainRotation, 0.0, Math.PI*2.0);
+        
+        if (debug) SmartDashboard.putNumber("RotationError", estimatedRotationToDriveTrainRotation);
 
-      rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
-      translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
-      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
-      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
-      /*
-       * Next 2 lines I think were breaking the rotation direction calculations to turn in the closest direction so 
-       * I commented them out 2/1/2024
-       *
-       * if (rotationError < 0.0)
-       *  rotationError += 2.0*Math.PI; // For the PID Controller make sure the rotationError is between 0 and 2*PI
-       */
-      rotationSpeed = -MathUtil.clamp(-rotationController.calculate(rotationError, 0),-m_config.getMaxRotation(), m_config.getMaxRotation()); // TODO Check sign  & Clean up 3 negations :-)
+        rotationErrorEstimationToDriveTrain = new Rotation2d(estimatedRotationToDriveTrainRotation);
+        translationErrorToTargetCorrectedForRotation = translationErrorToTarget.rotateBy(rotationErrorEstimationToDriveTrain);    // TODO Check sign of rotation.
+        xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTargetCorrectedForRotation.getX(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
+        ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTargetCorrectedForRotation.getY(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
+      } else {
+        xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
+        ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -m_config.getMaxThrottle(), m_config.getMaxThrottle());
+      }
+      
+      rotationSpeed = -MathUtil.clamp(
+        -rotationController.calculate(rotationError, 0.0)
+        ,-m_config.getMaxRotation()
+        , m_config.getMaxRotation()
+      ); // TODO Clean up double negation
     }
     if (debug) SmartDashboard.putNumber("GotoPose xSpeed", xSpeed);
     if (debug) SmartDashboard.putNumber("GotoPose ySpeed", ySpeed);

@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.WinchSubsystem;
 
-public class WinchCommand extends Command {
+public class WinchUpCommand extends Command {
   private final WinchSubsystem m_WinchSubsystem;
 
   /** Creates a new WinchCommand. */
-  public WinchCommand(WinchSubsystem winchSubsystem) {
+  public WinchUpCommand(WinchSubsystem winchSubsystem) {
     m_WinchSubsystem = winchSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_WinchSubsystem);
