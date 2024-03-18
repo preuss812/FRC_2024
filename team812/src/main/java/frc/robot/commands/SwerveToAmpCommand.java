@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Utilities;
 import frc.robot.subsystems.DriveSubsystemSRX;
@@ -26,7 +27,13 @@ public class SwerveToAmpCommand extends SwerveToPoseCommand {
     super(
       DriveSubsystemSRXSubsystem,
       PoseEstimatorSubsystem,
-      Utilities.isBlueAlliance() ? VisionConstants.AprilTag.BLUE_AMP : VisionConstants.AprilTag.RED_AMP);
+      Utilities.isBlueAlliance() ? VisionConstants.AprilTag.BLUE_AMP : VisionConstants.AprilTag.BLUE_AMP);
+  }
+
+  @Override
+  public void initialize() {
+    this.destination = Utilities.isBlueAlliance() ? VisionConstants.AprilTag.BLUE_AMP : VisionConstants.AprilTag.RED_AMP;
+    super.initialize();
   }
 
 }

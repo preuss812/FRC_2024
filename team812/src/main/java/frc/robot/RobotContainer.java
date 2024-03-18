@@ -72,16 +72,16 @@ import frc.robot.commands.StartButtonCommand;
 import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
-//import frc.robot.commands.SwerveToAmpCommand;
+import frc.robot.commands.SwerveToAmpCommand;
 //import frc.robot.commands.SwerveToPoseCommand;
-//import frc.robot.commands.SwerveToSourceCommand;
+import frc.robot.commands.SwerveToSourceCommand;
 //import frc.robot.commands.SwerveToPoseTest;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteOLSCommand;
 import frc.robot.commands.WinchDownCommand;
 import frc.robot.commands.WinchUpCommand;
-//import frc.robot.commands.GotoSourceCommand;
+import frc.robot.commands.GotoSourceCommand;
 //import frc.robot.commands.DetectColorCommand;
 //import frc.robot.TrajectoryPlans;
 //import frc.robot.commands.PushTowardsWall;
@@ -245,16 +245,16 @@ public class RobotContainer {
       .onTrue(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
-      new SequentialCommandGroup(
-        //new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem),
-        new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive),
-        new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
-      )
+      //new SequentialCommandGroup(
+        new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem)//,
+        //new GotoSourceCommand(m_PoseEstimatorSubsystem, m_robotDrive),
+        //new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
+      //)
     );
 
     new JoystickButton(m_driverController, Button.kX.value).whileTrue(
         new SequentialCommandGroup(
-          //new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
+          new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
           new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive), // Go the rest of the way to the AMP.
           new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem).withTimeout(2.0)
       )

@@ -23,7 +23,7 @@ import frc.robot.Utilities;
 public class SwerveToPoseCommand extends Command {
   private final DriveSubsystemSRX robotDrive;
   private final PoseEstimatorSubsystem poseEstimatorSubsystem;
-  private final AprilTag destination;
+  protected AprilTag destination;
   private SequentialCommandGroup commands;
   private final double finalDistanceToAmp    = 1.0; // Meters
   private final double finalDistanceToSource = 1.0; // Meters
@@ -105,6 +105,8 @@ public class SwerveToPoseCommand extends Command {
     } catch (Exception e) {
     }
     if (debug) SmartDashboard.putBoolean("SW Interrupted", interrupted);
+    robotDrive.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
+
     if (debug) SmartDashboard.putString("SW","Done");
   }
 

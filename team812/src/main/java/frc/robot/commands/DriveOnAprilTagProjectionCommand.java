@@ -117,7 +117,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   private double projectionB;
 
   private boolean onTarget;
-  private boolean debug = false;
+  private boolean debug = true;
+  private double lastTheta;
 
   /**
    * Drive to the specified distance from the best april tag currently in view.
@@ -159,6 +160,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SmartDashboard.putString("DP","Active");
     onTarget = true; // Not really but if we dont find a target, this will cause the command to end immediately.
     p = 0.0;
     xSign = 0.0;
@@ -232,6 +234,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       config.getAngularI(),
       config.getAngularD()
       );
+    lastTheta = 4.0;
     rotationController.setTolerance(config.getAngularTolerance()); // did not work, dont understand yet
     rotationController.enableContinuousInput(-Math.PI, Math.PI); // Tell PID Controller to expect inputs between -180 and 180 degrees (in Radians).
   }
@@ -251,6 +254,9 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     double throttle;
 
     throttle = -xbox.getRightY();
+    rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband*2); // Based on xbox right joystick / ignore calculations above.
+   
+    
     SmartDashboard.putNumber("DA throttle", throttle);
     //throttle = 0.5;
     currentPose = poseEstimatorSubsystem.getCurrentPose();
@@ -260,9 +266,21 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     if (debug) SmartDashboard.putString("DA Move",move.toString());
     if (debug) SmartDashboard.putString("DA unc",uncorrectedGoal.toString());
     
+    if (Math.abs(rotationSpeed) < 0.05 && lastTheta != 4.0) {
+      double deltaRotation = MathUtil.inputModulus(currentPose.getRotation().getRadians() - lastTheta, -Math.PI, Math.PI);
+      rotationSpeed = -MathUtil.clamp(
+        rotationController.calculate(deltaRotation,0),
+          -config.getMaxRotation(),
+           config.getMaxRotation());
+    } else {
+      lastTheta = currentPose.getRotation().getRadians();
+    }
+
     // We now have the goal position ignoring the distance from the april tag projection
     // Compute a correction factor to keep us on the projection line.
-    if (xSign == 0) {
+    if (Math.abs(throttle) <= 0.05) {
+      correctedGoal = uncorrectedGoal;
+    } else if (xSign == 0) {
       // The line is vertical.
       // The correction is simple set the X goal to be the X coordinate of the goal line.
       correctedGoal = new Translation2d( tagPose.getX(), uncorrectedGoal.getY());
@@ -290,7 +308,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
     
     // Test to see if we have arrived at the requested pose within the specified toleranes
-    if (Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
+    if (false
+    && Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
     &&  Math.abs(translationErrorToTarget.getY()) < config.getLinearTolerance()
     ) {
       // Yes, we have arrived
@@ -300,11 +319,11 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       rotationSpeed = 0.0;
       onTarget = true;
     } else {
-      
+            SmartDashboard.putBoolean("DA OnTarget", false);
+
       xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
       ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
     }
-    rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband); // Based on xbox right joystick / ignore calculations above.
     if (debug) SmartDashboard.putNumber("DA xSpeed", xSpeed);
     if (debug) SmartDashboard.putNumber("DA ySpeed", ySpeed);
     if (debug) SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
@@ -315,6 +334,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     robotDrive.drive(0, 0, 0, true, true);
+        SmartDashboard.putString("DP","Done");
+
   }
 
   // Returns true when the command should end.

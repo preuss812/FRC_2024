@@ -13,7 +13,7 @@ import frc.robot.Constants.NoteIntakeConstants;
 public class TakeInNoteOLSCommand extends Command {
   private final NoteIntakeSubsystem m_NoteIntakeSubsystem;
   private final ShooterSubsystem m_ShooterSubsystem;
-  private final OpticalLimitSwitch m_OpticalLimitSwitch;
+  private static final OpticalLimitSwitch m_OpticalLimitSwitch = new OpticalLimitSwitch(NoteIntakeConstants.kLimitSwitchChannel);
 
   /** Creates a new TakeInNoteCommand. */
   public TakeInNoteOLSCommand(
@@ -23,7 +23,6 @@ public class TakeInNoteOLSCommand extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_NoteIntakeSubsystem = noteIntakeSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
-    m_OpticalLimitSwitch = new OpticalLimitSwitch(NoteIntakeConstants.kLimitSwitchChannel);
     addRequirements(noteIntakeSubsystem, shooterSubsystem);
   }
 

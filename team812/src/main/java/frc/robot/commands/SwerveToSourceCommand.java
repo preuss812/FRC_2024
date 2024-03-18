@@ -29,4 +29,10 @@ public class SwerveToSourceCommand extends SwerveToPoseCommand {
       Utilities.isBlueAlliance() ? VisionConstants.AprilTag.BLUE_RIGHT_SOURCE : VisionConstants.AprilTag.RED_LEFT_SOURCE);
   }
 
+  @Override
+  public void initialize() {
+    this.destination = Utilities.isBlueAlliance() ? VisionConstants.AprilTag.BLUE_RIGHT_SOURCE : VisionConstants.AprilTag.RED_LEFT_SOURCE;
+    super.initialize();
+  }
+
 }
