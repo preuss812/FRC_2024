@@ -247,8 +247,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       //new SequentialCommandGroup(
         new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem)//,
-        //new GotoSourceCommand(m_PoseEstimatorSubsystem, m_robotDrive),
-        //new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
+        //new GotoSourceCommand(m_PoseEstimatorSubsystem, m_robotDrive)
       //)
     );
 
@@ -257,7 +256,7 @@ public class RobotContainer {
           new SwerveToAmpCommand( m_robotDrive, m_PoseEstimatorSubsystem), // Gets close to AMP
           new GotoAmpCommand(m_PoseEstimatorSubsystem, m_robotDrive), // Go the rest of the way to the AMP.
           new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem).withTimeout(2.0)
-      )
+      ).andThen(new StopAllMotorsCommand())
     );
 
     new JoystickButton(m_driverController, Button.kA.value)

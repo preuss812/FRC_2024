@@ -62,8 +62,8 @@ public class FollowTrajectoryCommand extends SequentialCommandGroup {
         if (debug) SmartDashboard.putString("FT", "catch->gotoPose");
       return;
     }
-    if (debug) {
-          RobotContainer.m_PoseEstimatorSubsystem.field2d.getObject("trajectory").setTrajectory(trajectory);
+    if (true || debug) {
+      RobotContainer.m_PoseEstimatorSubsystem.field2d.getObject("trajectory").setTrajectory(trajectory);
     }
 
     var thetaController = new ProfiledPIDController(

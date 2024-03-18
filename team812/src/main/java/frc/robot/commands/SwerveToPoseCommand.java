@@ -104,10 +104,10 @@ public class SwerveToPoseCommand extends Command {
       commands.cancel();
     } catch (Exception e) {
     }
-    if (debug) SmartDashboard.putBoolean("SW Interrupted", interrupted);
+    if (true || debug) SmartDashboard.putBoolean("SW Interrupted", interrupted);
     robotDrive.drive(0, 0, 0, true, true); // TODO Verify signs of inputs 
 
-    if (debug) SmartDashboard.putString("SW","Done");
+    if (true || debug) SmartDashboard.putString("SW","Done");
   }
 
   // Returns true when the command should end.
