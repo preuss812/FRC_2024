@@ -107,7 +107,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   private PIDController xController;
   private PIDController yController;
   private PIDController rotationController;
-  private Pose2d tagPose = null;
+  private static Pose2d tagPose = null;
+  private static boolean commandIsActive = false;
   
   private double p; // The constant P from the normal form for the april tag projection line.
   private double xSign; // The sign of x axis motion toward the april tag.
@@ -115,9 +116,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   private double projectionM;
   private double projectionB;
 
-  private boolean onTarget;
   private boolean debug = true;
-  private double lastTheta;
+  private static double lastTheta;
 
   /**
    * Drive to the specified distance from the best april tag currently in view.
@@ -135,7 +135,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     this.robotDrive = robotDrive;
     this.photonCamera = photonCamera;
     this.xbox = xbox;
-    onTarget = false;
     this.config = new DriveOnAprilTagProjectionConfig();
     addRequirements(robotDrive, poseEstimatorSubsystem);
   }
@@ -151,7 +150,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     this.robotDrive = robotDrive;
     this.photonCamera = photonCamera;
     this.xbox = xbox;
-    onTarget = false;
     this.config = config;
     addRequirements(robotDrive, poseEstimatorSubsystem);
   }
@@ -160,7 +158,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   @Override
   public void initialize() {
     SmartDashboard.putString("DP","Active");
-    onTarget = true; // Not really but if we dont find a target, this will cause the command to end immediately.
+    tagPose = null;
+    commandIsActive = false;
     p = 0.0;
     xSign = 0.0;
     ySign = 0.0;
@@ -177,13 +176,13 @@ public class DriveOnAprilTagProjectionCommand extends Command {
       // Get the tag pose from field layout - consider that the layout will be null if it failed to load
       tagPose = poseEstimatorSubsystem.getAprilTagPose(fiducialId);
       // Re-align the robot drive and pose subsystem.
-      robotDrive.resetOdometry(poseEstimatorSubsystem.getCurrentPose());
+      //robotDrive.resetOdometry(poseEstimatorSubsystem.getCurrentPose());
 
-        onTarget = false;
-        if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0) {
-          linearP = config.getLinearP();
-          linearI = config.getLinearI();
-          Utilities.toSmartDashboard("DA tag",tagPose);
+      if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0) {
+        commandIsActive = true;
+        linearP = config.getLinearP();
+        linearI = config.getLinearI();
+        Utilities.toSmartDashboard("DA tag",tagPose);
   
         // Compute the projected line from the april tag.
         // I'm using the "normal form" of the line.
@@ -211,6 +210,9 @@ public class DriveOnAprilTagProjectionCommand extends Command {
         SmartDashboard.putNumber("DP x", xSign);
         SmartDashboard.putNumber("DP y", ySign);
       }
+    } else {
+      tagPose = null;
+      commandIsActive = false;
     }
     SmartDashboard.putNumber("DA P", linearP);
     SmartDashboard.putNumber("DA I", linearI);
@@ -252,60 +254,62 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     Translation2d correctedGoal;
     double throttle;
 
-    throttle = -xbox.getRightY();
-    rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband*2); // Based on xbox right joystick / ignore calculations above.
-    
-    SmartDashboard.putNumber("DA throttle", throttle);
-    //throttle = 0.5;
-    currentPose = poseEstimatorSubsystem.getCurrentPose();
-    nominalMove = new Translation2d(throttle*config.getLinearP()/1.0, 0.0);
-    move = nominalMove.rotateBy(tagPose.getRotation().plus(new Rotation2d(Math.PI))); // Rotate the nominal move to the tag pose.
-    uncorrectedGoal = currentPose.getTranslation().plus(move);
-    if (debug) SmartDashboard.putString("DA Move",move.toString());
-    if (debug) SmartDashboard.putString("DA unc",uncorrectedGoal.toString());
-    
-    if (Math.abs(rotationSpeed) < 0.05 && lastTheta != 4.0) {
-      double deltaRotation = MathUtil.inputModulus(currentPose.getRotation().getRadians() - lastTheta, -Math.PI, Math.PI);
-      rotationSpeed = -MathUtil.clamp(
-        rotationController.calculate(deltaRotation,0),
-          -config.getMaxRotation(),
-           config.getMaxRotation());
-    } else {
-      lastTheta = currentPose.getRotation().getRadians();
+    if (tagPose != null) {
+      throttle = -xbox.getRightY();
+      rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband*2); // Based on xbox right joystick / ignore calculations above.
+      
+      SmartDashboard.putNumber("DA throttle", throttle);
+      //throttle = 0.5;
+      currentPose = poseEstimatorSubsystem.getCurrentPose();
+      nominalMove = new Translation2d(throttle*config.getLinearP()/1.0, 0.0);
+      move = nominalMove.rotateBy(tagPose.getRotation().plus(new Rotation2d(Math.PI))); // Rotate the nominal move to the tag pose.
+      uncorrectedGoal = currentPose.getTranslation().plus(move);
+      if (debug) SmartDashboard.putString("DA Move",move.toString());
+      if (debug) SmartDashboard.putString("DA unc",uncorrectedGoal.toString());
+      
+      if (Math.abs(rotationSpeed) < 0.05 && lastTheta != 4.0) {
+        double deltaRotation = MathUtil.inputModulus(currentPose.getRotation().getRadians() - lastTheta, -Math.PI, Math.PI);
+        rotationSpeed = -MathUtil.clamp(
+          rotationController.calculate(deltaRotation,0),
+            -config.getMaxRotation(),
+            config.getMaxRotation());
+      } else {
+        lastTheta = currentPose.getRotation().getRadians();
+      }
+
+      // We now have the goal position ignoring the distance from the april tag projection
+      // Compute a correction factor to keep us on the projection line.
+      if (Math.abs(throttle) <= 0.05) {
+        correctedGoal = currentPose.getTranslation();  // has the effect of pid producting x,y speeds of 0.0.
+      } else if (xSign == 0) {
+        // The line is vertical.
+        // The correction is simple set the X goal to be the X coordinate of the goal line.
+        correctedGoal = new Translation2d( tagPose.getX(), uncorrectedGoal.getY());
+      } else if (ySign == 0) {
+        // The line is horizontal
+        // The correction is simple set the Y goal to be the Y coordinate of the goal line.
+        correctedGoal = new Translation2d(uncorrectedGoal.getX(), tagPose.getY());
+      } else {
+        // Intersect the 2 lines to find the point to be on the projection line.
+        double perpendicularM = 1/projectionM;
+        double perpendicularB = uncorrectedGoal.getY() - projectionM * uncorrectedGoal.getX();
+        double intersectX = (perpendicularB - projectionB)/(projectionM - perpendicularM);
+        double intersectY = projectionM*intersectX + projectionB;
+        correctedGoal = new Translation2d(intersectX, intersectY);
+      }
+
+      if (debug) SmartDashboard.putString("DA goal", correctedGoal.toString());
+
+      // Calculate the X and Y and rotation offsets to the target location
+      translationErrorToTarget = new Translation2d( correctedGoal.getX() - currentPose.getX(), correctedGoal.getY() - currentPose.getY());
+      
+      if (debug) SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
+      if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
+      
+      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
+      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
+
     }
-
-    // We now have the goal position ignoring the distance from the april tag projection
-    // Compute a correction factor to keep us on the projection line.
-    if (Math.abs(throttle) <= 0.05) {
-      correctedGoal = currentPose.getTranslation();  // has the effect of pid producting x,y speeds of 0.0.
-    } else if (xSign == 0) {
-      // The line is vertical.
-      // The correction is simple set the X goal to be the X coordinate of the goal line.
-      correctedGoal = new Translation2d( tagPose.getX(), uncorrectedGoal.getY());
-    } else if (ySign == 0) {
-      // The line is horizontal
-      // The correction is simple set the Y goal to be the Y coordinate of the goal line.
-      correctedGoal = new Translation2d(uncorrectedGoal.getX(), tagPose.getY());
-    } else {
-      // Intersect the 2 lines to find the point to be on the projection line.
-      double perpendicularM = 1/projectionM;
-      double perpendicularB = uncorrectedGoal.getY() - projectionM * uncorrectedGoal.getX();
-      double intersectX = (perpendicularB - projectionB)/(projectionM - perpendicularM);
-      double intersectY = projectionM*intersectX + projectionB;
-      correctedGoal = new Translation2d(intersectX, intersectY);
-    }
-
-    if (debug) SmartDashboard.putString("DA goal", correctedGoal.toString());
-
-    // Calculate the X and Y and rotation offsets to the target location
-    translationErrorToTarget = new Translation2d( correctedGoal.getX() - currentPose.getX(), correctedGoal.getY() - currentPose.getY());
-    
-    if (debug) SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
-    if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
-    
-    xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-    ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-
     if (debug) SmartDashboard.putNumber("DA xSpeed", xSpeed);
     if (debug) SmartDashboard.putNumber("DA ySpeed", ySpeed);
     if (debug) SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
@@ -317,12 +321,27 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   public void end(boolean interrupted) {
     robotDrive.drive(0, 0, 0, true, true);
         SmartDashboard.putString("DP","Done");
+    commandIsActive = false;
 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (tagPose == null); // This is a really a mode, so external forces need to end this command.
+    return (tagPose == null);
+  }
+
+  /**
+   * Set the robot's rotation relative to the april tag being use for driving.
+   * @param angleToTag - the angle in radians the robot should face relative to the april tag 0=facing the tag.
+   */
+  public static void setAngle(double angleToTag) {
+    if (commandIsActive && tagPose != null) {
+      lastTheta = MathUtil.inputModulus(angleToTag + tagPose.getRotation().getRadians() + Math.PI, -Math.PI, Math.PI);
+    }
+  }
+
+  public static boolean isActive() {
+    return commandIsActive;
   }
 } // DriveOnAprilTagProjectionCommand class
