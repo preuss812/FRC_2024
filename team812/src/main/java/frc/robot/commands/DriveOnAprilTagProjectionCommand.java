@@ -273,7 +273,8 @@ public class DriveOnAprilTagProjectionCommand extends Command {
           -config.getMaxRotation(),
            config.getMaxRotation());
     } else {
-      lastTheta = currentPose.getRotation().getRadians();
+      //lastTheta = currentPose.getRotation().getRadians(); // TODO fix this.
+      rotationSpeed = 0.0;
     }
 
     // We now have the goal position ignoring the distance from the april tag projection

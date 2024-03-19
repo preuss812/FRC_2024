@@ -161,8 +161,8 @@ public final class Constants {
         public static final double kArmSensorUnitsPer100ms = kArmRange*10.0;      // Untested: Max speed in MotionMagic mode.  Full range in 1 second.
         public static final double kArmSensorUnitsPer100msPerSec = kArmRange*10;  // Untested: Max acceleration in MotionMagicMode.  Full acceleration in 1 second
 
-        public static final double kArmRaiseTimeout = 5.0; // Seconds - for autonomous.
-        public static final double kArmLowerTimeout = 5.0; // Seconds - for autonomous.
+        public static final double kArmRaiseTimeout = 2.0; // Seconds - for autonomous.
+        public static final double kArmLowerTimeout = 2.0; // Seconds - for autonomous.
         public static final double kArmHomeSpeed = 0.2;    // Percent
     }
     
