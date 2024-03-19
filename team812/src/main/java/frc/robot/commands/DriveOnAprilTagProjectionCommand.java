@@ -107,8 +107,7 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   private PIDController xController;
   private PIDController yController;
   private PIDController rotationController;
-  private Pose2d targetPose;
-  private Pose2d tagPose;
+  private Pose2d tagPose = null;
   
   private double p; // The constant P from the normal form for the april tag projection line.
   private double xSign; // The sign of x axis motion toward the april tag.
@@ -255,7 +254,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
 
     throttle = -xbox.getRightY();
     rotationSpeed = MathUtil.applyDeadband(xbox.getRightX(), OIConstants.kDriveDeadband*2); // Based on xbox right joystick / ignore calculations above.
-   
     
     SmartDashboard.putNumber("DA throttle", throttle);
     //throttle = 0.5;
@@ -273,14 +271,13 @@ public class DriveOnAprilTagProjectionCommand extends Command {
           -config.getMaxRotation(),
            config.getMaxRotation());
     } else {
-      //lastTheta = currentPose.getRotation().getRadians(); // TODO fix this.
-      rotationSpeed = 0.0;
+      lastTheta = currentPose.getRotation().getRadians();
     }
 
     // We now have the goal position ignoring the distance from the april tag projection
     // Compute a correction factor to keep us on the projection line.
     if (Math.abs(throttle) <= 0.05) {
-      correctedGoal = uncorrectedGoal;
+      correctedGoal = currentPose.getTranslation();  // has the effect of pid producting x,y speeds of 0.0.
     } else if (xSign == 0) {
       // The line is vertical.
       // The correction is simple set the X goal to be the X coordinate of the goal line.
@@ -303,28 +300,12 @@ public class DriveOnAprilTagProjectionCommand extends Command {
     // Calculate the X and Y and rotation offsets to the target location
     translationErrorToTarget = new Translation2d( correctedGoal.getX() - currentPose.getX(), correctedGoal.getY() - currentPose.getY());
     
-    // Calculate the difference in rotation between the PoseEstimator and the TargetPose
-    // Make sure the rotation error is between -PI and PI
     if (debug) SmartDashboard.putNumber("DA X", translationErrorToTarget.getX());
     if (debug) SmartDashboard.putNumber("DA Y", translationErrorToTarget.getY());
     
-    // Test to see if we have arrived at the requested pose within the specified toleranes
-    if (false
-    && Math.abs(translationErrorToTarget.getX()) < config.getLinearTolerance()
-    &&  Math.abs(translationErrorToTarget.getY()) < config.getLinearTolerance()
-    ) {
-      // Yes, we have arrived
-      SmartDashboard.putBoolean("DA OnTarget", true);
-      xSpeed = 0.0;
-      ySpeed = 0.0;
-      rotationSpeed = 0.0;
-      onTarget = true;
-    } else {
-            SmartDashboard.putBoolean("DA OnTarget", false);
+    xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
+    ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
 
-      xSpeed = MathUtil.clamp(xController.calculate(translationErrorToTarget.getX(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-      ySpeed = MathUtil.clamp(yController.calculate(translationErrorToTarget.getY(), 0), -config.getMaxThrottle(), config.getMaxThrottle());
-    }
     if (debug) SmartDashboard.putNumber("DA xSpeed", xSpeed);
     if (debug) SmartDashboard.putNumber("DA ySpeed", ySpeed);
     if (debug) SmartDashboard.putNumber("DA rSpeed", rotationSpeed);
@@ -342,6 +323,6 @@ public class DriveOnAprilTagProjectionCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; // This is a really a mode, so external forces need to end this command.
+    return (tagPose == null); // This is a really a mode, so external forces need to end this command.
   }
 } // DriveOnAprilTagProjectionCommand class
