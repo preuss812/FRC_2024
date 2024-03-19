@@ -52,7 +52,7 @@ import frc.robot.subsystems.PingResponseUltrasonicSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
 //import frc.robot.subsystems.CameraVisionSubsystem;
-import frc.robot.subsystems.ColorDetectionSubsytem;
+//import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.ArmRotationCommand;
 //import frc.robot.commands.DetectColorCommand;
@@ -121,7 +121,7 @@ public class RobotContainer {
   public static NoteIntakeSubsystem m_NoteIntakeSubsystem = new NoteIntakeSubsystem();
   public static WinchSubsystem m_WinchSubsystem = new WinchSubsystem();
   //public static PowerDistribution m_PowerDistribution = new PowerDistribution(0, ModuleType.kCTRE); // TODO Enable this and add SmartDashboard for Winch.
-  public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
+  //public static ColorDetectionSubsytem m_ColorDetectionSubsystem = new ColorDetectionSubsytem();
   //public static AnalogUltrasonicDistanceSubsystem m_UltrasonicDistanceSubsystem = 
   //          new AnalogUltrasonicDistanceSubsystem();
   public static PingResponseUltrasonicSubsystem m_PingResponseUltrasonicSubsystem =
