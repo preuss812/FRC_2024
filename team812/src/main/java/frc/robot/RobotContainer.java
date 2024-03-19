@@ -287,7 +287,8 @@ public class RobotContainer {
     POVButton dPad315 = dPadButton(315);
 
     
-    
+    new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(0.0)));
+    new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(Math.PI)));
     new JoystickButton(leftJoystick, 3).onTrue(
       new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
     );
