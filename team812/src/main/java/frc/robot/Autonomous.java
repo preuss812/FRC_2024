@@ -26,7 +26,7 @@ import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
 import frc.robot.commands.GotoAmpCommand;
 //import frc.robot.commands.GotoPoseCommand;
-import frc.robot.commands.RotateRobotCommand;
+import frc.robot.commands.RotateRobotAutoCommand;
 //import frc.robot.commands.StopRobotMotion;
 //import frc.robot.commands.PushTowardsWall;
 import frc.robot.commands.PushTowardsWallUltrasonic;
@@ -124,7 +124,7 @@ public class Autonomous extends SequentialCommandGroup {
         // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 4)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "TurnCameraTowardAmp")),
-        new RotateRobotCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
+        new RotateRobotAutoCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
 
         // Wait to see apriltag
         //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
