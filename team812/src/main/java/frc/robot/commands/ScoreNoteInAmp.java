@@ -22,6 +22,7 @@ public class ScoreNoteInAmp extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmUP")),
       new ArmRotationCommand(armRotationSubsystem, ArmConstants.kArmScoringPosition).withTimeout(ArmConstants.kArmRaiseTimeout),
+      //new InstantCommand(()->Utilities.resetPoseAtAmp()),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Shoot")),
       new ShooterCommand(shooterSubsystem).withTimeout(ShooterConstants.kShootTimeout),
       new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmDown")),

@@ -242,7 +242,10 @@ public class RobotContainer {
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
-      .onTrue(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
+      .onTrue(
+        new SequentialCommandGroup(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem),
+        new RunCommand(()->m_ShooterSubsystem.unshoot()).withTimeout(0.8))
+      );
 
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       //new SequentialCommandGroup(
@@ -289,9 +292,12 @@ public class RobotContainer {
     
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(0.0)));
     new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(Math.PI)));
+    /*
     new JoystickButton(leftJoystick, 3).onTrue(
-      new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
+      //new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
+      new RunCommand(()->m_ShooterSubsystem.unshoot()).withTimeout(0.8)
     );
+    */
     new JoystickButton(leftJoystick, 4).onTrue(new ArmRotationCommand(m_ArmRotationSubsystem,ArmConstants.kArmIntakePosition));
     // This command should just stop the robot from driving and stop the shooter and arm motors.
     new JoystickButton(leftJoystick, 5).onTrue(new StopAllMotorsCommand());

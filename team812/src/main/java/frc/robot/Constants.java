@@ -307,7 +307,7 @@ public final class Constants {
         public static final double kIntakeSpeed = 0.7;
         public static final double kShootSpeed =  0.7;
         public static final double kUnshootSpeed = -0.7;
-        public static final double kShootTimeout = 2.0; // Seconds
+        public static final double kShootTimeout = 3.0; // Seconds
     }
 
     

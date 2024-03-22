@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -86,8 +87,11 @@ public class Autonomous extends SequentialCommandGroup {
        * o Score the Note.
        * o GotoPoseDrive out of the starting box toward field center.
        */
-      final double firstMoveX = 1.84 - DriveConstants.kBackToCenterDistance;
+      final double firstMoveX = 1.84 + 0.50 - DriveConstants.kBackToCenterDistance;
       final double firstMoveY = 0.0;
+      final double secondMoveX = 0.0;
+      final double secondMoveY = -1.0;
+  
       final double finalMoveX = 2.0; // Arbitrary move out of the starting box
       final double finalMoveY = -1.0; // Arbitrary move out of the starting box and away from the wall.
       final double noTagSeenMoveX = 2.0; // Arbitrary move 2 meters forward to exit the starting box.
@@ -95,9 +99,11 @@ public class Autonomous extends SequentialCommandGroup {
 
       Pose2d finalMove;
       Pose2d firstMove;
+      Pose2d secondMove;
       Pose2d noTagSeenMove;
       finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d( Math.PI/2.0)); // Pose for robot to face the center of the field.
       firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(-Math.PI/2.0)); // Pose for robot to be at the april tag.
+      secondMove = new Pose2d(secondMoveX, secondMoveY, new Rotation2d(-Math.PI/2.0)); // Pose for robot to be at the april tag.
       noTagSeenMove = new Pose2d(noTagSeenMoveX, noTagSeenMoveY, new Rotation2d( Math.PI/2.0)); // Pose for robot to face the center of the field.
 
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
@@ -124,11 +130,13 @@ public class Autonomous extends SequentialCommandGroup {
         // Rotate toward the Amp.  It's really away from the amp as the camera is on the back of the robot.
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 4)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "TurnCameraTowardAmp")),
-        new RotateRobotAutoCommand(RobotContainer.m_robotDrive, -Math.PI/2, false).withTimeout(5.0),
+        new DriveRobotCommand(RobotContainer.m_robotDrive, secondMove, false).withTimeout(5.0), 
+        new RotateRobotAutoCommand(RobotContainer.m_robotDrive, -Units.degreesToRadians(70), false).withTimeout(5.0),
+        
 
         // Wait to see apriltag
         //new InstantCommand(() -> Utilities.refineYCoordinate()),  // TODO test this and see if we can reduce or eliminate the wait.
-        new WaitCommand(2.5), // TODO reduce or eliminate wait.
+        new WaitCommand(2.8), // TODO reduce or eliminate wait.
         new ConditionalCommand(
           new SequentialCommandGroup(
             
