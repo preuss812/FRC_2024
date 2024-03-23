@@ -116,9 +116,14 @@ public class RotateRobotAutoCommand extends Command {
       targetTheta = MathUtil.inputModulus(startingTheta + theta, -Math.PI, Math.PI);
       
     } else {
-        SmartDashboard.putString("RR","Blue");
-        targetTheta =  MathUtil.inputModulus(theta, -Math.PI, Math.PI);
-        if (debug) SmartDashboard.putNumber("RR 1", targetTheta);
+        
+        if (Utilities.isBlueAlliance()){
+          targetTheta =  MathUtil.inputModulus(theta, -Math.PI, Math.PI);
+          if (debug) SmartDashboard.putNumber("RR 1", Units.radiansToDegrees(targetTheta));
+       } else {
+            targetTheta =  MathUtil.inputModulus(-Math.PI -theta, -Math.PI, Math.PI); 
+            if (debug) SmartDashboard.putNumber("RR 2", Units.radiansToDegrees(targetTheta));
+       }
     }
     rotationController = new PIDController(angularP, angularI, config.getAngularD());
     rotationController.setIZone(config.getAngularIZone());
