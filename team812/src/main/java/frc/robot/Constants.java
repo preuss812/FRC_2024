@@ -304,9 +304,9 @@ public final class Constants {
         public static final double kMaxLowerRobotSpeed = -1.0;
     }
     public static final class ShooterConstants {
-        public static final double kIntakeSpeed = 0.7;
-        public static final double kShootSpeed =  0.7;
-        public static final double kUnshootSpeed = -0.7;
+        public static final double kIntakeSpeed = 1.0;
+        public static final double kShootSpeed =  1.0;
+        public static final double kUnshootSpeed = -1.0;
         public static final double kShootTimeout = 3.0; // Seconds
     }
 
@@ -378,7 +378,8 @@ public final class Constants {
         public static final boolean kGyroReversed = false;
 
         public static final double kBackToCenterDistance = Units.inchesToMeters(17.5); //was 15.0 until 3/5/2024
-        public static final double kApproximateStartingY = 6.0; // Meters (ie near the amp)
+        public static final double kRobotWidth = Units.inchesToMeters(24.0+6); // Frame with pules 2 bumpers.
+        public static final double kApproximateStartingY = FieldConstants.yMax - Units.inchesToMeters(36.0); // Meters (ie near the amp)
         public static final double kStartingOrientation = 0.0; // Starting orientation in radians (ie robot back against the alliance wall)
       }
     
@@ -456,6 +457,14 @@ public final class Constants {
         // Constraint for the motion profiled robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+        public static String[] mode = {"PV-Score-Leave", "Leave", "US-Score-Leave","Do Nothing"};
+        public static final int PVScoreLeaveMode = 0;
+        public static final int LeaveMode = 1;
+        public static final int USScoreLeaveMode = 2;
+        public static final int DoNothingMode = 3;
+        public static final int DefaultMode = 0;
+        
       }
     
       public static final class NeoMotorConstants {

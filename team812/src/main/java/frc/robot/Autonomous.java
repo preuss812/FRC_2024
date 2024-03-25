@@ -22,6 +22,7 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.commands.ArmHomeCommand;
 import frc.robot.commands.ArmRotationCommand;
+import frc.robot.commands.AutonomousStartDelayCommand;
 import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.FindAprilTagCommand;
 import frc.robot.commands.ScoreNoteInAmp;
@@ -35,7 +36,7 @@ import frc.robot.Constants.ArmConstants;
 //import frc.robot.commands.SwerveToPoseCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-//import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants;
 //import frc.robot.Constants.VisionConstants;
 //import frc.robot.Constants.VisionConstants.AprilTag;
 
@@ -60,17 +61,14 @@ public class Autonomous extends SequentialCommandGroup {
     m_PoseEstimatorSubsystem = RobotContainer.m_PoseEstimatorSubsystem;
     m_PingResponseUltrasonicSubsystem = RobotContainer.m_PingResponseUltrasonicSubsystem;
 
-    enum AutonomousStrategy {
-      LABTEST,
-      BLUEALLIANCE,
-      REDALLIANCE,
-      USEALLIANCE
+    int autoMode = (int) Math.round(SmartDashboard.getNumber("AutoMode",0));
+    if (autoMode < 0 || autoMode >= AutoConstants.mode.length) {
+      autoMode = 0; // Out of range values convert back to default mode, 0.
+      SmartDashboard.putNumber("AutoMode", autoMode);
     }
-    // This is now unused mostly but left in in case we need it for testing.
-    AutonomousStrategy autonomousStrategy = AutonomousStrategy.USEALLIANCE;
-
+    SmartDashboard.putString("AutoModeText", AutoConstants.mode[autoMode]);
   
-    if (autonomousStrategy == AutonomousStrategy.USEALLIANCE) {
+    if (autoMode == 0) {
       /**
        * We are starting with the robots back to the Alliance wall.
        * We hope we can be positioned anywhere along that wall.
@@ -121,6 +119,9 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
+
+        // Wait if requested to allow other robots to clear the area.
+        new AutonomousStartDelayCommand(),
 
         // Drive out based on drivetrain encoders to align with and face the Amp
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
@@ -196,6 +197,124 @@ public class Autonomous extends SequentialCommandGroup {
         
       );
       addCommands(fullCommandGroup);
+    } else if (autoMode == AutoConstants.LeaveMode) {
+
+      final double firstMoveX = 3.0; // Drive out 3 meters  // For in classroom.
+      final double firstMoveY = 0.0;
+
+      Pose2d firstMove;
+
+      firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(0.0)); // face the center of the field.
+
+      SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
+        // Set the gyro starting angle based on alliance and assumed robot placement
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
+        new InstantCommand(() -> RobotContainer.setGyroAngleToStartMatch()),
+        new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
+        new InstantCommand(() -> Utilities.allianceSetCurrentPose(
+          new Pose2d(
+            DriveConstants.kBackToCenterDistance,
+            DriveConstants.kApproximateStartingY,
+            new Rotation2d(DriveConstants.kStartingOrientation)))),
+
+        // Home the arm (should already be homed but this sets the encoder coordinates)
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
+        new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
+
+        // Wait if requested to allow other robots to clear the area.
+        new AutonomousStartDelayCommand(),
+
+        // Drive out based on drivetrain encoders to align with and face the Amp
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
+        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, true).withTimeout(5.0), // TODO Try controlRotation == true.
+         // quiesce the drive and finish.
+         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
+         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
+         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
+        );
+         addCommands(fullCommandGroup);
+
+    } else if (autoMode == AutoConstants.USScoreLeaveMode) {
+      final double ampZoneDepth = Units.inchesToMeters(13);
+      final double startingBoxDepth = Units.inchesToMeters(76.1);
+      final double startingRobotCenterY = FieldConstants.yMax - ampZoneDepth - DriveConstants.kBackToCenterDistance;
+      final double startingRobotCenterX = FieldConstants.xMin + startingBoxDepth - DriveConstants.kRobotWidth/2.0 - Units.inchesToMeters(2.0)/* tape */;
+      final double startingRobotOrientation = Units.degreesToRadians(-90.0);
+
+      final double firstMoveX = 1.84 - startingRobotCenterX;
+      final double firstMoveY = FieldConstants.yMax - startingRobotCenterY;
+      final double firstRotation = Units.degreesToRadians(-90.0);
+      final double finalMoveX = 2.0; // Arbitrary move out of the starting box
+      final double finalMoveY = -0.5; // Arbitrary move out of the starting box and away from the wall.
+      final double finalRotation = Units.degreesToRadians(0.0);
+      Pose2d finalMove;
+      Pose2d firstMove;
+
+      finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d(finalRotation)); // Pose for robot to face the center of the field.
+      firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(firstRotation)); // Pose for robot to be at the april tag.
+
+      SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
+        // Set the gyro starting angle based on alliance and assumed robot placement
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
+        new InstantCommand(() -> RobotContainer.setGyroAngleToStartMatchAmp()),
+        new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
+        new InstantCommand(() -> Utilities.allianceSetCurrentPose(
+          new Pose2d(
+            startingRobotCenterX,
+            startingRobotCenterY,
+            new Rotation2d(startingRobotOrientation)))),
+
+        // Home the arm (should already be homed but this sets the encoder coordinates)
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 2)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ArmHome")),
+        new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
+
+        // Wait if requested to allow other robots to clear the area.
+        new AutonomousStartDelayCommand(),
+
+        // Start the arm rising to the shooting position.
+        new InstantCommand(()->RobotContainer.m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)),
+
+        // Drive out based on drivetrain encoders to align with and face the Amp
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
+        new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0), // TODO Try controlRotation == true.      
+
+        // set the robot drive x,y,theta to match the pose estimator (ie use estimated position to set x,y,theta)
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 6)),
+        new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
+
+        // Make sure the arm is raised.
+        new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition),
+
+        // Score the note.
+        // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 9)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "ScoreNote")),
+        new ParallelDeadlineGroup(
+          new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem),
+          new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem)
+        ).withTimeout(10.0),
+
+        // Leave the starting box to get more points.
+        new InstantCommand(() -> Utilities.refineYCoordinate()), // Set pose to be exactly in front of the amp touching the amp wall.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 10)),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "LeaveStartBox")),
+        new DriveRobotCommand(m_robotDrive, finalMove, true).withTimeout(5.0),
+
+        // quiesce the drive and finish.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
+        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
+        
+      );
+      addCommands(fullCommandGroup);
+    } else if (autoMode == AutoConstants.DoNothingMode) {
+      // Do what we can given we do not know which alliance we are in.
+      // Currently it does nothing but stop the drive train which should already be stopped.
+      addCommands(new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive));
     } else {
       // Do what we can given we do not know which alliance we are in.
       // Currently it does nothing but stop the drive train which should already be stopped.

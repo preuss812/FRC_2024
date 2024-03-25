@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -65,6 +66,7 @@ import frc.robot.commands.DriveRobotCommand;
 import frc.robot.commands.GotoAmpCommand;
 //import frc.robot.commands.GotoPoseCommand;
 //import frc.robot.commands.NoteIntakeCommand;
+import frc.robot.commands.RotateRobotAutoCommand;
 import frc.robot.commands.RotateRobotCommand;
 import frc.robot.commands.ScoreNoteInAmp;
 //import frc.robot.commands.ShooterCommand;
@@ -241,11 +243,16 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value)
       .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-      .onTrue(
-        new SequentialCommandGroup(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem),
-        new RunCommand(()->m_ShooterSubsystem.unshoot()).withTimeout(0.8))
-      );
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).onTrue(
+        new SequentialCommandGroup(
+          new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem),
+          new ConditionalCommand(
+            new RunCommand(()->m_ShooterSubsystem.unshoot()).withTimeout(0.8),
+            new InstantCommand(),
+            Utilities.endGame
+          )
+        )
+    );
 
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       //new SequentialCommandGroup(
@@ -309,7 +316,10 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 11).whileTrue( new WinchUpCommand(m_WinchSubsystem));
     new JoystickButton(leftJoystick, 12).whileTrue( new WinchDownCommand(m_WinchSubsystem));
     
-    
+    SmartDashboard.putData("X1",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-60), false));
+    SmartDashboard.putData("X2",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-90), false));
+    SmartDashboard.putData("X3",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-120), false));
+    SmartDashboard.putData("X4",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(60), false));
 
     /*
     new JoystickButton(RightJoystick, 11).onTrue(
@@ -442,6 +452,43 @@ public class RobotContainer {
         new Pose2d(
            FieldConstants.xMax - DriveConstants.kBackToCenterDistance // Assume robot is back to the starting wall
           ,FieldConstants.yCenter                                     // Pick center of the field since we dont know where we will start.
+          ,new Rotation2d(Units.degreesToRadians(startingHeading))    // Facing toward the field.
+        )
+      );
+    }
+   }
+   /**
+   *  This function sets the gyro angle based on the alliance (blue or red)
+   * and the assumed starting position of the robot on the field.
+   * The current assumption is that the robot will be placed with it's back 
+   * close to the amp wall. The X coodinate will be calculate based on the
+   * assumption that the robot is just inside the starting box.
+   */
+  public static void setGyroAngleToStartMatchAmp() {
+    double ampZoneDepth = Units.inchesToMeters(13);
+    double startingBoxDepth = Units.inchesToMeters(76.1);
+    double startingRobotCenterY = FieldConstants.yMax - ampZoneDepth - DriveConstants.kBackToCenterDistance;
+    double startingRobotCenterX = FieldConstants.xMin + startingBoxDepth - DriveConstants.kRobotWidth/2.0 - Units.inchesToMeters(2.0)/* tape */;
+
+    boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
+    double startingHeading; // degrees.
+    if (isBlueAlliance) {
+      startingHeading = -90; // Facing Right
+      m_robotDrive.setAngleDegrees(startingHeading);
+      m_robotDrive.resetOdometry(
+        new Pose2d(
+           startingRobotCenterX     // Just inside the starting box near the amp
+          ,startingRobotCenterY     // Just inside the starting box near the amp
+          ,new Rotation2d(Units.degreesToRadians(startingHeading)) // Facing toward the field.
+        )
+      );
+    } else {
+      startingHeading = -90.0; // Facing Left
+      m_robotDrive.setAngleDegrees(startingHeading);
+      m_robotDrive.resetOdometry(
+        new Pose2d(
+           FieldConstants.xMax - startingRobotCenterX     // Just inside the starting box near the amp
+          ,startingRobotCenterY                           // Just inside the starting box near the amp
           ,new Rotation2d(Units.degreesToRadians(startingHeading))    // Facing toward the field.
         )
       );

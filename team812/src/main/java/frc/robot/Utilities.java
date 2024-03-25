@@ -14,6 +14,10 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -159,11 +163,19 @@ public class Utilities {
     }
 
     public static void allianceSetCurrentPose(Pose2d newPose) {
-        if (isBlueAlliance())
-          RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(newPose);
-        else // For the red alliance translate the X coordinates and rotate the pose 180 degrees.
-        RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(FieldConstants.xMax - newPose.getX(), newPose.getY(), new Rotation2d(Math.PI)));
-      }
+        if (isBlueAlliance()) {
+            RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(newPose);
+         } else { 
+            // For the red alliance translate the X coordinates and mirror the rotation
+            double x = FieldConstants.xMax - newPose.getX();
+            double rotation = MathUtil.inputModulus(
+                Math.PI - newPose.getRotation().getRadians(),
+                -Math.PI,
+                Math.PI
+            );
+            RobotContainer.m_PoseEstimatorSubsystem.setCurrentPose(new Pose2d(x, newPose.getY(), new Rotation2d(rotation)));
+        }
+    }
     
     public static Pose2d getAllianceRobotAmpPose(PoseEstimatorSubsystem poseEstimatorSubsystem) {
         Pose2d robotPose = null;
@@ -218,4 +230,9 @@ public class Utilities {
         // For debug, display whether we did reset the coordinate or not.
         SmartDashboard.putBoolean("PoseReset", reset);
     }
+    
+    // Boolean Supplier to return true if we are within 45 seconds of the end of the match.
+    public static BooleanSupplier endGame = ()->DriverStation.getMatchTime() >= 2.5*60.0 - 45.0;
+    
+
 }

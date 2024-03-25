@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 //import frc.robot.Constants.OIConstants;
 //import frc.robot.subsystems.DriveSubsystemSRX;
@@ -53,6 +54,11 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData(CommandScheduler.getInstance()); // This puts running commands on the shuffleboard.
     addPeriodic(() -> Utilities.setAlliance(), 1.0 );
+
+    SmartDashboard.putNumber("AutoStartDelay", 0.0);  // This puts up a place on the dashboard we can use to modify autonomous.
+    SmartDashboard.putNumber("AutoMode", AutoConstants.DefaultMode);
+    SmartDashboard.putString("AutoModeText", AutoConstants.mode[AutoConstants.DefaultMode]);
+
   }
 
   /**
@@ -64,11 +70,19 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    int autoMode = (int) Math.round(SmartDashboard.getNumber("AutoMode",0));
+    if (autoMode < 0 || autoMode >= AutoConstants.mode.length) {
+      autoMode = AutoConstants.DefaultMode; // Out of range values convert back to default mode, 0.
+      SmartDashboard.putNumber("AutoMode", autoMode);
+
+    }
+    SmartDashboard.putString("AutoModeText", AutoConstants.mode[autoMode]);
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
   }
 
   /**
