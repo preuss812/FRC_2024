@@ -254,12 +254,13 @@ public class Autonomous extends SequentialCommandGroup {
 
       finalMove = new Pose2d(finalMoveX, finalMoveY, new Rotation2d(finalRotation)); // Pose for robot to face the center of the field.
       firstMove = new Pose2d(firstMoveX, firstMoveY, new Rotation2d(firstRotation)); // Pose for robot to be at the april tag.
-
+      Utilities.toSmartDashboard("firstMove", firstMove);
+      
       SequentialCommandGroup fullCommandGroup = new SequentialCommandGroup(
         // Set the gyro starting angle based on alliance and assumed robot placement
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 1)),
         new InstantCommand(() -> RobotContainer.setGyroAngleToStartMatchAmp()),
-        new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.SPEED)),
+        new InstantCommand(() -> RobotContainer.m_robotDrive.setDrivingMode(DrivingMode.PRECISION)),
         new InstantCommand(() -> Utilities.allianceSetCurrentPose(
           new Pose2d(
             startingRobotCenterX,
@@ -272,7 +273,7 @@ public class Autonomous extends SequentialCommandGroup {
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
 
         // Wait if requested to allow other robots to clear the area.
-        new AutonomousStartDelayCommand(),
+        //new AutonomousStartDelayCommand(),
 
         // Start the arm rising to the shooting position.
         new InstantCommand(()->RobotContainer.m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)),
