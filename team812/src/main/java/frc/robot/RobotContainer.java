@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.NoteIntakeConstants;
 import frc.robot.Constants.OIConstants;
 //import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.UltrasonicConstants;
@@ -52,6 +54,7 @@ import frc.robot.subsystems.DriveSubsystemSRX.DrivingMode;
 import frc.robot.subsystems.PingResponseUltrasonicSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.DriveSubsystemSRX;
+import frc.robot.commands.AdjustNoteInShooterCommand;
 //import frc.robot.subsystems.CameraVisionSubsystem;
 //import frc.robot.subsystems.ColorDetectionSubsytem;
 import frc.robot.commands.ArmHomeCommand;
@@ -59,35 +62,37 @@ import frc.robot.commands.ArmRotationCommand;
 //import frc.robot.commands.DetectColorCommand;
 import frc.robot.commands.DriveOnAprilTagProjectionCommand;
 import frc.robot.commands.DriveRobotCommand;
-//import frc.robot.commands.ExpelNoteCommand;
+import frc.robot.commands.ExpelNoteCommand;
+import frc.robot.commands.OpticalLimitSwitch;
 //import frc.robot.commands.FindAprilTagCommand;
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkLowLevel.MotorType;
-import frc.robot.commands.GotoAmpCommand;
+//import frc.robot.commands.GotoAmpCommand;
 //import frc.robot.commands.GotoPoseCommand;
 //import frc.robot.commands.NoteIntakeCommand;
-import frc.robot.commands.RotateRobotAutoCommand;
+//import frc.robot.commands.RotateRobotAutoCommand;
 import frc.robot.commands.RotateRobotCommand;
-import frc.robot.commands.ScoreNoteInAmp;
+//import frc.robot.commands.ScoreNoteInAmp;
 //import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StartButtonCommand;
 import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
-import frc.robot.commands.SwerveToAmpCommand;
+//import frc.robot.commands.SwerveToAmpCommand;
 //import frc.robot.commands.SwerveToPoseCommand;
-import frc.robot.commands.SwerveToSourceCommand;
+//import frc.robot.commands.SwerveToSourceCommand;
 //import frc.robot.commands.SwerveToPoseTest;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteOLSCommand;
 import frc.robot.commands.WinchDownCommand;
 import frc.robot.commands.WinchUpCommand;
-import frc.robot.commands.GotoSourceCommand;
+//import frc.robot.commands.GotoSourceCommand;
 //import frc.robot.commands.DetectColorCommand;
 //import frc.robot.TrajectoryPlans;
 //import frc.robot.commands.PushTowardsWall;
 import frc.robot.commands.PushTowardsWallUltrasonic;
+import frc.utils.TriggerButton;
 
 
 
@@ -132,6 +137,7 @@ public class RobotContainer {
       UltrasonicConstants.kEchoChannel,
       UltrasonicConstants.kOffsetToBumper
     );
+  public static final OpticalLimitSwitch m_OpticalLimitSwitch = new OpticalLimitSwitch(NoteIntakeConstants.kLimitSwitchChannel);
 
   //public static DigitalIOSubsystem m_DigitalIOSubsystem = new DigitalIOSubsystem();
 
@@ -206,10 +212,12 @@ public class RobotContainer {
       new RunCommand(() -> m_ArmRotationSubsystem.rotate(-leftJoystick.getY()), m_ArmRotationSubsystem)
     );
     
+    /* Switched to TriggerButton
     // Default is to expel notes based on the percentage pulled of the left trigger.
     m_NoteIntakeSubsystem.setDefaultCommand(
       new RunCommand(()->m_NoteIntakeSubsystem.runMotor(-m_driverController.getLeftTriggerAxis()), m_NoteIntakeSubsystem)
     );
+    */
 
     // Default is to score notes based on the percentage pulled of the left trigger.
     m_ShooterSubsystem.setDefaultCommand(
@@ -241,7 +249,7 @@ public class RobotContainer {
    */
   
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-      .onTrue(new ScoreNoteInAmp(m_ArmRotationSubsystem, m_ShooterSubsystem));
+      .whileTrue(new InstantCommand(()-> m_ShooterSubsystem.shoot()));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onTrue(
         new SequentialCommandGroup(
@@ -253,7 +261,14 @@ public class RobotContainer {
           )
         )
     );
+    
+    new TriggerButton(m_driverController, Axis.kLeftTrigger).whileTrue(
+      new ExpelNoteCommand(m_NoteIntakeSubsystem)
+    );
 
+    /*
+     * Not using the swerve motion so disabling the buttons
+     * 
     new JoystickButton(m_driverController, Button.kB.value).whileTrue(
       //new SequentialCommandGroup(
         new SwerveToSourceCommand(m_robotDrive, m_PoseEstimatorSubsystem)//,
@@ -268,12 +283,16 @@ public class RobotContainer {
           //new PushTowardsWallUltrasonic(m_robotDrive, m_PingResponseUltrasonicSubsystem).withTimeout(2.0)
       //).andThen(new StopAllMotorsCommand())
     );
+    */
 
     new JoystickButton(m_driverController, Button.kA.value)
-      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)));
+      .whileTrue(new InstantCommand(()->m_ShooterSubsystem.unshoot()));
+    
+      new JoystickButton(m_driverController, Button.kB.value)
+      .whileTrue(new AdjustNoteInShooterCommand(m_ShooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kY.value)
-      .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
+    //new JoystickButton(m_driverController, Button.kY.value)
+    //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
 
     new JoystickButton(m_driverController, Button.kStart.value).onTrue(
       new InstantCommand(()->m_robotDrive.setDrivingMode(DrivingMode.SPEED))
@@ -297,9 +316,9 @@ public class RobotContainer {
     POVButton dPad315 = dPadButton(315);
 
     
+    /*  These 3 were for climbing but were not used:
     new JoystickButton(leftJoystick, 1).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(0.0)));
     new JoystickButton(leftJoystick, 2).onTrue(new InstantCommand(()->DriveOnAprilTagProjectionCommand.setAngle(Math.PI)));
-    /*
     new JoystickButton(leftJoystick, 3).onTrue(
       //new DriveOnAprilTagProjectionCommand(m_PoseEstimatorSubsystem, m_robotDrive, m_camera, m_driverController)
       new RunCommand(()->m_ShooterSubsystem.unshoot()).withTimeout(0.8)
@@ -315,11 +334,6 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(()->Utilities.resetPoseAtAmp()));
     new JoystickButton(leftJoystick, 11).whileTrue( new WinchUpCommand(m_WinchSubsystem));
     new JoystickButton(leftJoystick, 12).whileTrue( new WinchDownCommand(m_WinchSubsystem));
-    
-    SmartDashboard.putData("X1",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-60), false));
-    SmartDashboard.putData("X2",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-90), false));
-    SmartDashboard.putData("X3",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(-120), false));
-    SmartDashboard.putData("X4",new RotateRobotAutoCommand(m_robotDrive, Units.degreesToRadians(60), false));
 
     /*
     new JoystickButton(RightJoystick, 11).onTrue(
@@ -473,7 +487,7 @@ public class RobotContainer {
     boolean isBlueAlliance = Utilities.isBlueAlliance(); // From the Field Management system.
     double startingHeading; // degrees.
     if (isBlueAlliance) {
-      startingHeading = -90; // Facing Right
+      startingHeading = 90; // Facing source wall
       m_robotDrive.setAngleDegrees(startingHeading);
       m_robotDrive.resetOdometry(
         new Pose2d(
@@ -483,7 +497,7 @@ public class RobotContainer {
         )
       );
     } else {
-      startingHeading = -90.0; // Facing Left
+      startingHeading = 90.0; // Facing source wall
       m_robotDrive.setAngleDegrees(startingHeading);
       m_robotDrive.resetOdometry(
         new Pose2d(

@@ -229,12 +229,13 @@ public class Autonomous extends SequentialCommandGroup {
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
         new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, true).withTimeout(5.0), // TODO Try controlRotation == true.
-         // quiesce the drive and finish.
-         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
-         new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
-         new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
-        );
-         addCommands(fullCommandGroup);
+         
+        // quiesce the drive and finish.
+        new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 0)),
+        new InstantCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Done"))
+      );
+      addCommands(fullCommandGroup);
 
     } else if (autoMode == AutoConstants.USScoreLeaveMode) {
       final double ampZoneDepth = Units.inchesToMeters(13);
@@ -273,22 +274,19 @@ public class Autonomous extends SequentialCommandGroup {
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
 
         // Wait if requested to allow other robots to clear the area.
-        //new AutonomousStartDelayCommand(),
+        new AutonomousStartDelayCommand(),
 
         // Start the arm rising to the shooting position.
         new InstantCommand(()->RobotContainer.m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)),
 
         // Drive out based on drivetrain encoders to align with and face the Amp
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
-        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "Move1Meter")),
+        new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "MoveToAmp")),
         new DriveRobotCommand(RobotContainer.m_robotDrive, firstMove, false).withTimeout(5.0), // TODO Try controlRotation == true.      
 
         // set the robot drive x,y,theta to match the pose estimator (ie use estimated position to set x,y,theta)
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 6)),
         new InstantCommand(() -> robotContainer.alignDriveTrainToPoseEstimator()),
-
-        // Make sure the arm is raised.
-        new ArmRotationCommand(m_ArmRotationSubsystem, ArmConstants.kArmScoringPosition),
 
         // Score the note.
         // The StopRobotMotion keeps the swerve drive wheels from moving during the scoring.
