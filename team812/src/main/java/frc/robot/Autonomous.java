@@ -68,7 +68,7 @@ public class Autonomous extends SequentialCommandGroup {
     }
     SmartDashboard.putString("AutoModeText", AutoConstants.mode[autoMode]);
   
-    if (autoMode == 0) {
+    if (true || autoMode == 0) {
       /**
        * We are starting with the robots back to the Alliance wall.
        * We hope we can be positioned anywhere along that wall.
@@ -121,7 +121,7 @@ public class Autonomous extends SequentialCommandGroup {
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
 
         // Wait if requested to allow other robots to clear the area.
-        new AutonomousStartDelayCommand(),
+        //new AutonomousStartDelayCommand(),
 
         // Drive out based on drivetrain encoders to align with and face the Amp
         new InstantCommand(() -> SmartDashboard.putNumber("Auto Step", 3)),
@@ -274,9 +274,11 @@ public class Autonomous extends SequentialCommandGroup {
         new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem).withTimeout(3.0),
 
         // Wait if requested to allow other robots to clear the area.
-        new AutonomousStartDelayCommand(),
+        //new AutonomousStartDelayCommand(),
 
         // Start the arm rising to the shooting position.
+                new InstantCommand(() -> SmartDashboard.putString("ActiveCommand", "raise")),
+
         new InstantCommand(()->RobotContainer.m_ArmRotationSubsystem.setPosition(ArmConstants.kArmScoringPosition)),
 
         // Drive out based on drivetrain encoders to align with and face the Amp

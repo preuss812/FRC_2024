@@ -76,7 +76,7 @@ import frc.robot.commands.RotateRobotCommand;
 //import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.StartButtonCommand;
 import frc.robot.commands.StopAllMotorsCommand;
-//import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ShooterCommand;
 //import frc.robot.commands.StopRobotMotion;
 //import frc.robot.commands.SwerveToAmpCommand;
 //import frc.robot.commands.SwerveToPoseCommand;
@@ -85,6 +85,7 @@ import frc.robot.commands.StopAllMotorsCommand;
 //import frc.robot.commands.SwerveToPoseTest2;
 import frc.robot.commands.SwerveToPoseTest3;
 import frc.robot.commands.TakeInNoteOLSCommand;
+import frc.robot.commands.UnshootCommand;
 import frc.robot.commands.WinchDownCommand;
 import frc.robot.commands.WinchUpCommand;
 //import frc.robot.commands.GotoSourceCommand;
@@ -249,7 +250,7 @@ public class RobotContainer {
    */
   
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-      .whileTrue(new InstantCommand(()-> m_ShooterSubsystem.shoot()));
+      .whileTrue(new ShooterCommand(m_ShooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kLeftBumper.value).onTrue(
         new SequentialCommandGroup(
@@ -286,10 +287,12 @@ public class RobotContainer {
     */
 
     new JoystickButton(m_driverController, Button.kA.value)
-      .whileTrue(new InstantCommand(()->m_ShooterSubsystem.unshoot()));
+      .whileTrue(
+        new UnshootCommand(m_ShooterSubsystem)
+      );
     
       new JoystickButton(m_driverController, Button.kB.value)
-      .whileTrue(new AdjustNoteInShooterCommand(m_ShooterSubsystem));
+      .onTrue(new AdjustNoteInShooterCommand(m_ShooterSubsystem));
 
     //new JoystickButton(m_driverController, Button.kY.value)
     //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
