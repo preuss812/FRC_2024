@@ -21,9 +21,9 @@ public class StartButtonCommand extends SequentialCommandGroup {
     addCommands(
       new SequentialCommandGroup(
         new StopAllMotorsCommand(),
-        new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem),
+        //new ArmHomeCommand(RobotContainer.m_ArmRotationSubsystem),
         new InstantCommand(()->RobotContainer.setGyroAngleToStartMatch()),
-        new InstantCommand(()->RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.SPEED), RobotContainer.m_robotDrive)
+        new InstantCommand(()->RobotContainer.m_robotDrive.setDrivingMode(DriveSubsystemSRX.DrivingMode.PRECISION), RobotContainer.m_robotDrive)
       )
     );
   }

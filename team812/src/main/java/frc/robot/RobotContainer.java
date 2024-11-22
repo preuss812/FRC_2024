@@ -294,7 +294,7 @@ public class RobotContainer {
       new JoystickButton(m_driverController, Button.kB.value)
       .onTrue(new AdjustNoteInShooterCommand(m_ShooterSubsystem));
 
-    //new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_driverController, Button.kY.value).onTrue(new StartButtonCommand());
     //  .onTrue(new InstantCommand(()->m_ArmRotationSubsystem.setPosition(ArmConstants.kArmIntakePosition)));
 
     new JoystickButton(m_driverController, Button.kStart.value).onTrue(
@@ -335,10 +335,16 @@ public class RobotContainer {
     new JoystickButton(leftJoystick, 8).onTrue(new ArmHomeCommand(m_ArmRotationSubsystem));
     new JoystickButton(leftJoystick, 9).onTrue(new TakeInNoteOLSCommand(m_NoteIntakeSubsystem, m_ShooterSubsystem));
     new JoystickButton(leftJoystick, 10).onTrue(new InstantCommand(()->Utilities.resetPoseAtAmp()));
-    new JoystickButton(leftJoystick, 11).whileTrue( new WinchUpCommand(m_WinchSubsystem));
-    new JoystickButton(leftJoystick, 12).whileTrue( new WinchDownCommand(m_WinchSubsystem));
+    //new JoystickButton(leftJoystick, 11).whileTrue( new WinchUpCommand(m_WinchSubsystem));
+    //new JoystickButton(leftJoystick, 12).whileTrue( new WinchDownCommand(m_WinchSubsystem));
+    
+    new JoystickButton(leftJoystick, 11).onTrue(new InstantCommand(()->m_ArmRotationSubsystem.runMotor(0.2)));
+    new JoystickButton(leftJoystick, 11).onFalse(new InstantCommand(()->m_ArmRotationSubsystem.runMotor(0.0)));
 
-    /*
+    new JoystickButton(leftJoystick, 12).onTrue(new InstantCommand(()->m_ArmRotationSubsystem.runMotor(-0.2)));
+    new JoystickButton(leftJoystick, 12).onFalse(new InstantCommand(()->m_ArmRotationSubsystem.runMotor(0.0)));
+
+/*
     new JoystickButton(RightJoystick, 11).onTrue(
       new ArmHomeCommand(m_ArmRotationSubsystem)
     );
